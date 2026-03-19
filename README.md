@@ -5,6 +5,7 @@ A comprehensive web-based system for managing medical services in a hostel envir
 ## 🚀 Features
 
 ### Core Functionality
+
 - **Ambulance Management**: Track and manage ambulance availability, status, and real-time updates
 - **Auto Driver Services**: Coordinate transportation services for students
 - **Booking System**: Seamless booking for medical appointments and services
@@ -12,6 +13,7 @@ A comprehensive web-based system for managing medical services in a hostel envir
 - **User Dashboard**: Centralized interface for accessing all services
 
 ### Medical Services
+
 - Emergency Requests
 - Doctor Consultations
 - Lab Tests
@@ -22,6 +24,7 @@ A comprehensive web-based system for managing medical services in a hostel envir
 - Virtual Consultations
 
 ### Hostel Management
+
 - Complaint Management System
 - Laundry Services
 - Mess Food Ordering
@@ -34,6 +37,7 @@ A comprehensive web-based system for managing medical services in a hostel envir
 ## 🛠️ Tech Stack
 
 ### Backend
+
 - **Node.js** with Express.js
 - **MongoDB** with Mongoose ODM
 - **Socket.io** for real-time communication
@@ -42,6 +46,7 @@ A comprehensive web-based system for managing medical services in a hostel envir
 - **Nodemailer** for email services
 
 ### Frontend
+
 - **HTML5** with Tailwind CSS
 - **Vanilla JavaScript** for interactivity
 - **Font Awesome** for icons
@@ -56,12 +61,14 @@ A comprehensive web-based system for managing medical services in a hostel envir
 ## 🔧 Installation & Setup
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/simpykumarimandal/Hostel-Medical-Management.git
    cd Hostel-Medical-Management
    ```
 
 2. **Install backend dependencies**
+
    ```bash
    cd capstone/backend
    npm install
@@ -69,6 +76,7 @@ A comprehensive web-based system for managing medical services in a hostel envir
 
 3. **Environment Setup**
    Create a `.env` file in the `capstone/backend` directory:
+
    ```env
    PORT=3000
    MONGODB_URI=mongodb://localhost:27017/hms_ambulance
@@ -82,6 +90,7 @@ A comprehensive web-based system for managing medical services in a hostel envir
    Make sure MongoDB is running on your system.
 
 5. **Run the application**
+
    ```bash
    # From capstone/backend directory
    npm start
@@ -129,16 +138,19 @@ capstone/
 ## 🔌 API Endpoints
 
 ### Ambulances
+
 - `GET /api/ambulances` - Get all ambulances
 - `GET /api/ambulances/available` - Get available ambulances
 - `PATCH /api/ambulances/:id/status` - Update ambulance status
 
 ### Bookings
+
 - `GET /api/bookings` - Get all bookings
 - `POST /api/bookings` - Create new booking
 - `GET /api/bookings/:id` - Get booking by ID
 
 ### Autos
+
 - `GET /api/autos` - Get all auto drivers
 - `GET /api/autos/available` - Get available auto drivers
 
@@ -161,6 +173,7 @@ capstone/
 ## 🚀 Deployment
 
 ### Environment Variables for Production
+
 ```env
 NODE_ENV=production
 MONGODB_URI=your_production_mongodb_uri
@@ -171,6 +184,7 @@ EMAIL_PASS=your_production_email_password
 ```
 
 ### Build Commands
+
 ```bash
 # Install dependencies
 npm install
@@ -193,7 +207,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 👥 Authors
 
-- **Simpy Kumari Mandal** - *Initial work* - [simpykumarimandal](https://github.com/simpykumarimandal)
+- **Simpy Kumari Mandal** - _Initial work_ - [simpykumarimandal](https://github.com/simpykumarimandal)
 
 ## 🙏 Acknowledgments
 
