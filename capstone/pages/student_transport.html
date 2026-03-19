@@ -1,0 +1,2549 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HMS | Premium Transport Service</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
+    />
+    <!-- Add html2pdf library for PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style> @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"); body { font-family: "Inter", sans-serif; color: #d1d5db; } .active-nav-link { background-color: #374151; color: white; } .bg-card { background-color: #374151; } .message-box { animation: slideIn 0.5s forwards; } @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } } .fade-in { animation: fadeIn 0.5s ease-in; } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } } .gradient-border { background: linear-gradient(135deg, #3b82f6, #8b5cf6); padding: 2px; border-radius: 12px; } .gradient-border > div { background: #374151; border-radius: 10px; padding: 1.5rem; } .vehicle-card { transition: all 0.3s ease; border-radius: 0.75rem; overflow: hidden; } .vehicle-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.3); } .vehicle-type-auto { border-left: 4px solid #f59e0b; } .vehicle-type-taxi { border-left: 4px solid #3b82f6; } .vehicle-type-sedan { border-left: 4px solid #10b981; } .vehicle-type-suv { border-left: 4px solid #8b5cf6; } .vehicle-type-luxury { border-left: 4px solid #ec4899; } .vehicle-type-bus { border-left: 4px solid #f97316; } .booking-status-pending { background-color: #f59e0b; color: white; } .booking-status-confirmed { background-color: #10b981; color: white; } .booking-status-cancelled { background-color: #ef4444; color: white; } .booking-status-completed { background-color: #3b82f6; color: white; } .booking-status-dispatched { background-color: #8b5cf6; color: white; } .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); z-index: 1000; align-items: center; justify-content: center; } .modal.active { display: flex; } .modal-content { background: #1f2937; border-radius: 12px; padding: 2rem; max-width: 800px; width: 90%; max-height: 90vh; overflow-y: auto; } .form-group { margin-bottom: 1.5rem; } .form-label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: #d1d5db; } .form-input { width: 100%; background-color: #4b5563; border: 1px solid #6b7280; border-radius: 0.5rem; padding: 0.75rem 1rem; color: white; transition: all 0.3s ease; } .form-input:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3); } .map-container { border-radius: 0.75rem; height: 300px; overflow: hidden; } .status-indicator { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 6px; } .feature-card { background: linear-gradient(135deg, #1e40af, #3730a3); border-radius: 0.75rem; padding: 1.5rem; color: white; transition: all 0.3s ease; } .feature-card:hover { transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3); } .driver-card { background: linear-gradient(135deg, #059669, #047857); border-radius: 0.75rem; padding: 1.5rem; color: white; } .progress-bar { height: 6px; background-color: #374151; border-radius: 3px; overflow: hidden; } .progress-fill { height: 100%; background: linear-gradient(90deg, #3b82f6, #8b5cf6); transition: width 0.5s ease; } .pricing-card { border: 1px solid #374151; border-radius: 0.75rem; transition: all 0.3s ease; } .pricing-card:hover { border-color: #3b82f6; transform: translateY(-2px); } .pricing-card.featured { border-color: #3b82f6; transform: scale(1.05); box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.3); } .trip-animation { animation: tripProgress 2s infinite alternate; } @keyframes tripProgress { 0% { transform: translateX(0); } 100% { transform: translateX(100px); } } .live-tracking { background: linear-gradient(135deg, #1e293b, #0f172a); border-radius: 0.75rem; padding: 1.5rem; } .route-point { width: 12px; height: 12px; border-radius: 50%; background-color: #3b82f6; position: absolute; left: -6px; top: 50%; transform: translateY(-50%); } .route-line { position: absolute; left: 0; top: 50%; width: 100%; height: 2px; background: linear-gradient(90deg, #3b82f6, #8b5cf6); transform: translateY(-50%); } .payment-card { background: linear-gradient(135deg, #1e293b, #0f172a); border-radius: 0.75rem; padding: 1.5rem; border: 1px solid #374151; transition: all 0.3s ease; } .payment-card:hover { border-color: #3b82f6; transform: translateY(-2px); } .payment-card.selected { border-color: #3b82f6; background: linear-gradient(135deg, #1e3a8a, #3730a3); box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.3); } .payment-processing { animation: pulse 2s infinite; } @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } } .secure-badge { background: linear-gradient(135deg, #10b981, #059669); animation: glow 2s infinite alternate; } @keyframes glow { from { box-shadow: 0 0 5px #10b981; } to { box-shadow: 0 0 20px #10b981; } } .step-indicator { width: 30px; height: 30px; border-radius: 50%; background-color: #374151; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-right: 10px; } .step-indicator.active { background-color: #3b82f6; color: white; } .step-line { flex: 1; height: 2px; background-color: #374151; margin: 0 10px; } .step-line.active { background-color: #3b82f6; } /* Receipt Styles */ .receipt-container { background: white; color: #1f2937; padding: 2rem; border-radius: 12px; max-width: 600px; margin: 0 auto; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3); } .receipt-header { text-align: center; border-bottom: 2px solid #e5e7eb; padding-bottom: 1rem; margin-bottom: 1.5rem; } .receipt-logo { font-size: 2rem; color: #3b82f6; margin-bottom: 0.5rem; } .receipt-title { font-size: 1.5rem; font-weight: bold; color: #1f2937; } .receipt-subtitle { color: #6b7280; font-size: 0.9rem; } .receipt-section { margin-bottom: 1.5rem; } .receipt-section-title { font-weight: bold; color: #374151; margin-bottom: 0.5rem; border-bottom: 1px solid #e5e7eb; padding-bottom: 0.25rem; } .receipt-row { display: flex; justify-content: space-between; margin-bottom: 0.5rem; } .receipt-label { color: #6b7280; } .receipt-value { font-weight: 500; } .receipt-amount { font-weight: bold; color: #059669; } .receipt-divider { border-top: 2px dashed #d1d5db; margin: 1rem 0; } .receipt-footer { text-align: center; margin-top: 2rem; padding-top: 1rem; border-top: 2px solid #e5e7eb; color: #6b7280; font-size: 0.8rem; } .receipt-qr { text-align: center; margin: 1rem 0; } .receipt-actions { display: flex; gap: 1rem; justify-content: center; margin-top: 2rem; } </style> <style> .sidebar { transition: transform 0.25s ease-in-out; } .sidebar-collapsed .sidebar { transform: translateX(-110%); } .main-content { transition: margin-left 0.25s ease-in-out; } .sidebar-collapsed .main-content { margin-left: 0 !important; } @media (max-width: 768px) { .sidebar { transform: translateX(-110%); } .sidebar-open .sidebar { transform: translateX(0); } } </style></head>
+  <body class="bg-gray-900 flex flex-col md:flex-row min-h-screen">
+
+    <!-- Sidebar -->
+    <aside
+      class="sidebar w-full md:w-64 bg-gray-950 text-white p-6 flex flex-col items-center md:items-start space-y-8 shadow-2xl">
+      <div class="flex items-center space-x-2 mb-4">
+        <i class="fas fa-hospital text-xl text-blue-400"></i>
+        <h1 class="text-xl font-bold">HMS</h1>
+        <span class="text-sm text-gray-400 ml-2">Student Mode</span>
+      </div>
+      <nav class="w-full">
+  <ul class="space-y-2">
+    <li>
+      <a href="demo.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-chart-line mr-3"></i>
+        <span class="font-medium">Dashboard</span>
+      </a>
+    </li>
+    <li>
+      <a href="ambulance.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-truck-medical mr-3"></i>
+        <span class="font-medium">Ambulance</span>
+      </a>
+    </li>
+    <li>
+      <a href="doctors.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-user-doctor mr-3"></i>
+        <span class="font-medium">Doctors</span>
+      </a>
+    </li>
+    <li>
+      <a href="medicine_order.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-pills mr-3"></i>
+        <span class="font-medium">Pharmacy</span>
+      </a>
+    </li>
+    <li>
+      <a href="medicine_reminder.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bell mr-3"></i>
+        <span class="font-medium">Medicine Reminder</span>
+      </a>
+    </li>
+    <li>
+      <a href="symptoms_checker.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-stethoscope mr-3"></i>
+        <span class="font-medium">Symptoms Checker</span>
+      </a>
+    </li>
+    <li>
+      <a href="lab_tests.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-vial-circle-check mr-3"></i>
+        <span class="font-medium">Lab Tests</span>
+      </a>
+    </li>
+    <li>
+      <a href="emergency_requests.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-hand-holding-medical mr-3"></i>
+        <span class="font-medium">Emergency Requests</span>
+      </a>
+    </li>
+    <li>
+      <a href="sos.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-sos mr-3"></i>
+        <span class="font-medium">SOS</span>
+      </a>
+    </li>
+    <li>
+      <a href="electronic_health_records.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-file-medical mr-3"></i>
+        <span class="font-medium">Health Records</span>
+      </a>
+    </li>
+    <li>
+      <a href="health_insurance.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-shield-heart mr-3"></i>
+        <span class="font-medium">Health Insurance</span>
+      </a>
+    </li>
+    <li>
+      <a href="reports_and_analytics.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-chart-pie mr-3"></i>
+        <span class="font-medium">Reports & Analytics</span>
+      </a>
+    </li>
+    <li>
+      <a href="restocking.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-box-open mr-3"></i>
+        <span class="font-medium">Inventory</span>
+      </a>
+    </li>
+    <li>
+      <a href="studentrequest.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-cash-register mr-3"></i>
+        <span class="font-medium">Student Requests</span>
+      </a>
+    </li>
+    <li>
+      <a href="student_transport.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bus mr-3"></i>
+        <span class="font-medium">Student Transport</span>
+      </a>
+    </li>
+    <li>
+      <a href="transport_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-route mr-3"></i>
+        <span class="font-medium">Transport Management</span>
+      </a>
+    </li>
+    <li>
+      <a href="room_management.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bed mr-3"></i>
+        <span class="font-medium">Room Management</span>
+      </a>
+    </li>
+    <li>
+      <a href="room_sanitation.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-spray-can-sparkles mr-3"></i>
+        <span class="font-medium">Room Sanitation</span>
+      </a>
+    </li>
+    <li>
+      <a href="mess_menu.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-utensils mr-3"></i>
+        <span class="font-medium">Mess Menu</span>
+      </a>
+    </li>
+    <li>
+      <a href="mess_food_order_service.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bowl-food mr-3"></i>
+        <span class="font-medium">Mess Food Order</span>
+      </a>
+    </li>
+    <li>
+      <a href="laundry_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-shirt mr-3"></i>
+        <span class="font-medium">Laundry</span>
+      </a>
+    </li>
+    <li>
+      <a href="leave_and_outing.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-door-open mr-3"></i>
+        <span class="font-medium">Leave & Outing</span>
+      </a>
+    </li>
+    <li>
+      <a href="vit_bhopal_community.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-users mr-3"></i>
+        <span class="font-medium">VIT Community</span>
+      </a>
+    </li>
+    <li>
+      <a href="parent_notification.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-comments mr-3"></i>
+        <span class="font-medium">Parent Notification</span>
+      </a>
+    </li>
+    <li>
+      <a href="payment_gateway.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-credit-card mr-3"></i>
+        <span class="font-medium">Payment Gateway</span>
+      </a>
+    </li>
+    <li>
+      <a href="complaint_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-circle-exclamation mr-3"></i>
+        <span class="font-medium">Complaints</span>
+      </a>
+    </li>
+    <li>
+      <a href="exam_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-clipboard-list mr-3"></i>
+        <span class="font-medium">Exam Management</span>
+      </a>
+    </li>
+    <li>
+      <a href="local_hospital_network.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-hospital mr-3"></i>
+        <span class="font-medium">Local Hospitals</span>
+      </a>
+    </li>
+    <li>
+      <a href="medical_camps.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-hand-holding-heart mr-3"></i>
+        <span class="font-medium">Medical Camps</span>
+      </a>
+    </li>
+    <li>
+      <a href="virtual_consultation.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-video mr-3"></i>
+        <span class="font-medium">Virtual Consultation</span>
+      </a>
+    </li>
+    <li>
+      <a href="wearables.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-watch-fitness mr-3"></i>
+        <span class="font-medium">Wearables</span>
+      </a>
+    </li>
+    <li>
+      <a href="biometric.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-fingerprint mr-3"></i>
+        <span class="font-medium">Biometric</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+      <div class="mt-auto w-full">
+        <a href="/index.html" data-logout="true"
+          class="flex items-center justify-center w-full px-4 py-3 rounded-lg bg-red-600 hover:bg-red-700 transition-colors duration-200"
+        >
+          <i class="fa-solid fa-right-from-bracket mr-2"></i>
+          <span class="font-semibold">Log Out</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content flex-1 p-8 overflow-y-auto bg-gray-800">
+      <!-- Top Header -->
+      <header
+        class="flex items-center justify-between text-sm text-gray-400 mb-8"
+      >
+        <div id="date-time-display"></div>
+        <div class="flex items-center space-x-6">
+          <div class="relative">
+            <i
+              class="fa-solid fa-bell text-xl hover:text-white transition duration-200"
+            ></i>
+            <span
+              id="notification-badge"
+              class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center"
+              >3</span
+            >
+          </div>
+          <div class="flex items-center space-x-2">
+            <i class="fa-solid fa-user-circle text-xl"></i>
+            <span>Student Mode</span>
+          </div>
+          <div class="flex items-center space-x-2 cursor-pointer">
+            <i class="fa-solid fa-globe text-xl"></i>
+            <span>English</span>
+            <i class="fa-solid fa-chevron-down text-xs"></i>
+          </div>
+        </div>
+      </header>
+
+      <!-- Page Title & Actions -->
+      <div class="flex justify-between items-center mb-8">
+        <div>
+          <h2 class="text-3xl font-bold text-white mb-1">
+            Premium Transport Service
+          </h2>
+          <p class="text-gray-400">
+            Book auto, taxi, cab, sedan, SUV, and luxury vehicles for travel to
+            Bhopal, Indore, Ujjain and more
+          </p>
+        </div>
+        <div class="flex space-x-3">
+          <button
+            id="book-vehicle-btn"
+            class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center"
+          >
+            <i class="fa-solid fa-car mr-2"></i>
+            Book Vehicle
+          </button>
+          <button
+            id="my-bookings-btn"
+            class="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center"
+          >
+            <i class="fa-solid fa-list mr-2"></i>
+            My Bookings
+          </button>
+          <button
+            id="emergency-ride-btn"
+            class="bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center"
+          >
+            <i class="fa-solid fa-sos mr-2"></i>
+            Emergency Ride
+          </button>
+        </div>
+      </div>
+
+      <!-- University Location Banner -->
+      <div class="gradient-border mb-6">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center">
+            <div class="bg-blue-600 rounded-full p-3 mr-4">
+              <i class="fa-solid fa-university text-white text-xl"></i>
+            </div>
+            <div>
+              <div class="font-bold text-white text-lg">
+                VIT Bhopal University
+              </div>
+              <div class="text-blue-300">
+                Kothri Kalan, Sehore, Madhya Pradesh - 466114
+              </div>
+              <div class="text-sm text-gray-400 mt-1">
+                Pickup location for all vehicle bookings
+              </div>
+            </div>
+          </div>
+          <div class="text-right">
+            <div class="text-white font-semibold">Transport Helpdesk</div>
+            <div class="text-blue-400 font-bold text-xl">07562-654321</div>
+            <div class="text-sm text-gray-400">24/7 Support</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Stats Dashboard -->
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
+        <!-- Available Vehicles -->
+        <div class="gradient-border">
+          <div class="flex items-center justify-between">
+            <div>
+              <div
+                class="text-2xl font-bold text-white"
+                id="available-vehicles"
+              >
+                42
+              </div>
+              <div class="text-sm text-blue-300">Available Vehicles</div>
+            </div>
+            <i class="fa-solid fa-car text-blue-400 text-2xl"></i>
+          </div>
+        </div>
+
+        <!-- Active Bookings -->
+        <div class="gradient-border">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-2xl font-bold text-white" id="active-bookings">
+                18
+              </div>
+              <div class="text-sm text-green-300">Active Bookings</div>
+            </div>
+            <i class="fa-solid fa-clipboard-list text-green-400 text-2xl"></i>
+          </div>
+        </div>
+
+        <!-- Popular Destinations -->
+        <div class="gradient-border">
+          <div class="flex items-center justify-between">
+            <div>
+              <div
+                class="text-2xl font-bold text-white"
+                id="popular-destinations"
+              >
+                6
+              </div>
+              <div class="text-sm text-yellow-300">Popular Destinations</div>
+            </div>
+            <i class="fa-solid fa-location-dot text-yellow-400 text-2xl"></i>
+          </div>
+        </div>
+
+        <!-- Emergency Rides -->
+        <div class="gradient-border">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-2xl font-bold text-white" id="emergency-rides">
+                3
+              </div>
+              <div class="text-sm text-purple-300">Emergency Rides Today</div>
+            </div>
+            <i class="fa-solid fa-sos text-purple-400 text-2xl"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Enhanced Features Section -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="feature-card">
+          <div class="flex items-center mb-3">
+            <i class="fa-solid fa-shield-alt text-2xl mr-3"></i>
+            <h3 class="font-bold text-lg">Verified Drivers</h3>
+          </div>
+          <p class="text-sm opacity-90">
+            All drivers are verified with background checks and proper
+            documentation
+          </p>
+        </div>
+        <div
+          class="feature-card"
+          style="background: linear-gradient(135deg, #059669, #047857)"
+        >
+          <div class="flex items-center mb-3">
+            <i class="fa-solid fa-map-marked-alt text-2xl mr-3"></i>
+            <h3 class="font-bold text-lg">Live Tracking</h3>
+          </div>
+          <p class="text-sm opacity-90">
+            Real-time vehicle tracking with ETA updates and route optimization
+          </p>
+        </div>
+        <div
+          class="feature-card"
+          style="background: linear-gradient(135deg, #7c3aed, #6d28d9)"
+        >
+          <div class="flex items-center mb-3">
+            <i class="fa-solid fa-hand-holding-usd text-2xl mr-3"></i>
+            <h3 class="font-bold text-lg">Multiple Payments</h3>
+          </div>
+          <p class="text-sm opacity-90">
+            Pay via UPI, cards, wallets, or cash with transparent pricing
+          </p>
+        </div>
+      </div>
+
+      <!-- Quick Booking Section -->
+      <div class="bg-card rounded-xl shadow-lg p-6 mb-6">
+        <h3 class="text-xl font-bold text-white mb-4">Quick Book a Ride</h3>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+          <div class="form-group">
+            <label class="form-label">Pickup Location</label>
+            <select id="pickup-location" class="form-input">
+              <option value="main-gate">VIT Bhopal Main Gate</option>
+              <option value="boys-hostel">Boys Hostel Gate</option>
+              <option value="girls-hostel">Girls Hostel Gate</option>
+              <option value="academic-block">Academic Block</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Destination</label>
+            <select id="destination" class="form-input">
+              <option value="">Select Destination</option>
+              <optgroup label="Bhopal">
+                <option value="bhopal-airport">
+                  Bhopal Airport (Raja Bhoj)
+                </option>
+                <option value="bhopal-railway">Bhopal Railway Station</option>
+                <option value="bhopal-bus-stand">Bhopal Bus Stand</option>
+                <option value="bhopal-mp-nagar">MP Nagar, Bhopal</option>
+                <option value="bhopal-new-market">New Market, Bhopal</option>
+              </optgroup>
+              <optgroup label="Indore">
+                <option value="indore-airport">Indore Airport</option>
+                <option value="indore-railway">Indore Railway Station</option>
+                <option value="indore-bus-stand">Indore Bus Stand</option>
+                <option value="indore-vijay-nagar">Vijay Nagar, Indore</option>
+              </optgroup>
+              <optgroup label="Ujjain">
+                <option value="ujjain-railway">Ujjain Railway Station</option>
+                <option value="ujjain-bus-stand">Ujjain Bus Stand</option>
+                <option value="ujjain-mahakal">Mahakaleshwar Temple</option>
+              </optgroup>
+              <optgroup label="Other Destinations">
+                <option value="omkareshwar">Omkareshwar Temple</option>
+                <option value="pachmarhi">Pachmarhi Hill Station</option>
+                <option value="sanchi">Sanchi Stupa</option>
+              </optgroup>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Vehicle Type</label>
+            <select id="vehicle-type" class="form-input">
+              <option value="">Select Vehicle</option>
+              <option value="auto">Auto Rickshaw</option>
+              <option value="taxi">Taxi</option>
+              <option value="sedan">Sedan</option>
+              <option value="suv">SUV (Ertiga/Innova)</option>
+              <option value="luxury">Luxury Car</option>
+              <option value="bus">Mini Bus</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Pickup Time</label>
+            <input
+              type="text"
+              id="quick-pickup-time"
+              class="form-input"
+              placeholder="Select time"
+            />
+          </div>
+        </div>
+        <div class="flex justify-between items-center">
+          <div
+            id="quick-price-estimate"
+            class="text-green-400 font-bold text-lg hidden"
+          >
+            Estimated Fare: <span id="quick-estimated-price">₹0</span>
+          </div>
+          <button
+            id="quick-book-btn"
+            class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition duration-200 flex items-center"
+          >
+            <i class="fa-solid fa-magnifying-glass mr-2"></i>
+            Check Availability & Price
+          </button>
+        </div>
+      </div>
+
+      <!-- Vehicle Types Section -->
+      <div class="bg-card rounded-xl shadow-lg p-6 mb-6">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">Available Vehicle Types</h3>
+          <div class="flex items-center text-sm text-green-400">
+            <span class="status-indicator bg-green-500"></span>
+            Live Availability
+          </div>
+        </div>
+        <div
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          id="vehicles-container"
+        >
+          <!-- Vehicles will be populated here -->
+        </div>
+      </div>
+
+      <!-- Popular Destinations Section -->
+      <div class="bg-card rounded-xl shadow-lg p-6 mb-6">
+        <h3 class="text-xl font-bold text-white mb-6">Popular Destinations</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div
+            class="bg-gray-700 rounded-lg p-4 text-center cursor-pointer hover:bg-gray-600 transition transform hover:scale-105 duration-200"
+          >
+            <i class="fa-solid fa-plane text-blue-400 text-2xl mb-2"></i>
+            <div class="font-bold text-white">Bhopal Airport</div>
+            <div class="text-sm text-gray-400">45 km | ~1 hr</div>
+            <div class="text-green-400 font-semibold mt-2">From ₹600</div>
+          </div>
+          <div
+            class="bg-gray-700 rounded-lg p-4 text-center cursor-pointer hover:bg-gray-600 transition transform hover:scale-105 duration-200"
+          >
+            <i class="fa-solid fa-train text-orange-400 text-2xl mb-2"></i>
+            <div class="font-bold text-white">Bhopal Railway</div>
+            <div class="text-sm text-gray-400">42 km | ~50 min</div>
+            <div class="text-green-400 font-semibold mt-2">From ₹550</div>
+          </div>
+          <div
+            class="bg-gray-700 rounded-lg p-4 text-center cursor-pointer hover:bg-gray-600 transition transform hover:scale-105 duration-200"
+          >
+            <i class="fa-solid fa-bus text-yellow-400 text-2xl mb-2"></i>
+            <div class="font-bold text-white">Bhopal Bus Stand</div>
+            <div class="text-sm text-gray-400">43 km | ~55 min</div>
+            <div class="text-green-400 font-semibold mt-2">From ₹500</div>
+          </div>
+          <div
+            class="bg-gray-700 rounded-lg p-4 text-center cursor-pointer hover:bg-gray-600 transition transform hover:scale-105 duration-200"
+          >
+            <i class="fa-solid fa-mountain text-purple-400 text-2xl mb-2"></i>
+            <div class="font-bold text-white">Mahakaleshwar</div>
+            <div class="text-sm text-gray-400">180 km | ~3.5 hrs</div>
+            <div class="text-green-400 font-semibold mt-2">From ₹2500</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Booking History Section -->
+      <div class="bg-card rounded-xl shadow-lg p-6">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">Recent Bookings</h3>
+          <div class="flex space-x-2">
+            <button
+              id="filter-all"
+              class="filter-btn py-1 px-3 text-sm font-semibold text-white bg-blue-600 rounded-lg"
+            >
+              All
+            </button>
+            <button
+              id="filter-upcoming"
+              class="filter-btn py-1 px-3 text-sm font-semibold text-gray-400 bg-gray-700 rounded-lg hover:text-white"
+            >
+              Upcoming
+            </button>
+            <button
+              id="filter-completed"
+              class="filter-btn py-1 px-3 text-sm font-semibold text-gray-400 bg-gray-700 rounded-lg hover:text-white"
+            >
+              Completed
+            </button>
+          </div>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm text-left text-gray-400">
+            <thead class="text-xs uppercase bg-gray-700 text-gray-400">
+              <tr>
+                <th scope="col" class="px-6 py-3">Booking ID</th>
+                <th scope="col" class="px-6 py-3">Vehicle Type</th>
+                <th scope="col" class="px-6 py-3">Destination</th>
+                <th scope="col" class="px-6 py-3">Date & Time</th>
+                <th scope="col" class="px-6 py-3">Amount</th>
+                <th scope="col" class="px-6 py-3">Status</th>
+                <th scope="col" class="px-6 py-3">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="bookings-table-body">
+              <!-- Bookings will be populated here -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+
+    <!-- Book Vehicle Modal -->
+    <div id="book-vehicle-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">Book Vehicle</h3>
+          <button
+            id="close-book-vehicle"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="space-y-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="form-group">
+              <label class="form-label">Pickup Location</label>
+              <select id="modal-pickup-location" class="form-input">
+                <option value="main-gate">VIT Bhopal Main Gate</option>
+                <option value="boys-hostel">Boys Hostel Gate</option>
+                <option value="girls-hostel">Girls Hostel Gate</option>
+                <option value="academic-block">Academic Block</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Destination</label>
+              <select id="modal-destination" class="form-input">
+                <option value="">Select Destination</option>
+                <optgroup label="Bhopal">
+                  <option value="bhopal-airport">
+                    Bhopal Airport (Raja Bhoj)
+                  </option>
+                  <option value="bhopal-railway">Bhopal Railway Station</option>
+                  <option value="bhopal-bus-stand">Bhopal Bus Stand</option>
+                  <option value="bhopal-mp-nagar">MP Nagar, Bhopal</option>
+                  <option value="bhopal-new-market">New Market, Bhopal</option>
+                </optgroup>
+                <optgroup label="Indore">
+                  <option value="indore-airport">Indore Airport</option>
+                  <option value="indore-railway">Indore Railway Station</option>
+                  <option value="indore-bus-stand">Indore Bus Stand</option>
+                  <option value="indore-vijay-nagar">
+                    Vijay Nagar, Indore
+                  </option>
+                </optgroup>
+                <optgroup label="Ujjain">
+                  <option value="ujjain-railway">Ujjain Railway Station</option>
+                  <option value="ujjain-bus-stand">Ujjain Bus Stand</option>
+                  <option value="ujjain-mahakal">Mahakaleshwar Temple</option>
+                </optgroup>
+                <optgroup label="Other Destinations">
+                  <option value="omkareshwar">Omkareshwar Temple</option>
+                  <option value="pachmarhi">Pachmarhi Hill Station</option>
+                  <option value="sanchi">Sanchi Stupa</option>
+                </optgroup>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="form-group">
+              <label class="form-label">Vehicle Type</label>
+              <select id="modal-vehicle-type" class="form-input">
+                <option value="">Select Vehicle</option>
+                <option value="auto">Auto Rickshaw</option>
+                <option value="taxi">Taxi</option>
+                <option value="sedan">Sedan</option>
+                <option value="suv">SUV (Ertiga/Innova)</option>
+                <option value="luxury">Luxury Car</option>
+                <option value="bus">Mini Bus</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Pickup Date & Time</label>
+              <input
+                type="text"
+                id="pickup-datetime"
+                class="form-input"
+                placeholder="Select date and time"
+              />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="form-group">
+              <label class="form-label">Number of Passengers</label>
+              <select id="passengers" class="form-input">
+                <option value="1">1 Passenger</option>
+                <option value="2">2 Passengers</option>
+                <option value="3">3 Passengers</option>
+                <option value="4">4 Passengers</option>
+                <option value="5">5 Passengers</option>
+                <option value="6">6 Passengers</option>
+                <option value="7">7 Passengers</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Luggage (Optional)</label>
+              <select id="luggage" class="form-input">
+                <option value="none">No Luggage</option>
+                <option value="small">Small Bag (Backpack)</option>
+                <option value="medium">Medium Bag (Suitcase)</option>
+                <option value="large">Large Bag</option>
+                <option value="multiple">Multiple Bags</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Special Instructions (Optional)</label>
+            <textarea
+              id="special-instructions"
+              class="form-input"
+              rows="3"
+              placeholder="Any special requirements or instructions for the driver"
+            ></textarea>
+          </div>
+
+          <div id="price-estimate" class="bg-gray-700 rounded-lg p-4 hidden">
+            <div class="flex justify-between items-center mb-2">
+              <div>
+                <div class="text-white font-semibold">Estimated Fare</div>
+                <div class="text-gray-400 text-sm">Inclusive of all taxes</div>
+              </div>
+              <div
+                class="text-green-400 font-bold text-xl"
+                id="estimated-price"
+              >
+                ₹0
+              </div>
+            </div>
+            <div class="text-xs text-gray-400">
+              <div class="flex justify-between">
+                <span>Base fare:</span>
+                <span id="base-fare">₹0</span>
+              </div>
+              <div class="flex justify-between">
+                <span>Distance charge:</span>
+                <span id="distance-charge">₹0</span>
+              </div>
+              <div class="flex justify-between">
+                <span>GST (5%):</span>
+                <span id="gst-amount">₹0</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex space-x-2">
+            <button
+              id="confirm-booking-btn"
+              class="flex-1 bg-green-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-green-700 transition"
+            >
+              <i class="fa-solid fa-check mr-2"></i>Proceed to Payment
+            </button>
+            <button
+              class="flex-1 bg-gray-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-gray-700 transition"
+              onclick="closeModal('book-vehicle-modal')"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Enhanced Payment Modal -->
+    <div id="payment-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">Complete Payment</h3>
+          <button
+            id="close-payment"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <!-- Booking Steps -->
+        <div class="flex items-center mb-8">
+          <div class="step-indicator active">1</div>
+          <div class="step-line active"></div>
+          <div class="step-indicator active">2</div>
+          <div class="step-line"></div>
+          <div class="step-indicator">3</div>
+        </div>
+        <div class="flex justify-between text-xs text-gray-400 mb-2">
+          <div>Booking Details</div>
+          <div>Payment</div>
+          <div>Confirmation</div>
+        </div>
+
+        <div class="space-y-6">
+          <!-- Trip Summary -->
+          <div class="bg-gray-700 rounded-lg p-4">
+            <h4 class="font-bold text-white mb-3">Trip Summary</h4>
+            <div class="grid grid-cols-2 gap-4 text-sm">
+              <div>
+                <div class="text-gray-400">From</div>
+                <div class="text-white font-medium" id="payment-from">
+                  VIT Bhopal Main Gate
+                </div>
+              </div>
+              <div>
+                <div class="text-gray-400">To</div>
+                <div class="text-white font-medium" id="payment-to">
+                  Bhopal Airport
+                </div>
+              </div>
+              <div>
+                <div class="text-gray-400">Vehicle</div>
+                <div class="text-white font-medium" id="payment-vehicle">
+                  Sedan
+                </div>
+              </div>
+              <div>
+                <div class="text-gray-400">Date & Time</div>
+                <div class="text-white font-medium" id="payment-datetime">
+                  Nov 20, 2023 8:00 AM
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Payment Amount -->
+          <div class="bg-gray-700 rounded-lg p-4">
+            <div class="flex justify-between items-center">
+              <div>
+                <div class="text-white font-semibold">Total Amount</div>
+                <div class="text-gray-400 text-sm">Inclusive of all taxes</div>
+              </div>
+              <div
+                class="text-green-400 font-bold text-2xl"
+                id="payment-amount"
+              >
+                ₹0
+              </div>
+            </div>
+            <div class="text-xs text-gray-400 mt-2">
+              <div class="flex justify-between">
+                <span>Base fare:</span>
+                <span id="payment-base-fare">₹0</span>
+              </div>
+              <div class="flex justify-between">
+                <span>Distance charge:</span>
+                <span id="payment-distance-charge">₹0</span>
+              </div>
+              <div class="flex justify-between">
+                <span>GST (5%):</span>
+                <span id="payment-gst-amount">₹0</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Payment Methods -->
+          <div class="form-group">
+            <label class="form-label">Select Payment Method</label>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div class="payment-card" data-method="upi">
+                <div class="flex items-center">
+                  <i
+                    class="fa-solid fa-mobile-screen-button text-blue-400 text-xl mr-3"
+                  ></i>
+                  <div>
+                    <div class="font-semibold text-white">UPI Payment</div>
+                    <div class="text-xs text-gray-400">
+                      Google Pay, PhonePe, Paytm
+                    </div>
+                  </div>
+                </div>
+                <div class="mt-2 text-green-400 text-sm">
+                  <i class="fa-solid fa-bolt"></i> Instant Processing
+                </div>
+              </div>
+
+              <div class="payment-card" data-method="card">
+                <div class="flex items-center">
+                  <i
+                    class="fa-solid fa-credit-card text-purple-400 text-xl mr-3"
+                  ></i>
+                  <div>
+                    <div class="font-semibold text-white">
+                      Credit/Debit Card
+                    </div>
+                    <div class="text-xs text-gray-400">
+                      Visa, MasterCard, RuPay
+                    </div>
+                  </div>
+                </div>
+                <div class="mt-2 text-green-400 text-sm">
+                  <i class="fa-solid fa-shield-alt"></i> Secure Payment
+                </div>
+              </div>
+
+              <div class="payment-card" data-method="wallet">
+                <div class="flex items-center">
+                  <i
+                    class="fa-solid fa-wallet text-yellow-400 text-xl mr-3"
+                  ></i>
+                  <div>
+                    <div class="font-semibold text-white">Digital Wallet</div>
+                    <div class="text-xs text-gray-400">Paytm, Amazon Pay</div>
+                  </div>
+                </div>
+                <div class="mt-2 text-green-400 text-sm">
+                  <i class="fa-solid fa-rocket"></i> Fast Checkout
+                </div>
+              </div>
+
+              <div class="payment-card" data-method="cash">
+                <div class="flex items-center">
+                  <i
+                    class="fa-solid fa-money-bill-wave text-green-400 text-xl mr-3"
+                  ></i>
+                  <div>
+                    <div class="font-semibold text-white">Cash Payment</div>
+                    <div class="text-xs text-gray-400">
+                      Pay directly to driver
+                    </div>
+                  </div>
+                </div>
+                <div class="mt-2 text-green-400 text-sm">
+                  <i class="fa-solid fa-user"></i> Pay on Ride
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Payment Details Form -->
+          <div id="payment-details-form" class="hidden">
+            <div class="bg-gray-700 rounded-lg p-4">
+              <h4 class="font-bold text-white mb-3" id="payment-method-title">
+                UPI Payment
+              </h4>
+
+              <div id="upi-details" class="payment-method-details">
+                <div class="form-group">
+                  <label class="form-label">UPI ID</label>
+                  <input
+                    type="text"
+                    class="form-input"
+                    placeholder="yourname@upi"
+                    id="upi-id"
+                  />
+                </div>
+                <div class="text-center">
+                  <button
+                    class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition"
+                  >
+                    <i class="fa-solid fa-bolt mr-2"></i>Verify UPI ID
+                  </button>
+                </div>
+              </div>
+
+              <div id="card-details" class="payment-method-details hidden">
+                <div class="grid grid-cols-2 gap-4">
+                  <div class="form-group">
+                    <label class="form-label">Card Number</label>
+                    <input
+                      type="text"
+                      class="form-input"
+                      placeholder="1234 5678 9012 3456"
+                      id="card-number"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Card Holder Name</label>
+                    <input
+                      type="text"
+                      class="form-input"
+                      placeholder="John Doe"
+                      id="card-name"
+                    />
+                  </div>
+                </div>
+                <div class="grid grid-cols-3 gap-4">
+                  <div class="form-group">
+                    <label class="form-label">Expiry Date</label>
+                    <input
+                      type="text"
+                      class="form-input"
+                      placeholder="MM/YY"
+                      id="card-expiry"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">CVV</label>
+                    <input
+                      type="text"
+                      class="form-input"
+                      placeholder="123"
+                      id="card-cvv"
+                    />
+                  </div>
+                  <div class="form-group flex items-end">
+                    <button
+                      class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition"
+                    >
+                      Save Card
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div id="wallet-details" class="payment-method-details hidden">
+                <div class="form-group">
+                  <label class="form-label">Select Wallet</label>
+                  <select class="form-input" id="wallet-select">
+                    <option value="">Choose your wallet</option>
+                    <option value="paytm">Paytm Wallet</option>
+                    <option value="amazon">Amazon Pay</option>
+                    <option value="mobikwik">MobiKwik</option>
+                    <option value="freecharge">FreeCharge</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Mobile Number</label>
+                  <input
+                    type="text"
+                    class="form-input"
+                    placeholder="Enter registered mobile number"
+                    id="wallet-mobile"
+                  />
+                </div>
+              </div>
+
+              <div id="cash-details" class="payment-method-details hidden">
+                <div class="text-center p-4">
+                  <i
+                    class="fa-solid fa-money-bill-wave text-green-400 text-4xl mb-3"
+                  ></i>
+                  <div class="font-semibold text-white">Pay Cash to Driver</div>
+                  <div class="text-gray-400 text-sm mt-2">
+                    You can pay the amount directly to your driver when you meet
+                    them. The exact amount will be shown in the app.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Security Badge -->
+          <div class="secure-badge text-white rounded-lg p-3 text-center">
+            <i class="fa-solid fa-lock mr-2"></i>
+            Your payment is secured with 256-bit SSL encryption
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="flex space-x-2">
+            <button
+              id="confirm-payment-btn"
+              class="flex-1 bg-green-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-green-700 transition payment-processing"
+            >
+              <i class="fa-solid fa-lock mr-2"></i>Pay Now
+            </button>
+            <button
+              class="flex-1 bg-gray-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-gray-700 transition"
+              onclick="closeModal('payment-modal')"
+            >
+              Cancel Payment
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Payment Success Modal with Receipt -->
+    <div id="payment-success-modal" class="modal">
+      <div class="modal-content">
+        <div class="text-center mb-6">
+          <div class="bg-green-500 rounded-full p-4 inline-flex mb-4">
+            <i class="fa-solid fa-check text-white text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">Payment Successful!</h3>
+          <div class="text-gray-400">
+            Your booking has been confirmed and payment processed successfully.
+          </div>
+        </div>
+
+        <!-- Receipt Container -->
+        <div id="receipt-content" class="receipt-container">
+          <div class="receipt-header">
+            <div class="receipt-logo">
+              <i class="fa-solid fa-car"></i>
+            </div>
+            <div class="receipt-title">VIT Bhopal Transport Service</div>
+            <div class="receipt-subtitle">Official Booking Receipt</div>
+          </div>
+
+          <div class="receipt-section">
+            <div class="receipt-section-title">Booking Information</div>
+            <div class="receipt-row">
+              <div class="receipt-label">Booking ID:</div>
+              <div class="receipt-value" id="receipt-booking-id">VIT000</div>
+            </div>
+            <div class="receipt-row">
+              <div class="receipt-label">Booking Date:</div>
+              <div class="receipt-value" id="receipt-booking-date">
+                Nov 20, 2023
+              </div>
+            </div>
+            <div class="receipt-row">
+              <div class="receipt-label">Status:</div>
+              <div class="receipt-value" style="color: #10b981">Confirmed</div>
+            </div>
+          </div>
+
+          <div class="receipt-section">
+            <div class="receipt-section-title">Trip Details</div>
+            <div class="receipt-row">
+              <div class="receipt-label">From:</div>
+              <div class="receipt-value" id="receipt-from">
+                VIT Bhopal Main Gate
+              </div>
+            </div>
+            <div class="receipt-row">
+              <div class="receipt-label">To:</div>
+              <div class="receipt-value" id="receipt-to">Bhopal Airport</div>
+            </div>
+            <div class="receipt-row">
+              <div class="receipt-label">Vehicle Type:</div>
+              <div class="receipt-value" id="receipt-vehicle">Sedan</div>
+            </div>
+            <div class="receipt-row">
+              <div class="receipt-label">Pickup Time:</div>
+              <div class="receipt-value" id="receipt-pickup-time">
+                Nov 20, 2023 8:00 AM
+              </div>
+            </div>
+            <div class="receipt-row">
+              <div class="receipt-label">Passengers:</div>
+              <div class="receipt-value" id="receipt-passengers">2</div>
+            </div>
+          </div>
+
+          <div class="receipt-divider"></div>
+
+          <div class="receipt-section">
+            <div class="receipt-section-title">Payment Details</div>
+            <div class="receipt-row">
+              <div class="receipt-label">Payment Method:</div>
+              <div class="receipt-value" id="receipt-payment-method">UPI</div>
+            </div>
+            <div class="receipt-row">
+              <div class="receipt-label">Transaction ID:</div>
+              <div class="receipt-value" id="receipt-transaction-id">
+                TXN789456123
+              </div>
+            </div>
+            <div class="receipt-row">
+              <div class="receipt-label">Payment Date:</div>
+              <div class="receipt-value" id="receipt-payment-date">
+                Nov 19, 2023 7:45 PM
+              </div>
+            </div>
+          </div>
+
+          <div class="receipt-section">
+            <div class="receipt-section-title">Fare Breakdown</div>
+            <div class="receipt-row">
+              <div class="receipt-label">Base Fare:</div>
+              <div class="receipt-value" id="receipt-base-fare">₹400</div>
+            </div>
+            <div class="receipt-row">
+              <div class="receipt-label">Distance Charge:</div>
+              <div class="receipt-value" id="receipt-distance-charge">₹810</div>
+            </div>
+            <div class="receipt-row">
+              <div class="receipt-label">GST (5%):</div>
+              <div class="receipt-value" id="receipt-gst">₹61</div>
+            </div>
+            <div class="receipt-divider"></div>
+            <div class="receipt-row">
+              <div class="receipt-label">Total Amount:</div>
+              <div class="receipt-amount" id="receipt-total-amount">₹1271</div>
+            </div>
+          </div>
+
+          <div class="receipt-qr">
+            <div
+              style="
+                background: #f3f4f6;
+                padding: 1rem;
+                display: inline-block;
+                border-radius: 8px;
+              "
+            >
+              <div
+                style="color: #6b7280; font-size: 0.8rem; margin-bottom: 0.5rem"
+              >
+                Scan for Booking Details
+              </div>
+              <div
+                style="
+                  background: white;
+                  padding: 0.5rem;
+                  border-radius: 4px;
+                  display: inline-block;
+                "
+              >
+                <div
+                  style="
+                    width: 100px;
+                    height: 100px;
+                    background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: white;
+                    font-weight: bold;
+                  "
+                >
+                  QR CODE
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="receipt-footer">
+            <div>Thank you for choosing VIT Bhopal Transport Service</div>
+            <div>
+              For support, contact: 07562-654321 | transport@vitbhopal.ac.in
+            </div>
+            <div>
+              This is a computer-generated receipt. No signature required.
+            </div>
+          </div>
+        </div>
+
+        <!-- Receipt Actions -->
+        <div class="receipt-actions">
+          <button
+            id="download-receipt-btn"
+            class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition flex items-center"
+          >
+            <i class="fa-solid fa-download mr-2"></i>Download Receipt
+          </button>
+          <button
+            id="print-receipt-btn"
+            class="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg transition flex items-center"
+          >
+            <i class="fa-solid fa-print mr-2"></i>Print Receipt
+          </button>
+          <button
+            class="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-6 rounded-lg transition"
+            onclick="closeModal('payment-success-modal')"
+          >
+            Done
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Message Box for notifications -->
+    <div
+      id="message-box"
+      class="fixed bottom-4 right-4 bg-gray-700 text-white p-4 rounded-lg shadow-lg hidden message-box"
+    >
+      <p id="message-text"></p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+      // Vehicle Database
+      const vehiclesDatabase = [
+        {
+          id: 1,
+          type: "auto",
+          name: "Auto Rickshaw",
+          capacity: "3 passengers",
+          luggage: "Small bags only",
+          basePrice: 200,
+          perKm: 12,
+          image: "auto",
+          description: "Economical option for short distances",
+          features: ["Economical", "Quick", "Local Travel"],
+          available: true,
+          eta: "5-10 min",
+          rating: 4.2,
+        },
+        {
+          id: 2,
+          type: "taxi",
+          name: "Standard Taxi",
+          capacity: "4 passengers",
+          luggage: "2 medium bags",
+          basePrice: 300,
+          perKm: 15,
+          image: "taxi",
+          description: "Comfortable taxi for city travel",
+          features: ["AC", "Comfortable", "City Travel"],
+          available: true,
+          eta: "8-12 min",
+          rating: 4.5,
+        },
+        {
+          id: 3,
+          type: "sedan",
+          name: "Sedan Car",
+          capacity: "4 passengers",
+          luggage: "3 medium bags",
+          basePrice: 400,
+          perKm: 18,
+          image: "sedan",
+          description: "Premium sedan for comfortable travel",
+          features: ["Premium AC", "Spacious", "Comfortable"],
+          available: true,
+          eta: "10-15 min",
+          rating: 4.7,
+        },
+        {
+          id: 4,
+          type: "suv",
+          name: "SUV (Ertiga/Innova)",
+          capacity: "6-7 passengers",
+          luggage: "4-5 large bags",
+          basePrice: 600,
+          perKm: 22,
+          image: "suv",
+          description: "Spacious SUV for groups and long trips",
+          features: ["Spacious", "Group Travel", "Long Distance"],
+          available: true,
+          eta: "12-18 min",
+          rating: 4.6,
+        },
+        {
+          id: 5,
+          type: "luxury",
+          name: "Luxury Car",
+          capacity: "4 passengers",
+          luggage: "3 medium bags",
+          basePrice: 800,
+          perKm: 25,
+          image: "luxury",
+          description: "Premium luxury car for special occasions",
+          features: ["Luxury", "Premium", "Special Occasions"],
+          available: true,
+          eta: "15-20 min",
+          rating: 4.9,
+        },
+        {
+          id: 6,
+          type: "bus",
+          name: "Mini Bus",
+          capacity: "12-15 passengers",
+          luggage: "10+ large bags",
+          basePrice: 1200,
+          perKm: 30,
+          image: "bus",
+          description: "Ideal for large groups and events",
+          features: ["Large Capacity", "Group Events", "Luggage Space"],
+          available: true,
+          eta: "20-25 min",
+          rating: 4.4,
+        },
+      ];
+
+      // Destination Database with distances from VIT Bhopal
+      const destinationsDatabase = [
+        {
+          id: "bhopal-airport",
+          name: "Bhopal Airport (Raja Bhoj)",
+          city: "Bhopal",
+          distance: 45,
+          type: "airport",
+        },
+        {
+          id: "bhopal-railway",
+          name: "Bhopal Railway Station",
+          city: "Bhopal",
+          distance: 42,
+          type: "railway",
+        },
+        {
+          id: "bhopal-bus-stand",
+          name: "Bhopal Bus Stand",
+          city: "Bhopal",
+          distance: 43,
+          type: "bus",
+        },
+        {
+          id: "bhopal-mp-nagar",
+          name: "MP Nagar, Bhopal",
+          city: "Bhopal",
+          distance: 44,
+          type: "local",
+        },
+        {
+          id: "bhopal-new-market",
+          name: "New Market, Bhopal",
+          city: "Bhopal",
+          distance: 43,
+          type: "local",
+        },
+        {
+          id: "indore-airport",
+          name: "Indore Airport",
+          city: "Indore",
+          distance: 156,
+          type: "airport",
+        },
+        {
+          id: "indore-railway",
+          name: "Indore Railway Station",
+          city: "Indore",
+          distance: 158,
+          type: "railway",
+        },
+        {
+          id: "indore-bus-stand",
+          name: "Indore Bus Stand",
+          city: "Indore",
+          distance: 157,
+          type: "bus",
+        },
+        {
+          id: "indore-vijay-nagar",
+          name: "Vijay Nagar, Indore",
+          city: "Indore",
+          distance: 159,
+          type: "local",
+        },
+        {
+          id: "ujjain-railway",
+          name: "Ujjain Railway Station",
+          city: "Ujjain",
+          distance: 180,
+          type: "railway",
+        },
+        {
+          id: "ujjain-bus-stand",
+          name: "Ujjain Bus Stand",
+          city: "Ujjain",
+          distance: 181,
+          type: "bus",
+        },
+        {
+          id: "ujjain-mahakal",
+          name: "Mahakaleshwar Temple, Ujjain",
+          city: "Ujjain",
+          distance: 182,
+          type: "temple",
+        },
+        {
+          id: "omkareshwar",
+          name: "Omkareshwar Temple",
+          city: "Khandwa",
+          distance: 220,
+          type: "temple",
+        },
+        {
+          id: "pachmarhi",
+          name: "Pachmarhi Hill Station",
+          city: "Pachmarhi",
+          distance: 250,
+          type: "hillstation",
+        },
+        {
+          id: "sanchi",
+          name: "Sanchi Stupa",
+          city: "Sanchi",
+          distance: 80,
+          type: "historical",
+        },
+      ];
+
+      // Sample bookings data
+      let bookingsDatabase = [
+        {
+          id: "VIT001",
+          vehicleType: "sedan",
+          destination: "bhopal-airport",
+          pickupLocation: "main-gate",
+          dateTime: "2023-11-15T10:00",
+          passengers: 2,
+          luggage: "medium",
+          specialInstructions: "Flight at 1:00 PM",
+          status: "completed",
+          amount: 1200,
+          driver: {
+            name: "Rajesh Kumar",
+            phone: "9876543210",
+            vehicle: "MH12 AB 1234",
+            rating: 4.7,
+          },
+        },
+        {
+          id: "VIT002",
+          vehicleType: "suv",
+          destination: "indore-railway",
+          pickupLocation: "boys-hostel",
+          dateTime: "2023-11-20T08:00",
+          passengers: 4,
+          luggage: "multiple",
+          specialInstructions: "",
+          status: "dispatched",
+          amount: 3500,
+          driver: {
+            name: "Anil Sharma",
+            phone: "9876543211",
+            vehicle: "MH12 CD 5678",
+            rating: 4.5,
+          },
+        },
+        {
+          id: "VIT003",
+          vehicleType: "auto",
+          destination: "bhopal-mp-nagar",
+          pickupLocation: "girls-hostel",
+          dateTime: "2023-11-10T15:00",
+          passengers: 2,
+          luggage: "small",
+          specialInstructions: "Need to return by 7 PM",
+          status: "completed",
+          amount: 600,
+          driver: {
+            name: "Mohan Lal",
+            phone: "9876543212",
+            vehicle: "MP04 EF 9012",
+            rating: 4.2,
+          },
+        },
+        {
+          id: "VIT004",
+          vehicleType: "taxi",
+          destination: "bhopal-bus-stand",
+          pickupLocation: "main-gate",
+          dateTime: "2023-11-25T14:00",
+          passengers: 3,
+          luggage: "medium",
+          specialInstructions: "Will have 2 suitcases",
+          status: "confirmed",
+          amount: 800,
+          driver: {
+            name: "To be assigned",
+            phone: "N/A",
+            vehicle: "N/A",
+            rating: 0,
+          },
+        },
+      ];
+
+      // Current booking data
+      let currentBooking = null;
+      let currentReceiptData = null;
+
+      // JavaScript to display the current date and time
+      function updateDateTime() {
+        const now = new Date();
+        const options = {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        };
+        const formattedDateTime = now.toLocaleDateString("en-US", options);
+        document.getElementById("date-time-display").textContent =
+          formattedDateTime;
+      }
+      updateDateTime();
+      setInterval(updateDateTime, 60000);
+
+      // Modal functionality
+      function showModal(modalId) {
+        document.getElementById(modalId).classList.add("active");
+      }
+
+      function closeModal(modalId) {
+        document.getElementById(modalId).classList.remove("active");
+      }
+
+      // Function to show a custom message box
+      function showMessage(text, type = "info") {
+        const messageBox = document.getElementById("message-box");
+        const messageText = document.getElementById("message-text");
+
+        messageText.textContent = text;
+        messageBox.classList.remove(
+          "hidden",
+          "bg-red-700",
+          "bg-green-700",
+          "bg-blue-700"
+        );
+
+        if (type === "error") {
+          messageBox.classList.add("bg-red-700");
+        } else if (type === "success") {
+          messageBox.classList.add("bg-green-700");
+        } else if (type === "info") {
+          messageBox.classList.add("bg-blue-700");
+        } else {
+          messageBox.classList.add("bg-gray-700");
+        }
+
+        setTimeout(() => {
+          messageBox.classList.add("hidden");
+        }, 4000);
+      }
+
+      // Function to populate vehicles
+      function populateVehicles() {
+        const container = document.getElementById("vehicles-container");
+
+        container.innerHTML = vehiclesDatabase
+          .map((vehicle) => {
+            const vehicleClass = `vehicle-type-${vehicle.type}`;
+            const iconClass =
+              vehicle.type === "auto"
+                ? "fa-motorcycle"
+                : vehicle.type === "taxi"
+                ? "fa-taxi"
+                : vehicle.type === "sedan"
+                ? "fa-car"
+                : vehicle.type === "suv"
+                ? "fa-car-side"
+                : vehicle.type === "bus"
+                ? "fa-bus"
+                : "fa-car";
+
+            return `
+            <div class="vehicle-card bg-gray-700 rounded-xl p-6 ${vehicleClass}">
+              <div class="flex justify-between items-start mb-4">
+                <div>
+                  <h4 class="font-bold text-white text-lg">${vehicle.name}</h4>
+                  <div class="text-sm text-gray-400">${vehicle.capacity}</div>
+                </div>
+                <div class="text-right">
+                  <div class="text-green-400 text-sm font-semibold">${
+                    vehicle.eta
+                  }</div>
+                  <div class="text-yellow-400 text-xs">
+                    <i class="fa-solid fa-star"></i> ${vehicle.rating}
+                  </div>
+                </div>
+              </div>
+              
+              <div class="text-sm text-gray-300 mb-4">
+                ${vehicle.description}
+              </div>
+              
+              <div class="flex flex-wrap gap-1 mb-4">
+                ${vehicle.features
+                  .map(
+                    (feature) =>
+                      `<span class="specialty-badge text-blue-400 text-xs px-2 py-1 rounded">${feature}</span>`
+                  )
+                  .join("")}
+              </div>
+              
+              <div class="flex justify-between items-center mb-4">
+                <div class="text-gray-400 text-sm">Luggage:</div>
+                <div class="text-white font-medium text-sm">${
+                  vehicle.luggage
+                }</div>
+              </div>
+              
+              <div class="flex justify-between items-center mb-4">
+                <div class="text-gray-400 text-sm">Base Fare:</div>
+                <div class="text-white font-bold">₹${vehicle.basePrice}</div>
+              </div>
+              
+              <div class="flex space-x-2">
+                <button class="book-vehicle-btn flex-1 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold py-2 px-3 rounded-lg transition duration-200" data-id="${
+                  vehicle.id
+                }">
+                  <i class="fa-solid fa-bookmark mr-1"></i>Book Now
+                </button>
+                <button class="view-details-btn bg-gray-600 hover:bg-gray-700 text-white text-sm font-semibold py-2 px-3 rounded-lg transition duration-200" data-id="${
+                  vehicle.id
+                }">
+                  <i class="fa-solid fa-info-circle mr-1"></i>Details
+                </button>
+              </div>
+            </div>
+          `;
+          })
+          .join("");
+      }
+
+      // Function to populate bookings table
+      function populateBookingsTable(filter = "all") {
+        const container = document.getElementById("bookings-table-body");
+
+        let filteredBookings = bookingsDatabase;
+
+        if (filter === "upcoming") {
+          filteredBookings = bookingsDatabase.filter(
+            (booking) =>
+              booking.status === "pending" ||
+              booking.status === "confirmed" ||
+              booking.status === "dispatched"
+          );
+        } else if (filter === "completed") {
+          filteredBookings = bookingsDatabase.filter(
+            (booking) =>
+              booking.status === "completed" || booking.status === "cancelled"
+          );
+        }
+
+        if (filteredBookings.length === 0) {
+          container.innerHTML = `
+            <tr>
+              <td colspan="7" class="px-6 py-4 text-center text-gray-500">
+                <i class="fa-solid fa-clipboard-list text-2xl mb-2 block"></i>
+                <p>No bookings found</p>
+                <p class="text-sm mt-1">Book your first ride to see it here</p>
+              </td>
+            </tr>
+          `;
+          return;
+        }
+
+        container.innerHTML = filteredBookings
+          .map((booking) => {
+            const vehicle = vehiclesDatabase.find(
+              (v) => v.type === booking.vehicleType
+            );
+            const destination = destinationsDatabase.find(
+              (d) => d.id === booking.destination
+            );
+            const statusClass = `booking-status-${booking.status}`;
+
+            const statusText =
+              booking.status === "pending"
+                ? "Pending"
+                : booking.status === "confirmed"
+                ? "Confirmed"
+                : booking.status === "dispatched"
+                ? "Dispatched"
+                : booking.status === "cancelled"
+                ? "Cancelled"
+                : "Completed";
+
+            const formattedDate = new Date(booking.dateTime).toLocaleString(
+              "en-US",
+              {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+                hour: "numeric",
+                minute: "2-digit",
+                hour12: true,
+              }
+            );
+
+            return `
+            <tr class="border-b border-gray-700 hover:bg-gray-700">
+              <td class="px-6 py-4 font-medium text-white">${booking.id}</td>
+              <td class="px-6 py-4">
+                <div class="flex items-center">
+                  <i class="fa-solid ${
+                    vehicle.type === "auto"
+                      ? "fa-motorcycle"
+                      : vehicle.type === "bus"
+                      ? "fa-bus"
+                      : "fa-car"
+                  } mr-2 ${
+              vehicle.type === "auto"
+                ? "text-yellow-400"
+                : vehicle.type === "taxi"
+                ? "text-blue-400"
+                : vehicle.type === "sedan"
+                ? "text-green-400"
+                : vehicle.type === "suv"
+                ? "text-purple-400"
+                : vehicle.type === "bus"
+                ? "text-orange-400"
+                : "text-pink-400"
+            }"></i>
+                  ${vehicle.name}
+                </div>
+              </td>
+              <td class="px-6 py-4">${destination.name}</td>
+              <td class="px-6 py-4">${formattedDate}</td>
+              <td class="px-6 py-4 text-green-400 font-semibold">₹${
+                booking.amount
+              }</td>
+              <td class="px-6 py-4">
+                <span class="${statusClass} text-xs font-medium px-2.5 py-0.5 rounded-full">${statusText}</span>
+              </td>
+              <td class="px-6 py-4">
+                <button class="view-booking-btn text-blue-400 hover:text-blue-300 font-medium text-sm" data-id="${
+                  booking.id
+                }">
+                  <i class="fa-solid fa-eye mr-1"></i>View
+                </button>
+                ${
+                  booking.status === "pending" || booking.status === "confirmed"
+                    ? `
+                <button class="cancel-booking-btn text-red-400 hover:text-red-300 font-medium text-sm ml-3" data-id="${booking.id}">
+                  <i class="fa-solid fa-times mr-1"></i>Cancel
+                </button>
+                `
+                    : ""
+                }
+                ${
+                  booking.status === "dispatched"
+                    ? `
+                <button class="track-booking-btn text-green-400 hover:text-green-300 font-medium text-sm ml-3" data-id="${booking.id}">
+                  <i class="fa-solid fa-location-arrow mr-1"></i>Track
+                </button>
+                `
+                    : ""
+                }
+              </td>
+            </tr>
+          `;
+          })
+          .join("");
+      }
+
+      // Function to calculate estimated price
+      function calculatePrice(vehicleType, destinationId) {
+        const vehicle = vehiclesDatabase.find((v) => v.type === vehicleType);
+        const destination = destinationsDatabase.find(
+          (d) => d.id === destinationId
+        );
+
+        if (!vehicle || !destination)
+          return { total: 0, base: 0, distance: 0, gst: 0 };
+
+        // Calculate price: base price + (distance * per km rate)
+        const baseFare = vehicle.basePrice;
+        const distanceCharge = destination.distance * vehicle.perKm;
+        const subtotal = baseFare + distanceCharge;
+        const gst = Math.round(subtotal * 0.05);
+        const total = subtotal + gst;
+
+        return {
+          total: Math.round(total),
+          base: baseFare,
+          distance: Math.round(distanceCharge),
+          gst: gst,
+        };
+      }
+
+      // Function to show price estimate
+      function showPriceEstimate() {
+        const vehicleType = document.getElementById("modal-vehicle-type").value;
+        const destination = document.getElementById("modal-destination").value;
+
+        if (vehicleType && destination) {
+          const price = calculatePrice(vehicleType, destination);
+          document.getElementById(
+            "estimated-price"
+          ).textContent = `₹${price.total}`;
+          document.getElementById("base-fare").textContent = `₹${price.base}`;
+          document.getElementById(
+            "distance-charge"
+          ).textContent = `₹${price.distance}`;
+          document.getElementById("gst-amount").textContent = `₹${price.gst}`;
+          document.getElementById("price-estimate").classList.remove("hidden");
+        } else {
+          document.getElementById("price-estimate").classList.add("hidden");
+        }
+      }
+
+      // Function to show quick price estimate
+      function showQuickPriceEstimate() {
+        const vehicleType = document.getElementById("vehicle-type").value;
+        const destination = document.getElementById("destination").value;
+
+        if (vehicleType && destination) {
+          const price = calculatePrice(vehicleType, destination);
+          document.getElementById(
+            "quick-estimated-price"
+          ).textContent = `₹${price.total}`;
+          document
+            .getElementById("quick-price-estimate")
+            .classList.remove("hidden");
+        } else {
+          document
+            .getElementById("quick-price-estimate")
+            .classList.add("hidden");
+        }
+      }
+
+      // Function to create a new booking
+      function createBooking(bookingData) {
+        // Generate a unique booking ID
+        const bookingId =
+          "VIT" + (bookingsDatabase.length + 1).toString().padStart(3, "0");
+
+        // Calculate price
+        const price = calculatePrice(
+          bookingData.vehicleType,
+          bookingData.destination
+        );
+
+        // Create new booking object
+        const newBooking = {
+          id: bookingId,
+          ...bookingData,
+          status: "confirmed",
+          amount: price.total,
+          driver: {
+            name: "To be assigned",
+            phone: "N/A",
+            vehicle: "N/A",
+            rating: 0,
+          },
+        };
+
+        // Add to database
+        bookingsDatabase.unshift(newBooking);
+
+        // Update UI
+        populateBookingsTable();
+        updateStats();
+
+        return newBooking;
+      }
+
+      // Function to update statistics
+      function updateStats() {
+        document.getElementById("available-vehicles").textContent =
+          vehiclesDatabase.filter((v) => v.available).length;
+        document.getElementById("active-bookings").textContent =
+          bookingsDatabase.filter(
+            (b) =>
+              b.status === "pending" ||
+              b.status === "confirmed" ||
+              b.status === "dispatched"
+          ).length;
+        document.getElementById("popular-destinations").textContent = new Set(
+          bookingsDatabase.map((b) => b.destination)
+        ).size;
+        document.getElementById("emergency-rides").textContent =
+          bookingsDatabase.filter(
+            (b) =>
+              b.specialInstructions &&
+              b.specialInstructions.toLowerCase().includes("emergency")
+          ).length;
+      }
+
+      // Function to proceed to payment
+      function proceedToPayment(bookingData) {
+        currentBooking = bookingData;
+
+        // Calculate price
+        const price = calculatePrice(
+          bookingData.vehicleType,
+          bookingData.destination
+        );
+        const vehicle = vehiclesDatabase.find(
+          (v) => v.type === bookingData.vehicleType
+        );
+        const destination = destinationsDatabase.find(
+          (d) => d.id === bookingData.destination
+        );
+        const pickupLocationText =
+          bookingData.pickupLocation === "main-gate"
+            ? "VIT Bhopal Main Gate"
+            : bookingData.pickupLocation === "boys-hostel"
+            ? "Boys Hostel Gate"
+            : bookingData.pickupLocation === "girls-hostel"
+            ? "Girls Hostel Gate"
+            : "Academic Block";
+
+        // Format datetime with AM/PM
+        const formattedDateTime = new Date(bookingData.dateTime).toLocaleString(
+          "en-US",
+          {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+            hour: "numeric",
+            minute: "2-digit",
+            hour12: true,
+          }
+        );
+
+        // Update payment modal with booking details
+        document.getElementById("payment-from").textContent =
+          pickupLocationText;
+        document.getElementById("payment-to").textContent = destination.name;
+        document.getElementById("payment-vehicle").textContent = vehicle.name;
+        document.getElementById("payment-datetime").textContent =
+          formattedDateTime;
+        document.getElementById(
+          "payment-amount"
+        ).textContent = `₹${price.total}`;
+        document.getElementById(
+          "payment-base-fare"
+        ).textContent = `₹${price.base}`;
+        document.getElementById(
+          "payment-distance-charge"
+        ).textContent = `₹${price.distance}`;
+        document.getElementById(
+          "payment-gst-amount"
+        ).textContent = `₹${price.gst}`;
+
+        // Close booking modal and show payment modal
+        closeModal("book-vehicle-modal");
+        showModal("payment-modal");
+      }
+
+      // Function to process payment
+      function processPayment(paymentMethod) {
+        if (!currentBooking) return;
+
+        // Create booking
+        const newBooking = createBooking(currentBooking);
+
+        // Generate receipt data
+        const vehicle = vehiclesDatabase.find(
+          (v) => v.type === newBooking.vehicleType
+        );
+        const destination = destinationsDatabase.find(
+          (d) => d.id === newBooking.destination
+        );
+        const price = calculatePrice(
+          newBooking.vehicleType,
+          newBooking.destination
+        );
+
+        const pickupLocationText =
+          newBooking.pickupLocation === "main-gate"
+            ? "VIT Bhopal Main Gate"
+            : newBooking.pickupLocation === "boys-hostel"
+            ? "Boys Hostel Gate"
+            : newBooking.pickupLocation === "girls-hostel"
+            ? "Girls Hostel Gate"
+            : "Academic Block";
+
+        // Format dates
+        const now = new Date();
+        const bookingDate = now.toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        });
+
+        const paymentDate = now.toLocaleString("en-US", {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+          hour: "numeric",
+          minute: "2-digit",
+          hour12: true,
+        });
+
+        const pickupTime = new Date(newBooking.dateTime).toLocaleString(
+          "en-US",
+          {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+            hour: "numeric",
+            minute: "2-digit",
+            hour12: true,
+          }
+        );
+
+        // Store receipt data
+        currentReceiptData = {
+          bookingId: newBooking.id,
+          bookingDate: bookingDate,
+          from: pickupLocationText,
+          to: destination.name,
+          vehicle: vehicle.name,
+          pickupTime: pickupTime,
+          passengers: newBooking.passengers,
+          paymentMethod: paymentMethod.toUpperCase(),
+          transactionId:
+            "TXN" + Math.random().toString(36).substr(2, 9).toUpperCase(),
+          paymentDate: paymentDate,
+          baseFare: `₹${price.base}`,
+          distanceCharge: `₹${price.distance}`,
+          gst: `₹${price.gst}`,
+          totalAmount: `₹${price.total}`,
+        };
+
+        // Update receipt with data
+        updateReceipt(currentReceiptData);
+
+        // Close payment modal and show success
+        closeModal("payment-modal");
+        showModal("payment-success-modal");
+
+        // Reset current booking
+        currentBooking = null;
+
+        showMessage(
+          `Payment successful! Your booking ${newBooking.id} is confirmed.`,
+          "success"
+        );
+      }
+
+      // Function to update receipt with data
+      function updateReceipt(receiptData) {
+        document.getElementById("receipt-booking-id").textContent =
+          receiptData.bookingId;
+        document.getElementById("receipt-booking-date").textContent =
+          receiptData.bookingDate;
+        document.getElementById("receipt-from").textContent = receiptData.from;
+        document.getElementById("receipt-to").textContent = receiptData.to;
+        document.getElementById("receipt-vehicle").textContent =
+          receiptData.vehicle;
+        document.getElementById("receipt-pickup-time").textContent =
+          receiptData.pickupTime;
+        document.getElementById("receipt-passengers").textContent =
+          receiptData.passengers;
+        document.getElementById("receipt-payment-method").textContent =
+          receiptData.paymentMethod;
+        document.getElementById("receipt-transaction-id").textContent =
+          receiptData.transactionId;
+        document.getElementById("receipt-payment-date").textContent =
+          receiptData.paymentDate;
+        document.getElementById("receipt-base-fare").textContent =
+          receiptData.baseFare;
+        document.getElementById("receipt-distance-charge").textContent =
+          receiptData.distanceCharge;
+        document.getElementById("receipt-gst").textContent = receiptData.gst;
+        document.getElementById("receipt-total-amount").textContent =
+          receiptData.totalAmount;
+      }
+
+      // Function to download receipt as PDF
+      function downloadReceipt() {
+        const receiptElement = document.getElementById("receipt-content");
+
+        // Options for PDF generation
+        const options = {
+          margin: 10,
+          filename: `booking_receipt_${currentReceiptData.bookingId}.pdf`,
+          image: { type: "jpeg", quality: 0.98 },
+          html2canvas: { scale: 2 },
+          jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+        };
+
+        // Generate PDF
+        html2pdf().set(options).from(receiptElement).save();
+
+        showMessage("Receipt downloaded successfully!", "success");
+      }
+
+      // Function to print receipt
+      function printReceipt() {
+        const receiptElement = document.getElementById("receipt-content");
+        const originalContents = document.body.innerHTML;
+
+        // Create a print-friendly version
+        const printContents = receiptElement.outerHTML;
+
+        // Replace body content with receipt
+        document.body.innerHTML = printContents;
+
+        // Print
+        window.print();
+
+        // Restore original content
+        document.body.innerHTML = originalContents;
+
+        // Re-initialize event listeners
+        init();
+
+        showMessage("Receipt sent to printer!", "success");
+      }
+
+      // Initialize the application
+      function init() {
+        // Initialize date pickers with AM/PM format
+        flatpickr("#quick-pickup-time", {
+          enableTime: true,
+          dateFormat: "Y-m-d h:i K",
+          minDate: "today",
+          time_24hr: false,
+        });
+
+        flatpickr("#pickup-datetime", {
+          enableTime: true,
+          dateFormat: "Y-m-d h:i K",
+          minDate: "today",
+          time_24hr: false,
+        });
+
+        // Populate vehicles and bookings on load
+        populateVehicles();
+        populateBookingsTable();
+        updateStats();
+
+        // Book vehicle button
+        document
+          .getElementById("book-vehicle-btn")
+          .addEventListener("click", function () {
+            showModal("book-vehicle-modal");
+          });
+
+        // My bookings button
+        document
+          .getElementById("my-bookings-btn")
+          .addEventListener("click", function () {
+            // Scroll to bookings section
+            document.querySelector("#bookings-table-body").scrollIntoView({
+              behavior: "smooth",
+            });
+          });
+
+        // Emergency ride button
+        document
+          .getElementById("emergency-ride-btn")
+          .addEventListener("click", function () {
+            showModal("book-vehicle-modal");
+            document.getElementById("modal-destination").value =
+              "bhopal-airport";
+            document.getElementById("modal-vehicle-type").value = "sedan";
+            document.getElementById("special-instructions").value =
+              "EMERGENCY: Need immediate transport for medical emergency";
+            showPriceEstimate();
+            showMessage(
+              "Emergency ride mode activated. Your booking will be prioritized.",
+              "info"
+            );
+          });
+
+        // Quick book button
+        document
+          .getElementById("quick-book-btn")
+          .addEventListener("click", function () {
+            const pickupLocation =
+              document.getElementById("pickup-location").value;
+            const destination = document.getElementById("destination").value;
+            const vehicleType = document.getElementById("vehicle-type").value;
+
+            if (!pickupLocation || !destination || !vehicleType) {
+              showMessage(
+                "Please select pickup location, destination and vehicle type",
+                "error"
+              );
+              return;
+            }
+
+            showModal("book-vehicle-modal");
+            document.getElementById("modal-pickup-location").value =
+              pickupLocation;
+            document.getElementById("modal-destination").value = destination;
+            document.getElementById("modal-vehicle-type").value = vehicleType;
+            showPriceEstimate();
+          });
+
+        // Close book vehicle modal
+        document
+          .getElementById("close-book-vehicle")
+          .addEventListener("click", function () {
+            closeModal("book-vehicle-modal");
+          });
+
+        // Close payment modal
+        document
+          .getElementById("close-payment")
+          .addEventListener("click", function () {
+            closeModal("payment-modal");
+          });
+
+        // Event delegation for vehicle cards
+        document.addEventListener("click", function (e) {
+          // Book vehicle button
+          if (
+            e.target.classList.contains("book-vehicle-btn") ||
+            e.target.parentElement.classList.contains("book-vehicle-btn")
+          ) {
+            const btn = e.target.classList.contains("book-vehicle-btn")
+              ? e.target
+              : e.target.parentElement;
+            const vehicleId = parseInt(btn.dataset.id);
+            const vehicle = vehiclesDatabase.find((v) => v.id === vehicleId);
+
+            showModal("book-vehicle-modal");
+            document.getElementById("modal-vehicle-type").value = vehicle.type;
+            showPriceEstimate();
+          }
+
+          // View details button
+          if (
+            e.target.classList.contains("view-details-btn") ||
+            e.target.parentElement.classList.contains("view-details-btn")
+          ) {
+            const btn = e.target.classList.contains("view-details-btn")
+              ? e.target
+              : e.target.parentElement;
+            const vehicleId = parseInt(btn.dataset.id);
+            const vehicle = vehiclesDatabase.find((v) => v.id === vehicleId);
+
+            showMessage(
+              `${vehicle.name}: ${vehicle.description} | Capacity: ${vehicle.capacity} | Luggage: ${vehicle.luggage} | ETA: ${vehicle.eta} | Rating: ${vehicle.rating}`,
+              "info"
+            );
+          }
+        });
+
+        // Event delegation for bookings table
+        document.addEventListener("click", function (e) {
+          // View booking button
+          if (
+            e.target.classList.contains("view-booking-btn") ||
+            e.target.parentElement.classList.contains("view-booking-btn")
+          ) {
+            const btn = e.target.classList.contains("view-booking-btn")
+              ? e.target
+              : e.target.parentElement;
+            const bookingId = btn.dataset.id;
+            showBookingDetails(bookingId);
+          }
+
+          // Cancel booking button
+          if (
+            e.target.classList.contains("cancel-booking-btn") ||
+            e.target.parentElement.classList.contains("cancel-booking-btn")
+          ) {
+            const btn = e.target.classList.contains("cancel-booking-btn")
+              ? e.target
+              : e.target.parentElement;
+            const bookingId = btn.dataset.id;
+            cancelBooking(bookingId);
+          }
+
+          // Track booking button
+          if (
+            e.target.classList.contains("track-booking-btn") ||
+            e.target.parentElement.classList.contains("track-booking-btn")
+          ) {
+            const btn = e.target.classList.contains("track-booking-btn")
+              ? e.target
+              : e.target.parentElement;
+            const bookingId = btn.dataset.id;
+            showMessage(
+              `Live tracking activated for booking ${bookingId}`,
+              "info"
+            );
+          }
+        });
+
+        // Price estimate triggers
+        document
+          .getElementById("modal-vehicle-type")
+          .addEventListener("change", showPriceEstimate);
+        document
+          .getElementById("modal-destination")
+          .addEventListener("change", showPriceEstimate);
+
+        // Quick price estimate triggers
+        document
+          .getElementById("vehicle-type")
+          .addEventListener("change", showQuickPriceEstimate);
+        document
+          .getElementById("destination")
+          .addEventListener("change", showQuickPriceEstimate);
+
+        // Confirm booking button - redirects to payment
+        document
+          .getElementById("confirm-booking-btn")
+          .addEventListener("click", function () {
+            const pickupLocation = document.getElementById(
+              "modal-pickup-location"
+            ).value;
+            const destination =
+              document.getElementById("modal-destination").value;
+            const vehicleType =
+              document.getElementById("modal-vehicle-type").value;
+            const pickupDatetime =
+              document.getElementById("pickup-datetime").value;
+            const passengers = document.getElementById("passengers").value;
+            const luggage = document.getElementById("luggage").value;
+            const specialInstructions = document.getElementById(
+              "special-instructions"
+            ).value;
+
+            if (
+              !pickupLocation ||
+              !destination ||
+              !vehicleType ||
+              !pickupDatetime
+            ) {
+              showMessage("Please fill all required fields", "error");
+              return;
+            }
+
+            // Create booking data
+            const bookingData = {
+              vehicleType,
+              destination,
+              pickupLocation,
+              dateTime: pickupDatetime,
+              passengers: parseInt(passengers),
+              luggage,
+              specialInstructions,
+            };
+
+            // Proceed to payment
+            proceedToPayment(bookingData);
+          });
+
+        // Payment method selection
+        document.querySelectorAll(".payment-card").forEach((card) => {
+          card.addEventListener("click", function () {
+            // Remove selected class from all cards
+            document.querySelectorAll(".payment-card").forEach((c) => {
+              c.classList.remove("selected");
+            });
+
+            // Add selected class to clicked card
+            this.classList.add("selected");
+
+            const method = this.dataset.method;
+            const paymentDetailsForm = document.getElementById(
+              "payment-details-form"
+            );
+            const paymentMethodTitle = document.getElementById(
+              "payment-method-title"
+            );
+
+            // Show payment details form
+            paymentDetailsForm.classList.remove("hidden");
+
+            // Hide all payment method details
+            document
+              .querySelectorAll(".payment-method-details")
+              .forEach((detail) => {
+                detail.classList.add("hidden");
+              });
+
+            // Show selected payment method details
+            if (method === "upi") {
+              paymentMethodTitle.textContent = "UPI Payment";
+              document.getElementById("upi-details").classList.remove("hidden");
+            } else if (method === "card") {
+              paymentMethodTitle.textContent = "Card Payment";
+              document
+                .getElementById("card-details")
+                .classList.remove("hidden");
+            } else if (method === "wallet") {
+              paymentMethodTitle.textContent = "Digital Wallet";
+              document
+                .getElementById("wallet-details")
+                .classList.remove("hidden");
+            } else if (method === "cash") {
+              paymentMethodTitle.textContent = "Cash Payment";
+              document
+                .getElementById("cash-details")
+                .classList.remove("hidden");
+            }
+          });
+        });
+
+        // Confirm payment button
+        document
+          .getElementById("confirm-payment-btn")
+          .addEventListener("click", function () {
+            const selectedPaymentMethod = document.querySelector(
+              ".payment-card.selected"
+            );
+            if (!selectedPaymentMethod) {
+              showMessage("Please select a payment method", "error");
+              return;
+            }
+
+            const method = selectedPaymentMethod.dataset.method;
+
+            // Simulate payment processing
+            showMessage("Processing your payment...", "info");
+
+            setTimeout(() => {
+              processPayment(method);
+            }, 2000);
+          });
+
+        // Download receipt button
+        document
+          .getElementById("download-receipt-btn")
+          .addEventListener("click", downloadReceipt);
+
+        // Print receipt button
+        document
+          .getElementById("print-receipt-btn")
+          .addEventListener("click", printReceipt);
+
+        // Booking filters
+        document
+          .getElementById("filter-all")
+          .addEventListener("click", function () {
+            document.querySelectorAll(".filter-btn").forEach((btn) => {
+              btn.classList.remove("bg-blue-600", "text-white");
+              btn.classList.add("bg-gray-700", "text-gray-400");
+            });
+            this.classList.remove("bg-gray-700", "text-gray-400");
+            this.classList.add("bg-blue-600", "text-white");
+            populateBookingsTable("all");
+          });
+
+        document
+          .getElementById("filter-upcoming")
+          .addEventListener("click", function () {
+            document.querySelectorAll(".filter-btn").forEach((btn) => {
+              btn.classList.remove("bg-blue-600", "text-white");
+              btn.classList.add("bg-gray-700", "text-gray-400");
+            });
+            this.classList.remove("bg-gray-700", "text-gray-400");
+            this.classList.add("bg-blue-600", "text-white");
+            populateBookingsTable("upcoming");
+          });
+
+        document
+          .getElementById("filter-completed")
+          .addEventListener("click", function () {
+            document.querySelectorAll(".filter-btn").forEach((btn) => {
+              btn.classList.remove("bg-blue-600", "text-white");
+              btn.classList.add("bg-gray-700", "text-gray-400");
+            });
+            this.classList.remove("bg-gray-700", "text-gray-400");
+            this.classList.add("bg-blue-600", "text-white");
+            populateBookingsTable("completed");
+          });
+      }
+
+      // Initialize when DOM is loaded
+      document.addEventListener("DOMContentLoaded", init);
+    </script>
+    <script src="auth_guard.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,2625 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VIT Bhopal | Professional Laundry Management System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
+    />
+    <style> @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"); body { font-family: "Inter", sans-serif; color: #d1d5db; } .active-nav-link { background-color: #374151; color: white; } .bg-card { background-color: #374151; } .message-box { animation: slideIn 0.5s forwards; } @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } } .fade-in { animation: fadeIn 0.5s ease-in; } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } } .gradient-border { background: linear-gradient(135deg, #3b82f6, #8b5cf6); padding: 2px; border-radius: 12px; } .gradient-border > div { background: #374151; border-radius: 10px; padding: 1.5rem; } .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); z-index: 1000; align-items: center; justify-content: center; } .modal.active { display: flex; } .modal-content { background: #1f2937; border-radius: 12px; padding: 2rem; max-width: 800px; width: 90%; max-height: 90vh; overflow-y: auto; } .form-group { margin-bottom: 1.5rem; } .form-label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: #d1d5db; } .form-input { width: 100%; background-color: #4b5563; border: 1px solid #6b7280; border-radius: 0.5rem; padding: 0.75rem 1rem; color: white; transition: all 0.3s ease; } .form-input:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3); } .laundry-feature-card { background: linear-gradient(135deg, #1e40af, #3730a3); border-radius: 0.75rem; padding: 1.5rem; color: white; transition: all 0.3s ease; } .laundry-feature-card:hover { transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3); } .pickup-card { background: linear-gradient(135deg, #059669, #047857); border-radius: 0.75rem; padding: 1.5rem; color: white; transition: all 0.3s ease; } .pickup-card:hover { transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3); } .payment-card { background: linear-gradient(135deg, #7c3aed, #6d28d9); border-radius: 0.75rem; padding: 1.5rem; color: white; transition: all 0.3s ease; } .payment-card:hover { transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3); } .status-card { background: linear-gradient(135deg, #dc2626, #b91c1c); border-radius: 0.75rem; padding: 1.5rem; color: white; transition: all 0.3s ease; } .status-card:hover { transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3); } .laundry-schedule-card { border-left: 4px solid #3b82f6; background-color: #374151; border-radius: 0.5rem; padding: 1rem; margin-bottom: 1rem; } .pickup-status-card { border-left: 4px solid #10b981; background-color: #374151; border-radius: 0.5rem; padding: 1rem; margin-bottom: 1rem; } .payment-status { border-left: 4px solid #8b5cf6; background-color: #374151; border-radius: 0.5rem; padding: 1rem; margin-bottom: 1rem; } .status-indicator { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 5px; } .status-active { background-color: #10b981; } .status-pending { background-color: #f59e0b; } .status-completed { background-color: #3b82f6; } .status-cancelled { background-color: #ef4444; } .calendar-day { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; margin: 2px; cursor: pointer; } .calendar-day.booked { background-color: #ef4444; color: white; } .calendar-day.today { background-color: #3b82f6; color: white; } .calendar-day.selected { background-color: #10b981; color: white; } .calendar-day.available { background-color: #10b981; color: white; } .laundry-countdown { font-size: 2rem; font-weight: bold; text-align: center; background: linear-gradient(135deg, #1e293b, #0f172a); border-radius: 0.75rem; padding: 1.5rem; color: white; } .countdown-unit { display: inline-block; margin: 0 10px; } .countdown-value { font-size: 3rem; font-weight: bold; color: #3b82f6; } .countdown-label { font-size: 0.8rem; color: #d1d5db; text-transform: uppercase; } .schedule-table { width: 100%; border-collapse: collapse; } .schedule-table th, .schedule-table td { padding: 12px; text-align: left; border-bottom: 1px solid #374151; } .schedule-table th { background-color: #374151; color: #d1d5db; font-weight: 600; } .schedule-table tr:hover { background-color: #374151; } .calendar-container { background: linear-gradient(135deg, #1e293b, #0f172a); border-radius: 0.75rem; padding: 1.5rem; } .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; } .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; } .calendar-weekday { text-align: center; font-weight: 600; color: #9ca3af; padding: 5px; } .professional-header { background: linear-gradient(135deg, #1e3a8a, #3730a3); border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; border-left: 6px solid #f59e0b; } .progress-bar { height: 8px; background-color: #4b5563; border-radius: 4px; overflow: hidden; margin: 10px 0; } .progress-fill { height: 100%; background: linear-gradient(90deg, #3b82f6, #8b5cf6); border-radius: 4px; transition: width 0.3s ease; } .service-card { border: 1px solid #4b5563; border-radius: 0.5rem; padding: 1rem; margin-bottom: 1rem; cursor: pointer; transition: all 0.3s ease; } .service-card:hover { border-color: #3b82f6; background-color: #374151; } .service-card.selected { border-color: #3b82f6; background-color: #1e40af; } .item-counter { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; } .counter-btn { width: 30px; height: 30px; border-radius: 50%; background-color: #4b5563; color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; border: none; } .counter-value { font-weight: bold; color: white; } .payment-method-form { display: none; } .payment-method-form.active { display: block; } .bill-receipt { background: white; color: black; padding: 20px; border-radius: 8px; max-width: 500px; margin: 0 auto; } .bill-header { text-align: center; border-bottom: 2px solid #e5e7eb; padding-bottom: 10px; margin-bottom: 15px; } .bill-item { display: flex; justify-content: space-between; margin-bottom: 8px; } .bill-total { border-top: 2px solid #e5e7eb; padding-top: 10px; margin-top: 10px; font-weight: bold; } </style> <style> .sidebar { transition: transform 0.25s ease-in-out; } .sidebar-collapsed .sidebar { transform: translateX(-110%); } .main-content { transition: margin-left 0.25s ease-in-out; } .sidebar-collapsed .main-content { margin-left: 0 !important; } @media (max-width: 768px) { .sidebar { transform: translateX(-110%); } .sidebar-open .sidebar { transform: translateX(0); } } </style></head>
+  <body class="bg-gray-900 flex flex-col md:flex-row min-h-screen">
+
+    <!-- Sidebar -->
+    <aside
+      class="sidebar w-full md:w-64 bg-gray-950 text-white p-6 flex flex-col items-center md:items-start space-y-8 shadow-2xl">
+      <div class="flex items-center space-x-2 mb-4">
+        <i class="fas fa-university text-xl text-blue-400"></i>
+        <h1 class="text-xl font-bold">VIT Bhopal</h1>
+        <span class="text-sm text-gray-400 ml-2">Laundry Management</span>
+      </div>
+      <nav class="w-full">
+  <ul class="space-y-2">
+    <li>
+      <a href="demo.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-chart-line mr-3"></i>
+        <span class="font-medium">Dashboard</span>
+      </a>
+    </li>
+    <li>
+      <a href="ambulance.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-truck-medical mr-3"></i>
+        <span class="font-medium">Ambulance</span>
+      </a>
+    </li>
+    <li>
+      <a href="doctors.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-user-doctor mr-3"></i>
+        <span class="font-medium">Doctors</span>
+      </a>
+    </li>
+    <li>
+      <a href="medicine_order.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-pills mr-3"></i>
+        <span class="font-medium">Pharmacy</span>
+      </a>
+    </li>
+    <li>
+      <a href="medicine_reminder.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bell mr-3"></i>
+        <span class="font-medium">Medicine Reminder</span>
+      </a>
+    </li>
+    <li>
+      <a href="symptoms_checker.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-stethoscope mr-3"></i>
+        <span class="font-medium">Symptoms Checker</span>
+      </a>
+    </li>
+    <li>
+      <a href="lab_tests.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-vial-circle-check mr-3"></i>
+        <span class="font-medium">Lab Tests</span>
+      </a>
+    </li>
+    <li>
+      <a href="emergency_requests.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-hand-holding-medical mr-3"></i>
+        <span class="font-medium">Emergency Requests</span>
+      </a>
+    </li>
+    <li>
+      <a href="sos.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-sos mr-3"></i>
+        <span class="font-medium">SOS</span>
+      </a>
+    </li>
+    <li>
+      <a href="electronic_health_records.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-file-medical mr-3"></i>
+        <span class="font-medium">Health Records</span>
+      </a>
+    </li>
+    <li>
+      <a href="health_insurance.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-shield-heart mr-3"></i>
+        <span class="font-medium">Health Insurance</span>
+      </a>
+    </li>
+    <li>
+      <a href="reports_and_analytics.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-chart-pie mr-3"></i>
+        <span class="font-medium">Reports & Analytics</span>
+      </a>
+    </li>
+    <li>
+      <a href="restocking.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-box-open mr-3"></i>
+        <span class="font-medium">Inventory</span>
+      </a>
+    </li>
+    <li>
+      <a href="studentrequest.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-cash-register mr-3"></i>
+        <span class="font-medium">Student Requests</span>
+      </a>
+    </li>
+    <li>
+      <a href="student_transport.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bus mr-3"></i>
+        <span class="font-medium">Student Transport</span>
+      </a>
+    </li>
+    <li>
+      <a href="transport_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-route mr-3"></i>
+        <span class="font-medium">Transport Management</span>
+      </a>
+    </li>
+    <li>
+      <a href="room_management.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bed mr-3"></i>
+        <span class="font-medium">Room Management</span>
+      </a>
+    </li>
+    <li>
+      <a href="room_sanitation.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-spray-can-sparkles mr-3"></i>
+        <span class="font-medium">Room Sanitation</span>
+      </a>
+    </li>
+    <li>
+      <a href="mess_menu.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-utensils mr-3"></i>
+        <span class="font-medium">Mess Menu</span>
+      </a>
+    </li>
+    <li>
+      <a href="mess_food_order_service.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bowl-food mr-3"></i>
+        <span class="font-medium">Mess Food Order</span>
+      </a>
+    </li>
+    <li>
+      <a href="laundry_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-shirt mr-3"></i>
+        <span class="font-medium">Laundry</span>
+      </a>
+    </li>
+    <li>
+      <a href="leave_and_outing.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-door-open mr-3"></i>
+        <span class="font-medium">Leave & Outing</span>
+      </a>
+    </li>
+    <li>
+      <a href="vit_bhopal_community.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-users mr-3"></i>
+        <span class="font-medium">VIT Community</span>
+      </a>
+    </li>
+    <li>
+      <a href="parent_notification.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-comments mr-3"></i>
+        <span class="font-medium">Parent Notification</span>
+      </a>
+    </li>
+    <li>
+      <a href="payment_gateway.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-credit-card mr-3"></i>
+        <span class="font-medium">Payment Gateway</span>
+      </a>
+    </li>
+    <li>
+      <a href="complaint_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-circle-exclamation mr-3"></i>
+        <span class="font-medium">Complaints</span>
+      </a>
+    </li>
+    <li>
+      <a href="exam_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-clipboard-list mr-3"></i>
+        <span class="font-medium">Exam Management</span>
+      </a>
+    </li>
+    <li>
+      <a href="local_hospital_network.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-hospital mr-3"></i>
+        <span class="font-medium">Local Hospitals</span>
+      </a>
+    </li>
+    <li>
+      <a href="medical_camps.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-hand-holding-heart mr-3"></i>
+        <span class="font-medium">Medical Camps</span>
+      </a>
+    </li>
+    <li>
+      <a href="virtual_consultation.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-video mr-3"></i>
+        <span class="font-medium">Virtual Consultation</span>
+      </a>
+    </li>
+    <li>
+      <a href="wearables.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-watch-fitness mr-3"></i>
+        <span class="font-medium">Wearables</span>
+      </a>
+    </li>
+    <li>
+      <a href="biometric.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-fingerprint mr-3"></i>
+        <span class="font-medium">Biometric</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+      <div class="mt-auto w-full">
+        <a href="/index.html" data-logout="true"
+          class="flex items-center justify-center w-full px-4 py-3 rounded-lg bg-red-600 hover:bg-red-700 transition-colors duration-200"
+        >
+          <i class="fa-solid fa-right-from-bracket mr-2"></i>
+          <span class="font-semibold">Log Out</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content flex-1 p-8 overflow-y-auto bg-gray-800">
+      <!-- Professional Header -->
+      <div class="professional-header">
+        <div class="flex items-center justify-between">
+          <div>
+            <h1 class="text-3xl font-bold text-white mb-2">
+              VIT Bhopal University
+            </h1>
+            <h2 class="text-xl text-blue-200">Laundry Management System</h2>
+            <p class="text-gray-300 mt-2">
+              Professional Laundry Services for Students & Staff
+            </p>
+          </div>
+          <div class="text-right">
+            <div class="text-white font-semibold">Laundry Support</div>
+            <div class="text-blue-300 font-bold text-xl">07562-654323</div>
+            <div class="text-sm text-gray-300">Mon-Sat: 8:00 AM - 8:00 PM</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Top Header -->
+      <header
+        class="flex items-center justify-between text-sm text-gray-400 mb-8"
+      >
+        <div id="date-time-display"></div>
+        <div class="flex items-center space-x-6">
+          <div class="relative">
+            <i
+              class="fa-solid fa-bell text-xl hover:text-white transition duration-200"
+            ></i>
+            <span
+              id="notification-badge"
+              class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center"
+              >3</span
+            >
+          </div>
+          <div class="flex items-center space-x-2">
+            <i class="fa-solid fa-user-circle text-xl"></i>
+            <span>Student Portal</span>
+          </div>
+          <div class="flex items-center space-x-2 cursor-pointer">
+            <i class="fa-solid fa-globe text-xl"></i>
+            <span>English</span>
+            <i class="fa-solid fa-chevron-down text-xs"></i>
+          </div>
+        </div>
+      </header>
+
+      <!-- Quick Stats Dashboard -->
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
+        <!-- Active Bookings -->
+        <div class="gradient-border">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-2xl font-bold text-white" id="active-bookings">
+                5
+              </div>
+              <div class="text-sm text-blue-300">Active Bookings</div>
+            </div>
+            <i class="fa-solid fa-calendar-check text-blue-400 text-2xl"></i>
+          </div>
+        </div>
+
+        <!-- Pending Pickups -->
+        <div class="gradient-border">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-2xl font-bold text-white" id="pending-pickups">
+                3
+              </div>
+              <div class="text-sm text-green-300">Pending Pickups</div>
+            </div>
+            <i class="fa-solid fa-truck text-green-400 text-2xl"></i>
+          </div>
+        </div>
+
+        <!-- Monthly Usage -->
+        <div class="gradient-border">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-2xl font-bold text-white" id="monthly-usage">
+                12
+              </div>
+              <div class="text-sm text-purple-300">Monthly Usage</div>
+            </div>
+            <i class="fa-solid fa-chart-bar text-purple-400 text-2xl"></i>
+          </div>
+        </div>
+
+        <!-- Payment Due -->
+        <div class="gradient-border">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-2xl font-bold text-white" id="payment-due">
+                ₹450
+              </div>
+              <div class="text-sm text-yellow-300">Payment Due</div>
+            </div>
+            <i class="fa-solid fa-credit-card text-yellow-400 text-2xl"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Next Pickup Countdown -->
+      <div class="laundry-countdown mb-8">
+        <div class="text-lg text-gray-400 mb-2">
+          Next Scheduled Pickup: Boys Hostel A, Floor 2
+        </div>
+        <div id="countdown-timer">
+          <div class="countdown-unit">
+            <div class="countdown-value" id="countdown-days">01</div>
+            <div class="countdown-label">Days</div>
+          </div>
+          <div class="countdown-unit">
+            <div class="countdown-value" id="countdown-hours">06</div>
+            <div class="countdown-label">Hours</div>
+          </div>
+          <div class="countdown-unit">
+            <div class="countdown-value" id="countdown-minutes">30</div>
+            <div class="countdown-label">Minutes</div>
+          </div>
+          <div class="countdown-unit">
+            <div class="countdown-value" id="countdown-seconds">15</div>
+            <div class="countdown-label">Seconds</div>
+          </div>
+        </div>
+        <div class="text-sm text-gray-400 mt-4">
+          Pickup Date: Tomorrow | Time: 10:00 AM - 12:00 PM | Location: Boys
+          Hostel A, Floor 2
+        </div>
+      </div>
+
+      <!-- Main Features Section -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <!-- Book Laundry Service -->
+        <div class="laundry-feature-card">
+          <div class="flex items-center mb-3">
+            <i class="fa-solid fa-calendar-plus text-2xl mr-3"></i>
+            <h3 class="font-bold text-lg">Book Laundry Service</h3>
+          </div>
+          <p class="text-sm opacity-90 mb-4">
+            Schedule laundry pickup and delivery with flexible timing options
+          </p>
+          <div class="flex space-x-2">
+            <button
+              id="book-service-btn"
+              class="bg-white text-blue-600 text-sm font-semibold py-2 px-4 rounded-lg transition"
+            >
+              Book Now
+            </button>
+            <button
+              id="view-schedule-btn"
+              class="bg-transparent border border-white text-white text-sm font-semibold py-2 px-4 rounded-lg transition"
+            >
+              View Schedule
+            </button>
+          </div>
+        </div>
+
+        <!-- Pickup & Delivery Tracking -->
+        <div
+          class="laundry-feature-card"
+          style="background: linear-gradient(135deg, #7c3aed, #6d28d9)"
+        >
+          <div class="flex items-center mb-3">
+            <i class="fa-solid fa-truck-ramp-box text-2xl mr-3"></i>
+            <h3 class="font-bold text-lg">Pickup & Delivery Tracking</h3>
+          </div>
+          <p class="text-sm opacity-90 mb-4">
+            Track your laundry in real-time from pickup to delivery
+          </p>
+          <div class="flex space-x-2">
+            <button
+              id="track-order-btn"
+              class="bg-white text-purple-600 text-sm font-semibold py-2 px-4 rounded-lg transition"
+            >
+              Track Order
+            </button>
+            <button
+              id="schedule-pickup-btn"
+              class="bg-transparent border border-white text-white text-sm font-semibold py-2 px-4 rounded-lg transition"
+            >
+              Schedule Pickup
+            </button>
+          </div>
+        </div>
+
+        <!-- Payment & Billing -->
+        <div
+          class="laundry-feature-card"
+          style="background: linear-gradient(135deg, #059669, #047857)"
+        >
+          <div class="flex items-center mb-3">
+            <i class="fa-solid fa-credit-card text-2xl mr-3"></i>
+            <h3 class="font-bold text-lg">Payment & Billing</h3>
+          </div>
+          <p class="text-sm opacity-90 mb-4">
+            Secure payment processing and detailed billing information
+          </p>
+          <div class="flex space-x-2">
+            <button
+              id="make-payment-btn"
+              class="bg-white text-green-600 text-sm font-semibold py-2 px-4 rounded-lg transition"
+            >
+              Make Payment
+            </button>
+            <button
+              id="view-billing-btn"
+              class="bg-transparent border border-white text-white text-sm font-semibold py-2 px-4 rounded-lg transition"
+            >
+              View Billing
+            </button>
+          </div>
+        </div>
+
+        <!-- Service Status -->
+        <div
+          class="laundry-feature-card"
+          style="background: linear-gradient(135deg, #dc2626, #b91c1c)"
+        >
+          <div class="flex items-center mb-3">
+            <i class="fa-solid fa-clipboard-list text-2xl mr-3"></i>
+            <h3 class="font-bold text-lg">Service Status</h3>
+          </div>
+          <p class="text-sm opacity-90 mb-4">
+            Check current status of laundry facilities and service availability
+          </p>
+          <div class="flex space-x-2">
+            <button
+              id="check-status-btn"
+              class="bg-white text-red-600 text-sm font-semibold py-2 px-4 rounded-lg transition"
+            >
+              Check Status
+            </button>
+            <button
+              id="service-history-btn"
+              class="bg-transparent border border-white text-white text-sm font-semibold py-2 px-4 rounded-lg transition"
+            >
+              Service History
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Active Laundry Bookings Section -->
+      <div class="bg-card rounded-xl shadow-lg p-6 mb-6">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">Active Laundry Bookings</h3>
+          <div class="flex items-center text-sm text-green-400">
+            <span class="status-indicator bg-green-500"></span>
+            All Services Operational
+          </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="laundry-schedule-card">
+            <div class="flex justify-between items-start mb-3">
+              <h4 class="font-bold text-white">Regular Wash</h4>
+              <span
+                class="bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded-full"
+                >In Progress</span
+              >
+            </div>
+            <p class="text-sm text-gray-400 mb-2">
+              Booking ID: LND2025001 | 5 Items
+            </p>
+            <div class="flex justify-between text-sm mb-3">
+              <span
+                ><i class="fa-solid fa-calendar mr-1"></i> Dec 10, 2025</span
+              >
+              <span
+                ><i class="fa-solid fa-clock mr-1"></i> 2:00 PM - 4:00 PM</span
+              >
+            </div>
+            <div class="flex justify-between text-sm">
+              <span
+                ><i class="fa-solid fa-location-dot mr-1"></i> Boys Hostel
+                A</span
+              >
+              <span class="text-green-400"
+                ><i class="fa-solid fa-truck mr-1"></i> Pickup Scheduled</span
+              >
+            </div>
+            <div class="progress-bar mt-3">
+              <div class="progress-fill" style="width: 60%"></div>
+            </div>
+            <div class="text-xs text-gray-400 mt-1">60% Complete - Washing</div>
+          </div>
+
+          <div class="laundry-schedule-card">
+            <div class="flex justify-between items-start mb-3">
+              <h4 class="font-bold text-white">Dry Cleaning</h4>
+              <span
+                class="bg-yellow-500 text-white text-xs font-bold px-2 py-1 rounded-full"
+                >Pending</span
+              >
+            </div>
+            <p class="text-sm text-gray-400 mb-2">
+              Booking ID: LND2025002 | 3 Items
+            </p>
+            <div class="flex justify-between text-sm mb-3">
+              <span
+                ><i class="fa-solid fa-calendar mr-1"></i> Dec 11, 2025</span
+              >
+              <span
+                ><i class="fa-solid fa-clock mr-1"></i> 10:00 AM - 12:00
+                PM</span
+              >
+            </div>
+            <div class="flex justify-between text-sm">
+              <span
+                ><i class="fa-solid fa-location-dot mr-1"></i> Girls Hostel
+                B</span
+              >
+              <span class="text-yellow-400"
+                ><i class="fa-solid fa-clock mr-1"></i> Awaiting Pickup</span
+              >
+            </div>
+            <div class="progress-bar mt-3">
+              <div class="progress-fill" style="width: 20%"></div>
+            </div>
+            <div class="text-xs text-gray-400 mt-1">
+              20% Complete - Scheduled
+            </div>
+          </div>
+
+          <div class="laundry-schedule-card">
+            <div class="flex justify-between items-start mb-3">
+              <h4 class="font-bold text-white">Express Service</h4>
+              <span
+                class="bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full"
+                >Ready</span
+              >
+            </div>
+            <p class="text-sm text-gray-400 mb-2">
+              Booking ID: LND2025003 | 4 Items
+            </p>
+            <div class="flex justify-between text-sm mb-3">
+              <span><i class="fa-solid fa-calendar mr-1"></i> Dec 9, 2025</span>
+              <span
+                ><i class="fa-solid fa-clock mr-1"></i> 4:00 PM - 6:00 PM</span
+              >
+            </div>
+            <div class="flex justify-between text-sm">
+              <span
+                ><i class="fa-solid fa-location-dot mr-1"></i> Academic Staff
+                Quarters</span
+              >
+              <span class="text-blue-400"
+                ><i class="fa-solid fa-box mr-1"></i> Ready for Delivery</span
+              >
+            </div>
+            <div class="progress-bar mt-3">
+              <div class="progress-fill" style="width: 90%"></div>
+            </div>
+            <div class="text-xs text-gray-400 mt-1">
+              90% Complete - Ready for Delivery
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pickup & Delivery & Payment Status Section -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <!-- Pickup & Delivery Status -->
+        <div class="bg-card rounded-xl shadow-lg p-6">
+          <div class="flex justify-between items-center mb-6">
+            <h3 class="text-xl font-bold text-white">
+              Pickup & Delivery Status
+            </h3>
+            <div class="flex items-center text-sm text-green-400">
+              <span class="status-indicator bg-green-500"></span>
+              Active
+            </div>
+          </div>
+
+          <div class="space-y-4">
+            <div class="pickup-status-card">
+              <div class="flex justify-between items-start">
+                <div>
+                  <h5 class="font-bold text-white">
+                    Current Status: Pickup in Progress
+                  </h5>
+                  <p class="text-sm text-gray-400 mt-1">
+                    Boys Hostel A, Floor 2 | Estimated completion: 2:30 PM
+                  </p>
+                </div>
+                <span class="text-xs text-blue-400 font-semibold"
+                  >IN PROGRESS</span
+                >
+              </div>
+            </div>
+
+            <div>
+              <h5 class="font-bold text-white mb-2">Delivery Schedule</h5>
+              <div class="space-y-2">
+                <div class="flex justify-between text-sm">
+                  <span class="text-gray-400">Girls Hostel B</span>
+                  <span class="text-green-400">Completed</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                  <span class="text-gray-400">Boys Hostel A</span>
+                  <span class="text-blue-400">In Progress</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                  <span class="text-gray-400">Academic Staff Quarters</span>
+                  <span class="text-yellow-400">Scheduled</span>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h5 class="font-bold text-white mb-2">Service Vehicles</h5>
+              <div class="space-y-2">
+                <div class="flex justify-between text-sm">
+                  <span class="text-gray-400">Vehicle LND-01</span>
+                  <span class="text-green-400">On Route</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                  <span class="text-gray-400">Vehicle LND-02</span>
+                  <span class="text-yellow-400">At Facility</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-6 flex space-x-2">
+            <button
+              id="track-delivery-btn"
+              class="flex-1 bg-purple-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-purple-700 transition"
+            >
+              <i class="fa-solid fa-map-location-dot mr-2"></i>Track Delivery
+            </button>
+            <button
+              id="reschedule-btn"
+              class="flex-1 bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+            >
+              <i class="fa-solid fa-calendar-alt mr-2"></i>Reschedule
+            </button>
+          </div>
+        </div>
+
+        <!-- Payment Status -->
+        <div class="bg-card rounded-xl shadow-lg p-6">
+          <div class="flex justify-between items-center mb-6">
+            <h3 class="text-xl font-bold text-white">Payment Status</h3>
+            <button
+              class="text-blue-400 hover:text-blue-300 font-medium text-sm"
+              id="view-all-payments-btn"
+            >
+              <i class="fa-solid fa-eye mr-1"></i> View All
+            </button>
+          </div>
+
+          <div class="space-y-4">
+            <div class="payment-status">
+              <div class="flex justify-between items-start">
+                <div>
+                  <h5 class="font-bold text-white">Current Balance: ₹450</h5>
+                  <p class="text-sm text-gray-400 mt-1">
+                    Due Date: December 15, 2025
+                  </p>
+                  <p class="text-xs text-blue-400 mt-1">
+                    3 Services | Last Payment: ₹600 on Dec 1, 2025
+                  </p>
+                </div>
+                <span class="text-xs text-yellow-400 font-semibold">DUE</span>
+              </div>
+            </div>
+
+            <div class="payment-status">
+              <div class="flex justify-between items-start">
+                <div>
+                  <h5 class="font-bold text-white">Recent Payment</h5>
+                  <p class="text-sm text-gray-400 mt-1">
+                    December 1, 2025 | ₹600
+                  </p>
+                  <p class="text-xs text-blue-400 mt-1">
+                    Transaction ID: TXN20251201001
+                  </p>
+                </div>
+                <span class="text-xs text-green-400 font-semibold"
+                  >COMPLETED</span
+                >
+              </div>
+            </div>
+
+            <div class="payment-status">
+              <div class="flex justify-between items-start">
+                <div>
+                  <h5 class="font-bold text-white">Upcoming Auto-Debit</h5>
+                  <p class="text-sm text-gray-400 mt-1">
+                    Scheduled for December 15, 2025
+                  </p>
+                  <p class="text-xs text-blue-400 mt-1">
+                    Amount: ₹450 | Card: **** **** **** 1234
+                  </p>
+                </div>
+                <span class="text-xs text-yellow-400 font-semibold"
+                  >SCHEDULED</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-6 flex space-x-2">
+            <button
+              id="pay-now-btn"
+              class="flex-1 bg-red-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-red-700 transition"
+            >
+              <i class="fa-solid fa-credit-card mr-2"></i>Pay Now
+            </button>
+            <button
+              id="payment-methods-btn"
+              class="flex-1 bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+            >
+              <i class="fa-solid fa-wallet mr-2"></i>Payment Methods
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Additional Features Section -->
+      <div class="bg-card rounded-xl shadow-lg p-6">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">
+            Additional Laundry Management Features
+          </h3>
+          <div class="flex items-center text-sm text-blue-400">
+            <span class="status-indicator bg-blue-500"></span>
+            All Features Active
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Service Analytics -->
+          <div class="pickup-card">
+            <div class="flex items-center mb-3">
+              <i class="fa-solid fa-chart-pie text-2xl mr-3"></i>
+              <h4 class="font-bold text-lg">Service Analytics</h4>
+            </div>
+            <p class="text-sm opacity-90 mb-4">
+              View detailed analytics of your laundry usage and spending
+              patterns
+            </p>
+            <button
+              id="view-analytics-btn"
+              class="w-full bg-white text-green-600 text-sm font-semibold py-2 px-4 rounded-lg transition"
+            >
+              View Analytics
+            </button>
+          </div>
+
+          <!-- Service Preferences -->
+          <div class="payment-card">
+            <div class="flex items-center mb-3">
+              <i class="fa-solid fa-sliders text-2xl mr-3"></i>
+              <h4 class="font-bold text-lg">Service Preferences</h4>
+            </div>
+            <p class="text-sm opacity-90 mb-4">
+              Customize your laundry preferences and service options
+            </p>
+            <button
+              id="manage-preferences-btn"
+              class="w-full bg-white text-purple-600 text-sm font-semibold py-2 px-4 rounded-lg transition"
+            >
+              Manage Preferences
+            </button>
+          </div>
+
+          <!-- Support & Feedback -->
+          <div class="status-card">
+            <div class="flex items-center mb-3">
+              <i class="fa-solid fa-headset text-2xl mr-3"></i>
+              <h4 class="font-bold text-lg">Support & Feedback</h4>
+            </div>
+            <p class="text-sm opacity-90 mb-4">
+              Get help with laundry services or provide feedback for improvement
+            </p>
+            <button
+              id="contact-support-btn"
+              class="w-full bg-white text-red-600 text-sm font-semibold py-2 px-4 rounded-lg transition"
+            >
+              Contact Support
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Book Service Modal -->
+    <div id="book-service-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">Book Laundry Service</h3>
+          <button
+            id="close-book-service"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <div class="space-y-6">
+          <div class="bg-gray-700 rounded-lg p-4">
+            <h4 class="font-bold text-white mb-4">Service Selection</h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="service-card" id="regular-wash">
+                <div class="flex justify-between items-center">
+                  <div>
+                    <h5 class="font-bold text-white">Regular Wash</h5>
+                    <p class="text-sm text-gray-400">
+                      Standard cleaning service
+                    </p>
+                  </div>
+                  <div class="text-right">
+                    <div class="font-bold text-white">₹10</div>
+                    <div class="text-xs text-gray-400">per item</div>
+                  </div>
+                </div>
+                <div class="item-counter">
+                  <button class="counter-btn decrease">-</button>
+                  <span class="counter-value" id="regular-count">0</span>
+                  <button class="counter-btn increase">+</button>
+                </div>
+              </div>
+              <div class="service-card" id="express-service">
+                <div class="flex justify-between items-center">
+                  <div>
+                    <h5 class="font-bold text-white">Express Service</h5>
+                    <p class="text-sm text-gray-400">
+                      Priority service - 6 hours
+                    </p>
+                  </div>
+                  <div class="text-right">
+                    <div class="font-bold text-white">₹15</div>
+                    <div class="text-xs text-gray-400">per item</div>
+                  </div>
+                </div>
+                <div class="item-counter">
+                  <button class="counter-btn decrease">-</button>
+                  <span class="counter-value" id="express-count">0</span>
+                  <button class="counter-btn increase">+</button>
+                </div>
+              </div>
+              <div class="service-card" id="dry-cleaning">
+                <div class="flex justify-between items-center">
+                  <div>
+                    <h5 class="font-bold text-white">Dry Cleaning</h5>
+                    <p class="text-sm text-gray-400">Special fabric care</p>
+                  </div>
+                  <div class="text-right">
+                    <div class="font-bold text-white">₹25</div>
+                    <div class="text-xs text-gray-400">per item</div>
+                  </div>
+                </div>
+                <div class="item-counter">
+                  <button class="counter-btn decrease">-</button>
+                  <span class="counter-value" id="dry-clean-count">0</span>
+                  <button class="counter-btn increase">+</button>
+                </div>
+              </div>
+              <div class="service-card" id="ironing">
+                <div class="flex justify-between items-center">
+                  <div>
+                    <h5 class="font-bold text-white">Ironing Only</h5>
+                    <p class="text-sm text-gray-400">Professional pressing</p>
+                  </div>
+                  <div class="text-right">
+                    <div class="font-bold text-white">₹5</div>
+                    <div class="text-xs text-gray-400">per item</div>
+                  </div>
+                </div>
+                <div class="item-counter">
+                  <button class="counter-btn decrease">-</button>
+                  <span class="counter-value" id="ironing-count">0</span>
+                  <button class="counter-btn increase">+</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-gray-700 rounded-lg p-4">
+            <h4 class="font-bold text-white mb-4">Service Details</h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="form-group">
+                <label class="form-label">Pickup Location</label>
+                <select class="form-input" id="pickup-location">
+                  <option value="">Select Location</option>
+                  <option value="boys-a">Boys Hostel A</option>
+                  <option value="boys-b">Boys Hostel B</option>
+                  <option value="girls-a">Girls Hostel A</option>
+                  <option value="girls-b">Girls Hostel B</option>
+                  <option value="staff">Academic Staff Quarters</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Preferred Pickup Date</label>
+                <input
+                  type="text"
+                  id="pickup-date"
+                  class="form-input"
+                  placeholder="Select date"
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Preferred Time Slot</label>
+                <select class="form-input" id="time-slot">
+                  <option value="">Select Time Slot</option>
+                  <option value="morning">8:00 AM - 10:00 AM</option>
+                  <option value="late-morning">10:00 AM - 12:00 PM</option>
+                  <option value="afternoon">12:00 PM - 2:00 PM</option>
+                  <option value="late-afternoon">2:00 PM - 4:00 PM</option>
+                  <option value="evening">4:00 PM - 6:00 PM</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Special Instructions</label>
+                <textarea
+                  class="form-input"
+                  rows="3"
+                  placeholder="Any special instructions for your laundry (e.g., specific detergent, fabric softener, etc.)"
+                ></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-gray-700 rounded-lg p-4">
+            <h4 class="font-bold text-white mb-4">Order Summary</h4>
+            <div id="order-summary">
+              <div class="flex justify-between text-sm mb-2">
+                <span class="text-gray-400">Regular Wash:</span>
+                <span class="text-white" id="regular-summary"
+                  >0 items - ₹0</span
+                >
+              </div>
+              <div class="flex justify-between text-sm mb-2">
+                <span class="text-gray-400">Express Service:</span>
+                <span class="text-white" id="express-summary"
+                  >0 items - ₹0</span
+                >
+              </div>
+              <div class="flex justify-between text-sm mb-2">
+                <span class="text-gray-400">Dry Cleaning:</span>
+                <span class="text-white" id="dry-clean-summary"
+                  >0 items - ₹0</span
+                >
+              </div>
+              <div class="flex justify-between text-sm mb-2">
+                <span class="text-gray-400">Ironing:</span>
+                <span class="text-white" id="ironing-summary"
+                  >0 items - ₹0</span
+                >
+              </div>
+            </div>
+            <div
+              class="flex justify-between text-lg font-bold mt-4 pt-4 border-t border-gray-600"
+            >
+              <span class="text-white">Total Amount:</span>
+              <span class="text-white" id="total-amount">₹0</span>
+            </div>
+          </div>
+
+          <div class="flex justify-end space-x-2">
+            <button
+              id="confirm-booking-btn"
+              class="bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition"
+            >
+              Confirm Booking
+            </button>
+            <button
+              class="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+              onclick="closeModal('book-service-modal')"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Track Order Modal -->
+    <div id="track-order-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">Track Your Order</h3>
+          <button
+            id="close-track-order"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <div class="space-y-6">
+          <div class="bg-gray-700 rounded-lg p-4">
+            <h4 class="font-bold text-white mb-4">Order Tracking</h4>
+            <div class="form-group">
+              <label class="form-label">Enter Booking ID</label>
+              <input
+                type="text"
+                class="form-input"
+                id="tracking-id"
+                placeholder="e.g., LND2025001"
+                value="LND2025001"
+              />
+            </div>
+            <button
+              id="track-order-submit"
+              class="w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition"
+            >
+              Track Order
+            </button>
+          </div>
+
+          <div class="bg-gray-700 rounded-lg p-4">
+            <h4 class="font-bold text-white mb-4">Order Status</h4>
+            <div class="space-y-4">
+              <div class="flex items-center">
+                <div
+                  class="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center mr-3"
+                >
+                  <i class="fa-solid fa-check text-white text-xs"></i>
+                </div>
+                <div>
+                  <h5 class="font-bold text-white">Order Confirmed</h5>
+                  <p class="text-sm text-gray-400">Dec 10, 2025 - 2:00 PM</p>
+                </div>
+              </div>
+              <div class="flex items-center">
+                <div
+                  class="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center mr-3"
+                >
+                  <i class="fa-solid fa-check text-white text-xs"></i>
+                </div>
+                <div>
+                  <h5 class="font-bold text-white">Pickup Scheduled</h5>
+                  <p class="text-sm text-gray-400">Dec 10, 2025 - 2:15 PM</p>
+                </div>
+              </div>
+              <div class="flex items-center">
+                <div
+                  class="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center mr-3"
+                >
+                  <i class="fa-solid fa-check text-white text-xs"></i>
+                </div>
+                <div>
+                  <h5 class="font-bold text-white">Picked Up</h5>
+                  <p class="text-sm text-gray-400">Dec 10, 2025 - 2:30 PM</p>
+                </div>
+              </div>
+              <div class="flex items-center">
+                <div
+                  class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center mr-3"
+                >
+                  <i class="fa-solid fa-ellipsis text-white text-xs"></i>
+                </div>
+                <div>
+                  <h5 class="font-bold text-white">In Progress - Washing</h5>
+                  <p class="text-sm text-gray-400">
+                    Estimated completion: 3:30 PM
+                  </p>
+                </div>
+              </div>
+              <div class="flex items-center">
+                <div
+                  class="w-8 h-8 rounded-full bg-gray-500 flex items-center justify-center mr-3"
+                >
+                  <i class="fa-solid fa-minus text-white text-xs"></i>
+                </div>
+                <div>
+                  <h5 class="font-bold text-white">Drying</h5>
+                  <p class="text-sm text-gray-400">Pending</p>
+                </div>
+              </div>
+              <div class="flex items-center">
+                <div
+                  class="w-8 h-8 rounded-full bg-gray-500 flex items-center justify-center mr-3"
+                >
+                  <i class="fa-solid fa-minus text-white text-xs"></i>
+                </div>
+                <div>
+                  <h5 class="font-bold text-white">Ready for Delivery</h5>
+                  <p class="text-sm text-gray-400">Pending</p>
+                </div>
+              </div>
+              <div class="flex items-center">
+                <div
+                  class="w-8 h-8 rounded-full bg-gray-500 flex items-center justify-center mr-3"
+                >
+                  <i class="fa-solid fa-minus text-white text-xs"></i>
+                </div>
+                <div>
+                  <h5 class="font-bold text-white">Delivered</h5>
+                  <p class="text-sm text-gray-400">Pending</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex justify-end">
+            <button
+              class="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+              onclick="closeModal('track-order-modal')"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Make Payment Modal -->
+    <div id="make-payment-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">Make Payment</h3>
+          <button
+            id="close-make-payment"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <div class="space-y-6">
+          <div class="bg-gray-700 rounded-lg p-4">
+            <h4 class="font-bold text-white mb-4">Payment Summary</h4>
+            <div class="space-y-3">
+              <div class="flex justify-between">
+                <span class="text-gray-400">Outstanding Balance:</span>
+                <span class="text-white font-bold">₹450</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-400">Due Date:</span>
+                <span class="text-white">December 15, 2025</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-400">Services Included:</span>
+                <span class="text-white">3 Regular Washes</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-gray-700 rounded-lg p-4">
+            <h4 class="font-bold text-white mb-4">Payment Method</h4>
+            <div class="space-y-4">
+              <div class="flex items-center">
+                <input
+                  type="radio"
+                  id="credit-card"
+                  name="payment-method"
+                  class="mr-2"
+                  checked
+                />
+                <label for="credit-card" class="text-white"
+                  >Credit/Debit Card</label
+                >
+              </div>
+              <div class="flex items-center">
+                <input
+                  type="radio"
+                  id="upi"
+                  name="payment-method"
+                  class="mr-2"
+                />
+                <label for="upi" class="text-white">UPI Payment</label>
+              </div>
+              <div class="flex items-center">
+                <input
+                  type="radio"
+                  id="net-banking"
+                  name="payment-method"
+                  class="mr-2"
+                />
+                <label for="net-banking" class="text-white">Net Banking</label>
+              </div>
+              <div class="flex items-center">
+                <input
+                  type="radio"
+                  id="wallet"
+                  name="payment-method"
+                  class="mr-2"
+                />
+                <label for="wallet" class="text-white">Digital Wallet</label>
+              </div>
+            </div>
+
+            <div id="credit-card-form" class="payment-method-form active mt-4">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="form-group">
+                  <label class="form-label">Card Number</label>
+                  <input
+                    type="text"
+                    class="form-input"
+                    placeholder="1234 5678 9012 3456"
+                  />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Card Holder Name</label>
+                  <input
+                    type="text"
+                    class="form-input"
+                    placeholder="John Doe"
+                  />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Expiry Date</label>
+                  <input type="text" class="form-input" placeholder="MM/YY" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">CVV</label>
+                  <input type="text" class="form-input" placeholder="123" />
+                </div>
+              </div>
+            </div>
+
+            <div id="upi-form" class="payment-method-form mt-4">
+              <div class="form-group">
+                <label class="form-label">Select UPI App</label>
+                <select class="form-input">
+                  <option value="">Select UPI App</option>
+                  <option value="gpay">Google Pay</option>
+                  <option value="paytm">Paytm</option>
+                  <option value="phonepe">PhonePe</option>
+                  <option value="amazonpay">Amazon Pay</option>
+                  <option value="bhim">BHIM UPI</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">UPI ID</label>
+                <input
+                  type="text"
+                  class="form-input"
+                  placeholder="yourname@upi"
+                />
+              </div>
+            </div>
+
+            <div id="net-banking-form" class="payment-method-form mt-4">
+              <div class="form-group">
+                <label class="form-label">Select Bank</label>
+                <select class="form-input">
+                  <option value="">Select Bank</option>
+                  <option value="sbi">State Bank of India</option>
+                  <option value="hdfc">HDFC Bank</option>
+                  <option value="icici">ICICI Bank</option>
+                  <option value="axis">Axis Bank</option>
+                  <option value="pnb">Punjab National Bank</option>
+                </select>
+              </div>
+            </div>
+
+            <div id="wallet-form" class="payment-method-form mt-4">
+              <div class="form-group">
+                <label class="form-label">Select Wallet</label>
+                <select class="form-input">
+                  <option value="">Select Wallet</option>
+                  <option value="paytm">Paytm Wallet</option>
+                  <option value="mobikwik">MobiKwik</option>
+                  <option value="freecharge">FreeCharge</option>
+                  <option value="amazonpay">Amazon Pay</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Mobile Number</label>
+                <input
+                  type="text"
+                  class="form-input"
+                  placeholder="Registered Mobile Number"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="flex justify-end space-x-2">
+            <button
+              id="process-payment-btn"
+              class="bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition"
+            >
+              Pay ₹450
+            </button>
+            <button
+              class="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+              onclick="closeModal('make-payment-modal')"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- View Billing Modal -->
+    <div id="view-billing-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">Billing History</h3>
+          <button
+            id="close-view-billing"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <div class="space-y-6">
+          <div class="bg-gray-700 rounded-lg p-4">
+            <h4 class="font-bold text-white mb-4">Recent Bills</h4>
+            <div class="overflow-x-auto">
+              <table class="schedule-table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Service</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Dec 10, 2025</td>
+                    <td>Regular Wash (5 items)</td>
+                    <td>₹50</td>
+                    <td><span class="text-green-400">Paid</span></td>
+                    <td>
+                      <button
+                        class="text-blue-400 text-sm download-bill"
+                        data-bill-id="bill001"
+                      >
+                        Download
+                      </button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Dec 5, 2025</td>
+                    <td>Dry Cleaning (3 items)</td>
+                    <td>₹75</td>
+                    <td><span class="text-green-400">Paid</span></td>
+                    <td>
+                      <button
+                        class="text-blue-400 text-sm download-bill"
+                        data-bill-id="bill002"
+                      >
+                        Download
+                      </button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Dec 1, 2025</td>
+                    <td>Express Service (4 items)</td>
+                    <td>₹60</td>
+                    <td><span class="text-green-400">Paid</span></td>
+                    <td>
+                      <button
+                        class="text-blue-400 text-sm download-bill"
+                        data-bill-id="bill003"
+                      >
+                        Download
+                      </button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Nov 25, 2025</td>
+                    <td>Regular Wash + Ironing (6 items)</td>
+                    <td>₹90</td>
+                    <td><span class="text-green-400">Paid</span></td>
+                    <td>
+                      <button
+                        class="text-blue-400 text-sm download-bill"
+                        data-bill-id="bill004"
+                      >
+                        Download
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="flex justify-end space-x-2">
+            <button
+              id="print-all-bills-btn"
+              class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition"
+            >
+              <i class="fa-solid fa-print mr-2"></i>Print All Bills
+            </button>
+            <button
+              class="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+              onclick="closeModal('view-billing-modal')"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Service Status Modal -->
+    <div id="service-status-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">Service Status</h3>
+          <button
+            id="close-service-status"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <div class="space-y-6">
+          <div class="bg-gray-700 rounded-lg p-4">
+            <h4 class="font-bold text-white mb-4">Current Service Status</h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="bg-green-900 p-4 rounded-lg">
+                <div class="flex items-center">
+                  <i
+                    class="fa-solid fa-check-circle text-green-400 text-xl mr-3"
+                  ></i>
+                  <div>
+                    <h5 class="font-bold text-white">Regular Wash</h5>
+                    <p class="text-sm text-green-300">Operational</p>
+                  </div>
+                </div>
+              </div>
+              <div class="bg-green-900 p-4 rounded-lg">
+                <div class="flex items-center">
+                  <i
+                    class="fa-solid fa-check-circle text-green-400 text-xl mr-3"
+                  ></i>
+                  <div>
+                    <h5 class="font-bold text-white">Express Service</h5>
+                    <p class="text-sm text-green-300">Operational</p>
+                  </div>
+                </div>
+              </div>
+              <div class="bg-yellow-900 p-4 rounded-lg">
+                <div class="flex items-center">
+                  <i
+                    class="fa-solid fa-exclamation-triangle text-yellow-400 text-xl mr-3"
+                  ></i>
+                  <div>
+                    <h5 class="font-bold text-white">Dry Cleaning</h5>
+                    <p class="text-sm text-yellow-300">High Demand</p>
+                  </div>
+                </div>
+              </div>
+              <div class="bg-green-900 p-4 rounded-lg">
+                <div class="flex items-center">
+                  <i
+                    class="fa-solid fa-check-circle text-green-400 text-xl mr-3"
+                  ></i>
+                  <div>
+                    <h5 class="font-bold text-white">Ironing</h5>
+                    <p class="text-sm text-green-300">Operational</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-gray-700 rounded-lg p-4">
+            <h4 class="font-bold text-white mb-4">Facility Status</h4>
+            <div class="space-y-3">
+              <div class="flex justify-between">
+                <span class="text-gray-400">Main Laundry Facility:</span>
+                <span class="text-green-400">Operational</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-400">Pickup Service:</span>
+                <span class="text-green-400">Active</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-400">Delivery Service:</span>
+                <span class="text-green-400">Active</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-400">Payment System:</span>
+                <span class="text-green-400">Operational</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex justify-end">
+            <button
+              class="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+              onclick="closeModal('service-status-modal')"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Service History Modal -->
+    <div id="service-history-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">Service History</h3>
+          <button
+            id="close-service-history"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <div class="space-y-6">
+          <div class="bg-gray-700 rounded-lg p-4">
+            <h4 class="font-bold text-white mb-4">
+              Past Services (Last 30 Days)
+            </h4>
+            <div class="overflow-x-auto">
+              <table class="schedule-table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Service</th>
+                    <th>Items</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Dec 10, 2025</td>
+                    <td>Regular Wash</td>
+                    <td>5</td>
+                    <td>₹50</td>
+                    <td><span class="text-green-400">Completed</span></td>
+                  </tr>
+                  <tr>
+                    <td>Dec 5, 2025</td>
+                    <td>Dry Cleaning</td>
+                    <td>3</td>
+                    <td>₹75</td>
+                    <td><span class="text-green-400">Completed</span></td>
+                  </tr>
+                  <tr>
+                    <td>Dec 1, 2025</td>
+                    <td>Express Service</td>
+                    <td>4</td>
+                    <td>₹60</td>
+                    <td><span class="text-green-400">Completed</span></td>
+                  </tr>
+                  <tr>
+                    <td>Nov 25, 2025</td>
+                    <td>Regular Wash + Ironing</td>
+                    <td>6</td>
+                    <td>₹90</td>
+                    <td><span class="text-green-400">Completed</span></td>
+                  </tr>
+                  <tr>
+                    <td>Nov 20, 2025</td>
+                    <td>Regular Wash</td>
+                    <td>7</td>
+                    <td>₹70</td>
+                    <td><span class="text-green-400">Completed</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="flex justify-end">
+            <button
+              class="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+              onclick="closeModal('service-history-modal')"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reschedule Modal -->
+    <div id="reschedule-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">Reschedule Service</h3>
+          <button
+            id="close-reschedule"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <div class="space-y-6">
+          <div class="bg-gray-700 rounded-lg p-4">
+            <h4 class="font-bold text-white mb-4">Current Booking Details</h4>
+            <div class="space-y-3">
+              <div class="flex justify-between">
+                <span class="text-gray-400">Booking ID:</span>
+                <span class="text-white">LND2025001</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-400">Service:</span>
+                <span class="text-white">Regular Wash (5 items)</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-400">Current Date/Time:</span>
+                <span class="text-white">Dec 10, 2025 - 2:00 PM</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-400">Location:</span>
+                <span class="text-white">Boys Hostel A</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-gray-700 rounded-lg p-4">
+            <h4 class="font-bold text-white mb-4">New Schedule</h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="form-group">
+                <label class="form-label">New Pickup Date</label>
+                <input
+                  type="text"
+                  id="reschedule-date"
+                  class="form-input"
+                  placeholder="Select date"
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label">New Time Slot</label>
+                <select class="form-input">
+                  <option value="">Select Time Slot</option>
+                  <option value="morning">8:00 AM - 10:00 AM</option>
+                  <option value="late-morning">10:00 AM - 12:00 PM</option>
+                  <option value="afternoon">12:00 PM - 2:00 PM</option>
+                  <option value="late-afternoon">2:00 PM - 4:00 PM</option>
+                  <option value="evening">4:00 PM - 6:00 PM</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex justify-end space-x-2">
+            <button
+              id="confirm-reschedule-btn"
+              class="bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition"
+            >
+              Confirm Reschedule
+            </button>
+            <button
+              class="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+              onclick="closeModal('reschedule-modal')"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Payment Methods Modal -->
+    <div id="payment-methods-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">Payment Methods</h3>
+          <button
+            id="close-payment-methods"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <div class="space-y-6">
+          <div class="bg-gray-700 rounded-lg p-4">
+            <h4 class="font-bold text-white mb-4">Saved Payment Methods</h4>
+            <div class="space-y-4">
+              <div
+                class="flex items-center justify-between p-3 bg-gray-800 rounded-lg"
+              >
+                <div class="flex items-center">
+                  <i
+                    class="fa-solid fa-credit-card text-blue-400 text-xl mr-3"
+                  ></i>
+                  <div>
+                    <h5 class="font-bold text-white">Visa Card</h5>
+                    <p class="text-sm text-gray-400">**** **** **** 1234</p>
+                  </div>
+                </div>
+                <div>
+                  <span class="text-green-400 text-sm">Default</span>
+                </div>
+              </div>
+              <div
+                class="flex items-center justify-between p-3 bg-gray-800 rounded-lg"
+              >
+                <div class="flex items-center">
+                  <i
+                    class="fa-brands fa-google-pay text-green-400 text-xl mr-3"
+                  ></i>
+                  <div>
+                    <h5 class="font-bold text-white">Google Pay</h5>
+                    <p class="text-sm text-gray-400">user@okhdfcbank</p>
+                  </div>
+                </div>
+                <button class="text-blue-400 text-sm">Set as Default</button>
+              </div>
+              <div
+                class="flex items-center justify-between p-3 bg-gray-800 rounded-lg"
+              >
+                <div class="flex items-center">
+                  <i class="fa-brands fa-paypal text-blue-400 text-xl mr-3"></i>
+                  <div>
+                    <h5 class="font-bold text-white">PayPal</h5>
+                    <p class="text-sm text-gray-400">user@example.com</p>
+                  </div>
+                </div>
+                <button class="text-blue-400 text-sm">Set as Default</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-gray-700 rounded-lg p-4">
+            <h4 class="font-bold text-white mb-4">Add New Payment Method</h4>
+            <div class="flex space-x-2">
+              <button
+                class="flex-1 bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition"
+              >
+                <i class="fa-solid fa-credit-card mr-2"></i>Add Card
+              </button>
+              <button
+                class="flex-1 bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition"
+              >
+                <i class="fa-brands fa-google-pay mr-2"></i>Add UPI
+              </button>
+            </div>
+          </div>
+
+          <div class="flex justify-end">
+            <button
+              class="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+              onclick="closeModal('payment-methods-modal')"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Analytics Modal -->
+    <div id="analytics-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">Service Analytics</h3>
+          <button
+            id="close-analytics"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <div class="space-y-6">
+          <div class="bg-gray-700 rounded-lg p-4">
+            <h4 class="font-bold text-white mb-4">Monthly Usage</h4>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div class="bg-blue-900 p-4 rounded-lg text-center">
+                <div class="text-2xl font-bold text-white">12</div>
+                <div class="text-sm text-blue-300">Services This Month</div>
+              </div>
+              <div class="bg-green-900 p-4 rounded-lg text-center">
+                <div class="text-2xl font-bold text-white">₹450</div>
+                <div class="text-sm text-green-300">Monthly Spending</div>
+              </div>
+              <div class="bg-purple-900 p-4 rounded-lg text-center">
+                <div class="text-2xl font-bold text-white">5.2</div>
+                <div class="text-sm text-purple-300">Avg Items per Service</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-gray-700 rounded-lg p-4">
+            <h4 class="font-bold text-white mb-4">Service Distribution</h4>
+            <div class="space-y-3">
+              <div>
+                <div class="flex justify-between mb-1">
+                  <span class="text-gray-400">Regular Wash</span>
+                  <span class="text-white">60%</span>
+                </div>
+                <div class="progress-bar">
+                  <div class="progress-fill" style="width: 60%"></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between mb-1">
+                  <span class="text-gray-400">Express Service</span>
+                  <span class="text-white">25%</span>
+                </div>
+                <div class="progress-bar">
+                  <div class="progress-fill" style="width: 25%"></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between mb-1">
+                  <span class="text-gray-400">Dry Cleaning</span>
+                  <span class="text-white">10%</span>
+                </div>
+                <div class="progress-bar">
+                  <div class="progress-fill" style="width: 10%"></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between mb-1">
+                  <span class="text-gray-400">Ironing</span>
+                  <span class="text-white">5%</span>
+                </div>
+                <div class="progress-bar">
+                  <div class="progress-fill" style="width: 5%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex justify-end">
+            <button
+              class="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+              onclick="closeModal('analytics-modal')"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Preferences Modal -->
+    <div id="preferences-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">Service Preferences</h3>
+          <button
+            id="close-preferences"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <div class="space-y-6">
+          <div class="bg-gray-700 rounded-lg p-4">
+            <h4 class="font-bold text-white mb-4">Default Preferences</h4>
+            <div class="space-y-4">
+              <div class="form-group">
+                <label class="form-label">Preferred Pickup Time</label>
+                <select class="form-input">
+                  <option value="morning">8:00 AM - 10:00 AM</option>
+                  <option value="late-morning" selected>
+                    10:00 AM - 12:00 PM
+                  </option>
+                  <option value="afternoon">12:00 PM - 2:00 PM</option>
+                  <option value="late-afternoon">2:00 PM - 4:00 PM</option>
+                  <option value="evening">4:00 PM - 6:00 PM</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Default Service Type</label>
+                <select class="form-input">
+                  <option value="regular" selected>Regular Wash</option>
+                  <option value="express">Express Service</option>
+                  <option value="dry-cleaning">Dry Cleaning</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Detergent Preference</label>
+                <select class="form-input">
+                  <option value="standard" selected>Standard Detergent</option>
+                  <option value="fragrance-free">Fragrance-Free</option>
+                  <option value="hypoallergenic">Hypoallergenic</option>
+                  <option value="premium">Premium Detergent</option>
+                </select>
+              </div>
+              <div class="flex items-center">
+                <input
+                  type="checkbox"
+                  id="auto-schedule"
+                  class="mr-2"
+                  checked
+                />
+                <label for="auto-schedule" class="text-white"
+                  >Auto-schedule weekly pickup</label
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="flex justify-end space-x-2">
+            <button
+              id="save-preferences-btn"
+              class="bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition"
+            >
+              Save Preferences
+            </button>
+            <button
+              class="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+              onclick="closeModal('preferences-modal')"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Support Modal -->
+    <div id="support-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">Support & Feedback</h3>
+          <button
+            id="close-support"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <div class="space-y-6">
+          <div class="bg-gray-700 rounded-lg p-4">
+            <h4 class="font-bold text-white mb-4">Contact Support</h4>
+            <div class="space-y-4">
+              <div class="form-group">
+                <label class="form-label">Subject</label>
+                <select class="form-input">
+                  <option value="">Select Subject</option>
+                  <option value="service-issue">Service Issue</option>
+                  <option value="billing-issue">Billing Issue</option>
+                  <option value="pickup-delivery">
+                    Pickup/Delivery Problem
+                  </option>
+                  <option value="quality-issue">Quality Issue</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Description</label>
+                <textarea
+                  class="form-input"
+                  rows="4"
+                  placeholder="Please describe your issue or feedback in detail"
+                ></textarea>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Attachments (Optional)</label>
+                <div
+                  class="border-2 border-dashed border-gray-600 rounded-lg p-4 text-center"
+                >
+                  <i
+                    class="fa-solid fa-cloud-arrow-up text-2xl text-gray-400 mb-2"
+                  ></i>
+                  <p class="text-gray-400">
+                    Upload supporting documents or images
+                  </p>
+                  <button
+                    class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg mt-2 hover:bg-blue-700 transition"
+                  >
+                    Choose Files
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-gray-700 rounded-lg p-4">
+            <h4 class="font-bold text-white mb-4">Quick Contact</h4>
+            <div class="space-y-3">
+              <div class="flex justify-between">
+                <span class="text-gray-400">Phone Support:</span>
+                <span class="text-white">07562-654323</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-400">Email Support:</span>
+                <span class="text-white">laundry@vitbhopal.ac.in</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-400">Office Hours:</span>
+                <span class="text-white">Mon-Sat: 8:00 AM - 8:00 PM</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex justify-end space-x-2">
+            <button
+              id="submit-support-btn"
+              class="bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition"
+            >
+              Submit Request
+            </button>
+            <button
+              class="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+              onclick="closeModal('support-modal')"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bill Receipt Modal -->
+    <div id="bill-receipt-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">Bill Receipt</h3>
+          <button
+            id="close-bill-receipt"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <div class="space-y-6">
+          <div class="bill-receipt">
+            <div class="bill-header">
+              <h3 class="text-xl font-bold">VIT Bhopal University</h3>
+              <p class="text-sm text-gray-600">Laundry Services</p>
+              <p class="text-sm text-gray-600">
+                Receipt #: <span id="receipt-number">LND20251210001</span>
+              </p>
+              <p class="text-sm text-gray-600">
+                Date: <span id="receipt-date">December 10, 2025</span>
+              </p>
+            </div>
+
+            <div class="bill-item">
+              <span>Regular Wash (5 items)</span>
+              <span>₹50</span>
+            </div>
+            <div class="bill-item">
+              <span>Express Service (2 items)</span>
+              <span>₹30</span>
+            </div>
+            <div class="bill-item">
+              <span>Dry Cleaning (1 item)</span>
+              <span>₹25</span>
+            </div>
+            <div class="bill-item">
+              <span>Ironing (3 items)</span>
+              <span>₹15</span>
+            </div>
+
+            <div class="bill-total">
+              <span>Total Amount:</span>
+              <span>₹120</span>
+            </div>
+
+            <div class="mt-4 text-center text-sm text-gray-600">
+              <p>Thank you for using VIT Bhopal Laundry Services</p>
+              <p>For queries, contact: laundry@vitbhopal.ac.in</p>
+            </div>
+          </div>
+
+          <div class="flex justify-end space-x-2">
+            <button
+              id="print-bill-btn"
+              class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition"
+            >
+              <i class="fa-solid fa-print mr-2"></i>Print Bill
+            </button>
+            <button
+              id="download-bill-btn"
+              class="bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition"
+            >
+              <i class="fa-solid fa-download mr-2"></i>Download PDF
+            </button>
+            <button
+              class="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+              onclick="closeModal('bill-receipt-modal')"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Message Box for notifications -->
+    <div
+      id="message-box"
+      class="fixed bottom-4 right-4 bg-gray-700 text-white p-4 rounded-lg shadow-lg hidden message-box"
+    >
+      <p id="message-text"></p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+      // JavaScript to display the current date and time
+      function updateDateTime() {
+        const now = new Date();
+        const options = {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        };
+        const formattedDateTime = now.toLocaleDateString("en-US", options);
+        document.getElementById("date-time-display").textContent =
+          formattedDateTime;
+      }
+      updateDateTime();
+      setInterval(updateDateTime, 60000);
+
+      // Countdown timer for next pickup
+      function updateCountdown() {
+        const pickupDate = new Date();
+        pickupDate.setDate(pickupDate.getDate() + 1);
+        pickupDate.setHours(10, 0, 0, 0);
+
+        const now = new Date().getTime();
+        const distance = pickupDate - now;
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor(
+          (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+        );
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        document.getElementById("countdown-days").textContent = days
+          .toString()
+          .padStart(2, "0");
+        document.getElementById("countdown-hours").textContent = hours
+          .toString()
+          .padStart(2, "0");
+        document.getElementById("countdown-minutes").textContent = minutes
+          .toString()
+          .padStart(2, "0");
+        document.getElementById("countdown-seconds").textContent = seconds
+          .toString()
+          .padStart(2, "0");
+      }
+      setInterval(updateCountdown, 1000);
+      updateCountdown();
+
+      // Modal functionality
+      function showModal(modalId) {
+        document.getElementById(modalId).classList.add("active");
+      }
+
+      function closeModal(modalId) {
+        document.getElementById(modalId).classList.remove("active");
+      }
+
+      // Function to show a custom message box
+      function showMessage(text, type = "info") {
+        const messageBox = document.getElementById("message-box");
+        const messageText = document.getElementById("message-text");
+
+        messageText.textContent = text;
+        messageBox.classList.remove(
+          "hidden",
+          "bg-red-700",
+          "bg-green-700",
+          "bg-blue-700"
+        );
+
+        if (type === "error") {
+          messageBox.classList.add("bg-red-700");
+        } else if (type === "success") {
+          messageBox.classList.add("bg-green-700");
+        } else if (type === "info") {
+          messageBox.classList.add("bg-blue-700");
+        } else {
+          messageBox.classList.add("bg-gray-700");
+        }
+
+        setTimeout(() => {
+          messageBox.classList.add("hidden");
+        }, 4000);
+      }
+
+      // Initialize the application
+      function init() {
+        // Initialize date picker
+        flatpickr("#pickup-date", {
+          minDate: "today",
+          dateFormat: "Y-m-d",
+        });
+
+        flatpickr("#reschedule-date", {
+          minDate: "today",
+          dateFormat: "Y-m-d",
+        });
+
+        // Service selection functionality
+        const serviceCards = document.querySelectorAll(".service-card");
+        let selectedService = null;
+        let selectedServicePrice = 0;
+
+        // Item counters for each service
+        const regularCount = document.getElementById("regular-count");
+        const expressCount = document.getElementById("express-count");
+        const dryCleanCount = document.getElementById("dry-clean-count");
+        const ironingCount = document.getElementById("ironing-count");
+
+        // Initialize counters
+        let regularItems = 0;
+        let expressItems = 0;
+        let dryCleanItems = 0;
+        let ironingItems = 0;
+
+        // Update order summary
+        function updateOrderSummary() {
+          const regularTotal = regularItems * 10;
+          const expressTotal = expressItems * 15;
+          const dryCleanTotal = dryCleanItems * 25;
+          const ironingTotal = ironingItems * 5;
+
+          const totalAmount =
+            regularTotal + expressTotal + dryCleanTotal + ironingTotal;
+
+          document.getElementById(
+            "regular-summary"
+          ).textContent = `${regularItems} items - ₹${regularTotal}`;
+          document.getElementById(
+            "express-summary"
+          ).textContent = `${expressItems} items - ₹${expressTotal}`;
+          document.getElementById(
+            "dry-clean-summary"
+          ).textContent = `${dryCleanItems} items - ₹${dryCleanTotal}`;
+          document.getElementById(
+            "ironing-summary"
+          ).textContent = `${ironingItems} items - ₹${ironingTotal}`;
+          document.getElementById(
+            "total-amount"
+          ).textContent = `₹${totalAmount}`;
+        }
+
+        // Add event listeners to counter buttons
+        document.querySelectorAll(".counter-btn").forEach((button) => {
+          button.addEventListener("click", function () {
+            const isIncrease = this.classList.contains("increase");
+            const serviceCard = this.closest(".service-card");
+            const counterValue = serviceCard.querySelector(".counter-value");
+            let count = parseInt(counterValue.textContent);
+
+            if (isIncrease) {
+              count++;
+            } else if (count > 0) {
+              count--;
+            }
+
+            counterValue.textContent = count;
+
+            // Update the specific service count
+            if (serviceCard.id === "regular-wash") {
+              regularItems = count;
+            } else if (serviceCard.id === "express-service") {
+              expressItems = count;
+            } else if (serviceCard.id === "dry-cleaning") {
+              dryCleanItems = count;
+            } else if (serviceCard.id === "ironing") {
+              ironingItems = count;
+            }
+
+            updateOrderSummary();
+          });
+        });
+
+        // Payment method selection
+        const paymentMethods = document.querySelectorAll(
+          'input[name="payment-method"]'
+        );
+        const paymentForms = document.querySelectorAll(".payment-method-form");
+
+        paymentMethods.forEach((method) => {
+          method.addEventListener("change", function () {
+            // Hide all forms
+            paymentForms.forEach((form) => {
+              form.classList.remove("active");
+            });
+
+            // Show selected form
+            const formId = `${this.id}-form`;
+            document.getElementById(formId).classList.add("active");
+          });
+        });
+
+        // Book Service button
+        document
+          .getElementById("book-service-btn")
+          .addEventListener("click", function () {
+            showModal("book-service-modal");
+          });
+
+        // View Schedule button
+        document
+          .getElementById("view-schedule-btn")
+          .addEventListener("click", function () {
+            showModal("view-schedule-modal");
+          });
+
+        // Track Order button
+        document
+          .getElementById("track-order-btn")
+          .addEventListener("click", function () {
+            showModal("track-order-modal");
+          });
+
+        // Schedule Pickup button
+        document
+          .getElementById("schedule-pickup-btn")
+          .addEventListener("click", function () {
+            showModal("book-service-modal");
+          });
+
+        // Make Payment button
+        document
+          .getElementById("make-payment-btn")
+          .addEventListener("click", function () {
+            showModal("make-payment-modal");
+          });
+
+        // View Billing button
+        document
+          .getElementById("view-billing-btn")
+          .addEventListener("click", function () {
+            showModal("view-billing-modal");
+          });
+
+        // Check Status button
+        document
+          .getElementById("check-status-btn")
+          .addEventListener("click", function () {
+            showModal("service-status-modal");
+          });
+
+        // Service History button
+        document
+          .getElementById("service-history-btn")
+          .addEventListener("click", function () {
+            showModal("service-history-modal");
+          });
+
+        // Track Delivery button
+        document
+          .getElementById("track-delivery-btn")
+          .addEventListener("click", function () {
+            showModal("track-order-modal");
+          });
+
+        // Reschedule button
+        document
+          .getElementById("reschedule-btn")
+          .addEventListener("click", function () {
+            showModal("reschedule-modal");
+          });
+
+        // Pay Now button
+        document
+          .getElementById("pay-now-btn")
+          .addEventListener("click", function () {
+            showModal("make-payment-modal");
+          });
+
+        // Payment Methods button
+        document
+          .getElementById("payment-methods-btn")
+          .addEventListener("click", function () {
+            showModal("payment-methods-modal");
+          });
+
+        // View Analytics button
+        document
+          .getElementById("view-analytics-btn")
+          .addEventListener("click", function () {
+            showModal("analytics-modal");
+          });
+
+        // Manage Preferences button
+        document
+          .getElementById("manage-preferences-btn")
+          .addEventListener("click", function () {
+            showModal("preferences-modal");
+          });
+
+        // Contact Support button
+        document
+          .getElementById("contact-support-btn")
+          .addEventListener("click", function () {
+            showModal("support-modal");
+          });
+
+        // View All Payments button
+        document
+          .getElementById("view-all-payments-btn")
+          .addEventListener("click", function () {
+            showModal("view-billing-modal");
+          });
+
+        // Close modals
+        document
+          .getElementById("close-book-service")
+          .addEventListener("click", function () {
+            closeModal("book-service-modal");
+          });
+
+        document
+          .getElementById("close-track-order")
+          .addEventListener("click", function () {
+            closeModal("track-order-modal");
+          });
+
+        document
+          .getElementById("close-make-payment")
+          .addEventListener("click", function () {
+            closeModal("make-payment-modal");
+          });
+
+        document
+          .getElementById("close-view-billing")
+          .addEventListener("click", function () {
+            closeModal("view-billing-modal");
+          });
+
+        document
+          .getElementById("close-service-status")
+          .addEventListener("click", function () {
+            closeModal("service-status-modal");
+          });
+
+        document
+          .getElementById("close-service-history")
+          .addEventListener("click", function () {
+            closeModal("service-history-modal");
+          });
+
+        document
+          .getElementById("close-reschedule")
+          .addEventListener("click", function () {
+            closeModal("reschedule-modal");
+          });
+
+        document
+          .getElementById("close-payment-methods")
+          .addEventListener("click", function () {
+            closeModal("payment-methods-modal");
+          });
+
+        document
+          .getElementById("close-analytics")
+          .addEventListener("click", function () {
+            closeModal("analytics-modal");
+          });
+
+        document
+          .getElementById("close-preferences")
+          .addEventListener("click", function () {
+            closeModal("preferences-modal");
+          });
+
+        document
+          .getElementById("close-support")
+          .addEventListener("click", function () {
+            closeModal("support-modal");
+          });
+
+        document
+          .getElementById("close-bill-receipt")
+          .addEventListener("click", function () {
+            closeModal("bill-receipt-modal");
+          });
+
+        // Form submission handlers
+        document
+          .getElementById("confirm-booking-btn")
+          .addEventListener("click", function () {
+            const totalItems =
+              regularItems + expressItems + dryCleanItems + ironingItems;
+            if (totalItems === 0) {
+              showMessage(
+                "Please select at least one item for laundry service",
+                "error"
+              );
+              return;
+            }
+
+            const location = document.getElementById("pickup-location").value;
+            if (!location) {
+              showMessage("Please select a pickup location", "error");
+              return;
+            }
+
+            showMessage("Laundry service booked successfully!", "success");
+            closeModal("book-service-modal");
+          });
+
+        document
+          .getElementById("process-payment-btn")
+          .addEventListener("click", function () {
+            showMessage("Payment processed successfully!", "success");
+            closeModal("make-payment-modal");
+          });
+
+        document
+          .getElementById("confirm-reschedule-btn")
+          .addEventListener("click", function () {
+            showMessage("Service rescheduled successfully!", "success");
+            closeModal("reschedule-modal");
+          });
+
+        document
+          .getElementById("save-preferences-btn")
+          .addEventListener("click", function () {
+            showMessage("Preferences saved successfully!", "success");
+            closeModal("preferences-modal");
+          });
+
+        document
+          .getElementById("submit-support-btn")
+          .addEventListener("click", function () {
+            showMessage(
+              "Support request submitted successfully! We'll contact you soon.",
+              "success"
+            );
+            closeModal("support-modal");
+          });
+
+        // Bill download functionality
+        document.querySelectorAll(".download-bill").forEach((button) => {
+          button.addEventListener("click", function () {
+            showModal("bill-receipt-modal");
+          });
+        });
+
+        document
+          .getElementById("print-bill-btn")
+          .addEventListener("click", function () {
+            showMessage("Printing bill...", "success");
+          });
+
+        document
+          .getElementById("download-bill-btn")
+          .addEventListener("click", function () {
+            showMessage("Bill downloaded successfully!", "success");
+          });
+
+        document
+          .getElementById("print-all-bills-btn")
+          .addEventListener("click", function () {
+            showMessage("Printing all bills...", "success");
+          });
+
+        // Track order functionality
+        document
+          .getElementById("track-order-submit")
+          .addEventListener("click", function () {
+            const trackingId = document.getElementById("tracking-id").value;
+            if (!trackingId) {
+              showMessage("Please enter a booking ID", "error");
+              return;
+            }
+            showMessage(`Tracking order: ${trackingId}`, "success");
+          });
+      }
+
+      // Initialize when DOM is loaded
+      document.addEventListener("DOMContentLoaded", init);
+    </script>
+    <script src="auth_guard.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

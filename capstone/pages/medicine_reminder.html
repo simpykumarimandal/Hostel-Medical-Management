@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HMS | Medicine Reminder</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style> @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"); body { font-family: "Inter", sans-serif; color: #d1d5db; /* gray-300 */ } .active-nav-link { background-color: #374151; /* gray-700 */ color: white; } .bg-card { background-color: #374151; /* gray-700 */ } .message-box { animation: slideIn 0.5s forwards; } @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } } .reminder-card { transition: all 0.3s ease; } .reminder-card:hover { transform: translateY(-2px); } .reminder-card.overdue { border-left: 4px solid #ef4444; } .reminder-card.upcoming { border-left: 4px solid #f59e0b; } .reminder-card.completed { border-left: 4px solid #10b981; opacity: 0.7; } .frequency-btn { transition: all 0.2s ease; } .frequency-btn.selected { background-color: #3b82f6; color: white; transform: scale(1.05); } .pulse-alert { animation: pulse 2s infinite; } @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } } .fade-in { animation: fadeIn 0.5s ease-in; } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } } .progress-ring { transform: rotate(-90deg); } .progress-ring-circle { transition: stroke-dashoffset 0.3s; } </style> <style> .sidebar { transition: transform 0.25s ease-in-out; } .sidebar-collapsed .sidebar { transform: translateX(-110%); } .main-content { transition: margin-left 0.25s ease-in-out; } .sidebar-collapsed .main-content { margin-left: 0 !important; } @media (max-width: 768px) { .sidebar { transform: translateX(-110%); } .sidebar-open .sidebar { transform: translateX(0); } } </style></head>
+  <body class="bg-gray-900 flex flex-col md:flex-row min-h-screen">
+
+    <!-- Sidebar -->
+    <aside
+      class="sidebar w-full md:w-64 bg-gray-950 text-white p-6 flex flex-col items-center md:items-start space-y-8 shadow-2xl">
+      <div class="flex items-center space-x-2 mb-4">
+        <i class="fas fa-hospital text-xl text-blue-400"></i>
+        <h1 class="text-xl font-bold">HMS</h1>
+        <span class="text-sm text-gray-400 ml-2">Student Mode</span>
+      </div>
+      <nav class="w-full">
+  <ul class="space-y-2">
+    <li>
+      <a href="demo.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-chart-line mr-3"></i>
+        <span class="font-medium">Dashboard</span>
+      </a>
+    </li>
+    <li>
+      <a href="ambulance.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-truck-medical mr-3"></i>
+        <span class="font-medium">Ambulance</span>
+      </a>
+    </li>
+    <li>
+      <a href="doctors.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-user-doctor mr-3"></i>
+        <span class="font-medium">Doctors</span>
+      </a>
+    </li>
+    <li>
+      <a href="medicine_order.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-pills mr-3"></i>
+        <span class="font-medium">Pharmacy</span>
+      </a>
+    </li>
+    <li>
+      <a href="medicine_reminder.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bell mr-3"></i>
+        <span class="font-medium">Medicine Reminder</span>
+      </a>
+    </li>
+    <li>
+      <a href="symptoms_checker.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-stethoscope mr-3"></i>
+        <span class="font-medium">Symptoms Checker</span>
+      </a>
+    </li>
+    <li>
+      <a href="lab_tests.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-vial-circle-check mr-3"></i>
+        <span class="font-medium">Lab Tests</span>
+      </a>
+    </li>
+    <li>
+      <a href="emergency_requests.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-hand-holding-medical mr-3"></i>
+        <span class="font-medium">Emergency Requests</span>
+      </a>
+    </li>
+    <li>
+      <a href="sos.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-sos mr-3"></i>
+        <span class="font-medium">SOS</span>
+      </a>
+    </li>
+    <li>
+      <a href="electronic_health_records.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-file-medical mr-3"></i>
+        <span class="font-medium">Health Records</span>
+      </a>
+    </li>
+    <li>
+      <a href="health_insurance.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-shield-heart mr-3"></i>
+        <span class="font-medium">Health Insurance</span>
+      </a>
+    </li>
+    <li>
+      <a href="reports_and_analytics.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-chart-pie mr-3"></i>
+        <span class="font-medium">Reports & Analytics</span>
+      </a>
+    </li>
+    <li>
+      <a href="restocking.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-box-open mr-3"></i>
+        <span class="font-medium">Inventory</span>
+      </a>
+    </li>
+    <li>
+      <a href="studentrequest.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-cash-register mr-3"></i>
+        <span class="font-medium">Student Requests</span>
+      </a>
+    </li>
+    <li>
+      <a href="student_transport.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bus mr-3"></i>
+        <span class="font-medium">Student Transport</span>
+      </a>
+    </li>
+    <li>
+      <a href="transport_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-route mr-3"></i>
+        <span class="font-medium">Transport Management</span>
+      </a>
+    </li>
+    <li>
+      <a href="room_management.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bed mr-3"></i>
+        <span class="font-medium">Room Management</span>
+      </a>
+    </li>
+    <li>
+      <a href="room_sanitation.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-spray-can-sparkles mr-3"></i>
+        <span class="font-medium">Room Sanitation</span>
+      </a>
+    </li>
+    <li>
+      <a href="mess_menu.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-utensils mr-3"></i>
+        <span class="font-medium">Mess Menu</span>
+      </a>
+    </li>
+    <li>
+      <a href="mess_food_order_service.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bowl-food mr-3"></i>
+        <span class="font-medium">Mess Food Order</span>
+      </a>
+    </li>
+    <li>
+      <a href="laundry_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-shirt mr-3"></i>
+        <span class="font-medium">Laundry</span>
+      </a>
+    </li>
+    <li>
+      <a href="leave_and_outing.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-door-open mr-3"></i>
+        <span class="font-medium">Leave & Outing</span>
+      </a>
+    </li>
+    <li>
+      <a href="vit_bhopal_community.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-users mr-3"></i>
+        <span class="font-medium">VIT Community</span>
+      </a>
+    </li>
+    <li>
+      <a href="parent_notification.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-comments mr-3"></i>
+        <span class="font-medium">Parent Notification</span>
+      </a>
+    </li>
+    <li>
+      <a href="payment_gateway.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-credit-card mr-3"></i>
+        <span class="font-medium">Payment Gateway</span>
+      </a>
+    </li>
+    <li>
+      <a href="complaint_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-circle-exclamation mr-3"></i>
+        <span class="font-medium">Complaints</span>
+      </a>
+    </li>
+    <li>
+      <a href="exam_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-clipboard-list mr-3"></i>
+        <span class="font-medium">Exam Management</span>
+      </a>
+    </li>
+    <li>
+      <a href="local_hospital_network.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-hospital mr-3"></i>
+        <span class="font-medium">Local Hospitals</span>
+      </a>
+    </li>
+    <li>
+      <a href="medical_camps.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-hand-holding-heart mr-3"></i>
+        <span class="font-medium">Medical Camps</span>
+      </a>
+    </li>
+    <li>
+      <a href="virtual_consultation.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-video mr-3"></i>
+        <span class="font-medium">Virtual Consultation</span>
+      </a>
+    </li>
+    <li>
+      <a href="wearables.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-watch-fitness mr-3"></i>
+        <span class="font-medium">Wearables</span>
+      </a>
+    </li>
+    <li>
+      <a href="biometric.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-fingerprint mr-3"></i>
+        <span class="font-medium">Biometric</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+      <div class="mt-auto w-full">
+        <a href="/index.html" data-logout="true"
+          class="flex items-center justify-center w-full px-4 py-3 rounded-lg bg-red-600 hover:bg-red-700 transition-colors duration-200"
+        >
+          <i class="fa-solid fa-right-from-bracket mr-2"></i>
+          <span class="font-semibold">Log Out</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content flex-1 p-8 overflow-y-auto bg-gray-800">
+      <!-- Top Header -->
+      <header
+        class="flex items-center justify-between text-sm text-gray-400 mb-8"
+      >
+        <div id="date-time-display"></div>
+        <div class="flex items-center space-x-6">
+          <div class="relative">
+            <i
+              class="fa-solid fa-bell text-xl hover:text-white transition duration-200"
+            ></i>
+            <span
+              id="notification-badge"
+              class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center hidden"
+              >0</span
+            >
+          </div>
+          <div class="flex items-center space-x-2">
+            <i class="fa-solid fa-user-circle text-xl"></i>
+            <span>Student Mode</span>
+          </div>
+          <div class="flex items-center space-x-2 cursor-pointer">
+            <i class="fa-solid fa-globe text-xl"></i>
+            <span>English</span>
+            <i class="fa-solid fa-chevron-down text-xs"></i>
+          </div>
+        </div>
+      </header>
+
+      <!-- Page Title & Actions -->
+      <h2 class="text-3xl font-bold text-white mb-1">Medicine Reminder</h2>
+      <p class="text-gray-400 mb-8">
+        Set reminders for your medications and never miss a dose again.
+      </p>
+
+      <!-- Quick Stats & Add Reminder -->
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-6">
+        <!-- Today's Medications -->
+        <div class="bg-blue-900/30 border border-blue-700 rounded-xl p-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-2xl font-bold text-white" id="today-count">
+                0
+              </div>
+              <div class="text-sm text-blue-300">Today's Doses</div>
+            </div>
+            <i class="fa-solid fa-calendar-day text-blue-400 text-2xl"></i>
+          </div>
+        </div>
+
+        <!-- Pending Reminders -->
+        <div class="bg-yellow-900/30 border border-yellow-700 rounded-xl p-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-2xl font-bold text-white" id="pending-count">
+                0
+              </div>
+              <div class="text-sm text-yellow-300">Pending</div>
+            </div>
+            <i class="fa-solid fa-clock text-yellow-400 text-2xl"></i>
+          </div>
+        </div>
+
+        <!-- Completed -->
+        <div class="bg-green-900/30 border border-green-700 rounded-xl p-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-2xl font-bold text-white" id="completed-count">
+                0
+              </div>
+              <div class="text-sm text-green-300">Completed</div>
+            </div>
+            <i class="fa-solid fa-check-circle text-green-400 text-2xl"></i>
+          </div>
+        </div>
+
+        <!-- Add Reminder Button -->
+        <div
+          class="bg-card border border-gray-600 rounded-xl p-4 flex items-center justify-center"
+        >
+          <button
+            id="add-reminder-btn"
+            class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 shadow-md flex items-center justify-center w-full"
+          >
+            <i class="fa-solid fa-plus mr-2"></i>
+            Add New Reminder
+          </button>
+        </div>
+      </div>
+
+      <!-- Main Content Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Today's Reminders -->
+        <div class="lg:col-span-2 bg-card rounded-xl shadow-lg p-6">
+          <div class="flex items-center justify-between mb-6">
+            <h3 class="text-xl font-bold text-white">Today's Schedule</h3>
+            <div class="flex space-x-2">
+              <button
+                id="filter-all"
+                class="filter-btn px-3 py-1 rounded-lg bg-blue-600 text-white text-sm"
+              >
+                All
+              </button>
+              <button
+                id="filter-pending"
+                class="filter-btn px-3 py-1 rounded-lg bg-gray-600 text-gray-300 text-sm"
+              >
+                Pending
+              </button>
+              <button
+                id="filter-completed"
+                class="filter-btn px-3 py-1 rounded-lg bg-gray-600 text-gray-300 text-sm"
+              >
+                Completed
+              </button>
+            </div>
+          </div>
+
+          <div id="today-reminders" class="space-y-4">
+            <!-- Today's reminders will be injected here by JavaScript -->
+            <div class="text-center py-8 text-gray-500">
+              <i class="fa-solid fa-bell-slash text-3xl mb-2"></i>
+              <p>No reminders for today</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Add/Edit Reminder Form -->
+        <div class="bg-card rounded-xl shadow-lg p-6 h-fit">
+          <h3 class="text-xl font-bold text-white mb-4" id="form-title">
+            Add New Reminder
+          </h3>
+          <form id="reminder-form" class="space-y-4">
+            <input type="hidden" id="edit-id" value="" />
+
+            <div>
+              <label class="block text-sm font-medium text-gray-400 mb-2"
+                >Medicine Name</label
+              >
+              <input
+                type="text"
+                id="medicine-name"
+                class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-blue-500 focus:border-blue-500"
+                placeholder="e.g., Paracetamol 500mg"
+                required
+              />
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-400 mb-2"
+                  >Dosage</label
+                >
+                <input
+                  type="text"
+                  id="medicine-dosage"
+                  class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="e.g., 1 tablet"
+                  required
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-400 mb-2"
+                  >Quantity</label
+                >
+                <input
+                  type="number"
+                  id="medicine-quantity"
+                  class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="e.g., 2"
+                  min="1"
+                  required
+                />
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-400 mb-2"
+                >Frequency</label
+              >
+              <div class="grid grid-cols-3 gap-2">
+                <button
+                  type="button"
+                  class="frequency-btn bg-gray-600 hover:bg-gray-500 text-white py-2 rounded transition duration-200"
+                  data-frequency="once"
+                >
+                  Once
+                </button>
+                <button
+                  type="button"
+                  class="frequency-btn bg-gray-600 hover:bg-gray-500 text-white py-2 rounded transition duration-200"
+                  data-frequency="daily"
+                >
+                  Daily
+                </button>
+                <button
+                  type="button"
+                  class="frequency-btn selected bg-blue-600 text-white py-2 rounded transition duration-200"
+                  data-frequency="weekly"
+                >
+                  Weekly
+                </button>
+              </div>
+            </div>
+
+            <div id="schedule-details">
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-400 mb-2"
+                    >Start Date</label
+                  >
+                  <input
+                    type="date"
+                    id="start-date"
+                    class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-blue-500 focus:border-blue-500"
+                    required
+                  />
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-400 mb-2"
+                    >Time</label
+                  >
+                  <input
+                    type="time"
+                    id="reminder-time"
+                    class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-blue-500 focus:border-blue-500"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div id="weekly-schedule" class="mt-4">
+                <label class="block text-sm font-medium text-gray-400 mb-2"
+                  >Days of Week</label
+                >
+                <div class="grid grid-cols-7 gap-1">
+                  <button
+                    type="button"
+                    class="day-btn bg-gray-600 hover:bg-gray-500 text-white py-2 rounded text-sm transition duration-200"
+                    data-day="mon"
+                  >
+                    Mon
+                  </button>
+                  <button
+                    type="button"
+                    class="day-btn bg-gray-600 hover:bg-gray-500 text-white py-2 rounded text-sm transition duration-200"
+                    data-day="tue"
+                  >
+                    Tue
+                  </button>
+                  <button
+                    type="button"
+                    class="day-btn bg-gray-600 hover:bg-gray-500 text-white py-2 rounded text-sm transition duration-200"
+                    data-day="wed"
+                  >
+                    Wed
+                  </button>
+                  <button
+                    type="button"
+                    class="day-btn bg-gray-600 hover:bg-gray-500 text-white py-2 rounded text-sm transition duration-200"
+                    data-day="thu"
+                  >
+                    Thu
+                  </button>
+                  <button
+                    type="button"
+                    class="day-btn bg-gray-600 hover:bg-gray-500 text-white py-2 rounded text-sm transition duration-200"
+                    data-day="fri"
+                  >
+                    Fri
+                  </button>
+                  <button
+                    type="button"
+                    class="day-btn bg-gray-600 hover:bg-gray-500 text-white py-2 rounded text-sm transition duration-200"
+                    data-day="sat"
+                  >
+                    Sat
+                  </button>
+                  <button
+                    type="button"
+                    class="day-btn bg-gray-600 hover:bg-gray-500 text-white py-2 rounded text-sm transition duration-200"
+                    data-day="sun"
+                  >
+                    Sun
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-400 mb-2"
+                >Instructions</label
+              >
+              <textarea
+                id="medicine-instructions"
+                rows="3"
+                class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-blue-500 focus:border-blue-500"
+                placeholder="e.g., Take after meals, with water..."
+              ></textarea>
+            </div>
+
+            <div class="flex space-x-3 pt-2">
+              <button
+                type="button"
+                id="cancel-edit"
+                class="flex-1 bg-gray-600 text-white font-semibold py-3 rounded-lg hover:bg-gray-700 transition duration-200 hidden"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                class="flex-1 bg-blue-600 text-white font-semibold py-3 rounded-lg hover:bg-blue-700 transition duration-200 shadow-md"
+              >
+                <i class="fa-solid fa-bell mr-2"></i>
+                Set Reminder
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- All Reminders History -->
+      <div class="bg-card rounded-xl shadow-lg p-6 mt-6">
+        <h3 class="text-xl font-bold text-white mb-4">
+          All Medication Reminders
+        </h3>
+        <div id="all-reminders" class="space-y-4">
+          <!-- All reminders will be injected here by JavaScript -->
+          <div class="text-center py-8 text-gray-500">
+            <i class="fa-solid fa-prescription-bottle text-3xl mb-2"></i>
+            <p>No medication reminders set yet</p>
+            <button
+              id="setup-first-reminder"
+              class="text-blue-400 hover:text-blue-300 mt-2"
+            >
+              Set up your first reminder
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Message Box for notifications -->
+    <div
+      id="message-box"
+      class="fixed bottom-4 right-4 bg-gray-700 text-white p-4 rounded-lg shadow-lg hidden message-box"
+    >
+      <p id="message-text"></p>
+    </div>
+
+    <!-- Notification Modal -->
+    <div
+      id="notification-modal"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50"
+    >
+      <div class="bg-gray-800 rounded-xl p-6 w-full max-w-md mx-4">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-xl font-bold text-white">Medicine Reminder</h3>
+          <button
+            id="close-notification"
+            class="text-gray-400 hover:text-white"
+          >
+            <i class="fa-solid fa-times text-xl"></i>
+          </button>
+        </div>
+
+        <div id="notification-content" class="space-y-4">
+          <!-- Notification content will be injected here -->
+        </div>
+
+        <div class="flex space-x-3 mt-6">
+          <button
+            id="snooze-reminder"
+            class="flex-1 bg-yellow-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-yellow-700 transition duration-200"
+          >
+            Snooze (10 min)
+          </button>
+          <button
+            id="mark-taken"
+            class="flex-1 bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition duration-200"
+          >
+            <i class="fa-solid fa-check mr-2"></i>
+            Mark Taken
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // JavaScript to display the current date and time
+      function updateDateTime() {
+        const now = new Date();
+        const options = {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        };
+        const formattedDateTime = now.toLocaleDateString("en-US", options);
+        document.getElementById("date-time-display").textContent =
+          formattedDateTime;
+      }
+      updateDateTime();
+      setInterval(updateDateTime, 60000);
+
+      // Medicine reminders data
+      let reminders = [
+        {
+          id: 1,
+          medicineName: "Paracetamol 500mg",
+          dosage: "1 tablet",
+          quantity: 2,
+          frequency: "daily",
+          startDate: "2024-01-15",
+          time: "08:00",
+          days: ["mon", "tue", "wed", "thu", "fri", "sat", "sun"],
+          instructions: "Take after breakfast",
+          status: "active",
+          completed: [],
+          createdAt: new Date(),
+        },
+        {
+          id: 2,
+          medicineName: "Vitamin C 1000mg",
+          dosage: "1 capsule",
+          quantity: 1,
+          frequency: "daily",
+          startDate: "2024-01-10",
+          time: "19:00",
+          days: ["mon", "wed", "fri"],
+          instructions: "Take with dinner",
+          status: "active",
+          completed: ["2024-01-15", "2024-01-17"],
+          createdAt: new Date(),
+        },
+      ];
+
+      // Notification settings
+      let notificationSettings = {
+        enabled: true,
+        sound: true,
+        snoozeDuration: 10, // minutes
+        advanceNotice: 5, // minutes
+      };
+
+      // DOM Elements
+      const messageBox = document.getElementById("message-box");
+      const messageText = document.getElementById("message-text");
+      const notificationBadge = document.getElementById("notification-badge");
+
+      // Function to show a custom message box
+      function showMessage(text, type = "info") {
+        messageText.textContent = text;
+        messageBox.classList.remove("hidden", "bg-red-700", "bg-green-700");
+        if (type === "error") {
+          messageBox.classList.add("bg-red-700");
+        } else if (type === "success") {
+          messageBox.classList.add("bg-green-700");
+        } else {
+          messageBox.classList.add("bg-gray-700");
+        }
+        setTimeout(() => {
+          messageBox.classList.add("hidden");
+        }, 3000);
+      }
+
+      // Function to format time for display
+      function formatTime(timeString) {
+        const [hours, minutes] = timeString.split(":");
+        const hour = parseInt(hours);
+        const ampm = hour >= 12 ? "PM" : "AM";
+        const displayHour = hour % 12 || 12;
+        return `${displayHour}:${minutes} ${ampm}`;
+      }
+
+      // Function to get day name from abbreviation
+      function getDayName(abbr) {
+        const days = {
+          mon: "Monday",
+          tue: "Tuesday",
+          wed: "Wednesday",
+          thu: "Thursday",
+          fri: "Friday",
+          sat: "Saturday",
+          sun: "Sunday",
+        };
+        return days[abbr] || abbr;
+      }
+
+      // Function to calculate next reminder time
+      function getNextReminderTime(reminder) {
+        const now = new Date();
+        const today = now.toISOString().split("T")[0];
+        const [hours, minutes] = reminder.time.split(":");
+
+        const reminderTime = new Date();
+        reminderTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+
+        // If reminder time has passed today, schedule for next occurrence
+        if (reminderTime < now) {
+          reminderTime.setDate(reminderTime.getDate() + 1);
+        }
+
+        return reminderTime;
+      }
+
+      // Function to update statistics
+      function updateStatistics() {
+        const today = new Date().toISOString().split("T")[0];
+        const todayCount = reminders.filter(
+          (r) =>
+            r.status === "active" &&
+            (r.frequency === "daily" ||
+              (r.frequency === "weekly" && r.days.includes(getTodayAbbr())))
+        ).length;
+
+        const pendingCount = reminders.filter(
+          (r) => r.status === "active" && !r.completed.includes(today)
+        ).length;
+
+        const completedCount = reminders.reduce(
+          (count, r) => count + r.completed.length,
+          0
+        );
+
+        document.getElementById("today-count").textContent = todayCount;
+        document.getElementById("pending-count").textContent = pendingCount;
+        document.getElementById("completed-count").textContent = completedCount;
+
+        // Update notification badge
+        const upcomingCount = getUpcomingReminders().length;
+        if (upcomingCount > 0) {
+          notificationBadge.textContent = upcomingCount;
+          notificationBadge.classList.remove("hidden");
+        } else {
+          notificationBadge.classList.add("hidden");
+        }
+      }
+
+      // Function to get today's day abbreviation
+      function getTodayAbbr() {
+        const days = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
+        return days[new Date().getDay()];
+      }
+
+      // Function to get upcoming reminders (within next hour)
+      function getUpcomingReminders() {
+        const now = new Date();
+        const oneHourFromNow = new Date(now.getTime() + 60 * 60 * 1000);
+        const today = now.toISOString().split("T")[0];
+        const todayAbbr = getTodayAbbr();
+
+        return reminders.filter((reminder) => {
+          if (reminder.status !== "active") return false;
+          if (!reminder.completed.includes(today)) {
+            const [hours, minutes] = reminder.time.split(":");
+            const reminderTime = new Date();
+            reminderTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+
+            return (
+              reminderTime >= now &&
+              reminderTime <= oneHourFromNow &&
+              (reminder.frequency === "daily" ||
+                (reminder.frequency === "weekly" &&
+                  reminder.days.includes(todayAbbr)))
+            );
+          }
+          return false;
+        });
+      }
+
+      // Function to render today's reminders
+      function renderTodayReminders(filter = "all") {
+        const container = document.getElementById("today-reminders");
+        const today = new Date().toISOString().split("T")[0];
+        const todayAbbr = getTodayAbbr();
+
+        const todayReminders = reminders.filter(
+          (reminder) =>
+            reminder.status === "active" &&
+            (reminder.frequency === "daily" ||
+              (reminder.frequency === "weekly" &&
+                reminder.days.includes(todayAbbr)))
+        );
+
+        if (todayReminders.length === 0) {
+          container.innerHTML = `
+            <div class="text-center py-8 text-gray-500">
+              <i class="fa-solid fa-bell-slash text-3xl mb-2"></i>
+              <p>No reminders for today</p>
+            </div>
+          `;
+          return;
+        }
+
+        container.innerHTML = todayReminders
+          .map((reminder) => {
+            const isCompleted = reminder.completed.includes(today);
+            const nextTime = getNextReminderTime(reminder);
+            const isOverdue = nextTime < new Date() && !isCompleted;
+
+            let statusClass = "upcoming";
+            let statusText = "Upcoming";
+
+            if (isCompleted) {
+              statusClass = "completed";
+              statusText = "Completed";
+            } else if (isOverdue) {
+              statusClass = "overdue";
+              statusText = "Overdue";
+            }
+
+            if (filter === "pending" && isCompleted) return "";
+            if (filter === "completed" && !isCompleted) return "";
+
+            return `
+            <div class="reminder-card ${statusClass} bg-gray-700 rounded-lg p-4">
+              <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center space-x-3">
+                  <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
+                    <i class="fa-solid fa-pills text-white"></i>
+                  </div>
+                  <div>
+                    <div class="font-semibold text-white">${
+                      reminder.medicineName
+                    }</div>
+                    <div class="text-sm text-gray-400">${reminder.dosage} × ${
+              reminder.quantity
+            }</div>
+                  </div>
+                </div>
+                <span class="px-3 py-1 text-xs font-semibold rounded-full ${
+                  statusClass === "overdue"
+                    ? "bg-red-600"
+                    : statusClass === "completed"
+                    ? "bg-green-600"
+                    : "bg-yellow-600"
+                } text-white">
+                  ${statusText}
+                </span>
+              </div>
+              
+              <div class="flex items-center justify-between text-sm">
+                <div class="text-gray-300">
+                  <i class="fa-solid fa-clock mr-1"></i>
+                  ${formatTime(reminder.time)}
+                </div>
+                <div class="flex space-x-2">
+                  ${
+                    !isCompleted
+                      ? `
+                    <button class="mark-taken text-green-400 hover:text-green-300 transition duration-200" data-id="${reminder.id}">
+                      <i class="fa-solid fa-check"></i>
+                    </button>
+                  `
+                      : ""
+                  }
+                  <button class="edit-reminder text-blue-400 hover:text-blue-300 transition duration-200" data-id="${
+                    reminder.id
+                  }">
+                    <i class="fa-solid fa-edit"></i>
+                  </button>
+                  <button class="delete-reminder text-red-400 hover:text-red-300 transition duration-200" data-id="${
+                    reminder.id
+                  }">
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </div>
+              </div>
+              
+              ${
+                reminder.instructions
+                  ? `
+                <div class="mt-2 text-sm text-gray-400">
+                  <i class="fa-solid fa-info-circle mr-1"></i>
+                  ${reminder.instructions}
+                </div>
+              `
+                  : ""
+              }
+            </div>
+          `;
+          })
+          .join("");
+      }
+
+      // Function to render all reminders
+      function renderAllReminders() {
+        const container = document.getElementById("all-reminders");
+
+        if (reminders.length === 0) {
+          container.innerHTML = `
+            <div class="text-center py-8 text-gray-500">
+              <i class="fa-solid fa-prescription-bottle text-3xl mb-2"></i>
+              <p>No medication reminders set yet</p>
+              <button id="setup-first-reminder" class="text-blue-400 hover:text-blue-300 mt-2">
+                Set up your first reminder
+              </button>
+            </div>
+          `;
+          return;
+        }
+
+        container.innerHTML = reminders
+          .map((reminder) => {
+            const nextTime = getNextReminderTime(reminder);
+            const daysText = reminder.days
+              ? reminder.days.map(getDayName).join(", ")
+              : "Daily";
+
+            return `
+            <div class="reminder-card bg-gray-700 rounded-lg p-4">
+              <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center space-x-3">
+                  <div class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center">
+                    <i class="fa-solid fa-pills text-white text-lg"></i>
+                  </div>
+                  <div>
+                    <div class="font-semibold text-white text-lg">${
+                      reminder.medicineName
+                    }</div>
+                    <div class="text-sm text-gray-400">${reminder.dosage} × ${
+              reminder.quantity
+            }</div>
+                  </div>
+                </div>
+                <span class="px-3 py-1 text-xs font-semibold rounded-full ${
+                  reminder.status === "active" ? "bg-green-600" : "bg-gray-600"
+                } text-white">
+                  ${reminder.status === "active" ? "Active" : "Inactive"}
+                </span>
+              </div>
+              
+              <div class="grid grid-cols-2 gap-4 text-sm mb-3">
+                <div>
+                  <div class="text-gray-400">Time</div>
+                  <div class="text-white">${formatTime(reminder.time)}</div>
+                </div>
+                <div>
+                  <div class="text-gray-400">Frequency</div>
+                  <div class="text-white">${
+                    reminder.frequency === "daily" ? "Every day" : daysText
+                  }</div>
+                </div>
+              </div>
+              
+              ${
+                reminder.instructions
+                  ? `
+                <div class="mb-3 text-sm">
+                  <div class="text-gray-400">Instructions</div>
+                  <div class="text-white">${reminder.instructions}</div>
+                </div>
+              `
+                  : ""
+              }
+              
+              <div class="flex justify-between items-center text-sm">
+                <div class="text-gray-400">
+                  Completed: ${reminder.completed.length} times
+                </div>
+                <div class="flex space-x-2">
+                  <button class="edit-reminder text-blue-400 hover:text-blue-300 transition duration-200" data-id="${
+                    reminder.id
+                  }">
+                    <i class="fa-solid fa-edit"></i> Edit
+                  </button>
+                  <button class="delete-reminder text-red-400 hover:text-red-300 transition duration-200" data-id="${
+                    reminder.id
+                  }">
+                    <i class="fa-solid fa-trash"></i> Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          `;
+          })
+          .join("");
+      }
+
+      // Function to show notification modal
+      function showNotification(reminder) {
+        const modal = document.getElementById("notification-modal");
+        const content = document.getElementById("notification-content");
+
+        content.innerHTML = `
+          <div class="text-center">
+            <div class="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center mx-auto mb-4 pulse-alert">
+              <i class="fa-solid fa-bell text-white text-2xl"></i>
+            </div>
+            <h4 class="text-lg font-bold text-white mb-2">Time for Your Medication</h4>
+            <div class="text-gray-300 mb-4">
+              <div class="font-semibold text-xl">${reminder.medicineName}</div>
+              <div>${reminder.dosage} × ${reminder.quantity}</div>
+              ${
+                reminder.instructions
+                  ? `<div class="text-sm mt-2">${reminder.instructions}</div>`
+                  : ""
+              }
+            </div>
+          </div>
+        `;
+
+        modal.classList.remove("hidden");
+
+        // Play sound if enabled
+        if (notificationSettings.sound) {
+          // In a real app, you would play an actual sound
+          console.log("Playing reminder sound");
+        }
+      }
+
+      // Function to check for due reminders
+      function checkDueReminders() {
+        const upcoming = getUpcomingReminders();
+        const now = new Date();
+
+        upcoming.forEach((reminder) => {
+          const [hours, minutes] = reminder.time.split(":");
+          const reminderTime = new Date();
+          reminderTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+
+          // Show notification if it's time (within 1 minute)
+          const timeDiff = Math.abs(reminderTime - now);
+          if (timeDiff < 60000) {
+            // 1 minute
+            showNotification(reminder);
+          }
+        });
+      }
+
+      // Initialize the application
+      function init() {
+        updateStatistics();
+        renderTodayReminders();
+        renderAllReminders();
+
+        // Set up interval to check for due reminders
+        setInterval(checkDueReminders, 30000); // Check every 30 seconds
+
+        // Set today's date as default in the form
+        const today = new Date().toISOString().split("T")[0];
+        document.getElementById("start-date").value = today;
+
+        // Set current time + 5 minutes as default
+        const now = new Date();
+        now.setMinutes(now.getMinutes() + 5);
+        const timeString = now.toTimeString().substring(0, 5);
+        document.getElementById("reminder-time").value = timeString;
+      }
+
+      // Event Listeners
+      document.addEventListener("DOMContentLoaded", function () {
+        init();
+
+        // Add reminder button
+        document
+          .getElementById("add-reminder-btn")
+          .addEventListener("click", function () {
+            document.getElementById("form-title").textContent =
+              "Add New Reminder";
+            document.getElementById("edit-id").value = "";
+            document.getElementById("reminder-form").reset();
+            document.getElementById("cancel-edit").classList.add("hidden");
+
+            // Reset frequency buttons
+            document.querySelectorAll(".frequency-btn").forEach((btn) => {
+              btn.classList.remove("selected");
+            });
+            document
+              .querySelector('[data-frequency="weekly"]')
+              .classList.add("selected");
+
+            // Reset day buttons
+            document.querySelectorAll(".day-btn").forEach((btn) => {
+              btn.classList.remove("selected");
+            });
+          });
+
+        // Frequency selection
+        document.querySelectorAll(".frequency-btn").forEach((btn) => {
+          btn.addEventListener("click", function () {
+            document
+              .querySelectorAll(".frequency-btn")
+              .forEach((b) => b.classList.remove("selected"));
+            this.classList.add("selected");
+
+            // Show/hide weekly schedule
+            const weeklySchedule = document.getElementById("weekly-schedule");
+            if (this.dataset.frequency === "weekly") {
+              weeklySchedule.classList.remove("hidden");
+            } else {
+              weeklySchedule.classList.add("hidden");
+            }
+          });
+        });
+
+        // Day selection
+        document.querySelectorAll(".day-btn").forEach((btn) => {
+          btn.addEventListener("click", function () {
+            this.classList.toggle("selected");
+          });
+        });
+
+        // Filter buttons
+        document.querySelectorAll(".filter-btn").forEach((btn) => {
+          btn.addEventListener("click", function () {
+            document.querySelectorAll(".filter-btn").forEach((b) => {
+              b.classList.remove("bg-blue-600", "text-white");
+              b.classList.add("bg-gray-600", "text-gray-300");
+            });
+            this.classList.remove("bg-gray-600", "text-gray-300");
+            this.classList.add("bg-blue-600", "text-white");
+
+            const filter = this.id.replace("filter-", "");
+            renderTodayReminders(filter);
+          });
+        });
+
+        // Form submission
+        document
+          .getElementById("reminder-form")
+          .addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const formData = {
+              id: document.getElementById("edit-id").value || Date.now(),
+              medicineName: document.getElementById("medicine-name").value,
+              dosage: document.getElementById("medicine-dosage").value,
+              quantity: parseInt(
+                document.getElementById("medicine-quantity").value
+              ),
+              frequency: document.querySelector(".frequency-btn.selected")
+                .dataset.frequency,
+              startDate: document.getElementById("start-date").value,
+              time: document.getElementById("reminder-time").value,
+              days: Array.from(
+                document.querySelectorAll(".day-btn.selected")
+              ).map((btn) => btn.dataset.day),
+              instructions: document.getElementById("medicine-instructions")
+                .value,
+              status: "active",
+              completed: [],
+              createdAt: new Date(),
+            };
+
+            if (document.getElementById("edit-id").value) {
+              // Edit existing reminder
+              const index = reminders.findIndex(
+                (r) => r.id == document.getElementById("edit-id").value
+              );
+              if (index !== -1) {
+                reminders[index] = { ...reminders[index], ...formData };
+                showMessage("Reminder updated successfully!", "success");
+              }
+            } else {
+              // Add new reminder
+              reminders.push(formData);
+              showMessage("Reminder set successfully!", "success");
+            }
+
+            updateStatistics();
+            renderTodayReminders();
+            renderAllReminders();
+            this.reset();
+            document.getElementById("cancel-edit").classList.add("hidden");
+          });
+
+        // Mark as taken
+        document.addEventListener("click", function (e) {
+          if (
+            e.target.classList.contains("mark-taken") ||
+            e.target.closest(".mark-taken")
+          ) {
+            const button = e.target.classList.contains("mark-taken")
+              ? e.target
+              : e.target.closest(".mark-taken");
+            const reminderId = parseInt(button.dataset.id);
+            const today = new Date().toISOString().split("T")[0];
+
+            const reminder = reminders.find((r) => r.id === reminderId);
+            if (reminder && !reminder.completed.includes(today)) {
+              reminder.completed.push(today);
+              updateStatistics();
+              renderTodayReminders();
+              renderAllReminders();
+              showMessage("Medication marked as taken!", "success");
+            }
+          }
+        });
+
+        // Edit reminder
+        document.addEventListener("click", function (e) {
+          if (
+            e.target.classList.contains("edit-reminder") ||
+            e.target.closest(".edit-reminder")
+          ) {
+            const button = e.target.classList.contains("edit-reminder")
+              ? e.target
+              : e.target.closest(".edit-reminder");
+            const reminderId = parseInt(button.dataset.id);
+
+            const reminder = reminders.find((r) => r.id === reminderId);
+            if (reminder) {
+              document.getElementById("form-title").textContent =
+                "Edit Reminder";
+              document.getElementById("edit-id").value = reminder.id;
+              document.getElementById("medicine-name").value =
+                reminder.medicineName;
+              document.getElementById("medicine-dosage").value =
+                reminder.dosage;
+              document.getElementById("medicine-quantity").value =
+                reminder.quantity;
+              document.getElementById("start-date").value = reminder.startDate;
+              document.getElementById("reminder-time").value = reminder.time;
+              document.getElementById("medicine-instructions").value =
+                reminder.instructions || "";
+
+              // Set frequency
+              document.querySelectorAll(".frequency-btn").forEach((btn) => {
+                btn.classList.remove("selected");
+                if (btn.dataset.frequency === reminder.frequency) {
+                  btn.classList.add("selected");
+                }
+              });
+
+              // Set days
+              document.querySelectorAll(".day-btn").forEach((btn) => {
+                btn.classList.remove("selected");
+                if (reminder.days.includes(btn.dataset.day)) {
+                  btn.classList.add("selected");
+                }
+              });
+
+              // Show/hide weekly schedule
+              const weeklySchedule = document.getElementById("weekly-schedule");
+              if (reminder.frequency === "weekly") {
+                weeklySchedule.classList.remove("hidden");
+              } else {
+                weeklySchedule.classList.add("hidden");
+              }
+
+              document.getElementById("cancel-edit").classList.remove("hidden");
+
+              // Scroll to form
+              document.getElementById("reminder-form").scrollIntoView({
+                behavior: "smooth",
+              });
+            }
+          }
+        });
+
+        // Delete reminder
+        document.addEventListener("click", function (e) {
+          if (
+            e.target.classList.contains("delete-reminder") ||
+            e.target.closest(".delete-reminder")
+          ) {
+            const button = e.target.classList.contains("delete-reminder")
+              ? e.target
+              : e.target.closest(".delete-reminder");
+            const reminderId = parseInt(button.dataset.id);
+
+            if (confirm("Are you sure you want to delete this reminder?")) {
+              reminders = reminders.filter((r) => r.id !== reminderId);
+              updateStatistics();
+              renderTodayReminders();
+              renderAllReminders();
+              showMessage("Reminder deleted successfully!", "success");
+            }
+          }
+        });
+
+        // Cancel edit
+        document
+          .getElementById("cancel-edit")
+          .addEventListener("click", function () {
+            document.getElementById("reminder-form").reset();
+            document.getElementById("edit-id").value = "";
+            document.getElementById("form-title").textContent =
+              "Add New Reminder";
+            this.classList.add("hidden");
+          });
+
+        // Setup first reminder
+        document.addEventListener("click", function (e) {
+          if (e.target.id === "setup-first-reminder") {
+            document.getElementById("add-reminder-btn").click();
+          }
+        });
+
+        // Notification modal controls
+        document
+          .getElementById("close-notification")
+          .addEventListener("click", function () {
+            document
+              .getElementById("notification-modal")
+              .classList.add("hidden");
+          });
+
+        document
+          .getElementById("snooze-reminder")
+          .addEventListener("click", function () {
+            // In a real app, you would implement snooze functionality
+            showMessage(
+              `Reminder snoozed for ${notificationSettings.snoozeDuration} minutes`,
+              "success"
+            );
+            document
+              .getElementById("notification-modal")
+              .classList.add("hidden");
+          });
+
+        document
+          .getElementById("mark-taken")
+          .addEventListener("click", function () {
+            // In a real app, you would mark the specific reminder as taken
+            const today = new Date().toISOString().split("T")[0];
+            // This would need to be connected to the specific reminder
+            showMessage("Medication marked as taken!", "success");
+            document
+              .getElementById("notification-modal")
+              .classList.add("hidden");
+            updateStatistics();
+            renderTodayReminders();
+          });
+      });
+    </script>
+    <script src="auth_guard.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

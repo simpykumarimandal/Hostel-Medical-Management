@@ -1,0 +1,2137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VIT Bhopal | Transport Management System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
+    />
+    <style> @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"); body { font-family: "Inter", sans-serif; color: #d1d5db; } .active-nav-link { background-color: #374151; color: white; } .bg-card { background-color: #374151; } .message-box { animation: slideIn 0.5s forwards; } @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } } .fade-in { animation: fadeIn 0.5s ease-in; } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } } .gradient-border { background: linear-gradient(135deg, #3b82f6, #8b5cf6); padding: 2px; border-radius: 12px; } .gradient-border > div { background: #374151; border-radius: 10px; padding: 1.5rem; } .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); z-index: 1000; align-items: center; justify-content: center; } .modal.active { display: flex; } .modal-content { background: #1f2937; border-radius: 12px; padding: 2rem; max-width: 800px; width: 90%; max-height: 90vh; overflow-y: auto; } .form-group { margin-bottom: 1.5rem; } .form-label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: #d1d5db; } .form-input { width: 100%; background-color: #4b5563; border: 1px solid #6b7280; border-radius: 0.5rem; padding: 0.75rem 1rem; color: white; transition: all 0.3s ease; } .form-input:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3); } .feature-card { background: linear-gradient(135deg, #1e40af, #3730a3); border-radius: 0.75rem; padding: 1.5rem; color: white; transition: all 0.3s ease; } .feature-card:hover { transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3); } .route-card { background: linear-gradient(135deg, #059669, #047857); border-radius: 0.75rem; padding: 1.5rem; color: white; transition: all 0.3s ease; } .route-card:hover { transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3); } .seat { width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin: 5px; cursor: pointer; transition: all 0.2s ease; } .seat.available { background-color: #10b981; } .seat.occupied { background-color: #ef4444; cursor: not-allowed; } .seat.selected { background-color: #3b82f6; } .seat.driver { background-color: #8b5cf6; } .bus-layout { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 20px; } .bus-driver { grid-column: 1 / -1; text-align: center; margin-bottom: 10px; } .attendance-status { width: 12px; height: 12px; border-radius: 50%; display: inline-block; margin-right: 5px; } .present { background-color: #10b981; } .absent { background-color: #ef4444; } .late { background-color: #f59e0b; } .parcel-status { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 5px; } .parcel-received { background-color: #10b981; } .parcel-pending { background-color: #f59e0b; } .parcel-delivered { background-color: #3b82f6; } .notification-card { border-left: 4px solid #3b82f6; background-color: #374151; border-radius: 0.5rem; padding: 1rem; margin-bottom: 1rem; } .notification-card.urgent { border-left-color: #ef4444; } .notification-card.info { border-left-color: #3b82f6; } .notification-card.warning { border-left-color: #f59e0b; } .storage-item { background-color: #374151; border-radius: 0.5rem; padding: 1rem; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; } .route-details-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; } .route-map { background: linear-gradient(135deg, #1e293b, #0f172a); border-radius: 0.75rem; padding: 1.5rem; height: 300px; display: flex; align-items: center; justify-content: center; } .attendance-table { width: 100%; border-collapse: collapse; } .attendance-table th, .attendance-table td { padding: 10px; text-align: left; border-bottom: 1px solid #374151; } .attendance-table th { background-color: #374151; } </style> <style> .sidebar { transition: transform 0.25s ease-in-out; } .sidebar-collapsed .sidebar { transform: translateX(-110%); } .main-content { transition: margin-left 0.25s ease-in-out; } .sidebar-collapsed .main-content { margin-left: 0 !important; } @media (max-width: 768px) { .sidebar { transform: translateX(-110%); } .sidebar-open .sidebar { transform: translateX(0); } } </style></head>
+  <body class="bg-gray-900 flex flex-col md:flex-row min-h-screen">
+
+    <!-- Sidebar -->
+    <aside
+      class="sidebar w-full md:w-64 bg-gray-950 text-white p-6 flex flex-col items-center md:items-start space-y-8 shadow-2xl">
+      <div class="flex items-center space-x-2 mb-4">
+        <i class="fas fa-university text-xl text-blue-400"></i>
+        <h1 class="text-xl font-bold">VIT Bhopal</h1>
+        <span class="text-sm text-gray-400 ml-2">Transport</span>
+      </div>
+      <nav class="w-full">
+  <ul class="space-y-2">
+    <li>
+      <a href="demo.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-chart-line mr-3"></i>
+        <span class="font-medium">Dashboard</span>
+      </a>
+    </li>
+    <li>
+      <a href="ambulance.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-truck-medical mr-3"></i>
+        <span class="font-medium">Ambulance</span>
+      </a>
+    </li>
+    <li>
+      <a href="doctors.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-user-doctor mr-3"></i>
+        <span class="font-medium">Doctors</span>
+      </a>
+    </li>
+    <li>
+      <a href="medicine_order.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-pills mr-3"></i>
+        <span class="font-medium">Pharmacy</span>
+      </a>
+    </li>
+    <li>
+      <a href="medicine_reminder.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bell mr-3"></i>
+        <span class="font-medium">Medicine Reminder</span>
+      </a>
+    </li>
+    <li>
+      <a href="symptoms_checker.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-stethoscope mr-3"></i>
+        <span class="font-medium">Symptoms Checker</span>
+      </a>
+    </li>
+    <li>
+      <a href="lab_tests.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-vial-circle-check mr-3"></i>
+        <span class="font-medium">Lab Tests</span>
+      </a>
+    </li>
+    <li>
+      <a href="emergency_requests.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-hand-holding-medical mr-3"></i>
+        <span class="font-medium">Emergency Requests</span>
+      </a>
+    </li>
+    <li>
+      <a href="sos.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-sos mr-3"></i>
+        <span class="font-medium">SOS</span>
+      </a>
+    </li>
+    <li>
+      <a href="electronic_health_records.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-file-medical mr-3"></i>
+        <span class="font-medium">Health Records</span>
+      </a>
+    </li>
+    <li>
+      <a href="health_insurance.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-shield-heart mr-3"></i>
+        <span class="font-medium">Health Insurance</span>
+      </a>
+    </li>
+    <li>
+      <a href="reports_and_analytics.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-chart-pie mr-3"></i>
+        <span class="font-medium">Reports & Analytics</span>
+      </a>
+    </li>
+    <li>
+      <a href="restocking.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-box-open mr-3"></i>
+        <span class="font-medium">Inventory</span>
+      </a>
+    </li>
+    <li>
+      <a href="studentrequest.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-cash-register mr-3"></i>
+        <span class="font-medium">Student Requests</span>
+      </a>
+    </li>
+    <li>
+      <a href="student_transport.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bus mr-3"></i>
+        <span class="font-medium">Student Transport</span>
+      </a>
+    </li>
+    <li>
+      <a href="transport_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-route mr-3"></i>
+        <span class="font-medium">Transport Management</span>
+      </a>
+    </li>
+    <li>
+      <a href="room_management.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bed mr-3"></i>
+        <span class="font-medium">Room Management</span>
+      </a>
+    </li>
+    <li>
+      <a href="room_sanitation.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-spray-can-sparkles mr-3"></i>
+        <span class="font-medium">Room Sanitation</span>
+      </a>
+    </li>
+    <li>
+      <a href="mess_menu.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-utensils mr-3"></i>
+        <span class="font-medium">Mess Menu</span>
+      </a>
+    </li>
+    <li>
+      <a href="mess_food_order_service.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bowl-food mr-3"></i>
+        <span class="font-medium">Mess Food Order</span>
+      </a>
+    </li>
+    <li>
+      <a href="laundry_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-shirt mr-3"></i>
+        <span class="font-medium">Laundry</span>
+      </a>
+    </li>
+    <li>
+      <a href="leave_and_outing.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-door-open mr-3"></i>
+        <span class="font-medium">Leave & Outing</span>
+      </a>
+    </li>
+    <li>
+      <a href="vit_bhopal_community.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-users mr-3"></i>
+        <span class="font-medium">VIT Community</span>
+      </a>
+    </li>
+    <li>
+      <a href="parent_notification.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-comments mr-3"></i>
+        <span class="font-medium">Parent Notification</span>
+      </a>
+    </li>
+    <li>
+      <a href="payment_gateway.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-credit-card mr-3"></i>
+        <span class="font-medium">Payment Gateway</span>
+      </a>
+    </li>
+    <li>
+      <a href="complaint_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-circle-exclamation mr-3"></i>
+        <span class="font-medium">Complaints</span>
+      </a>
+    </li>
+    <li>
+      <a href="exam_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-clipboard-list mr-3"></i>
+        <span class="font-medium">Exam Management</span>
+      </a>
+    </li>
+    <li>
+      <a href="local_hospital_network.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-hospital mr-3"></i>
+        <span class="font-medium">Local Hospitals</span>
+      </a>
+    </li>
+    <li>
+      <a href="medical_camps.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-hand-holding-heart mr-3"></i>
+        <span class="font-medium">Medical Camps</span>
+      </a>
+    </li>
+    <li>
+      <a href="virtual_consultation.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-video mr-3"></i>
+        <span class="font-medium">Virtual Consultation</span>
+      </a>
+    </li>
+    <li>
+      <a href="wearables.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-watch-fitness mr-3"></i>
+        <span class="font-medium">Wearables</span>
+      </a>
+    </li>
+    <li>
+      <a href="biometric.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-fingerprint mr-3"></i>
+        <span class="font-medium">Biometric</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+      <div class="mt-auto w-full">
+        <a href="/index.html" data-logout="true"
+          class="flex items-center justify-center w-full px-4 py-3 rounded-lg bg-red-600 hover:bg-red-700 transition-colors duration-200"
+        >
+          <i class="fa-solid fa-right-from-bracket mr-2"></i>
+          <span class="font-semibold">Log Out</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content flex-1 p-8 overflow-y-auto bg-gray-800">
+      <!-- Top Header -->
+      <header
+        class="flex items-center justify-between text-sm text-gray-400 mb-8"
+      >
+        <div id="date-time-display"></div>
+        <div class="flex items-center space-x-6">
+          <div class="relative">
+            <i
+              class="fa-solid fa-bell text-xl hover:text-white transition duration-200"
+            ></i>
+            <span
+              id="notification-badge"
+              class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center"
+              >5</span
+            >
+          </div>
+          <div class="flex items-center space-x-2">
+            <i class="fa-solid fa-user-circle text-xl"></i>
+            <span>Transport Manager</span>
+          </div>
+          <div class="flex items-center space-x-2 cursor-pointer">
+            <i class="fa-solid fa-globe text-xl"></i>
+            <span>English</span>
+            <i class="fa-solid fa-chevron-down text-xs"></i>
+          </div>
+        </div>
+      </header>
+
+      <!-- Page Title & Actions -->
+      <div class="flex justify-between items-center mb-8">
+        <div>
+          <h2 class="text-3xl font-bold text-white mb-1">
+            Transport Management System
+          </h2>
+          <p class="text-gray-400">
+            Manage bus routes, seat allocation, attendance tracking, parcels and
+            notifications
+          </p>
+        </div>
+        <div class="flex space-x-3">
+          <button
+            id="add-route-btn"
+            class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center"
+          >
+            <i class="fa-solid fa-plus mr-2"></i>
+            Add Route
+          </button>
+          <button
+            id="manage-parcels-btn"
+            class="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center"
+          >
+            <i class="fa-solid fa-box mr-2"></i>
+            Manage Parcels
+          </button>
+          <button
+            id="send-notification-btn"
+            class="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center"
+          >
+            <i class="fa-solid fa-bell mr-2"></i>
+            Send Notification
+          </button>
+        </div>
+      </div>
+
+      <!-- University Location Banner -->
+      <div class="gradient-border mb-6">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center">
+            <div class="bg-blue-600 rounded-full p-3 mr-4">
+              <i class="fa-solid fa-university text-white text-xl"></i>
+            </div>
+            <div>
+              <div class="font-bold text-white text-lg">
+                VIT Bhopal University
+              </div>
+              <div class="text-blue-300">
+                Kothri Kalan, Sehore, Madhya Pradesh - 466114
+              </div>
+              <div class="text-sm text-gray-400 mt-1">
+                Transport Management Dashboard
+              </div>
+            </div>
+          </div>
+          <div class="text-right">
+            <div class="text-white font-semibold">Transport Helpdesk</div>
+            <div class="text-blue-400 font-bold text-xl">07562-654321</div>
+            <div class="text-sm text-gray-400">Mon-Sat: 8:00 AM - 6:00 PM</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Stats Dashboard -->
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
+        <!-- Active Routes -->
+        <div class="gradient-border">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-2xl font-bold text-white" id="active-routes">
+                12
+              </div>
+              <div class="text-sm text-blue-300">Active Routes</div>
+            </div>
+            <i class="fa-solid fa-route text-blue-400 text-2xl"></i>
+          </div>
+        </div>
+
+        <!-- Total Students -->
+        <div class="gradient-border">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-2xl font-bold text-white" id="total-students">
+                1,250
+              </div>
+              <div class="text-sm text-green-300">Registered Students</div>
+            </div>
+            <i class="fa-solid fa-users text-green-400 text-2xl"></i>
+          </div>
+        </div>
+
+        <!-- Pending Parcels -->
+        <div class="gradient-border">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-2xl font-bold text-white" id="pending-parcels">
+                8
+              </div>
+              <div class="text-sm text-yellow-300">Pending Parcels</div>
+            </div>
+            <i class="fa-solid fa-box text-yellow-400 text-2xl"></i>
+          </div>
+        </div>
+
+        <!-- Today's Trips -->
+        <div class="gradient-border">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-2xl font-bold text-white" id="todays-trips">
+                24
+              </div>
+              <div class="text-sm text-purple-300">Today's Trips</div>
+            </div>
+            <i class="fa-solid fa-bus text-purple-400 text-2xl"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Features Section -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <!-- Bus Route Scheduling -->
+        <div class="feature-card">
+          <div class="flex items-center mb-3">
+            <i class="fa-solid fa-route text-2xl mr-3"></i>
+            <h3 class="font-bold text-lg">Bus Route Scheduling</h3>
+          </div>
+          <p class="text-sm opacity-90 mb-4">
+            Create and manage bus routes with timings, stops, and assigned
+            vehicles
+          </p>
+          <div class="flex space-x-2">
+            <button
+              id="view-routes-btn"
+              class="bg-white text-blue-600 text-sm font-semibold py-2 px-4 rounded-lg transition"
+            >
+              View Routes
+            </button>
+            <button
+              id="add-new-route-btn"
+              class="bg-transparent border border-white text-white text-sm font-semibold py-2 px-4 rounded-lg transition"
+            >
+              Add New
+            </button>
+          </div>
+        </div>
+
+        <!-- Seat Allocation System -->
+        <div
+          class="feature-card"
+          style="background: linear-gradient(135deg, #059669, #047857)"
+        >
+          <div class="flex items-center mb-3">
+            <i class="fa-solid fa-chair text-2xl mr-3"></i>
+            <h3 class="font-bold text-lg">Seat Allocation System</h3>
+          </div>
+          <p class="text-sm opacity-90 mb-4">
+            Allocate seats to students with real-time availability and booking
+            system
+          </p>
+          <div class="flex space-x-2">
+            <button
+              id="manage-seats-btn"
+              class="bg-white text-green-600 text-sm font-semibold py-2 px-4 rounded-lg transition"
+            >
+              Manage Seats
+            </button>
+            <button
+              id="view-allocations-btn"
+              class="bg-transparent border border-white text-white text-sm font-semibold py-2 px-4 rounded-lg transition"
+            >
+              View Allocations
+            </button>
+          </div>
+        </div>
+
+        <!-- Trip Attendance Tracking -->
+        <div
+          class="feature-card"
+          style="background: linear-gradient(135deg, #7c3aed, #6d28d9)"
+        >
+          <div class="flex items-center mb-3">
+            <i class="fa-solid fa-clipboard-check text-2xl mr-3"></i>
+            <h3 class="font-bold text-lg">Trip Attendance Tracking</h3>
+          </div>
+          <p class="text-sm opacity-90 mb-4">
+            Track student attendance on bus trips with real-time monitoring
+          </p>
+          <div class="flex space-x-2">
+            <button
+              id="track-attendance-btn"
+              class="bg-white text-purple-600 text-sm font-semibold py-2 px-4 rounded-lg transition"
+            >
+              Track Attendance
+            </button>
+            <button
+              id="generate-reports-btn"
+              class="bg-transparent border border-white text-white text-sm font-semibold py-2 px-4 rounded-lg transition"
+            >
+              Generate Reports
+            </button>
+          </div>
+        </div>
+
+        <!-- Parcel & Mail Management -->
+        <div
+          class="feature-card"
+          style="background: linear-gradient(135deg, #dc2626, #b91c1c)"
+        >
+          <div class="flex items-center mb-3">
+            <i class="fa-solid fa-box text-2xl mr-3"></i>
+            <h3 class="font-bold text-lg">Parcel & Mail Management</h3>
+          </div>
+          <p class="text-sm opacity-90 mb-4">
+            Manage parcel receipt, tracking, and delivery to students
+          </p>
+          <div class="flex space-x-2">
+            <button
+              id="manage-parcels-feature-btn"
+              class="bg-white text-red-600 text-sm font-semibold py-2 px-4 rounded-lg transition"
+            >
+              Manage Parcels
+            </button>
+            <button
+              id="track-delivery-btn"
+              class="bg-transparent border border-white text-white text-sm font-semibold py-2 px-4 rounded-lg transition"
+            >
+              Track Delivery
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Active Routes Section -->
+      <div class="bg-card rounded-xl shadow-lg p-6 mb-6">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">Active Bus Routes</h3>
+          <div class="flex items-center text-sm text-green-400">
+            <span class="status-indicator bg-green-500"></span>
+            Live Tracking Enabled
+          </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="route-card">
+            <div class="flex justify-between items-start mb-3">
+              <h4 class="font-bold text-lg">Route 101</h4>
+              <span
+                class="bg-white text-green-700 text-xs font-bold px-2 py-1 rounded-full"
+                >Active</span
+              >
+            </div>
+            <p class="text-sm opacity-90 mb-2">
+              Bhopal City Center → VIT Campus
+            </p>
+            <div class="flex justify-between text-sm mb-3">
+              <span><i class="fa-solid fa-clock mr-1"></i> 7:00 AM</span>
+              <span><i class="fa-solid fa-users mr-1"></i> 42/45</span>
+            </div>
+            <div class="flex space-x-2">
+              <button
+                class="view-route-details-btn flex-1 bg-white text-green-600 text-sm font-semibold py-2 px-3 rounded-lg transition"
+                data-route="101"
+              >
+                View Details
+              </button>
+            </div>
+          </div>
+
+          <div class="route-card">
+            <div class="flex justify-between items-start mb-3">
+              <h4 class="font-bold text-lg">Route 102</h4>
+              <span
+                class="bg-white text-green-700 text-xs font-bold px-2 py-1 rounded-full"
+                >Active</span
+              >
+            </div>
+            <p class="text-sm opacity-90 mb-2">Habibganj → VIT Campus</p>
+            <div class="flex justify-between text-sm mb-3">
+              <span><i class="fa-solid fa-clock mr-1"></i> 7:15 AM</span>
+              <span><i class="fa-solid fa-users mr-1"></i> 38/45</span>
+            </div>
+            <div class="flex space-x-2">
+              <button
+                class="view-route-details-btn flex-1 bg-white text-green-600 text-sm font-semibold py-2 px-3 rounded-lg transition"
+                data-route="102"
+              >
+                View Details
+              </button>
+            </div>
+          </div>
+
+          <div class="route-card">
+            <div class="flex justify-between items-start mb-3">
+              <h4 class="font-bold text-lg">Route 103</h4>
+              <span
+                class="bg-white text-yellow-700 text-xs font-bold px-2 py-1 rounded-full"
+                >Delayed</span
+              >
+            </div>
+            <p class="text-sm opacity-90 mb-2">MP Nagar → VIT Campus</p>
+            <div class="flex justify-between text-sm mb-3">
+              <span><i class="fa-solid fa-clock mr-1"></i> 7:30 AM</span>
+              <span><i class="fa-solid fa-users mr-1"></i> 35/45</span>
+            </div>
+            <div class="flex space-x-2">
+              <button
+                class="view-route-details-btn flex-1 bg-white text-green-600 text-sm font-semibold py-2 px-3 rounded-lg transition"
+                data-route="103"
+              >
+                View Details
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Notifications Section -->
+      <div class="bg-card rounded-xl shadow-lg p-6 mb-6">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">Recent Notifications</h3>
+          <button
+            class="text-blue-400 hover:text-blue-300 font-medium text-sm"
+            id="view-all-notifications-btn"
+          >
+            <i class="fa-solid fa-eye mr-1"></i> View All
+          </button>
+        </div>
+        <div class="space-y-4" id="notifications-container">
+          <div class="notification-card urgent">
+            <div class="flex justify-between items-start">
+              <div>
+                <h4 class="font-bold text-white">Route 103 Delayed</h4>
+                <p class="text-sm text-gray-400 mt-1">
+                  Route 103 from MP Nagar is delayed by 15 minutes due to
+                  traffic congestion.
+                </p>
+              </div>
+              <span class="text-xs text-gray-400">10 min ago</span>
+            </div>
+          </div>
+          <div class="notification-card info">
+            <div class="flex justify-between items-start">
+              <div>
+                <h4 class="font-bold text-white">New Parcel Received</h4>
+                <p class="text-sm text-gray-400 mt-1">
+                  5 new parcels received at transport office for students.
+                </p>
+              </div>
+              <span class="text-xs text-gray-400">1 hour ago</span>
+            </div>
+          </div>
+          <div class="notification-card warning">
+            <div class="flex justify-between items-start">
+              <div>
+                <h4 class="font-bold text-white">Bus Maintenance Scheduled</h4>
+                <p class="text-sm text-gray-400 mt-1">
+                  Bus VIT-05 scheduled for maintenance on Saturday. Alternate
+                  arrangements will be made.
+                </p>
+              </div>
+              <span class="text-xs text-gray-400">2 hours ago</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Parcels Section -->
+      <div class="bg-card rounded-xl shadow-lg p-6">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">Recent Parcels</h3>
+          <button
+            class="text-blue-400 hover:text-blue-300 font-medium text-sm"
+            id="view-all-parcels-btn"
+          >
+            <i class="fa-solid fa-eye mr-1"></i> View All
+          </button>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm text-left text-gray-400">
+            <thead class="text-xs uppercase bg-gray-700 text-gray-400">
+              <tr>
+                <th scope="col" class="px-6 py-3">Parcel ID</th>
+                <th scope="col" class="px-6 py-3">Student</th>
+                <th scope="col" class="px-6 py-3">Received Date</th>
+                <th scope="col" class="px-6 py-3">Status</th>
+                <th scope="col" class="px-6 py-3">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="parcels-table-body">
+              <tr class="border-b border-gray-700 hover:bg-gray-700">
+                <td class="px-6 py-4 font-medium text-white">PCL001</td>
+                <td class="px-6 py-4">Rahul Sharma (20BCE1001)</td>
+                <td class="px-6 py-4">Nov 20, 2023</td>
+                <td class="px-6 py-4">
+                  <span class="parcel-status parcel-received"></span>
+                  Received
+                </td>
+                <td class="px-6 py-4">
+                  <button
+                    class="view-parcel-details-btn text-blue-400 hover:text-blue-300 font-medium text-sm"
+                    data-parcel="PCL001"
+                  >
+                    <i class="fa-solid fa-eye mr-1"></i> Details
+                  </button>
+                </td>
+              </tr>
+              <tr class="border-b border-gray-700 hover:bg-gray-700">
+                <td class="px-6 py-4 font-medium text-white">PCL002</td>
+                <td class="px-6 py-4">Priya Patel (20BCE1002)</td>
+                <td class="px-6 py-4">Nov 19, 2023</td>
+                <td class="px-6 py-4">
+                  <span class="parcel-status parcel-delivered"></span>
+                  Delivered
+                </td>
+                <td class="px-6 py-4">
+                  <button
+                    class="view-parcel-details-btn text-blue-400 hover:text-blue-300 font-medium text-sm"
+                    data-parcel="PCL002"
+                  >
+                    <i class="fa-solid fa-eye mr-1"></i> Details
+                  </button>
+                </td>
+              </tr>
+              <tr class="border-b border-gray-700 hover:bg-gray-700">
+                <td class="px-6 py-4 font-medium text-white">PCL003</td>
+                <td class="px-6 py-4">Amit Kumar (20BCE1003)</td>
+                <td class="px-6 py-4">Nov 18, 2023</td>
+                <td class="px-6 py-4">
+                  <span class="parcel-status parcel-pending"></span>
+                  Pending
+                </td>
+                <td class="px-6 py-4">
+                  <button
+                    class="view-parcel-details-btn text-blue-400 hover:text-blue-300 font-medium text-sm"
+                    data-parcel="PCL003"
+                  >
+                    <i class="fa-solid fa-eye mr-1"></i> Details
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+
+    <!-- Add Route Modal -->
+    <div id="add-route-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">Add New Bus Route</h3>
+          <button
+            id="close-add-route"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="space-y-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="form-group">
+              <label class="form-label">Route Name/Number</label>
+              <input
+                type="text"
+                class="form-input"
+                placeholder="e.g., Route 101"
+                id="route-name"
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Assigned Bus</label>
+              <select class="form-input" id="assigned-bus">
+                <option value="">Select Bus</option>
+                <option value="bus1">VIT-01 (45 Seater)</option>
+                <option value="bus2">VIT-02 (45 Seater)</option>
+                <option value="bus3">VIT-03 (35 Seater)</option>
+                <option value="bus4">VIT-04 (45 Seater)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="form-group">
+              <label class="form-label">Start Location</label>
+              <input
+                type="text"
+                class="form-input"
+                placeholder="e.g., Bhopal City Center"
+                id="start-location"
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Destination</label>
+              <input
+                type="text"
+                class="form-input"
+                value="VIT Bhopal Campus"
+                readonly
+                id="destination"
+              />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="form-group">
+              <label class="form-label">Departure Time</label>
+              <input
+                type="text"
+                id="departure-time"
+                class="form-input"
+                placeholder="Select time"
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Estimated Arrival</label>
+              <input
+                type="text"
+                id="arrival-time"
+                class="form-input"
+                placeholder="Select time"
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Route Stops</label>
+            <textarea
+              class="form-input"
+              rows="3"
+              placeholder="Enter bus stops in order, separated by commas"
+              id="route-stops"
+            ></textarea>
+          </div>
+
+          <div class="flex space-x-2">
+            <button
+              id="save-route-btn"
+              class="flex-1 bg-green-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-green-700 transition"
+            >
+              <i class="fa-solid fa-check mr-2"></i>Save Route
+            </button>
+            <button
+              class="flex-1 bg-gray-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-gray-700 transition"
+              onclick="closeModal('add-route-modal')"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Route Details Modal -->
+    <div id="route-details-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white" id="route-details-title">
+            Route Details
+          </h3>
+          <button
+            id="close-route-details"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <div class="route-details-container">
+          <div>
+            <div class="mb-6">
+              <h4 class="font-bold text-white mb-2">Route Information</h4>
+              <div class="bg-gray-700 rounded-lg p-4">
+                <div class="flex justify-between mb-2">
+                  <span class="text-gray-400">Route Number:</span>
+                  <span class="text-white font-medium" id="detail-route-number"
+                    >101</span
+                  >
+                </div>
+                <div class="flex justify-between mb-2">
+                  <span class="text-gray-400">Assigned Bus:</span>
+                  <span class="text-white font-medium" id="detail-assigned-bus"
+                    >VIT-01</span
+                  >
+                </div>
+                <div class="flex justify-between mb-2">
+                  <span class="text-gray-400">Departure Time:</span>
+                  <span
+                    class="text-white font-medium"
+                    id="detail-departure-time"
+                    >7:00 AM</span
+                  >
+                </div>
+                <div class="flex justify-between mb-2">
+                  <span class="text-gray-400">Arrival Time:</span>
+                  <span class="text-white font-medium" id="detail-arrival-time"
+                    >8:15 AM</span
+                  >
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-400">Capacity:</span>
+                  <span class="text-white font-medium" id="detail-capacity"
+                    >45/45</span
+                  >
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h4 class="font-bold text-white mb-2">Route Stops</h4>
+              <div class="bg-gray-700 rounded-lg p-4">
+                <ul
+                  class="list-disc list-inside text-white"
+                  id="route-stops-list"
+                >
+                  <li>Bhopal City Center</li>
+                  <li>MP Nagar Zone 1</li>
+                  <li>Habibganj</li>
+                  <li>Bairagarh</li>
+                  <li>VIT Bhopal Campus</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="route-map">
+            <div class="text-center">
+              <i class="fa-solid fa-map text-4xl text-blue-400 mb-3"></i>
+              <div class="text-white font-semibold">Route Map</div>
+              <div class="text-gray-400 text-sm mt-2">
+                Interactive route visualization
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-6 flex justify-end space-x-2">
+          <button
+            class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition"
+          >
+            Edit Route
+          </button>
+          <button
+            class="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+            onclick="closeModal('route-details-modal')"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Seat Allocation Modal -->
+    <div id="seat-allocation-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">
+            Seat Allocation - Route 101
+          </h3>
+          <button
+            id="close-seat-allocation"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <div class="mb-6">
+          <div class="flex justify-between items-center">
+            <div>
+              <h4 class="font-bold text-white">Bus VIT-01</h4>
+              <p class="text-gray-400">
+                45 Seater | Bhopal City Center → VIT Campus
+              </p>
+            </div>
+            <div class="text-right">
+              <div class="text-green-400 font-semibold">
+                Available: <span id="available-seats-count">12</span>
+              </div>
+              <div class="text-sm text-gray-400">
+                Occupied: <span id="occupied-seats-count">33</span>/45
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bus-layout" id="bus-layout-container">
+          <div class="bus-driver">
+            <div class="seat driver">
+              <i class="fa-solid fa-user"></i>
+            </div>
+            <div class="text-xs text-gray-400 mt-1">Driver</div>
+          </div>
+
+          <!-- Seats will be populated dynamically -->
+        </div>
+
+        <div class="mt-6 flex justify-between items-center">
+          <div class="flex space-x-4">
+            <div class="flex items-center">
+              <div class="seat available mr-2"></div>
+              <span class="text-sm">Available</span>
+            </div>
+            <div class="flex items-center">
+              <div class="seat occupied mr-2"></div>
+              <span class="text-sm">Occupied</span>
+            </div>
+            <div class="flex items-center">
+              <div class="seat selected mr-2"></div>
+              <span class="text-sm">Selected</span>
+            </div>
+          </div>
+
+          <div class="flex space-x-2">
+            <button
+              id="allocate-seats-btn"
+              class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition"
+            >
+              Allocate Selected
+            </button>
+            <button
+              class="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+              onclick="closeModal('seat-allocation-modal')"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- View Allocations Modal -->
+    <div id="view-allocations-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">
+            Seat Allocations - All Routes
+          </h3>
+          <button
+            id="close-view-allocations"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm text-left text-gray-400">
+            <thead class="text-xs uppercase bg-gray-700 text-gray-400">
+              <tr>
+                <th scope="col" class="px-6 py-3">Route</th>
+                <th scope="col" class="px-6 py-3">Bus</th>
+                <th scope="col" class="px-6 py-3">Capacity</th>
+                <th scope="col" class="px-6 py-3">Allocated</th>
+                <th scope="col" class="px-6 py-3">Available</th>
+                <th scope="col" class="px-6 py-3">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-gray-700 hover:bg-gray-700">
+                <td class="px-6 py-4 font-medium text-white">Route 101</td>
+                <td class="px-6 py-4">VIT-01</td>
+                <td class="px-6 py-4">45</td>
+                <td class="px-6 py-4">33</td>
+                <td class="px-6 py-4 text-green-400">12</td>
+                <td class="px-6 py-4">
+                  <button
+                    class="text-blue-400 hover:text-blue-300 font-medium text-sm view-route-allocations-btn"
+                    data-route="101"
+                  >
+                    <i class="fa-solid fa-eye mr-1"></i> View
+                  </button>
+                </td>
+              </tr>
+              <tr class="border-b border-gray-700 hover:bg-gray-700">
+                <td class="px-6 py-4 font-medium text-white">Route 102</td>
+                <td class="px-6 py-4">VIT-02</td>
+                <td class="px-6 py-4">45</td>
+                <td class="px-6 py-4">38</td>
+                <td class="px-6 py-4 text-green-400">7</td>
+                <td class="px-6 py-4">
+                  <button
+                    class="text-blue-400 hover:text-blue-300 font-medium text-sm view-route-allocations-btn"
+                    data-route="102"
+                  >
+                    <i class="fa-solid fa-eye mr-1"></i> View
+                  </button>
+                </td>
+              </tr>
+              <tr class="border-b border-gray-700 hover:bg-gray-700">
+                <td class="px-6 py-4 font-medium text-white">Route 103</td>
+                <td class="px-6 py-4">VIT-03</td>
+                <td class="px-6 py-4">35</td>
+                <td class="px-6 py-4">35</td>
+                <td class="px-6 py-4 text-red-400">0</td>
+                <td class="px-6 py-4">
+                  <button
+                    class="text-blue-400 hover:text-blue-300 font-medium text-sm view-route-allocations-btn"
+                    data-route="103"
+                  >
+                    <i class="fa-solid fa-eye mr-1"></i> View
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="mt-6 flex justify-end">
+          <button
+            class="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+            onclick="closeModal('view-allocations-modal')"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Track Attendance Modal -->
+    <div id="track-attendance-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">
+            Track Attendance - Route 101
+          </h3>
+          <button
+            id="close-track-attendance"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <div class="mb-6">
+          <div class="flex justify-between items-center">
+            <div>
+              <h4 class="font-bold text-white">Today's Trip - Nov 20, 2023</h4>
+              <p class="text-gray-400">
+                Bhopal City Center → VIT Campus | 7:00 AM
+              </p>
+            </div>
+            <div class="text-right">
+              <div class="text-green-400 font-semibold">Present: 38</div>
+              <div class="text-sm text-gray-400">Absent: 5 | Late: 2</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="attendance-table">
+            <thead>
+              <tr>
+                <th>Student ID</th>
+                <th>Name</th>
+                <th>Status</th>
+                <th>Boarding Time</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>20BCE1001</td>
+                <td>Rahul Sharma</td>
+                <td><span class="attendance-status present"></span>Present</td>
+                <td>7:05 AM</td>
+                <td>
+                  <button
+                    class="text-blue-400 hover:text-blue-300 font-medium text-sm"
+                  >
+                    <i class="fa-solid fa-edit mr-1"></i> Update
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td>20BCE1002</td>
+                <td>Priya Patel</td>
+                <td><span class="attendance-status present"></span>Present</td>
+                <td>7:02 AM</td>
+                <td>
+                  <button
+                    class="text-blue-400 hover:text-blue-300 font-medium text-sm"
+                  >
+                    <i class="fa-solid fa-edit mr-1"></i> Update
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td>20BCE1003</td>
+                <td>Amit Kumar</td>
+                <td><span class="attendance-status late"></span>Late</td>
+                <td>7:18 AM</td>
+                <td>
+                  <button
+                    class="text-blue-400 hover:text-blue-300 font-medium text-sm"
+                  >
+                    <i class="fa-solid fa-edit mr-1"></i> Update
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td>20BCE1004</td>
+                <td>Neha Singh</td>
+                <td><span class="attendance-status absent"></span>Absent</td>
+                <td>-</td>
+                <td>
+                  <button
+                    class="text-blue-400 hover:text-blue-300 font-medium text-sm"
+                  >
+                    <i class="fa-solid fa-edit mr-1"></i> Update
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="mt-6 flex justify-end space-x-2">
+          <button
+            class="bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition"
+          >
+            <i class="fa-solid fa-download mr-2"></i>Export Report
+          </button>
+          <button
+            class="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+            onclick="closeModal('track-attendance-modal')"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Generate Reports Modal -->
+    <div id="generate-reports-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">
+            Generate Attendance Reports
+          </h3>
+          <button
+            id="close-generate-reports"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <div class="space-y-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="form-group">
+              <label class="form-label">Report Type</label>
+              <select class="form-input" id="report-type">
+                <option value="daily">Daily Attendance</option>
+                <option value="weekly">Weekly Summary</option>
+                <option value="monthly">Monthly Report</option>
+                <option value="route">Route-wise Analysis</option>
+                <option value="student">Student-wise Report</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Date Range</label>
+              <input
+                type="text"
+                id="report-date-range"
+                class="form-input"
+                placeholder="Select date range"
+              />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="form-group">
+              <label class="form-label">Route (Optional)</label>
+              <select class="form-input" id="report-route">
+                <option value="all">All Routes</option>
+                <option value="101">Route 101</option>
+                <option value="102">Route 102</option>
+                <option value="103">Route 103</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Format</label>
+              <select class="form-input" id="report-format">
+                <option value="pdf">PDF</option>
+                <option value="excel">Excel</option>
+                <option value="csv">CSV</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Additional Filters (Optional)</label>
+            <div class="flex flex-wrap gap-4 mt-2">
+              <label class="flex items-center">
+                <input type="checkbox" class="mr-2" />
+                <span class="text-sm">Include Student Details</span>
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" class="mr-2" />
+                <span class="text-sm">Include Late Arrivals</span>
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" class="mr-2" checked />
+                <span class="text-sm">Include Summary Statistics</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-6 flex justify-end space-x-2">
+          <button
+            id="generate-report-btn"
+            class="bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition"
+          >
+            <i class="fa-solid fa-chart-bar mr-2"></i>Generate Report
+          </button>
+          <button
+            class="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+            onclick="closeModal('generate-reports-modal')"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Manage Parcels Modal -->
+    <div id="manage-parcels-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">Manage Parcels</h3>
+          <button
+            id="close-manage-parcels"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <div class="mb-6 flex justify-between items-center">
+          <div>
+            <h4 class="font-bold text-white">Parcel Management</h4>
+            <p class="text-gray-400">Add, update, and track student parcels</p>
+          </div>
+          <button
+            id="add-parcel-btn"
+            class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition"
+          >
+            <i class="fa-solid fa-plus mr-2"></i>Add Parcel
+          </button>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm text-left text-gray-400">
+            <thead class="text-xs uppercase bg-gray-700 text-gray-400">
+              <tr>
+                <th scope="col" class="px-6 py-3">Parcel ID</th>
+                <th scope="col" class="px-6 py-3">Student</th>
+                <th scope="col" class="px-6 py-3">Received Date</th>
+                <th scope="col" class="px-6 py-3">Status</th>
+                <th scope="col" class="px-6 py-3">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="manage-parcels-table-body">
+              <!-- Parcels will be populated dynamically -->
+            </tbody>
+          </table>
+        </div>
+
+        <div class="mt-6 flex justify-end">
+          <button
+            class="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+            onclick="closeModal('manage-parcels-modal')"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Track Delivery Modal -->
+    <div id="track-delivery-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">Track Parcel Delivery</h3>
+          <button
+            id="close-track-delivery"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <div class="mb-6">
+          <div class="flex justify-between items-center">
+            <div>
+              <h4 class="font-bold text-white" id="tracking-parcel-id">
+                PCL001
+              </h4>
+              <p class="text-gray-400" id="tracking-student-info">
+                Rahul Sharma (20BCE1001)
+              </p>
+            </div>
+            <div class="text-right">
+              <div class="text-green-400 font-semibold" id="tracking-status">
+                Received
+              </div>
+              <div class="text-sm text-gray-400" id="tracking-date">
+                Nov 20, 2023
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="space-y-4">
+          <div class="bg-gray-700 rounded-lg p-4">
+            <h5 class="font-bold text-white mb-3">Delivery Timeline</h5>
+            <div class="space-y-3">
+              <div class="flex items-center">
+                <div class="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
+                <div class="flex-1">
+                  <div class="text-white font-medium">Parcel Received</div>
+                  <div class="text-gray-400 text-sm">
+                    Nov 20, 2023 - 10:30 AM
+                  </div>
+                </div>
+              </div>
+              <div class="flex items-center">
+                <div class="w-3 h-3 bg-yellow-500 rounded-full mr-3"></div>
+                <div class="flex-1">
+                  <div class="text-white font-medium">Processing</div>
+                  <div class="text-gray-400 text-sm">
+                    Nov 20, 2023 - 11:15 AM
+                  </div>
+                </div>
+              </div>
+              <div class="flex items-center">
+                <div class="w-3 h-3 bg-gray-500 rounded-full mr-3"></div>
+                <div class="flex-1">
+                  <div class="text-gray-400 font-medium">Out for Delivery</div>
+                  <div class="text-gray-400 text-sm">
+                    Expected: Nov 21, 2023
+                  </div>
+                </div>
+              </div>
+              <div class="flex items-center">
+                <div class="w-3 h-3 bg-gray-500 rounded-full mr-3"></div>
+                <div class="flex-1">
+                  <div class="text-gray-400 font-medium">Delivered</div>
+                  <div class="text-gray-400 text-sm">Not yet delivered</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-gray-700 rounded-lg p-4">
+            <h5 class="font-bold text-white mb-3">Parcel Details</h5>
+            <div class="grid grid-cols-2 gap-4 text-sm">
+              <div>
+                <div class="text-gray-400">Sender</div>
+                <div class="text-white font-medium" id="tracking-sender">
+                  Amazon India
+                </div>
+              </div>
+              <div>
+                <div class="text-gray-400">Parcel Type</div>
+                <div class="text-white font-medium" id="tracking-type">
+                  Package
+                </div>
+              </div>
+              <div>
+                <div class="text-gray-400">Weight</div>
+                <div class="text-white font-medium" id="tracking-weight">
+                  2.5 kg
+                </div>
+              </div>
+              <div>
+                <div class="text-gray-400">Dimensions</div>
+                <div class="text-white font-medium" id="tracking-dimensions">
+                  30x20x15 cm
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-6 flex justify-end space-x-2">
+          <button
+            class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition"
+          >
+            <i class="fa-solid fa-edit mr-2"></i>Update Status
+          </button>
+          <button
+            class="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+            onclick="closeModal('track-delivery-modal')"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Send Notification Modal -->
+    <div id="send-notification-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">Send Notification</h3>
+          <button
+            id="close-send-notification"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <div class="space-y-4">
+          <div class="form-group">
+            <label class="form-label">Notification Title</label>
+            <input
+              type="text"
+              class="form-input"
+              placeholder="Enter notification title"
+              id="notification-title"
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Notification Message</label>
+            <textarea
+              class="form-input"
+              rows="4"
+              placeholder="Enter notification message"
+              id="notification-message"
+            ></textarea>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="form-group">
+              <label class="form-label">Priority</label>
+              <select class="form-input" id="notification-priority">
+                <option value="info">Information</option>
+                <option value="warning">Warning</option>
+                <option value="urgent">Urgent</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Target Audience</label>
+              <select class="form-input" id="notification-audience">
+                <option value="all">All Students</option>
+                <option value="route101">Route 101 Students</option>
+                <option value="route102">Route 102 Students</option>
+                <option value="route103">Route 103 Students</option>
+                <option value="hostel">Hostel Students</option>
+                <option value="day">Day Scholars</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Send Options</label>
+            <div class="flex flex-wrap gap-4 mt-2">
+              <label class="flex items-center">
+                <input type="checkbox" class="mr-2" checked />
+                <span class="text-sm">In-App Notification</span>
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" class="mr-2" />
+                <span class="text-sm">Email</span>
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" class="mr-2" />
+                <span class="text-sm">SMS</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-6 flex justify-end space-x-2">
+          <button
+            id="send-notification-now-btn"
+            class="bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition"
+          >
+            <i class="fa-solid fa-paper-plane mr-2"></i>Send Notification
+          </button>
+          <button
+            class="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+            onclick="closeModal('send-notification-modal')"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Message Box for notifications -->
+    <div
+      id="message-box"
+      class="fixed bottom-4 right-4 bg-gray-700 text-white p-4 rounded-lg shadow-lg hidden message-box"
+    >
+      <p id="message-text"></p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+      // Sample data
+      const routesData = {
+        101: {
+          name: "Route 101",
+          bus: "VIT-01",
+          departure: "7:00 AM",
+          arrival: "8:15 AM",
+          capacity: "45/45",
+          stops: [
+            "Bhopal City Center",
+            "MP Nagar Zone 1",
+            "Habibganj",
+            "Bairagarh",
+            "VIT Bhopal Campus",
+          ],
+        },
+        102: {
+          name: "Route 102",
+          bus: "VIT-02",
+          departure: "7:15 AM",
+          arrival: "8:30 AM",
+          capacity: "38/45",
+          stops: [
+            "Habibganj",
+            "MP Nagar Zone 2",
+            "Bairagarh",
+            "VIT Bhopal Campus",
+          ],
+        },
+        103: {
+          name: "Route 103",
+          bus: "VIT-03",
+          departure: "7:30 AM",
+          arrival: "8:45 AM",
+          capacity: "35/35",
+          stops: ["MP Nagar", "Bairagarh", "Kolar Road", "VIT Bhopal Campus"],
+        },
+      };
+
+      const parcelsData = [
+        {
+          id: "PCL001",
+          student: "Rahul Sharma (20BCE1001)",
+          date: "Nov 20, 2023",
+          status: "received",
+          sender: "Amazon India",
+          type: "Package",
+          weight: "2.5 kg",
+          dimensions: "30x20x15 cm",
+        },
+        {
+          id: "PCL002",
+          student: "Priya Patel (20BCE1002)",
+          date: "Nov 19, 2023",
+          status: "delivered",
+          sender: "Flipkart",
+          type: "Document",
+          weight: "0.5 kg",
+          dimensions: "25x15x5 cm",
+        },
+        {
+          id: "PCL003",
+          student: "Amit Kumar (20BCE1003)",
+          date: "Nov 18, 2023",
+          status: "pending",
+          sender: "Myntra",
+          type: "Clothing",
+          weight: "1.2 kg",
+          dimensions: "35x25x10 cm",
+        },
+      ];
+
+      // JavaScript to display the current date and time
+      function updateDateTime() {
+        const now = new Date();
+        const options = {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        };
+        const formattedDateTime = now.toLocaleDateString("en-US", options);
+        document.getElementById("date-time-display").textContent =
+          formattedDateTime;
+      }
+      updateDateTime();
+      setInterval(updateDateTime, 60000);
+
+      // Modal functionality
+      function showModal(modalId) {
+        document.getElementById(modalId).classList.add("active");
+      }
+
+      function closeModal(modalId) {
+        document.getElementById(modalId).classList.remove("active");
+      }
+
+      // Function to show a custom message box
+      function showMessage(text, type = "info") {
+        const messageBox = document.getElementById("message-box");
+        const messageText = document.getElementById("message-text");
+
+        messageText.textContent = text;
+        messageBox.classList.remove(
+          "hidden",
+          "bg-red-700",
+          "bg-green-700",
+          "bg-blue-700"
+        );
+
+        if (type === "error") {
+          messageBox.classList.add("bg-red-700");
+        } else if (type === "success") {
+          messageBox.classList.add("bg-green-700");
+        } else if (type === "info") {
+          messageBox.classList.add("bg-blue-700");
+        } else {
+          messageBox.classList.add("bg-gray-700");
+        }
+
+        setTimeout(() => {
+          messageBox.classList.add("hidden");
+        }, 4000);
+      }
+
+      // Function to populate bus layout
+      function populateBusLayout() {
+        const container = document.getElementById("bus-layout-container");
+        container.innerHTML = "";
+
+        // Add driver seat
+        const driverDiv = document.createElement("div");
+        driverDiv.className = "bus-driver";
+        driverDiv.innerHTML = `
+          <div class="seat driver">
+            <i class="fa-solid fa-user"></i>
+          </div>
+          <div class="text-xs text-gray-400 mt-1">Driver</div>
+        `;
+        container.appendChild(driverDiv);
+
+        // Add 44 passenger seats (4 rows of 11 seats)
+        for (let i = 1; i <= 44; i++) {
+          const seat = document.createElement("div");
+          // Randomly assign some seats as occupied
+          const isOccupied = Math.random() > 0.3;
+          seat.className = `seat ${isOccupied ? "occupied" : "available"}`;
+          seat.textContent = i;
+          seat.dataset.seat = i;
+          container.appendChild(seat);
+        }
+
+        // Update seat counts
+        const availableSeats =
+          document.querySelectorAll(".seat.available").length;
+        const occupiedSeats =
+          document.querySelectorAll(".seat.occupied").length;
+
+        document.getElementById("available-seats-count").textContent =
+          availableSeats;
+        document.getElementById("occupied-seats-count").textContent =
+          occupiedSeats;
+      }
+
+      // Function to populate manage parcels table
+      function populateManageParcelsTable() {
+        const container = document.getElementById("manage-parcels-table-body");
+
+        container.innerHTML = parcelsData
+          .map((parcel) => {
+            const statusClass = `parcel-${parcel.status}`;
+            const statusText =
+              parcel.status === "received"
+                ? "Received"
+                : parcel.status === "delivered"
+                ? "Delivered"
+                : "Pending";
+
+            return `
+            <tr class="border-b border-gray-700 hover:bg-gray-700">
+              <td class="px-6 py-4 font-medium text-white">${parcel.id}</td>
+              <td class="px-6 py-4">${parcel.student}</td>
+              <td class="px-6 py-4">${parcel.date}</td>
+              <td class="px-6 py-4">
+                <span class="parcel-status ${statusClass}"></span>
+                ${statusText}
+              </td>
+              <td class="px-6 py-4">
+                <button class="edit-parcel-btn text-blue-400 hover:text-blue-300 font-medium text-sm mr-3" data-id="${parcel.id}">
+                  <i class="fa-solid fa-edit mr-1"></i> Edit
+                </button>
+                <button class="track-parcel-btn text-green-400 hover:text-green-300 font-medium text-sm" data-id="${parcel.id}">
+                  <i class="fa-solid fa-location-arrow mr-1"></i> Track
+                </button>
+              </td>
+            </tr>
+          `;
+          })
+          .join("");
+      }
+
+      // Function to show route details
+      function showRouteDetails(routeId) {
+        const route = routesData[routeId];
+        if (!route) return;
+
+        document.getElementById(
+          "route-details-title"
+        ).textContent = `Route Details - ${route.name}`;
+        document.getElementById("detail-route-number").textContent = routeId;
+        document.getElementById("detail-assigned-bus").textContent = route.bus;
+        document.getElementById("detail-departure-time").textContent =
+          route.departure;
+        document.getElementById("detail-arrival-time").textContent =
+          route.arrival;
+        document.getElementById("detail-capacity").textContent = route.capacity;
+
+        const stopsList = document.getElementById("route-stops-list");
+        stopsList.innerHTML = route.stops
+          .map((stop) => `<li>${stop}</li>`)
+          .join("");
+
+        showModal("route-details-modal");
+      }
+
+      // Function to show parcel details for tracking
+      function showParcelTracking(parcelId) {
+        const parcel = parcelsData.find((p) => p.id === parcelId);
+        if (!parcel) return;
+
+        document.getElementById("tracking-parcel-id").textContent = parcel.id;
+        document.getElementById("tracking-student-info").textContent =
+          parcel.student;
+        document.getElementById("tracking-status").textContent =
+          parcel.status === "received"
+            ? "Received"
+            : parcel.status === "delivered"
+            ? "Delivered"
+            : "Pending";
+        document.getElementById("tracking-date").textContent = parcel.date;
+        document.getElementById("tracking-sender").textContent = parcel.sender;
+        document.getElementById("tracking-type").textContent = parcel.type;
+        document.getElementById("tracking-weight").textContent = parcel.weight;
+        document.getElementById("tracking-dimensions").textContent =
+          parcel.dimensions;
+
+        showModal("track-delivery-modal");
+      }
+
+      // Initialize the application
+      function init() {
+        // Initialize time pickers
+        flatpickr("#departure-time", {
+          enableTime: true,
+          noCalendar: true,
+          dateFormat: "H:i",
+          time_24hr: false,
+        });
+
+        flatpickr("#arrival-time", {
+          enableTime: true,
+          noCalendar: true,
+          dateFormat: "H:i",
+          time_24hr: false,
+        });
+
+        flatpickr("#report-date-range", {
+          mode: "range",
+          dateFormat: "Y-m-d",
+        });
+
+        // Populate initial data
+        populateBusLayout();
+        populateManageParcelsTable();
+
+        // Add route button
+        document
+          .getElementById("add-route-btn")
+          .addEventListener("click", function () {
+            showModal("add-route-modal");
+          });
+
+        // Manage parcels button
+        document
+          .getElementById("manage-parcels-btn")
+          .addEventListener("click", function () {
+            showModal("manage-parcels-modal");
+          });
+
+        // Send notification button
+        document
+          .getElementById("send-notification-btn")
+          .addEventListener("click", function () {
+            showModal("send-notification-modal");
+          });
+
+        // Close modals
+        document
+          .getElementById("close-add-route")
+          .addEventListener("click", function () {
+            closeModal("add-route-modal");
+          });
+
+        document
+          .getElementById("close-seat-allocation")
+          .addEventListener("click", function () {
+            closeModal("seat-allocation-modal");
+          });
+
+        document
+          .getElementById("close-route-details")
+          .addEventListener("click", function () {
+            closeModal("route-details-modal");
+          });
+
+        document
+          .getElementById("close-view-allocations")
+          .addEventListener("click", function () {
+            closeModal("view-allocations-modal");
+          });
+
+        document
+          .getElementById("close-track-attendance")
+          .addEventListener("click", function () {
+            closeModal("track-attendance-modal");
+          });
+
+        document
+          .getElementById("close-generate-reports")
+          .addEventListener("click", function () {
+            closeModal("generate-reports-modal");
+          });
+
+        document
+          .getElementById("close-manage-parcels")
+          .addEventListener("click", function () {
+            closeModal("manage-parcels-modal");
+          });
+
+        document
+          .getElementById("close-track-delivery")
+          .addEventListener("click", function () {
+            closeModal("track-delivery-modal");
+          });
+
+        document
+          .getElementById("close-send-notification")
+          .addEventListener("click", function () {
+            closeModal("send-notification-modal");
+          });
+
+        // Feature card buttons
+        document
+          .getElementById("view-routes-btn")
+          .addEventListener("click", function () {
+            showMessage("Viewing all bus routes", "info");
+          });
+
+        document
+          .getElementById("add-new-route-btn")
+          .addEventListener("click", function () {
+            showModal("add-route-modal");
+          });
+
+        document
+          .getElementById("manage-seats-btn")
+          .addEventListener("click", function () {
+            showModal("seat-allocation-modal");
+          });
+
+        document
+          .getElementById("view-allocations-btn")
+          .addEventListener("click", function () {
+            showModal("view-allocations-modal");
+          });
+
+        document
+          .getElementById("track-attendance-btn")
+          .addEventListener("click", function () {
+            showModal("track-attendance-modal");
+          });
+
+        document
+          .getElementById("generate-reports-btn")
+          .addEventListener("click", function () {
+            showModal("generate-reports-modal");
+          });
+
+        document
+          .getElementById("manage-parcels-feature-btn")
+          .addEventListener("click", function () {
+            showModal("manage-parcels-modal");
+          });
+
+        document
+          .getElementById("track-delivery-btn")
+          .addEventListener("click", function () {
+            showModal("track-delivery-modal");
+          });
+
+        // Event delegation for route details buttons
+        document.addEventListener("click", function (e) {
+          if (e.target.classList.contains("view-route-details-btn")) {
+            const routeId = e.target.dataset.route;
+            showRouteDetails(routeId);
+          }
+
+          if (e.target.classList.contains("view-parcel-details-btn")) {
+            const parcelId = e.target.dataset.parcel;
+            showParcelTracking(parcelId);
+          }
+
+          if (e.target.classList.contains("track-parcel-btn")) {
+            const parcelId = e.target.dataset.id;
+            showParcelTracking(parcelId);
+          }
+
+          if (e.target.classList.contains("view-route-allocations-btn")) {
+            const routeId = e.target.dataset.route;
+            showMessage(`Viewing allocations for Route ${routeId}`, "info");
+          }
+
+          // Seat selection functionality
+          if (
+            e.target.classList.contains("seat") &&
+            e.target.classList.contains("available")
+          ) {
+            e.target.classList.toggle("selected");
+          }
+        });
+
+        // Save route button
+        document
+          .getElementById("save-route-btn")
+          .addEventListener("click", function () {
+            const routeName = document.getElementById("route-name").value;
+            const assignedBus = document.getElementById("assigned-bus").value;
+
+            if (!routeName || !assignedBus) {
+              showMessage("Please fill all required fields", "error");
+              return;
+            }
+
+            showMessage(`Route ${routeName} added successfully!`, "success");
+            closeModal("add-route-modal");
+
+            // Reset form
+            document.getElementById("route-name").value = "";
+            document.getElementById("assigned-bus").value = "";
+            document.getElementById("start-location").value = "";
+            document.getElementById("departure-time").value = "";
+            document.getElementById("arrival-time").value = "";
+            document.getElementById("route-stops").value = "";
+          });
+
+        // Allocate seats button
+        document
+          .getElementById("allocate-seats-btn")
+          .addEventListener("click", function () {
+            const selectedSeats = document.querySelectorAll(".seat.selected");
+            if (selectedSeats.length === 0) {
+              showMessage(
+                "Please select at least one seat to allocate",
+                "error"
+              );
+              return;
+            }
+
+            showMessage(
+              `Allocated ${selectedSeats.length} seats successfully!`,
+              "success"
+            );
+            closeModal("seat-allocation-modal");
+          });
+
+        // Generate report button
+        document
+          .getElementById("generate-report-btn")
+          .addEventListener("click", function () {
+            const reportType = document.getElementById("report-type").value;
+            const dateRange =
+              document.getElementById("report-date-range").value;
+
+            if (!dateRange) {
+              showMessage("Please select a date range", "error");
+              return;
+            }
+
+            showMessage(
+              `Generating ${reportType} report for ${dateRange}`,
+              "info"
+            );
+            setTimeout(() => {
+              showMessage("Report generated successfully!", "success");
+              closeModal("generate-reports-modal");
+            }, 2000);
+          });
+
+        // Add parcel button
+        document
+          .getElementById("add-parcel-btn")
+          .addEventListener("click", function () {
+            showMessage(
+              "Add parcel functionality will be implemented soon",
+              "info"
+            );
+          });
+
+        // Send notification button
+        document
+          .getElementById("send-notification-now-btn")
+          .addEventListener("click", function () {
+            const title = document.getElementById("notification-title").value;
+            const message = document.getElementById(
+              "notification-message"
+            ).value;
+
+            if (!title || !message) {
+              showMessage("Please fill all required fields", "error");
+              return;
+            }
+
+            showMessage("Notification sent successfully!", "success");
+            closeModal("send-notification-modal");
+
+            // Reset form
+            document.getElementById("notification-title").value = "";
+            document.getElementById("notification-message").value = "";
+            document.getElementById("notification-priority").value = "info";
+            document.getElementById("notification-audience").value = "all";
+          });
+
+        // View all notifications button
+        document
+          .getElementById("view-all-notifications-btn")
+          .addEventListener("click", function () {
+            showMessage("Viewing all notifications", "info");
+          });
+
+        // View all parcels button
+        document
+          .getElementById("view-all-parcels-btn")
+          .addEventListener("click", function () {
+            showModal("manage-parcels-modal");
+          });
+      }
+
+      // Initialize when DOM is loaded
+      document.addEventListener("DOMContentLoaded", init);
+    </script>
+    <script src="auth_guard.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

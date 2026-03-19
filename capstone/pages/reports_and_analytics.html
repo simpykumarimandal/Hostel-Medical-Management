@@ -1,0 +1,1582 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HMS | Reports & Analytics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style> @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"); body { font-family: "Inter", sans-serif; color: #d1d5db; } .active-nav-link { background-color: #374151; color: white; } .bg-card { background-color: #374151; } .fade-in { animation: fadeIn 0.5s ease-in; } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } } .stat-card { transition: all 0.3s ease; } .stat-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); } .report-table { border-collapse: separate; border-spacing: 0; } .report-table th { position: sticky; top: 0; background-color: #4b5563; z-index: 10; } .report-table tr:last-child td:first-child { border-bottom-left-radius: 0.5rem; } .report-table tr:last-child td:last-child { border-bottom-right-radius: 0.5rem; } .metric-trend { display: inline-flex; align-items: center; font-size: 0.75rem; padding: 2px 6px; border-radius: 4px; } .trend-up { background-color: rgba(34, 197, 94, 0.2); color: #22c55e; } .trend-down { background-color: rgba(239, 68, 68, 0.2); color: #ef4444; } .trend-neutral { background-color: rgba(156, 163, 175, 0.2); color: #9ca3af; } .notification { position: fixed; top: 20px; right: 20px; padding: 12px 20px; border-radius: 8px; color: white; z-index: 1000; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); transform: translateX(150%); transition: transform 0.3s ease; } .notification.show { transform: translateX(0); } .notification.success { background-color: #10b981; } .notification.info { background-color: #3b82f6; } .notification.warning { background-color: #f59e0b; } .notification.error { background-color: #ef4444; } .refresh-btn { transition: all 0.3s ease; } .refresh-btn:hover { transform: rotate(180deg); } .refresh-btn.refreshing { animation: spin 1s linear infinite; } @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } } @media print { body * { visibility: hidden; } #printable-content, #printable-content * { visibility: visible; } #printable-content { position: absolute; left: 0; top: 0; width: 100%; } .no-print { display: none !important; } } </style> <style> .sidebar { transition: transform 0.25s ease-in-out; } .sidebar-collapsed .sidebar { transform: translateX(-110%); } .main-content { transition: margin-left 0.25s ease-in-out; } .sidebar-collapsed .main-content { margin-left: 0 !important; } @media (max-width: 768px) { .sidebar { transform: translateX(-110%); } .sidebar-open .sidebar { transform: translateX(0); } } </style></head>
+  <body class="bg-gray-900 flex flex-col md:flex-row min-h-screen">
+
+    <!-- Notification Container -->
+    <div id="notification-container"></div>
+
+    <!-- Sidebar -->
+    <aside
+      class="sidebar w-full md:w-64 bg-gray-950 text-white p-6 flex flex-col items-center md:items-start space-y-8 shadow-2xl no-print">
+      <div class="flex items-center space-x-2 mb-4">
+        <i class="fas fa-hospital text-xl text-blue-400"></i>
+        <h1 class="text-xl font-bold">HMS</h1>
+        <span class="text-sm text-gray-400 ml-2">Admin Mode</span>
+      </div>
+      <nav class="w-full">
+  <ul class="space-y-2">
+    <li>
+      <a href="demo.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-chart-line mr-3"></i>
+        <span class="font-medium">Dashboard</span>
+      </a>
+    </li>
+    <li>
+      <a href="ambulance.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-truck-medical mr-3"></i>
+        <span class="font-medium">Ambulance</span>
+      </a>
+    </li>
+    <li>
+      <a href="doctors.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-user-doctor mr-3"></i>
+        <span class="font-medium">Doctors</span>
+      </a>
+    </li>
+    <li>
+      <a href="medicine_order.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-pills mr-3"></i>
+        <span class="font-medium">Pharmacy</span>
+      </a>
+    </li>
+    <li>
+      <a href="medicine_reminder.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bell mr-3"></i>
+        <span class="font-medium">Medicine Reminder</span>
+      </a>
+    </li>
+    <li>
+      <a href="symptoms_checker.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-stethoscope mr-3"></i>
+        <span class="font-medium">Symptoms Checker</span>
+      </a>
+    </li>
+    <li>
+      <a href="lab_tests.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-vial-circle-check mr-3"></i>
+        <span class="font-medium">Lab Tests</span>
+      </a>
+    </li>
+    <li>
+      <a href="emergency_requests.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-hand-holding-medical mr-3"></i>
+        <span class="font-medium">Emergency Requests</span>
+      </a>
+    </li>
+    <li>
+      <a href="sos.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-sos mr-3"></i>
+        <span class="font-medium">SOS</span>
+      </a>
+    </li>
+    <li>
+      <a href="electronic_health_records.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-file-medical mr-3"></i>
+        <span class="font-medium">Health Records</span>
+      </a>
+    </li>
+    <li>
+      <a href="health_insurance.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-shield-heart mr-3"></i>
+        <span class="font-medium">Health Insurance</span>
+      </a>
+    </li>
+    <li>
+      <a href="reports_and_analytics.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-chart-pie mr-3"></i>
+        <span class="font-medium">Reports & Analytics</span>
+      </a>
+    </li>
+    <li>
+      <a href="restocking.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-box-open mr-3"></i>
+        <span class="font-medium">Inventory</span>
+      </a>
+    </li>
+    <li>
+      <a href="studentrequest.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-cash-register mr-3"></i>
+        <span class="font-medium">Student Requests</span>
+      </a>
+    </li>
+    <li>
+      <a href="student_transport.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bus mr-3"></i>
+        <span class="font-medium">Student Transport</span>
+      </a>
+    </li>
+    <li>
+      <a href="transport_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-route mr-3"></i>
+        <span class="font-medium">Transport Management</span>
+      </a>
+    </li>
+    <li>
+      <a href="room_management.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bed mr-3"></i>
+        <span class="font-medium">Room Management</span>
+      </a>
+    </li>
+    <li>
+      <a href="room_sanitation.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-spray-can-sparkles mr-3"></i>
+        <span class="font-medium">Room Sanitation</span>
+      </a>
+    </li>
+    <li>
+      <a href="mess_menu.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-utensils mr-3"></i>
+        <span class="font-medium">Mess Menu</span>
+      </a>
+    </li>
+    <li>
+      <a href="mess_food_order_service.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bowl-food mr-3"></i>
+        <span class="font-medium">Mess Food Order</span>
+      </a>
+    </li>
+    <li>
+      <a href="laundry_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-shirt mr-3"></i>
+        <span class="font-medium">Laundry</span>
+      </a>
+    </li>
+    <li>
+      <a href="leave_and_outing.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-door-open mr-3"></i>
+        <span class="font-medium">Leave & Outing</span>
+      </a>
+    </li>
+    <li>
+      <a href="vit_bhopal_community.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-users mr-3"></i>
+        <span class="font-medium">VIT Community</span>
+      </a>
+    </li>
+    <li>
+      <a href="parent_notification.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-comments mr-3"></i>
+        <span class="font-medium">Parent Notification</span>
+      </a>
+    </li>
+    <li>
+      <a href="payment_gateway.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-credit-card mr-3"></i>
+        <span class="font-medium">Payment Gateway</span>
+      </a>
+    </li>
+    <li>
+      <a href="complaint_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-circle-exclamation mr-3"></i>
+        <span class="font-medium">Complaints</span>
+      </a>
+    </li>
+    <li>
+      <a href="exam_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-clipboard-list mr-3"></i>
+        <span class="font-medium">Exam Management</span>
+      </a>
+    </li>
+    <li>
+      <a href="local_hospital_network.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-hospital mr-3"></i>
+        <span class="font-medium">Local Hospitals</span>
+      </a>
+    </li>
+    <li>
+      <a href="medical_camps.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-hand-holding-heart mr-3"></i>
+        <span class="font-medium">Medical Camps</span>
+      </a>
+    </li>
+    <li>
+      <a href="virtual_consultation.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-video mr-3"></i>
+        <span class="font-medium">Virtual Consultation</span>
+      </a>
+    </li>
+    <li>
+      <a href="wearables.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-watch-fitness mr-3"></i>
+        <span class="font-medium">Wearables</span>
+      </a>
+    </li>
+    <li>
+      <a href="biometric.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-fingerprint mr-3"></i>
+        <span class="font-medium">Biometric</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+      <div class="mt-auto w-full">
+        <a href="/index.html" data-logout="true"
+          class="flex items-center justify-center w-full px-4 py-3 rounded-lg bg-red-600 hover:bg-red-700 transition-colors duration-200"
+        >
+          <i class="fa-solid fa-right-from-bracket mr-2"></i>
+          <span class="font-semibold">Log Out</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content flex-1 p-8 overflow-y-auto bg-gray-800">
+      <!-- Top Header -->
+      <header
+        class="flex items-center justify-between text-sm text-gray-400 mb-8 no-print"
+      >
+        <div id="date-time-display"></div>
+        <div class="flex items-center space-x-6">
+          <!-- Refresh Button -->
+          <button
+            id="refresh-page-btn"
+            class="refresh-btn bg-gray-700 hover:bg-gray-600 text-white p-2 rounded-lg transition duration-200 flex items-center"
+            title="Refresh Data"
+          >
+            <i class="fa-solid fa-rotate text-lg"></i>
+          </button>
+
+          <div class="relative">
+            <i
+              class="fa-solid fa-bell text-xl hover:text-white transition duration-200"
+            ></i>
+            <span
+              id="notification-badge"
+              class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center"
+              >3</span
+            >
+          </div>
+          <div class="flex items-center space-x-2">
+            <i class="fa-solid fa-user-circle text-xl"></i>
+            <span>Admin Mode</span>
+          </div>
+          <div class="flex items-center space-x-2 cursor-pointer">
+            <i class="fa-solid fa-globe text-xl"></i>
+            <span>English</span>
+            <i class="fa-solid fa-chevron-down text-xs"></i>
+          </div>
+        </div>
+      </header>
+
+      <!-- Page Title & Actions -->
+      <div class="flex justify-between items-center mb-8 no-print">
+        <div>
+          <h2 class="text-3xl font-bold text-white mb-1">
+            Reports & Analytics
+          </h2>
+          <p class="text-gray-400">
+            Comprehensive insights into hospital operations and student health
+            trends.
+          </p>
+        </div>
+        <div class="flex space-x-3">
+          <button
+            id="download-pdf-btn"
+            class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200 flex items-center"
+          >
+            <i class="fa-solid fa-file-pdf mr-2"></i>
+            Download PDF
+          </button>
+          <button
+            id="print-report-btn"
+            class="bg-gray-700 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-200 flex items-center"
+          >
+            <i class="fa-solid fa-print mr-2"></i>
+            Print Report
+          </button>
+        </div>
+      </div>
+
+      <!-- Printable Content -->
+      <div id="printable-content">
+        <!-- Key Metrics Overview -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <!-- Monthly Medicine Usage -->
+          <div
+            class="stat-card bg-gradient-to-br from-blue-900/40 to-blue-800/20 border border-blue-700/50 rounded-xl p-6"
+          >
+            <div class="flex items-center justify-between mb-4">
+              <div class="text-blue-400 bg-blue-900/50 p-3 rounded-lg">
+                <i class="fa-solid fa-pills text-xl"></i>
+              </div>
+              <span class="metric-trend trend-up">
+                <i class="fa-solid fa-arrow-up mr-1"></i>
+                12%
+              </span>
+            </div>
+            <div class="text-2xl font-bold text-white mb-1">350</div>
+            <div class="text-sm text-blue-300">Monthly Medicine Usage</div>
+            <div class="mt-4 text-xs text-blue-200 flex justify-between">
+              <span>Last month: 312</span>
+              <span>Units</span>
+            </div>
+          </div>
+
+          <!-- Doctor Visit Frequency -->
+          <div
+            class="stat-card bg-gradient-to-br from-purple-900/40 to-purple-800/20 border border-purple-700/50 rounded-xl p-6"
+          >
+            <div class="flex items-center justify-between mb-4">
+              <div class="text-purple-400 bg-purple-900/50 p-3 rounded-lg">
+                <i class="fa-solid fa-user-doctor text-xl"></i>
+              </div>
+              <span class="metric-trend trend-down">
+                <i class="fa-solid fa-arrow-down mr-1"></i>
+                5%
+              </span>
+            </div>
+            <div class="text-2xl font-bold text-white mb-1">~15</div>
+            <div class="text-sm text-purple-300">Avg. Daily Doctor Visits</div>
+            <div class="mt-4 text-xs text-purple-200 flex justify-between">
+              <span>Last month: ~16</span>
+              <span>Visits/day</span>
+            </div>
+          </div>
+
+          <!-- Ambulance Requests -->
+          <div
+            class="stat-card bg-gradient-to-br from-red-900/40 to-red-800/20 border border-red-700/50 rounded-xl p-6"
+          >
+            <div class="flex items-center justify-between mb-4">
+              <div class="text-red-400 bg-red-900/50 p-3 rounded-lg">
+                <i class="fa-solid fa-truck-medical text-xl"></i>
+              </div>
+              <span class="metric-trend trend-up">
+                <i class="fa-solid fa-arrow-up mr-1"></i>
+                18%
+              </span>
+            </div>
+            <div class="text-2xl font-bold text-white mb-1">22</div>
+            <div class="text-sm text-red-300">
+              Ambulance Requests (Last Month)
+            </div>
+            <div class="mt-4 text-xs text-red-200 flex justify-between">
+              <span>18 responded (82%)</span>
+              <span>4 pending</span>
+            </div>
+          </div>
+
+          <!-- Student Health Index -->
+          <div
+            class="stat-card bg-gradient-to-br from-green-900/40 to-green-800/20 border border-green-700/50 rounded-xl p-6"
+          >
+            <div class="flex items-center justify-between mb-4">
+              <div class="text-green-400 bg-green-900/50 p-3 rounded-lg">
+                <i class="fa-solid fa-heart-pulse text-xl"></i>
+              </div>
+              <span class="metric-trend trend-up">
+                <i class="fa-solid fa-arrow-up mr-1"></i>
+                3%
+              </span>
+            </div>
+            <div class="text-2xl font-bold text-white mb-1">87%</div>
+            <div class="text-sm text-green-300">Student Health Index</div>
+            <div class="mt-4 text-xs text-green-200 flex justify-between">
+              <span>Last month: 84%</span>
+              <span>Excellent</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Enhanced Data Visualization Section -->
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-8">
+          <!-- Medicine Usage Overview -->
+          <div class="xl:col-span-2 bg-card rounded-xl shadow-lg p-6">
+            <div class="flex justify-between items-center mb-6">
+              <h3 class="text-xl font-bold text-white">
+                Medicine Usage Overview
+              </h3>
+              <div class="flex space-x-2">
+                <button
+                  class="text-xs bg-gray-700 hover:bg-gray-600 text-white py-1 px-3 rounded transition duration-200"
+                >
+                  Monthly
+                </button>
+                <button
+                  class="text-xs bg-blue-600 text-white py-1 px-3 rounded transition duration-200"
+                >
+                  Quarterly
+                </button>
+                <button
+                  class="text-xs bg-gray-700 hover:bg-gray-600 text-white py-1 px-3 rounded transition duration-200"
+                >
+                  Yearly
+                </button>
+              </div>
+            </div>
+            <div class="grid grid-cols-3 gap-4 text-center mb-6">
+              <div class="bg-gray-700/50 rounded-lg p-4">
+                <div class="text-white font-semibold text-lg">Paracetamol</div>
+                <div class="text-blue-400 text-xl font-bold">120 units</div>
+                <div class="text-gray-400 text-sm mt-1">Most Used</div>
+              </div>
+              <div class="bg-gray-700/50 rounded-lg p-4">
+                <div class="text-white font-semibold text-lg">Antibiotics</div>
+                <div class="text-purple-400 text-xl font-bold">85 units</div>
+                <div class="text-gray-400 text-sm mt-1">Moderate</div>
+              </div>
+              <div class="bg-gray-700/50 rounded-lg p-4">
+                <div class="text-white font-semibold text-lg">ORS</div>
+                <div class="text-green-400 text-xl font-bold">45 units</div>
+                <div class="text-gray-400 text-sm mt-1">Low Usage</div>
+              </div>
+            </div>
+            <div class="bg-gray-700/50 rounded-lg p-4">
+              <div class="flex justify-between items-center mb-3">
+                <h4 class="text-lg font-semibold text-white">
+                  Monthly Consumption
+                </h4>
+                <span class="text-green-400 text-sm font-medium"
+                  >+12% from last month</span
+                >
+              </div>
+              <div class="space-y-3">
+                <div>
+                  <div class="flex justify-between text-sm mb-1">
+                    <span class="text-gray-300">January</span>
+                    <span class="text-white font-semibold">350 units</span>
+                  </div>
+                  <div class="w-full bg-gray-600 rounded-full h-2">
+                    <div
+                      class="bg-blue-500 h-2 rounded-full"
+                      style="width: 100%"
+                    ></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex justify-between text-sm mb-1">
+                    <span class="text-gray-300">December</span>
+                    <span class="text-white font-semibold">312 units</span>
+                  </div>
+                  <div class="w-full bg-gray-600 rounded-full h-2">
+                    <div
+                      class="bg-blue-400 h-2 rounded-full"
+                      style="width: 89%"
+                    ></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex justify-between text-sm mb-1">
+                    <span class="text-gray-300">November</span>
+                    <span class="text-white font-semibold">290 units</span>
+                  </div>
+                  <div class="w-full bg-gray-600 rounded-full h-2">
+                    <div
+                      class="bg-blue-300 h-2 rounded-full"
+                      style="width: 83%"
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Health Conditions Overview -->
+          <div class="bg-card rounded-xl shadow-lg p-6">
+            <h3 class="text-xl font-bold text-white mb-6">
+              Health Conditions Overview
+            </h3>
+            <div class="space-y-4">
+              <div>
+                <div class="flex justify-between text-sm mb-1">
+                  <span class="text-gray-300">Fever</span>
+                  <span class="text-white font-semibold">35 cases</span>
+                </div>
+                <div class="w-full bg-gray-700 rounded-full h-2">
+                  <div
+                    class="bg-red-500 h-2 rounded-full"
+                    style="width: 40%"
+                  ></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between text-sm mb-1">
+                  <span class="text-gray-300">Diarrhea</span>
+                  <span class="text-white font-semibold">18 cases</span>
+                </div>
+                <div class="w-full bg-gray-700 rounded-full h-2">
+                  <div
+                    class="bg-yellow-500 h-2 rounded-full"
+                    style="width: 21%"
+                  ></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between text-sm mb-1">
+                  <span class="text-gray-300">Cold & Cough</span>
+                  <span class="text-white font-semibold">15 cases</span>
+                </div>
+                <div class="w-full bg-gray-700 rounded-full h-2">
+                  <div
+                    class="bg-blue-500 h-2 rounded-full"
+                    style="width: 17%"
+                  ></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between text-sm mb-1">
+                  <span class="text-gray-300">Headache</span>
+                  <span class="text-white font-semibold">12 cases</span>
+                </div>
+                <div class="w-full bg-gray-700 rounded-full h-2">
+                  <div
+                    class="bg-green-500 h-2 rounded-full"
+                    style="width: 14%"
+                  ></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between text-sm mb-1">
+                  <span class="text-gray-300">Other</span>
+                  <span class="text-white font-semibold">8 cases</span>
+                </div>
+                <div class="w-full bg-gray-700 rounded-full h-2">
+                  <div
+                    class="bg-purple-500 h-2 rounded-full"
+                    style="width: 9%"
+                  ></div>
+                </div>
+              </div>
+            </div>
+            <div class="mt-6 pt-4 border-t border-gray-700">
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-400">Total Cases</span>
+                <span class="text-white font-semibold">88</span>
+              </div>
+              <div class="flex justify-between text-sm mt-2">
+                <span class="text-gray-400">Hostel Students</span>
+                <span class="text-white font-semibold">42%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Detailed Reports Section -->
+        <div class="bg-card rounded-xl shadow-lg p-6 mb-8">
+          <h3 class="text-xl font-bold text-white mb-6">Detailed Reports</h3>
+          <p class="text-gray-400 mb-6">
+            Use the filters below to generate specific reports.
+          </p>
+
+          <!-- Report Filters -->
+          <div
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 no-print"
+          >
+            <div>
+              <label class="block text-sm font-medium text-gray-400 mb-2"
+                >Report Type</label
+              >
+              <select
+                id="report-type"
+                class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option value="ambulance-requests">Ambulance Requests</option>
+                <option value="doctor-visits">Doctor Visits</option>
+                <option value="condition-analysis">Condition Analysis</option>
+                <option value="medicine-consumption">
+                  Medicine Consumption
+                </option>
+                <option value="monthly-usage">Monthly Usage</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-400 mb-2"
+                >Date Range</label
+              >
+              <select
+                id="date-range"
+                class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option value="last-week">Last Week</option>
+                <option value="last-month" selected>Last Month</option>
+                <option value="last-quarter">Last Quarter</option>
+                <option value="last-year">Last Year</option>
+                <option value="custom">Custom Range</option>
+              </select>
+            </div>
+            <div id="custom-date-range" class="hidden lg:col-span-2">
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-400 mb-2"
+                    >From Date</label
+                  >
+                  <input
+                    type="date"
+                    class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-400 mb-2"
+                    >To Date</label
+                  >
+                  <input
+                    type="date"
+                    class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="flex items-end">
+              <button
+                id="generate-report"
+                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 shadow-md flex items-center justify-center"
+              >
+                <i class="fa-solid fa-chart-bar mr-2"></i>
+                Generate Report
+              </button>
+            </div>
+          </div>
+
+          <!-- Report Results -->
+          <div id="report-results" class="bg-gray-700 rounded-lg p-6 fade-in">
+            <div class="flex justify-between items-center mb-6">
+              <h4 class="text-lg font-bold text-white" id="report-title">
+                Ambulance Requests Report
+              </h4>
+              <div class="text-sm text-gray-400">
+                <i class="fa-solid fa-calendar mr-1"></i>
+                Last 30 days
+              </div>
+            </div>
+
+            <!-- Ambulance Requests Report -->
+            <div id="ambulance-report" class="space-y-6">
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div class="bg-gray-800 rounded-lg p-4 text-center">
+                  <div class="text-2xl font-bold text-white">22</div>
+                  <div class="text-sm text-gray-400">Total Requests</div>
+                </div>
+                <div class="bg-gray-800 rounded-lg p-4 text-center">
+                  <div class="text-2xl font-bold text-green-500">18</div>
+                  <div class="text-sm text-gray-400">Responded</div>
+                </div>
+                <div class="bg-gray-800 rounded-lg p-4 text-center">
+                  <div class="text-2xl font-bold text-red-500">4</div>
+                  <div class="text-sm text-gray-400">Not Responded</div>
+                </div>
+              </div>
+
+              <div class="overflow-x-auto">
+                <table class="w-full report-table rounded-lg overflow-hidden">
+                  <thead>
+                    <tr class="bg-gray-800 text-gray-300 text-left">
+                      <th class="py-3 px-4">Date</th>
+                      <th class="py-3 px-4">Time</th>
+                      <th class="py-3 px-4">Location</th>
+                      <th class="py-3 px-4">Emergency Type</th>
+                      <th class="py-3 px-4">Response Time</th>
+                      <th class="py-3 px-4">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="border-b border-gray-700 hover:bg-gray-750">
+                      <td class="py-3 px-4">2025-08-15</td>
+                      <td class="py-3 px-4">14:30</td>
+                      <td class="py-3 px-4">Hostel Block 1</td>
+                      <td class="py-3 px-4">Accident</td>
+                      <td class="py-3 px-4">8 min</td>
+                      <td class="py-3 px-4">
+                        <span
+                          class="px-2 py-1 bg-green-600 text-white rounded-full text-xs"
+                          >Responded</span
+                        >
+                      </td>
+                    </tr>
+                    <tr class="border-b border-gray-700 hover:bg-gray-750">
+                      <td class="py-3 px-4">2025-07-18</td>
+                      <td class="py-3 px-4">09:15</td>
+                      <td class="py-3 px-4">Academic Block 1</td>
+                      <td class="py-3 px-4">Severe Allergy</td>
+                      <td class="py-3 px-4">12 min</td>
+                      <td class="py-3 px-4">
+                        <span
+                          class="px-2 py-1 bg-green-600 text-white rounded-full text-xs"
+                          >Responded</span
+                        >
+                      </td>
+                    </tr>
+                    <tr class="border-b border-gray-700 hover:bg-gray-750">
+                      <td class="py-3 px-4">2025-07-22</td>
+                      <td class="py-3 px-4">22:45</td>
+                      <td class="py-3 px-4">Multi Purpose Hall</td>
+                      <td class="py-3 px-4">Fracture</td>
+                      <td class="py-3 px-4">15 min</td>
+                      <td class="py-3 px-4">
+                        <span
+                          class="px-2 py-1 bg-green-600 text-white rounded-full text-xs"
+                          >Responded</span
+                        >
+                      </td>
+                    </tr>
+                    <tr class="border-b border-gray-700 hover:bg-gray-750">
+                      <td class="py-3 px-4">2025-07-25</td>
+                      <td class="py-3 px-4">16:20</td>
+                      <td class="py-3 px-4">Hostel Block 1</td>
+                      <td class="py-3 px-4">Respiratory Issue</td>
+                      <td class="py-3 px-4">-</td>
+                      <td class="py-3 px-4">
+                        <span
+                          class="px-2 py-1 bg-red-600 text-white rounded-full text-xs"
+                          >Not Responded</span
+                        >
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Doctor Visits Report -->
+            <div id="doctor-visits-report" class="hidden space-y-6">
+              <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                <div class="bg-gray-800 rounded-lg p-4 text-center">
+                  <div class="text-2xl font-bold text-white">~15</div>
+                  <div class="text-sm text-gray-400">Avg. Daily Visits</div>
+                </div>
+                <div class="bg-gray-800 rounded-lg p-4 text-center">
+                  <div class="text-2xl font-bold text-blue-500">42%</div>
+                  <div class="text-sm text-gray-400">Hostel Students</div>
+                </div>
+                <div class="bg-gray-800 rounded-lg p-4 text-center">
+                  <div class="text-2xl font-bold text-yellow-500">35</div>
+                  <div class="text-sm text-gray-400">Fever Cases</div>
+                </div>
+                <div class="bg-gray-800 rounded-lg p-4 text-center">
+                  <div class="text-2xl font-bold text-purple-500">18</div>
+                  <div class="text-sm text-gray-400">Diarrhea Cases</div>
+                </div>
+              </div>
+
+              <div class="overflow-x-auto">
+                <table class="w-full report-table rounded-lg overflow-hidden">
+                  <thead>
+                    <tr class="bg-gray-800 text-gray-300 text-left">
+                      <th class="py-3 px-4">Date</th>
+                      <th class="py-3 px-4">Student Type</th>
+                      <th class="py-3 px-4">Condition</th>
+                      <th class="py-3 px-4">Severity</th>
+                      <th class="py-3 px-4">Treatment</th>
+                      <th class="py-3 px-4">Follow-up Required</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="border-b border-gray-700 hover:bg-gray-750">
+                      <td class="py-3 px-4">2025-08-15</td>
+                      <td class="py-3 px-4">Hostel Block 2</td>
+                      <td class="py-3 px-4">Fever</td>
+                      <td class="py-3 px-4">
+                        <span
+                          class="px-2 py-1 bg-yellow-600 text-white rounded-full text-xs"
+                          >Moderate</span
+                        >
+                      </td>
+                      <td class="py-3 px-4">Paracetamol, Rest</td>
+                      <td class="py-3 px-4">No</td>
+                    </tr>
+                    <tr class="border-b border-gray-700 hover:bg-gray-750">
+                      <td class="py-3 px-4">2025-06-16</td>
+                      <td class="py-3 px-4">Hostel Block 1</td>
+                      <td class="py-3 px-4">Diarrhea</td>
+                      <td class="py-3 px-4">
+                        <span
+                          class="px-2 py-1 bg-orange-600 text-white rounded-full text-xs"
+                          >Severe</span
+                        >
+                      </td>
+                      <td class="py-3 px-4">ORS, Antibiotics</td>
+                      <td class="py-3 px-4">Yes</td>
+                    </tr>
+                    <tr class="border-b border-gray-700 hover:bg-gray-750">
+                      <td class="py-3 px-4">2025-10-17</td>
+                      <td class="py-3 px-4">Hostel Block 4</td>
+                      <td class="py-3 px-4">Cold & Cough</td>
+                      <td class="py-3 px-4">
+                        <span
+                          class="px-2 py-1 bg-green-600 text-white rounded-full text-xs"
+                          >Mild</span
+                        >
+                      </td>
+                      <td class="py-3 px-4">Cough Syrup</td>
+                      <td class="py-3 px-4">No</td>
+                    </tr>
+                    <tr class="border-b border-gray-700 hover:bg-gray-750">
+                      <td class="py-3 px-4">2025-08-18</td>
+                      <td class="py-3 px-4">Girls Hostel Block 1</td>
+                      <td class="py-3 px-4">Fever</td>
+                      <td class="py-3 px-4">
+                        <span
+                          class="px-2 py-1 bg-yellow-600 text-white rounded-full text-xs"
+                          >Moderate</span
+                        >
+                      </td>
+                      <td class="py-3 px-4">Antipyretics</td>
+                      <td class="py-3 px-4">Yes</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Condition Analysis Report -->
+            <div id="condition-analysis-report" class="hidden space-y-6">
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div class="bg-gray-800 rounded-lg p-4 text-center">
+                  <div class="text-2xl font-bold text-white">88</div>
+                  <div class="text-sm text-gray-400">Total Cases</div>
+                </div>
+                <div class="bg-gray-800 rounded-lg p-4 text-center">
+                  <div class="text-2xl font-bold text-blue-500">42%</div>
+                  <div class="text-sm text-gray-400">Hostel Students</div>
+                </div>
+                <div class="bg-gray-800 rounded-lg p-4 text-center">
+                  <div class="text-2xl font-bold text-green-500">87%</div>
+                  <div class="text-sm text-gray-400">Recovery Rate</div>
+                </div>
+              </div>
+
+              <div class="overflow-x-auto">
+                <table class="w-full report-table rounded-lg overflow-hidden">
+                  <thead>
+                    <tr class="bg-gray-800 text-gray-300 text-left">
+                      <th class="py-3 px-4">Condition</th>
+                      <th class="py-3 px-4">Cases</th>
+                      <th class="py-3 px-4">Hostel Students</th>
+                      <th class="py-3 px-4">Day Scholars</th>
+                      <th class="py-3 px-4">Recovery Rate</th>
+                      <th class="py-3 px-4">Avg. Recovery Days</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="border-b border-gray-700 hover:bg-gray-750">
+                      <td class="py-3 px-4">Fever</td>
+                      <td class="py-3 px-4">35</td>
+                      <td class="py-3 px-4">18</td>
+                      <td class="py-3 px-4">17</td>
+                      <td class="py-3 px-4">94%</td>
+                      <td class="py-3 px-4">3.2 days</td>
+                    </tr>
+                    <tr class="border-b border-gray-700 hover:bg-gray-750">
+                      <td class="py-3 px-4">Diarrhea</td>
+                      <td class="py-3 px-4">18</td>
+                      <td class="py-3 px-4">12</td>
+                      <td class="py-3 px-4">6</td>
+                      <td class="py-3 px-4">89%</td>
+                      <td class="py-3 px-4">4.5 days</td>
+                    </tr>
+                    <tr class="border-b border-gray-700 hover:bg-gray-750">
+                      <td class="py-3 px-4">Cold & Cough</td>
+                      <td class="py-3 px-4">15</td>
+                      <td class="py-3 px-4">8</td>
+                      <td class="py-3 px-4">7</td>
+                      <td class="py-3 px-4">93%</td>
+                      <td class="py-3 px-4">5.1 days</td>
+                    </tr>
+                    <tr class="border-b border-gray-700 hover:bg-gray-750">
+                      <td class="py-3 px-4">Headache</td>
+                      <td class="py-3 px-4">12</td>
+                      <td class="py-3 px-4">5</td>
+                      <td class="py-3 px-4">7</td>
+                      <td class="py-3 px-4">96%</td>
+                      <td class="py-3 px-4">1.5 days</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Medicine Consumption Report -->
+            <div id="medicine-consumption-report" class="hidden space-y-6">
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div class="bg-gray-800 rounded-lg p-4 text-center">
+                  <div class="text-2xl font-bold text-white">350</div>
+                  <div class="text-sm text-gray-400">Total Units Used</div>
+                </div>
+                <div class="bg-gray-800 rounded-lg p-4 text-center">
+                  <div class="text-2xl font-bold text-blue-500">12%</div>
+                  <div class="text-sm text-gray-400">
+                    Increase from Last Month
+                  </div>
+                </div>
+                <div class="bg-gray-800 rounded-lg p-4 text-center">
+                  <div class="text-2xl font-bold text-green-500">28</div>
+                  <div class="text-sm text-gray-400">Different Medicines</div>
+                </div>
+              </div>
+
+              <div class="overflow-x-auto">
+                <table class="w-full report-table rounded-lg overflow-hidden">
+                  <thead>
+                    <tr class="bg-gray-800 text-gray-300 text-left">
+                      <th class="py-3 px-4">Medicine</th>
+                      <th class="py-3 px-4">Units Used</th>
+                      <th class="py-3 px-4">% of Total</th>
+                      <th class="py-3 px-4">Trend</th>
+                      <th class="py-3 px-4">Stock Status</th>
+                      <th class="py-3 px-4">Restock Needed</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="border-b border-gray-700 hover:bg-gray-750">
+                      <td class="py-3 px-4">Paracetamol 500mg</td>
+                      <td class="py-3 px-4">120</td>
+                      <td class="py-3 px-4">34.3%</td>
+                      <td class="py-3 px-4">
+                        <span class="text-green-500">↑ 8%</span>
+                      </td>
+                      <td class="py-3 px-4">
+                        <span
+                          class="px-2 py-1 bg-yellow-600 text-white rounded-full text-xs"
+                          >Medium</span
+                        >
+                      </td>
+                      <td class="py-3 px-4">No</td>
+                    </tr>
+                    <tr class="border-b border-gray-700 hover:bg-gray-750">
+                      <td class="py-3 px-4">Amoxicillin 250mg</td>
+                      <td class="py-3 px-4">85</td>
+                      <td class="py-3 px-4">24.3%</td>
+                      <td class="py-3 px-4">
+                        <span class="text-red-500">↓ 5%</span>
+                      </td>
+                      <td class="py-3 px-4">
+                        <span
+                          class="px-2 py-1 bg-red-600 text-white rounded-full text-xs"
+                          >Low</span
+                        >
+                      </td>
+                      <td class="py-3 px-4">Yes</td>
+                    </tr>
+                    <tr class="border-b border-gray-700 hover:bg-gray-750">
+                      <td class="py-3 px-4">ORS Packets</td>
+                      <td class="py-3 px-4">45</td>
+                      <td class="py-3 px-4">12.9%</td>
+                      <td class="py-3 px-4">
+                        <span class="text-green-500">↑ 15%</span>
+                      </td>
+                      <td class="py-3 px-4">
+                        <span
+                          class="px-2 py-1 bg-green-600 text-white rounded-full text-xs"
+                          >High</span
+                        >
+                      </td>
+                      <td class="py-3 px-4">No</td>
+                    </tr>
+                    <tr class="border-b border-gray-700 hover:bg-gray-750">
+                      <td class="py-3 px-4">Vitamin C Tablets</td>
+                      <td class="py-3 px-4">35</td>
+                      <td class="py-3 px-4">10.0%</td>
+                      <td class="py-3 px-4">
+                        <span class="text-green-500">↑ 12%</span>
+                      </td>
+                      <td class="py-3 px-4">
+                        <span
+                          class="px-2 py-1 bg-green-600 text-white rounded-full text-xs"
+                          >High</span
+                        >
+                      </td>
+                      <td class="py-3 px-4">No</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Monthly Usage Report -->
+            <div id="monthly-usage-report" class="hidden space-y-6">
+              <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                <div class="bg-gray-800 rounded-lg p-4 text-center">
+                  <div class="text-2xl font-bold text-white">350</div>
+                  <div class="text-sm text-gray-400">Medicine Units</div>
+                </div>
+                <div class="bg-gray-800 rounded-lg p-4 text-center">
+                  <div class="text-2xl font-bold text-blue-500">~450</div>
+                  <div class="text-sm text-gray-400">Doctor Visits</div>
+                </div>
+                <div class="bg-gray-800 rounded-lg p-4 text-center">
+                  <div class="text-2xl font-bold text-purple-500">22</div>
+                  <div class="text-sm text-gray-400">Ambulance Calls</div>
+                </div>
+                <div class="bg-gray-800 rounded-lg p-4 text-center">
+                  <div class="text-2xl font-bold text-green-500">87%</div>
+                  <div class="text-sm text-gray-400">Health Index</div>
+                </div>
+              </div>
+
+              <div class="overflow-x-auto">
+                <table class="w-full report-table rounded-lg overflow-hidden">
+                  <thead>
+                    <tr class="bg-gray-800 text-gray-300 text-left">
+                      <th class="py-3 px-4">Category</th>
+                      <th class="py-3 px-4">Current Month</th>
+                      <th class="py-3 px-4">Previous Month</th>
+                      <th class="py-3 px-4">Change</th>
+                      <th class="py-3 px-4">Trend</th>
+                      <th class="py-3 px-4">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="border-b border-gray-700 hover:bg-gray-750">
+                      <td class="py-3 px-4">Medicine Usage</td>
+                      <td class="py-3 px-4">350 units</td>
+                      <td class="py-3 px-4">312 units</td>
+                      <td class="py-3 px-4">+38 units</td>
+                      <td class="py-3 px-4">
+                        <span class="text-green-500">↑ 12%</span>
+                      </td>
+                      <td class="py-3 px-4">
+                        <span
+                          class="px-2 py-1 bg-yellow-600 text-white rounded-full text-xs"
+                          >Monitor</span
+                        >
+                      </td>
+                    </tr>
+                    <tr class="border-b border-gray-700 hover:bg-gray-750">
+                      <td class="py-3 px-4">Doctor Visits</td>
+                      <td class="py-3 px-4">~450</td>
+                      <td class="py-3 px-4">~480</td>
+                      <td class="py-3 px-4">-30 visits</td>
+                      <td class="py-3 px-4">
+                        <span class="text-green-500">↓ 6%</span>
+                      </td>
+                      <td class="py-3 px-4">
+                        <span
+                          class="px-2 py-1 bg-green-600 text-white rounded-full text-xs"
+                          >Good</span
+                        >
+                      </td>
+                    </tr>
+                    <tr class="border-b border-gray-700 hover:bg-gray-750">
+                      <td class="py-3 px-4">Ambulance Requests</td>
+                      <td class="py-3 px-4">22</td>
+                      <td class="py-3 px-4">18</td>
+                      <td class="py-3 px-4">+4 requests</td>
+                      <td class="py-3 px-4">
+                        <span class="text-red-500">↑ 22%</span>
+                      </td>
+                      <td class="py-3 px-4">
+                        <span
+                          class="px-2 py-1 bg-red-600 text-white rounded-full text-xs"
+                          >Alert</span
+                        >
+                      </td>
+                    </tr>
+                    <tr class="border-b border-gray-700 hover:bg-gray-750">
+                      <td class="py-3 px-4">Student Health Index</td>
+                      <td class="py-3 px-4">87%</td>
+                      <td class="py-3 px-4">84%</td>
+                      <td class="py-3 px-4">+3%</td>
+                      <td class="py-3 px-4">
+                        <span class="text-green-500">↑ 4%</span>
+                      </td>
+                      <td class="py-3 px-4">
+                        <span
+                          class="px-2 py-1 bg-green-600 text-white rounded-full text-xs"
+                          >Excellent</span
+                        >
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Additional Insights -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          <!-- Response Time Analysis -->
+          <div class="bg-card rounded-xl shadow-lg p-6">
+            <h3 class="text-xl font-bold text-white mb-4">
+              Ambulance Response Time Analysis
+            </h3>
+            <div class="space-y-4">
+              <div>
+                <div class="flex justify-between text-sm mb-1">
+                  <span class="text-gray-300">Average Response Time</span>
+                  <span class="text-white font-semibold">11.7 minutes</span>
+                </div>
+                <div class="w-full bg-gray-700 rounded-full h-2">
+                  <div
+                    class="bg-blue-500 h-2 rounded-full"
+                    style="width: 65%"
+                  ></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between text-sm mb-1">
+                  <span class="text-gray-300">Target Response Time</span>
+                  <span class="text-white font-semibold">10 minutes</span>
+                </div>
+                <div class="w-full bg-gray-700 rounded-full h-2">
+                  <div
+                    class="bg-green-500 h-2 rounded-full"
+                    style="width: 85%"
+                  ></div>
+                </div>
+              </div>
+              <div class="mt-6 grid grid-cols-2 gap-4">
+                <div class="bg-gray-700/50 rounded-lg p-3 text-center">
+                  <div class="text-white font-semibold">Fastest Response</div>
+                  <div class="text-green-400">5 minutes</div>
+                </div>
+                <div class="bg-gray-700/50 rounded-lg p-3 text-center">
+                  <div class="text-white font-semibold">Slowest Response</div>
+                  <div class="text-red-400">22 minutes</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Medicine Stock Status -->
+          <div class="bg-card rounded-xl shadow-lg p-6">
+            <h3 class="text-xl font-bold text-white mb-4">
+              Medicine Stock Status
+            </h3>
+            <div class="space-y-4">
+              <div>
+                <div class="flex justify-between text-sm mb-1">
+                  <span class="text-gray-300">Paracetamol</span>
+                  <span class="text-white font-semibold">65%</span>
+                </div>
+                <div class="w-full bg-gray-700 rounded-full h-2">
+                  <div
+                    class="bg-yellow-500 h-2 rounded-full"
+                    style="width: 65%"
+                  ></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between text-sm mb-1">
+                  <span class="text-gray-300">Antibiotics</span>
+                  <span class="text-white font-semibold">42%</span>
+                </div>
+                <div class="w-full bg-gray-700 rounded-full h-2">
+                  <div
+                    class="bg-red-500 h-2 rounded-full"
+                    style="width: 42%"
+                  ></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between text-sm mb-1">
+                  <span class="text-gray-300">ORS</span>
+                  <span class="text-white font-semibold">78%</span>
+                </div>
+                <div class="w-full bg-gray-700 rounded-full h-2">
+                  <div
+                    class="bg-green-500 h-2 rounded-full"
+                    style="width: 78%"
+                  ></div>
+                </div>
+              </div>
+              <div class="mt-6">
+                <div class="flex justify-between text-sm">
+                  <span class="text-gray-400">Restocking Needed</span>
+                  <span class="text-red-400 font-semibold"
+                    >Antibiotics, Painkillers</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="bg-card rounded-xl shadow-lg p-6 no-print">
+          <h3 class="text-xl font-bold text-white mb-4">Quick Actions</h3>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <button
+              id="export-data-btn"
+              class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-200 flex flex-col items-center justify-center"
+            >
+              <i class="fa-solid fa-file-export text-xl mb-2"></i>
+              <span>Export Data</span>
+            </button>
+            <button
+              id="set-alerts-btn"
+              class="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-200 flex flex-col items-center justify-center"
+            >
+              <i class="fa-solid fa-bell text-xl mb-2"></i>
+              <span>Set Alerts</span>
+            </button>
+            <button
+              id="trend-analysis-btn"
+              class="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-200 flex flex-col items-center justify-center"
+            >
+              <i class="fa-solid fa-chart-line text-xl mb-2"></i>
+              <span>Trend Analysis</span>
+            </button>
+            <button
+              id="restock-request-btn"
+              class="bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-200 flex flex-col items-center justify-center"
+            >
+              <i class="fa-solid fa-rotate text-xl mb-2"></i>
+              <span>Restock Request</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      // JavaScript to display the current date and time
+      function updateDateTime() {
+        const now = new Date();
+        const options = {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        };
+        const formattedDateTime = now.toLocaleDateString("en-US", options);
+        document.getElementById("date-time-display").textContent =
+          formattedDateTime;
+      }
+      updateDateTime();
+      setInterval(updateDateTime, 60000);
+
+      // Refresh Page Functionality
+      document
+        .getElementById("refresh-page-btn")
+        .addEventListener("click", function () {
+          const refreshBtn = this;
+          const icon = refreshBtn.querySelector("i");
+
+          // Add spinning animation
+          refreshBtn.classList.add("refreshing");
+
+          // Show notification
+          showNotification("Refreshing data...", "info");
+
+          // Simulate data refresh (in a real app, this would fetch new data from API)
+          setTimeout(() => {
+            // Remove spinning animation
+            refreshBtn.classList.remove("refreshing");
+
+            // Update some random data to simulate refresh
+            const stats = document.querySelectorAll(".stat-card .text-2xl");
+            stats.forEach((stat) => {
+              const currentValue = parseInt(stat.textContent);
+              if (!isNaN(currentValue)) {
+                // Add/subtract small random amount to simulate data change
+                const change = Math.floor(Math.random() * 10) - 3;
+                const newValue = Math.max(1, currentValue + change);
+                stat.textContent = newValue;
+
+                // Update trend indicators
+                const trend = stat
+                  .closest(".stat-card")
+                  .querySelector(".metric-trend");
+                if (trend) {
+                  if (change > 0) {
+                    trend.innerHTML =
+                      '<i class="fa-solid fa-arrow-up mr-1"></i>' +
+                      Math.abs(change) +
+                      "%";
+                    trend.className = "metric-trend trend-up";
+                  } else if (change < 0) {
+                    trend.innerHTML =
+                      '<i class="fa-solid fa-arrow-down mr-1"></i>' +
+                      Math.abs(change) +
+                      "%";
+                    trend.className = "metric-trend trend-down";
+                  } else {
+                    trend.innerHTML =
+                      '<i class="fa-solid fa-minus mr-1"></i>0%';
+                    trend.className = "metric-trend trend-neutral";
+                  }
+                }
+              }
+            });
+
+            showNotification("Data refreshed successfully!", "success");
+          }, 1500);
+        });
+
+      // Notification system
+      function showNotification(message, type = "info") {
+        const notificationContainer = document.getElementById(
+          "notification-container"
+        );
+        const notification = document.createElement("div");
+        notification.className = `notification ${type}`;
+        notification.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fa-solid ${
+                      type === "success"
+                        ? "fa-check-circle"
+                        : type === "error"
+                        ? "fa-exclamation-circle"
+                        : type === "warning"
+                        ? "fa-exclamation-triangle"
+                        : "fa-info-circle"
+                    } mr-2"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+        notificationContainer.appendChild(notification);
+
+        // Show notification
+        setTimeout(() => {
+          notification.classList.add("show");
+        }, 100);
+
+        // Hide and remove notification after 5 seconds
+        setTimeout(() => {
+          notification.classList.remove("show");
+          setTimeout(() => {
+            notificationContainer.removeChild(notification);
+          }, 300);
+        }, 5000);
+      }
+
+      // Quick Actions functionality
+      document
+        .getElementById("export-data-btn")
+        .addEventListener("click", function () {
+          showNotification(
+            "Data export initiated. Your file will be ready shortly.",
+            "info"
+          );
+          // Simulate export process
+          setTimeout(() => {
+            showNotification("Data exported successfully!", "success");
+          }, 2000);
+        });
+
+      document
+        .getElementById("set-alerts-btn")
+        .addEventListener("click", function () {
+          showNotification(
+            "Alert settings opened. Configure your notification preferences.",
+            "info"
+          );
+          // In a real application, this would open a modal or navigate to settings
+        });
+
+      document
+        .getElementById("trend-analysis-btn")
+        .addEventListener("click", function () {
+          showNotification("Generating trend analysis report...", "info");
+          // Simulate analysis process
+          setTimeout(() => {
+            showNotification(
+              "Trend analysis complete! View the detailed report.",
+              "success"
+            );
+          }, 1500);
+        });
+
+      document
+        .getElementById("restock-request-btn")
+        .addEventListener("click", function () {
+          showNotification("Restock request submitted for review.", "info");
+          // Simulate request process
+          setTimeout(() => {
+            showNotification(
+              "Restock request approved! Order will be processed.",
+              "success"
+            );
+          }, 1800);
+        });
+
+      // FIXED Print functionality - Using CSS print media queries
+      document
+        .getElementById("print-report-btn")
+        .addEventListener("click", function () {
+          showNotification("Preparing report for printing...", "info");
+
+          // Use CSS print media queries to print only the content
+          setTimeout(() => {
+            window.print();
+            showNotification(
+              "Print dialog opened. Select your printer options.",
+              "success"
+            );
+          }, 500);
+        });
+
+      // PDF Download functionality
+      document
+        .getElementById("download-pdf-btn")
+        .addEventListener("click", function () {
+          showNotification("Generating PDF report...", "info");
+
+          // Get report details
+          const reportType = document.getElementById("report-type").value;
+          const dateRange = document.getElementById("date-range").value;
+          const reportTitle =
+            document.getElementById("report-title").textContent;
+
+          // In a real implementation, you would use jsPDF and html2canvas
+          // For this demo, we'll simulate the process
+          setTimeout(() => {
+            // Create a simulated download
+            const element = document.createElement("a");
+            element.setAttribute("href", "data:application/pdf;charset=utf-8,");
+            element.setAttribute(
+              "download",
+              `HMS_Report_${reportType}_${
+                new Date().toISOString().split("T")[0]
+              }.pdf`
+            );
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+
+            showNotification("PDF report downloaded successfully!", "success");
+          }, 2000);
+        });
+
+      // Report Generation Logic
+      document
+        .getElementById("generate-report")
+        .addEventListener("click", function () {
+          const reportType = document.getElementById("report-type").value;
+          const dateRange = document.getElementById("date-range").value;
+
+          // Hide all reports first
+          const reportSections = [
+            "ambulance-report",
+            "doctor-visits-report",
+            "condition-analysis-report",
+            "medicine-consumption-report",
+            "monthly-usage-report",
+          ];
+
+          reportSections.forEach((section) => {
+            const element = document.getElementById(section);
+            if (element) {
+              element.classList.add("hidden");
+            }
+          });
+
+          // Show selected report
+          let reportElement = null;
+          let reportTitle = "";
+
+          switch (reportType) {
+            case "ambulance-requests":
+              reportElement = document.getElementById("ambulance-report");
+              reportTitle = "Ambulance Requests Report";
+              break;
+            case "doctor-visits":
+              reportElement = document.getElementById("doctor-visits-report");
+              reportTitle = "Doctor Visits Report";
+              break;
+            case "condition-analysis":
+              reportElement = document.getElementById(
+                "condition-analysis-report"
+              );
+              reportTitle = "Condition Analysis Report";
+              break;
+            case "medicine-consumption":
+              reportElement = document.getElementById(
+                "medicine-consumption-report"
+              );
+              reportTitle = "Medicine Consumption Report";
+              break;
+            case "monthly-usage":
+              reportElement = document.getElementById("monthly-usage-report");
+              reportTitle = "Monthly Usage Report";
+              break;
+            default:
+              reportElement = document.getElementById("ambulance-report");
+              reportTitle = "Ambulance Requests Report";
+          }
+
+          if (reportElement) {
+            reportElement.classList.remove("hidden");
+            document.getElementById("report-title").textContent =
+              reportTitle + " - " + getDateRangeText(dateRange);
+          }
+
+          // Show custom date range if selected
+          if (dateRange === "custom") {
+            document
+              .getElementById("custom-date-range")
+              .classList.remove("hidden");
+          } else {
+            document
+              .getElementById("custom-date-range")
+              .classList.add("hidden");
+          }
+
+          showNotification(
+            `Generated ${reportType.replace(
+              "-",
+              " "
+            )} report for ${getDateRangeText(dateRange).toLowerCase()}`,
+            "success"
+          );
+        });
+
+      // Date range change handler
+      document
+        .getElementById("date-range")
+        .addEventListener("change", function () {
+          if (this.value === "custom") {
+            document
+              .getElementById("custom-date-range")
+              .classList.remove("hidden");
+          } else {
+            document
+              .getElementById("custom-date-range")
+              .classList.add("hidden");
+          }
+        });
+
+      // Helper function to get date range text
+      function getDateRangeText(dateRange) {
+        const texts = {
+          "last-week": "Last Week",
+          "last-month": "Last Month",
+          "last-quarter": "Last Quarter",
+          "last-year": "Last Year",
+          custom: "Custom Range",
+        };
+        return texts[dateRange] || "Last Month";
+      }
+
+      // Initialize the application
+      document.addEventListener("DOMContentLoaded", function () {
+        // Set default report to ambulance requests
+        document.getElementById("ambulance-report").classList.remove("hidden");
+        document.getElementById("report-title").textContent =
+          "Ambulance Requests Report - Last Month";
+      });
+    </script>
+    <script src="auth_guard.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

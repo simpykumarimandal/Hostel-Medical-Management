@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hostel Management System Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap");
+      :root {
+        --brand: #2563eb;
+        --brand-dark: #1d4ed8;
+        --panel: rgba(17, 24, 39, 0.92);
+        --panel-border: rgba(148, 163, 184, 0.25);
+      }
+      body {
+        font-family: "Inter", sans-serif;
+        background: radial-gradient(
+            circle at 15% 15%,
+            rgba(59, 130, 246, 0.18),
+            transparent 40%
+          ),
+          radial-gradient(
+            circle at 85% 0%,
+            rgba(16, 185, 129, 0.12),
+            transparent 35%
+          ),
+          #0b1120;
+      }
+      .bg-gradient-custom {
+        background: linear-gradient(135deg, #111827, #0b1220);
+        border: 1px solid var(--panel-border);
+        backdrop-filter: blur(10px);
+      }
+      .form-container {
+        transform: scale(1);
+        transition: transform 0.4s ease, opacity 0.4s ease;
+        opacity: 1;
+      }
+      .form-container.fade-out {
+        transform: scale(0.97);
+        opacity: 0;
+        display: none;
+      }
+      input:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.35);
+        border-color: var(--brand);
+      }
+      button {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+      button:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 10px 24px rgba(15, 23, 42, 0.35);
+      }
+      #main-container {
+        box-shadow: 0 25px 60px rgba(2, 6, 23, 0.55);
+      }
+    </style>
+  </head>
+  <body
+    class="flex items-center justify-center min-h-screen p-4 bg-gray-900 text-gray-300"
+  >
+    <div
+      id="main-container"
+      class="bg-gray-800 bg-gradient-custom rounded-2xl shadow-2xl p-8 w-full max-w-sm transition-all duration-300 ease-in-out transform scale-100"
+    >
+      <div id="role-selection" class="form-container">
+        <h2 class="text-3xl font-bold text-center text-white mb-6">
+          Welcome to HMS
+        </h2>
+        <p class="text-center text-gray-400 mb-8">
+          Please select your mode to log in.
+        </p>
+        <div class="space-y-4">
+          <button
+            id="student-mode-btn"
+            class="w-full flex justify-center py-4 px-4 rounded-lg shadow-md text-base font-semibold text-white bg-blue-600 hover:bg-blue-700 transition-colors duration-200"
+          >
+            <i class="fa-solid fa-graduation-cap mr-2"></i>
+            Student Mode
+          </button>
+          <button
+            id="doctor-mode-btn"
+            class="w-full flex justify-center py-4 px-4 rounded-lg shadow-md text-base font-semibold text-white bg-green-600 hover:bg-green-700 transition-colors duration-200"
+          >
+            <i class="fa-solid fa-user-shield mr-2"></i>
+            Hostel Authority
+          </button>
+        </div>
+      </div>
+
+      <!-- Student Login/Register Forms (Initially Hidden) -->
+      <div
+        id="student-auth-container"
+        class="form-container fade-out"
+        style="display: none"
+      >
+        <div
+          id="student-login-form-container"
+          class="transition-opacity duration-300 ease-in-out"
+        >
+          <h2 class="text-3xl font-bold text-center text-white mb-6">
+            Student Sign In
+          </h2>
+          <form id="student-login-form" class="space-y-6">
+            <div>
+              <label
+                for="student-login-regno"
+                class="block text-sm font-medium text-gray-400"
+                >Registration Number</label
+              >
+              <input
+                type="text"
+                id="student-login-regno"
+                class="mt-1 block w-full px-4 py-3 rounded-lg border border-gray-600 bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+                required
+              />
+            </div>
+            <div>
+              <label
+                for="student-login-password"
+                class="block text-sm font-medium text-gray-400"
+                >Password</label
+              >
+              <input
+                type="password"
+                id="student-login-password"
+                class="mt-1 block w-full px-4 py-3 rounded-lg border border-gray-600 bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+                required
+              />
+            </div>
+            <button
+              type="submit"
+              class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
+            >
+              Sign In
+            </button>
+          </form>
+          <p class="mt-6 text-center text-sm text-gray-400">
+            Don't have an account?
+            <a
+              href="#"
+              id="show-student-register"
+              class="font-medium text-blue-400 hover:text-blue-300 transition-colors duration-200"
+              >Sign Up</a
+            >
+          </p>
+          <button
+            id="back-to-role-student"
+            class="mt-4 w-full text-center text-sm text-gray-400 hover:text-white transition-colors duration-200"
+          >
+            <- Back
+          </button>
+        </div>
+        <div
+          id="student-register-form-container"
+          class="transition-opacity duration-300 ease-in-out"
+          style="display: none"
+        >
+          <h2 class="text-3xl font-bold text-center text-white mb-6">
+            Student Sign Up
+          </h2>
+          <form id="student-register-form" class="space-y-6">
+            <div>
+              <label
+                for="student-register-name"
+                class="block text-sm font-medium text-gray-400"
+                >Full Name</label
+              >
+              <input
+                type="text"
+                id="student-register-name"
+                class="mt-1 block w-full px-4 py-3 rounded-lg border border-gray-600 bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+                required
+              />
+            </div>
+            <div>
+              <label
+                for="student-register-regno"
+                class="block text-sm font-medium text-gray-400"
+                >Registration Number</label
+              >
+              <input
+                type="text"
+                id="student-register-regno"
+                class="mt-1 block w-full px-4 py-3 rounded-lg border border-gray-600 bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+                required
+              />
+            </div>
+            <div>
+              <label
+                for="student-register-password"
+                class="block text-sm font-medium text-gray-400"
+                >Password</label
+              >
+              <input
+                type="password"
+                id="student-register-password"
+                class="mt-1 block w-full px-4 py-3 rounded-lg border border-gray-600 bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+                required
+              />
+            </div>
+            <button
+              type="submit"
+              class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
+            >
+              Sign Up
+            </button>
+          </form>
+          <p class="mt-6 text-center text-sm text-gray-400">
+            Already have an account?
+            <a
+              href="#"
+              id="show-student-login"
+              class="font-medium text-blue-400 hover:text-blue-300 transition-colors duration-200"
+              >Sign In</a
+            >
+          </p>
+          <button
+            id="back-to-role-student-register"
+            class="mt-4 w-full text-center text-sm text-gray-400 hover:text-white transition-colors duration-200"
+          >
+            <- Back
+          </button>
+        </div>
+      </div>
+
+      <!-- Hostel Authority Login Form (Initially Hidden) -->
+      <div
+        id="doctor-auth-container"
+        class="form-container fade-out"
+        style="display: none"
+      >
+        <div
+          id="doctor-login-form-container"
+          class="transition-opacity duration-300 ease-in-out"
+        >
+          <h2 class="text-3xl font-bold text-center text-white mb-6">
+            Hostel Authority Sign In
+          </h2>
+          <form id="doctor-login-form" class="space-y-6">
+            <div>
+              <label
+                for="doctor-id"
+                class="block text-sm font-medium text-gray-400"
+                >Authority ID</label
+              >
+              <input
+                type="text"
+                id="doctor-id"
+                class="mt-1 block w-full px-4 py-3 rounded-lg border border-gray-600 bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-200"
+                required
+              />
+            </div>
+            <div>
+              <label
+                for="doctor-password"
+                class="block text-sm font-medium text-gray-400"
+                >Password</label
+              >
+              <input
+                type="password"
+                id="doctor-password"
+                class="mt-1 block w-full px-4 py-3 rounded-lg border border-gray-600 bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-200"
+                required
+              />
+            </div>
+            <button
+              type="submit"
+              class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-semibold text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200"
+            >
+              Sign In
+            </button>
+          </form>
+          <p class="mt-6 text-center text-sm text-gray-400">
+            Don't have an account?
+            <a
+              href="#"
+              id="show-authority-register"
+              class="font-medium text-green-400 hover:text-green-300 transition-colors duration-200"
+              >Sign Up</a
+            >
+          </p>
+          <button
+            id="back-to-role-doctor"
+            class="mt-6 w-full text-center text-sm text-gray-400 hover:text-white transition-colors duration-200"
+          >
+            <- Back
+          </button>
+        </div>
+        <div
+          id="authority-register-form-container"
+          class="transition-opacity duration-300 ease-in-out"
+          style="display: none"
+        >
+          <h2 class="text-3xl font-bold text-center text-white mb-6">
+            Hostel Authority Sign Up
+          </h2>
+          <form id="authority-register-form" class="space-y-6">
+            <div>
+              <label
+                for="authority-register-id"
+                class="block text-sm font-medium text-gray-400"
+                >Authority ID</label
+              >
+              <input
+                type="text"
+                id="authority-register-id"
+                class="mt-1 block w-full px-4 py-3 rounded-lg border border-gray-600 bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-200"
+                required
+              />
+            </div>
+            <div>
+              <label
+                for="authority-register-password"
+                class="block text-sm font-medium text-gray-400"
+                >Password</label
+              >
+              <input
+                type="password"
+                id="authority-register-password"
+                class="mt-1 block w-full px-4 py-3 rounded-lg border border-gray-600 bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-200"
+                required
+              />
+            </div>
+            <button
+              type="submit"
+              class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-semibold text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200"
+            >
+              Sign Up
+            </button>
+          </form>
+          <p class="mt-6 text-center text-sm text-gray-400">
+            Already have an account?
+            <a
+              href="#"
+              id="show-authority-login"
+              class="font-medium text-green-400 hover:text-green-300 transition-colors duration-200"
+              >Sign In</a
+            >
+          </p>
+          <button
+            id="back-to-role-authority-register"
+            class="mt-4 w-full text-center text-sm text-gray-400 hover:text-white transition-colors duration-200"
+          >
+            <- Back
+          </button>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+    <script>
+      try {
+        const existingSession = JSON.parse(
+          localStorage.getItem("hms_session") || "null"
+        );
+        if (existingSession && existingSession.expiresAt) {
+          if (Date.now() < existingSession.expiresAt) {
+            window.location.href = "/demo.html";
+          } else {
+            localStorage.removeItem("hms_session");
+          }
+        }
+      } catch (err) {
+        localStorage.removeItem("hms_session");
+      }
+
+      const roleSelection = document.getElementById("role-selection");
+      const studentAuthContainer = document.getElementById(
+        "student-auth-container"
+      );
+      const doctorAuthContainer = document.getElementById(
+        "doctor-auth-container"
+      );
+
+      const studentLoginContainer = document.getElementById(
+        "student-login-form-container"
+      );
+      const studentRegisterContainer = document.getElementById(
+        "student-register-form-container"
+      );
+      const showStudentRegisterLink = document.getElementById(
+        "show-student-register"
+      );
+      const showStudentLoginLink =
+        document.getElementById("show-student-login");
+      const showAuthorityRegisterLink = document.getElementById(
+        "show-authority-register"
+      );
+      const showAuthorityLoginLink = document.getElementById(
+        "show-authority-login"
+      );
+
+      const studentModeBtn = document.getElementById("student-mode-btn");
+      const doctorModeBtn = document.getElementById("doctor-mode-btn");
+
+      const backToRoleStudentBtn = document.getElementById(
+        "back-to-role-student"
+      );
+      const backToRoleStudentRegisterBtn = document.getElementById(
+        "back-to-role-student-register"
+      );
+      const backToRoleDoctorBtn = document.getElementById(
+        "back-to-role-doctor"
+      );
+      const backToRoleAuthorityRegisterBtn = document.getElementById(
+        "back-to-role-authority-register"
+      );
+      const authorityRegisterContainer = document.getElementById(
+        "authority-register-form-container"
+      );
+
+      // Initially hide all forms except role selection
+      studentAuthContainer.style.display = "none";
+      doctorAuthContainer.style.display = "none";
+      studentRegisterContainer.style.display = "none";
+      if (authorityRegisterContainer) {
+        authorityRegisterContainer.style.display = "none";
+      }
+      studentLoginContainer.style.display = "block";
+
+      function transitionTo(targetContainer) {
+        const currentContainers = [
+          roleSelection,
+          studentAuthContainer,
+          doctorAuthContainer,
+        ];
+        currentContainers.forEach((container) => {
+          if (container === targetContainer) {
+            container.classList.remove("fade-out");
+            container.style.display = "block";
+          } else {
+            container.classList.add("fade-out");
+            setTimeout(() => (container.style.display = "none"), 500); // Wait for transition
+          }
+        });
+      }
+
+      // Event listeners for role selection
+      studentModeBtn.addEventListener("click", () => {
+        transitionTo(studentAuthContainer);
+      });
+
+      doctorModeBtn.addEventListener("click", () => {
+        transitionTo(doctorAuthContainer);
+      });
+
+      // Event listeners for back buttons
+      backToRoleStudentBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        transitionTo(roleSelection);
+      });
+
+      backToRoleStudentRegisterBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        transitionTo(roleSelection);
+      });
+
+      backToRoleDoctorBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        transitionTo(roleSelection);
+      });
+      if (backToRoleAuthorityRegisterBtn) {
+        backToRoleAuthorityRegisterBtn.addEventListener("click", (e) => {
+          e.preventDefault();
+          transitionTo(roleSelection);
+        });
+      }
+
+      // Student form toggles
+      showStudentRegisterLink.addEventListener("click", (e) => {
+        e.preventDefault();
+        studentLoginContainer.classList.add("fade-out");
+        setTimeout(() => {
+          studentLoginContainer.style.display = "none";
+          studentRegisterContainer.classList.remove("fade-out");
+          studentRegisterContainer.style.display = "block";
+        }, 500);
+      });
+
+      showStudentLoginLink.addEventListener("click", (e) => {
+        e.preventDefault();
+        studentRegisterContainer.classList.add("fade-out");
+        setTimeout(() => {
+          studentRegisterContainer.style.display = "none";
+          studentLoginContainer.classList.remove("fade-out");
+          studentLoginContainer.style.display = "block";
+        }, 500);
+      });
+
+      if (showAuthorityRegisterLink && authorityRegisterContainer) {
+        showAuthorityRegisterLink.addEventListener("click", (e) => {
+          e.preventDefault();
+          const loginForm = document.getElementById("doctor-login-form");
+          if (loginForm) {
+            loginForm.classList.add("fade-out");
+          }
+          setTimeout(() => {
+            const loginContainer = document.getElementById(
+              "doctor-login-form-container"
+            );
+            if (loginContainer) {
+              loginContainer.style.display = "none";
+            }
+            authorityRegisterContainer.classList.remove("fade-out");
+            authorityRegisterContainer.style.display = "block";
+          }, 500);
+        });
+      }
+
+      if (showAuthorityLoginLink && authorityRegisterContainer) {
+        showAuthorityLoginLink.addEventListener("click", (e) => {
+          e.preventDefault();
+          authorityRegisterContainer.classList.add("fade-out");
+          setTimeout(() => {
+            authorityRegisterContainer.style.display = "none";
+            const loginContainer = document.getElementById(
+              "doctor-login-form-container"
+            );
+            if (loginContainer) {
+              loginContainer.classList.remove("fade-out");
+              loginContainer.style.display = "block";
+            }
+          }, 500);
+        });
+      }
+
+      const STORAGE_KEY = "hms_users_v1";
+      const SESSION_KEY = "hms_session";
+
+      const loadUsers = () => {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          return raw
+            ? JSON.parse(raw)
+            : { students: [], authorities: [] };
+        } catch (err) {
+          return { students: [], authorities: [] };
+        }
+      };
+
+      const saveUsers = (users) => {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(users));
+      };
+
+      const SESSION_TTL_MS = 15 * 60 * 1000;
+      const startSession = (role, id) => {
+        const now = Date.now();
+        localStorage.setItem(
+          SESSION_KEY,
+          JSON.stringify({
+            role,
+            id,
+            loginAt: now,
+            expiresAt: now + SESSION_TTL_MS,
+          })
+        );
+        window.location.href = "/demo.html";
+      };
+
+      const studentLoginForm = document.getElementById("student-login-form");
+      const studentRegisterForm = document.getElementById(
+        "student-register-form"
+      );
+      const authorityLoginForm = document.getElementById("doctor-login-form");
+      const authorityRegisterForm = document.getElementById(
+        "authority-register-form"
+      );
+
+      if (studentRegisterForm) {
+        studentRegisterForm.addEventListener("submit", (event) => {
+          event.preventDefault();
+          const regNo = document
+            .getElementById("student-register-regno")
+            .value.trim();
+          const password = document
+            .getElementById("student-register-password")
+            .value.trim();
+          if (!regNo || !password) return;
+          const users = loadUsers();
+          if (users.students.some((s) => s.regNo === regNo)) {
+            alert("Student already registered.");
+            return;
+          }
+          users.students.push({ regNo, password });
+          saveUsers(users);
+          startSession("student", regNo);
+        });
+      }
+
+      if (studentLoginForm) {
+        studentLoginForm.addEventListener("submit", (event) => {
+          event.preventDefault();
+          const regNo = document
+            .getElementById("student-login-regno")
+            .value.trim();
+          const password = document
+            .getElementById("student-login-password")
+            .value.trim();
+          const users = loadUsers();
+          const match = users.students.find(
+            (s) => s.regNo === regNo && s.password === password
+          );
+          if (!match) {
+            alert("Invalid student credentials.");
+            return;
+          }
+          startSession("student", regNo);
+        });
+      }
+
+      if (authorityRegisterForm) {
+        authorityRegisterForm.addEventListener("submit", (event) => {
+          event.preventDefault();
+          const authorityId = document
+            .getElementById("authority-register-id")
+            .value.trim();
+          const password = document
+            .getElementById("authority-register-password")
+            .value.trim();
+          if (!authorityId || !password) return;
+          const users = loadUsers();
+          if (users.authorities.some((a) => a.id === authorityId)) {
+            alert("Authority already registered.");
+            return;
+          }
+          users.authorities.push({ id: authorityId, password });
+          saveUsers(users);
+          startSession("authority", authorityId);
+        });
+      }
+
+      if (authorityLoginForm) {
+        authorityLoginForm.addEventListener("submit", (event) => {
+          event.preventDefault();
+          const authorityId = document
+            .getElementById("doctor-id")
+            .value.trim();
+          const password = document
+            .getElementById("doctor-password")
+            .value.trim();
+          const users = loadUsers();
+          const match = users.authorities.find(
+            (a) => a.id === authorityId && a.password === password
+          );
+          if (!match) {
+            alert("Invalid authority credentials.");
+            return;
+          }
+          startSession("authority", authorityId);
+        });
+      }
+    </script>
+  </body>
+</html>
+

@@ -1,0 +1,1668 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HMS | Medicine Order</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style> @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"); :root { --primary: #3b82f6; --secondary: #8b5cf6; --success: #10b981; --warning: #f59e0b; --danger: #ef4444; --dark: #1f2937; --darker: #111827; } * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Inter", sans-serif; } body { background-color: var(--darker); color: #d1d5db; min-height: 100vh; } .gradient-bg { background: linear-gradient(135deg, var(--primary), var(--secondary)); } .gradient-text { background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -moz-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; -moz-text-fill-color: transparent; } .card { background-color: #374151; border-radius: 12px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3); transition: all 0.3s ease; } .card:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4); } .btn-primary { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; transition: all 0.3s ease; } .btn-primary:hover { opacity: 0.9; transform: translateY(-2px); } .sidebar-item { transition: all 0.3s ease; border-left: 3px solid transparent; } .sidebar-item:hover { background-color: #374151; border-left-color: var(--primary); } .sidebar-item.active { background-color: #374151; border-left-color: var(--primary); } .medicine-card { transition: all 0.3s ease; } .medicine-card:hover { transform: translateY(-3px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3); } .status-badge { padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; } .status-pending { background-color: rgba(245, 158, 11, 0.2); color: #f59e0b; } .status-confirmed { background-color: rgba(16, 185, 129, 0.2); color: #10b981; } .cart-badge { position: absolute; top: -8px; right: -8px; background-color: var(--danger); color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: bold; } .prescription-upload-area { border: 2px dashed #4b5563; border-radius: 0.75rem; padding: 2.5rem; text-align: center; transition: all 0.3s ease; cursor: pointer; } .prescription-upload-area:hover { border-color: var(--primary); background-color: #374151; } .prescription-upload-area.dragover { border-color: var(--success); background-color: rgba(16, 185, 129, 0.1); } .search-box { position: relative; } .search-box input { padding-right: 3rem; } .search-box i { position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); color: #9ca3af; } .fade-in { animation: fadeIn 0.5s ease-in; } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } } .notification { position: fixed; bottom: 1.5rem; right: 1.5rem; padding: 1rem 1.5rem; border-radius: 0.75rem; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3); z-index: 100; animation: slideIn 0.5s forwards; } .notification.success { background-color: var(--success); color: white; } .notification.error { background-color: var(--danger); color: white; } .notification.info { background-color: var(--primary); color: white; } @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } } .form-group { margin-bottom: 1.5rem; } .form-label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: #d1d5db; } .form-input { width: 100%; background-color: #4b5563; border: 1px solid #6b7280; border-radius: 0.5rem; padding: 0.75rem 1rem; color: white; transition: all 0.3s ease; } .form-input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3); } .form-select { width: 100%; background-color: #4b5563; border: 1px solid #6b7280; border-radius: 0.5rem; padding: 0.75rem 1rem; color: white; transition: all 0.3s ease; appearance: none; background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%239ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e"); background-position: right 0.5rem center; background-repeat: no-repeat; background-size: 1.5em 1.5em; } .form-select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3); } </style> <style> .sidebar { transition: transform 0.25s ease-in-out; } .sidebar-collapsed .sidebar { transform: translateX(-110%); } .main-content { transition: margin-left 0.25s ease-in-out; } .sidebar-collapsed .main-content { margin-left: 0 !important; } @media (max-width: 768px) { .sidebar { transform: translateX(-110%); } .sidebar-open .sidebar { transform: translateX(0); } } </style></head>
+  <body class="min-h-screen bg-gray-900 flex">
+
+    <!-- Sidebar -->
+    <aside
+      class="sidebar w-64 bg-gray-950 text-white flex flex-col h-screen fixed left-0 top-0 z-10">
+      <div class="p-6">
+        <div class="flex items-center space-x-3 mb-8">
+          <i class="fas fa-hospital text-2xl text-blue-400"></i>
+          <div>
+            <h1 class="text-xl font-bold">HMS</h1>
+            <p class="text-xs text-gray-400">Student Mode</p>
+          </div>
+        </div>
+
+        <nav class="space-y-2">
+          <div
+            class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2"
+          >
+            Dashboard
+          </div>
+
+          
+
+        <a href="/index.html" data-logout="true"
+          class="flex items-center justify-center w-full px-4 py-3 rounded-lg bg-red-600 hover:bg-red-700 transition-colors duration-200 mt-4"
+        >
+          <i class="fa-solid fa-right-from-bracket mr-2"></i>
+          <span class="font-semibold">Log Out</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content flex-1 ml-64 p-8 bg-gray-900 min-h-screen">
+      <!-- Top Header -->
+      <header
+        class="flex items-center justify-between text-sm text-gray-400 mb-8"
+      >
+        <div id="date-time-display">Monday, October 16, 2023, 10:30 AM</div>
+        <div class="flex items-center space-x-6">
+          <div class="relative">
+            <i
+              class="fa-solid fa-bell text-xl hover:text-white transition duration-200 cursor-pointer"
+            ></i>
+            <span
+              class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center"
+              >2</span
+            >
+          </div>
+          <div class="flex items-center space-x-2">
+            <i class="fa-solid fa-user-circle text-xl"></i>
+            <span>Student Mode</span>
+          </div>
+          <div class="flex items-center space-x-2 cursor-pointer">
+            <i class="fa-solid fa-globe text-xl"></i>
+            <span>English</span>
+            <i class="fa-solid fa-chevron-down text-xs"></i>
+          </div>
+        </div>
+      </header>
+
+      <!-- Page Title & Actions -->
+      <div class="flex justify-between items-center mb-8">
+        <div>
+          <h2 class="text-3xl font-bold text-white mb-1">Medicine Order</h2>
+          <p class="text-gray-400">
+            Order medicines from hostel medical center and get them delivered to
+            your room
+          </p>
+        </div>
+        <div class="flex space-x-3">
+          <button
+            id="my-orders-btn"
+            class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center"
+          >
+            <i class="fa-solid fa-history mr-2"></i>
+            My Orders
+          </button>
+          <button
+            id="prescription-btn"
+            class="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center"
+          >
+            <i class="fa-solid fa-file-medical mr-2"></i>
+            Upload Prescription
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick Stats -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div class="card p-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <div
+                class="text-2xl font-bold text-white"
+                id="available-medicines"
+              >
+                24
+              </div>
+              <div class="text-sm text-blue-300">Available Medicines</div>
+            </div>
+            <i class="fas fa-pills text-blue-400 text-2xl"></i>
+          </div>
+        </div>
+
+        <div class="card p-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-2xl font-bold text-white" id="pending-orders">
+                3
+              </div>
+              <div class="text-sm text-yellow-300">Pending Orders</div>
+            </div>
+            <i class="fas fa-clock text-yellow-400 text-2xl"></i>
+          </div>
+        </div>
+
+        <div class="card p-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-2xl font-bold text-white" id="delivered-orders">
+                12
+              </div>
+              <div class="text-sm text-green-300">Delivered This Month</div>
+            </div>
+            <i class="fas fa-check-circle text-green-400 text-2xl"></i>
+          </div>
+        </div>
+
+        <div class="card p-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-2xl font-bold text-white" id="delivery-time">
+                25 min
+              </div>
+              <div class="text-sm text-purple-300">Avg Delivery Time</div>
+            </div>
+            <i class="fas fa-shipping-fast text-purple-400 text-2xl"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Content Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Medicines Catalog -->
+        <div class="lg:col-span-2">
+          <div class="card p-6 mb-6">
+            <div class="flex justify-between items-center mb-6">
+              <h3 class="text-xl font-bold text-white">Medicines Catalog</h3>
+              <div class="search-box">
+                <input
+                  type="text"
+                  id="medicine-search"
+                  placeholder="Search medicines..."
+                  class="bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-blue-500 focus:border-blue-500 w-64"
+                />
+                <i class="fas fa-search"></i>
+              </div>
+            </div>
+
+            <div class="flex flex-wrap gap-4 mb-6">
+              <button
+                class="category-btn bg-blue-600 text-white px-4 py-2 rounded-lg transition hover:bg-blue-700 active"
+                data-category="all"
+              >
+                All Medicines
+              </button>
+              <button
+                class="category-btn bg-gray-700 text-gray-300 px-4 py-2 rounded-lg transition hover:bg-gray-600"
+                data-category="Pain Relief"
+              >
+                Pain Relief
+              </button>
+              <button
+                class="category-btn bg-gray-700 text-gray-300 px-4 py-2 rounded-lg transition hover:bg-gray-600"
+                data-category="Antibiotics"
+              >
+                Antibiotics
+              </button>
+              <button
+                class="category-btn bg-gray-700 text-gray-300 px-4 py-2 rounded-lg transition hover:bg-gray-600"
+                data-category="Cold & Flu"
+              >
+                Cold & Flu
+              </button>
+              <button
+                class="category-btn bg-gray-700 text-gray-300 px-4 py-2 rounded-lg transition hover:bg-gray-600"
+                data-category="Vitamins"
+              >
+                Vitamins
+              </button>
+              <button
+                class="category-btn bg-gray-700 text-gray-300 px-4 py-2 rounded-lg transition hover:bg-gray-600"
+                data-category="Digestive"
+              >
+                Digestive
+              </button>
+            </div>
+
+            <div
+              id="medicines-grid"
+              class="grid grid-cols-1 md:grid-cols-2 gap-4"
+            >
+              <!-- Medicines will be populated here -->
+            </div>
+          </div>
+
+          <!-- Delivery Information -->
+          <div class="card p-6">
+            <h3 class="text-xl font-bold text-white mb-4">
+              Delivery Information
+            </h3>
+            <div class="space-y-4">
+              <div class="flex items-start">
+                <i class="fas fa-clock text-blue-400 mt-1 mr-3"></i>
+                <div>
+                  <div class="font-medium text-white">Delivery Hours</div>
+                  <div class="text-sm text-gray-400">
+                    9:00 AM - 8:00 PM (Monday - Saturday)
+                  </div>
+                  <div class="text-sm text-gray-400">
+                    10:00 AM - 2:00 PM (Sunday)
+                  </div>
+                </div>
+              </div>
+              <div class="flex items-start">
+                <i class="fas fa-info-circle text-blue-400 mt-1 mr-3"></i>
+                <div>
+                  <div class="font-medium text-white">Important Notes</div>
+                  <div class="text-sm text-gray-400">
+                    • Delivery is free for all orders
+                  </div>
+                  <div class="text-sm text-gray-400">
+                    • Prescription required for certain medicines
+                  </div>
+                  <div class="text-sm text-gray-400">
+                    • Please keep your student ID ready for verification
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cart & Order Summary -->
+        <div class="space-y-6">
+          <!-- Cart -->
+          <div class="card p-6">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-xl font-bold text-white">Your Cart</h3>
+              <div class="relative">
+                <i class="fas fa-shopping-cart text-xl"></i>
+                <span id="cart-count" class="cart-badge">0</span>
+              </div>
+            </div>
+            <div
+              id="cart-items"
+              class="space-y-4 mb-4 max-h-80 overflow-y-auto"
+            >
+              <!-- Cart items will be populated here -->
+              <div class="text-center py-8 text-gray-500">
+                <i class="fas fa-shopping-cart text-3xl mb-3"></i>
+                <p>Your cart is empty</p>
+                <p class="text-sm mt-1">Add medicines from the catalog</p>
+              </div>
+            </div>
+            <div class="border-t border-gray-700 pt-4">
+              <div class="flex justify-between mb-2">
+                <span class="text-gray-400">Subtotal:</span>
+                <span class="text-white font-medium" id="cart-subtotal"
+                  >₹0.00</span
+                >
+              </div>
+              <div class="flex justify-between mb-4">
+                <span class="text-gray-400">Delivery:</span>
+                <span class="text-green-400 font-medium">FREE</span>
+              </div>
+              <div class="flex justify-between text-lg font-bold">
+                <span class="text-white">Total:</span>
+                <span class="text-white" id="cart-total">₹0.00</span>
+              </div>
+            </div>
+            <button
+              id="checkout-btn"
+              class="btn-primary w-full font-semibold py-3 px-6 rounded-lg mt-6 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled
+            >
+              <i class="fas fa-credit-card mr-2"></i>Proceed to Checkout
+            </button>
+          </div>
+
+          <!-- Recent Orders -->
+          <div class="card p-6">
+            <h3 class="text-xl font-bold text-white mb-4">Recent Orders</h3>
+            <div id="recent-orders" class="space-y-4">
+              <!-- Recent orders will be populated here -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Checkout Modal -->
+    <div
+      id="checkout-modal"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden"
+    >
+      <div
+        class="bg-gray-800 rounded-xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto"
+      >
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">Checkout</h3>
+          <button
+            id="close-checkout-modal"
+            class="text-gray-400 hover:text-white"
+          >
+            <i class="fas fa-times text-xl"></i>
+          </button>
+        </div>
+
+        <div class="space-y-6">
+          <!-- Order Summary -->
+          <div class="card p-4">
+            <h4 class="font-bold text-white mb-3">Order Summary</h4>
+            <div id="checkout-items" class="space-y-3 mb-3">
+              <!-- Checkout items will be populated here -->
+            </div>
+            <div class="border-t border-gray-700 pt-3">
+              <div class="flex justify-between mb-2">
+                <span class="text-gray-400">Subtotal:</span>
+                <span class="text-white font-medium" id="checkout-subtotal"
+                  >₹0.00</span
+                >
+              </div>
+              <div class="flex justify-between mb-2">
+                <span class="text-gray-400">Delivery:</span>
+                <span class="text-green-400 font-medium">FREE</span>
+              </div>
+              <div class="flex justify-between text-lg font-bold">
+                <span class="text-white">Total:</span>
+                <span class="text-white" id="checkout-total">₹0.00</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Student Information Form -->
+          <div class="card p-4">
+            <h4 class="font-bold text-white mb-4">Student Information</h4>
+            <form id="student-info-form">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="form-group">
+                  <label for="student-name" class="form-label">Full Name</label>
+                  <input
+                    type="text"
+                    id="student-name"
+                    class="form-input"
+                    placeholder="Enter your full name"
+                    required
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="registration-number" class="form-label"
+                    >Registration Number</label
+                  >
+                  <input
+                    type="text"
+                    id="registration-number"
+                    class="form-input"
+                    placeholder="Enter registration number"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="form-group">
+                  <label for="hostel-block" class="form-label"
+                    >Hostel Block</label
+                  >
+                  <select id="hostel-block" class="form-select" required>
+                    <option value="">Select Hostel Block</option>
+                    <option value="A">Block 1</option>
+                    <option value="B">Block 2</option>
+                    <option value="C">Block 3</option>
+                    <option value="D">Girls Hostel Block 1</option>
+                    <option value="E">Girls Hostel Block 2</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="room-number" class="form-label"
+                    >Room Number</label
+                  >
+                  <input
+                    type="text"
+                    id="room-number"
+                    class="form-input"
+                    placeholder="Enter room number"
+                    required
+                  />
+                </div>
+              </div>
+
+              <!-- Contact Details Section -->
+              <div class="border-t border-gray-700 pt-4 mt-4">
+                <h5 class="font-bold text-white mb-3">Contact Details</h5>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div class="form-group">
+                    <label for="phone-number" class="form-label"
+                      >Phone Number</label
+                    >
+                    <input
+                      type="tel"
+                      id="phone-number"
+                      class="form-input"
+                      placeholder="Enter your phone number"
+                      required
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label for="email" class="form-label">Email Address</label>
+                    <input
+                      type="email"
+                      id="email"
+                      class="form-input"
+                      placeholder="Enter your email"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="emergency-contact" class="form-label"
+                    >Emergency Contact Number</label
+                  >
+                  <input
+                    type="tel"
+                    id="emergency-contact"
+                    class="form-input"
+                    placeholder="Enter emergency contact number"
+                    required
+                  />
+                  <p class="text-xs text-gray-400 mt-1">
+                    In case we need to reach someone in case of emergency
+                  </p>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="additional-notes" class="form-label"
+                  >Additional Notes (Optional)</label
+                >
+                <textarea
+                  id="additional-notes"
+                  class="form-input"
+                  rows="3"
+                  placeholder="Any special delivery instructions or notes"
+                ></textarea>
+              </div>
+            </form>
+          </div>
+
+          <!-- Prescription Check -->
+          <div id="prescription-check" class="card p-4 hidden">
+            <div class="flex items-start">
+              <i
+                class="fas fa-exclamation-triangle text-yellow-400 mt-1 mr-3"
+              ></i>
+              <div>
+                <h4 class="font-bold text-white mb-2">Prescription Required</h4>
+                <p class="text-sm text-gray-300 mb-3">
+                  Some items in your order require a prescription. Please upload
+                  a valid prescription to proceed with your order.
+                </p>
+                <button
+                  id="upload-prescription-checkout"
+                  class="bg-yellow-600 hover:bg-yellow-700 text-white font-semibold py-2 px-4 rounded-lg transition"
+                >
+                  <i class="fas fa-file-upload mr-2"></i>Upload Prescription
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Payment Method -->
+          <div class="card p-4">
+            <h4 class="font-bold text-white mb-4">Payment Method</h4>
+            <div class="space-y-3">
+              <div class="flex items-center">
+                <input
+                  type="radio"
+                  id="cash-on-delivery"
+                  name="payment-method"
+                  value="cod"
+                  class="mr-3"
+                  checked
+                />
+                <label for="cash-on-delivery" class="text-white"
+                  >Cash on Delivery</label
+                >
+              </div>
+              <div class="flex items-center">
+                <input
+                  type="radio"
+                  id="upi"
+                  name="payment-method"
+                  value="upi"
+                  class="mr-3"
+                />
+                <label for="upi" class="text-white">UPI Payment</label>
+              </div>
+              <div class="flex items-center">
+                <input
+                  type="radio"
+                  id="card"
+                  name="payment-method"
+                  value="card"
+                  class="mr-3"
+                />
+                <label for="card" class="text-white">Credit/Debit Card</label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Terms and Conditions -->
+          <div class="card p-4">
+            <div class="flex items-start">
+              <input type="checkbox" id="terms-agreement" class="mr-3 mt-1" />
+              <label for="terms-agreement" class="text-sm text-gray-300">
+                I agree to the
+                <a href="electronic_health_records.html" class="text-blue-400 hover:underline"
+                  >Terms and Conditions</a
+                >
+                and confirm that all information provided is accurate. I
+                understand that prescription medicines require valid
+                documentation.
+              </label>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="flex justify-end space-x-3">
+            <button
+              id="cancel-checkout"
+              class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+            >
+              Cancel
+            </button>
+            <button
+              id="confirm-order"
+              class="btn-primary font-semibold py-2 px-4 rounded-lg"
+            >
+              <i class="fas fa-check-circle mr-2"></i>Confirm Order
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Prescription Upload Modal -->
+    <div
+      id="prescription-modal"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden"
+    >
+      <div class="bg-gray-800 rounded-xl p-6 w-full max-w-2xl">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-xl font-bold text-white">Upload Prescription</h3>
+          <button
+            id="close-prescription-modal"
+            class="text-gray-400 hover:text-white"
+          >
+            <i class="fas fa-times text-xl"></i>
+          </button>
+        </div>
+        <div class="space-y-4">
+          <div class="prescription-upload-area" id="prescription-dropzone">
+            <i class="fas fa-file-upload text-4xl text-gray-400 mb-4"></i>
+            <p class="text-lg font-medium text-white">
+              Drag & Drop your prescription here
+            </p>
+            <p class="text-gray-400 mt-2">or</p>
+            <button class="btn-primary font-semibold py-2 px-6 rounded-lg mt-4">
+              <i class="fas fa-folder-open mr-2"></i>Browse Files
+            </button>
+            <p class="text-sm text-gray-400 mt-4">
+              Supported formats: JPG, PNG, PDF (Max: 5MB)
+            </p>
+            <input
+              type="file"
+              id="prescription-file"
+              class="hidden"
+              accept=".jpg,.jpeg,.png,.pdf"
+            />
+          </div>
+          <div id="prescription-preview" class="hidden">
+            <div
+              class="bg-gray-700 rounded-lg p-4 flex items-center justify-between"
+            >
+              <div class="flex items-center">
+                <i
+                  class="fas fa-file-prescription text-2xl text-blue-400 mr-3"
+                ></i>
+                <div>
+                  <div
+                    class="font-medium text-white"
+                    id="prescription-filename"
+                  >
+                    prescription.pdf
+                  </div>
+                  <div class="text-sm text-gray-400" id="prescription-filesize">
+                    2.4 MB
+                  </div>
+                </div>
+              </div>
+              <button
+                id="remove-prescription"
+                class="text-red-400 hover:text-red-300"
+              >
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+          </div>
+          <div class="flex justify-end space-x-3 mt-6">
+            <button
+              id="cancel-prescription"
+              class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+            >
+              Cancel
+            </button>
+            <button
+              id="submit-prescription"
+              class="btn-primary font-semibold py-2 px-4 rounded-lg"
+            >
+              Upload Prescription
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Order Confirmation Modal -->
+    <div
+      id="order-confirmation-modal"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden"
+    >
+      <div class="bg-gray-800 rounded-xl p-6 w-full max-w-md text-center">
+        <div class="mb-4">
+          <i class="fas fa-check-circle text-green-400 text-5xl mb-4"></i>
+          <h3 class="text-xl font-bold text-white mb-2">Order Confirmed!</h3>
+          <p class="text-gray-300">Your order has been placed successfully</p>
+        </div>
+        <div class="bg-gray-700 rounded-lg p-4 mb-6">
+          <div class="text-sm space-y-2">
+            <div class="flex justify-between">
+              <span class="text-gray-400">Order ID:</span>
+              <span class="text-white font-medium" id="confirmed-order-id"
+                >#1005</span
+              >
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-400">Estimated Delivery:</span>
+              <span class="text-white font-medium">Within 45 minutes</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-400">Delivery To:</span>
+              <span
+                class="text-white font-medium"
+                id="confirmed-delivery-address"
+                >Room B-204</span
+              >
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-400">Contact:</span>
+              <span class="text-white font-medium" id="confirmed-contact"
+                >+91 XXXXX XXXXX</span
+              >
+            </div>
+          </div>
+        </div>
+        <button
+          id="close-confirmation"
+          class="btn-primary w-full font-semibold py-3 px-6 rounded-lg"
+        >
+          Continue Shopping
+        </button>
+      </div>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="notification hidden">
+      <p id="notification-text"></p>
+    </div>
+
+    <script>
+      // Expanded medicine data with more items
+      const medicines = [
+        {
+          id: 1,
+          name: "Paracetamol",
+          price: 15,
+          category: "Pain Relief",
+          description: "For fever and mild pain relief",
+          stock: 50,
+          requiresPrescription: false,
+        },
+        {
+          id: 2,
+          name: "Ibuprofen",
+          price: 25,
+          category: "Pain Relief",
+          description: "For inflammation and pain relief",
+          stock: 30,
+          requiresPrescription: false,
+        },
+        {
+          id: 3,
+          name: "Amoxicillin",
+          price: 120,
+          category: "Antibiotics",
+          description: "For bacterial infections",
+          stock: 20,
+          requiresPrescription: true,
+        },
+        {
+          id: 4,
+          name: "Cetirizine",
+          price: 20,
+          category: "Cold & Flu",
+          description: "For allergies and cold symptoms",
+          stock: 40,
+          requiresPrescription: false,
+        },
+        {
+          id: 5,
+          name: "Vitamin C",
+          price: 50,
+          category: "Vitamins",
+          description: "Immune system support",
+          stock: 60,
+          requiresPrescription: false,
+        },
+        {
+          id: 6,
+          name: "Aspirin",
+          price: 18,
+          category: "Pain Relief",
+          description: "For pain and inflammation",
+          stock: 35,
+          requiresPrescription: false,
+        },
+        {
+          id: 7,
+          name: "Azithromycin",
+          price: 150,
+          category: "Antibiotics",
+          description: "For bacterial infections",
+          stock: 15,
+          requiresPrescription: true,
+        },
+        {
+          id: 8,
+          name: "Vitamin D",
+          price: 65,
+          category: "Vitamins",
+          description: "Bone health and immunity",
+          stock: 45,
+          requiresPrescription: false,
+        },
+        {
+          id: 9,
+          name: "Omeprazole",
+          price: 85,
+          category: "Digestive",
+          description: "For acid reflux and heartburn",
+          stock: 25,
+          requiresPrescription: false,
+        },
+        {
+          id: 10,
+          name: "Loratadine",
+          price: 22,
+          category: "Cold & Flu",
+          description: "For allergy relief",
+          stock: 38,
+          requiresPrescription: false,
+        },
+        {
+          id: 11,
+          name: "Metformin",
+          price: 95,
+          category: "Prescription",
+          description: "For diabetes management",
+          stock: 18,
+          requiresPrescription: true,
+        },
+        {
+          id: 12,
+          name: "Atorvastatin",
+          price: 110,
+          category: "Prescription",
+          description: "For cholesterol control",
+          stock: 22,
+          requiresPrescription: true,
+        },
+        {
+          id: 13,
+          name: "Multivitamin",
+          price: 75,
+          category: "Vitamins",
+          description: "Daily nutritional supplement",
+          stock: 55,
+          requiresPrescription: false,
+        },
+        {
+          id: 14,
+          name: "Diazepam",
+          price: 130,
+          category: "Prescription",
+          description: "For anxiety and muscle spasms",
+          stock: 12,
+          requiresPrescription: true,
+        },
+        {
+          id: 15,
+          name: "Cough Syrup",
+          price: 45,
+          category: "Cold & Flu",
+          description: "For cough relief",
+          stock: 28,
+          requiresPrescription: false,
+        },
+        {
+          id: 16,
+          name: "Antacid Tablets",
+          price: 35,
+          category: "Digestive",
+          description: "For indigestion relief",
+          stock: 42,
+          requiresPrescription: false,
+        },
+        {
+          id: 17,
+          name: "Iron Supplements",
+          price: 60,
+          category: "Vitamins",
+          description: "For iron deficiency",
+          stock: 33,
+          requiresPrescription: false,
+        },
+        {
+          id: 18,
+          name: "Eye Drops",
+          price: 40,
+          category: "Eye Care",
+          description: "For dry eyes and irritation",
+          stock: 27,
+          requiresPrescription: false,
+        },
+        {
+          id: 19,
+          name: "Insulin",
+          price: 280,
+          category: "Prescription",
+          description: "For diabetes treatment",
+          stock: 8,
+          requiresPrescription: true,
+        },
+        {
+          id: 20,
+          name: "Calcium Tablets",
+          price: 55,
+          category: "Vitamins",
+          description: "For bone health",
+          stock: 47,
+          requiresPrescription: false,
+        },
+        {
+          id: 21,
+          name: "Antiseptic Cream",
+          price: 30,
+          category: "First Aid",
+          description: "For cuts and wounds",
+          stock: 39,
+          requiresPrescription: false,
+        },
+        {
+          id: 22,
+          name: "Blood Pressure Monitor",
+          price: 450,
+          category: "Medical Devices",
+          description: "Digital BP monitor",
+          stock: 5,
+          requiresPrescription: false,
+        },
+        {
+          id: 23,
+          name: "Thermometer",
+          price: 120,
+          category: "Medical Devices",
+          description: "Digital thermometer",
+          stock: 15,
+          requiresPrescription: false,
+        },
+        {
+          id: 24,
+          name: "Bandages",
+          price: 25,
+          category: "First Aid",
+          description: "Medical bandage roll",
+          stock: 65,
+          requiresPrescription: false,
+        },
+      ];
+
+      // Sample order data
+      const recentOrders = [
+        {
+          id: 1001,
+          date: "2023-10-15",
+          status: "delivered",
+          total: 85,
+          items: ["Paracetamol", "Vitamin C"],
+        },
+        {
+          id: 1002,
+          date: "2023-10-12",
+          status: "dispatched",
+          total: 145,
+          items: ["Ibuprofen", "Cetirizine"],
+        },
+        {
+          id: 1003,
+          date: "2023-10-10",
+          status: "processing",
+          total: 120,
+          items: ["Amoxicillin"],
+        },
+      ];
+
+      // Cart state
+      let cart = [];
+      let currentCategory = "all";
+
+      // DOM Elements
+      const medicinesGrid = document.getElementById("medicines-grid");
+      const cartItems = document.getElementById("cart-items");
+      const cartCount = document.getElementById("cart-count");
+      const cartSubtotal = document.getElementById("cart-subtotal");
+      const cartTotal = document.getElementById("cart-total");
+      const checkoutBtn = document.getElementById("checkout-btn");
+      const prescriptionModal = document.getElementById("prescription-modal");
+      const prescriptionBtn = document.getElementById("prescription-btn");
+      const closePrescriptionModal = document.getElementById(
+        "close-prescription-modal"
+      );
+      const cancelPrescription = document.getElementById("cancel-prescription");
+      const prescriptionFile = document.getElementById("prescription-file");
+      const prescriptionDropzone = document.getElementById(
+        "prescription-dropzone"
+      );
+      const prescriptionPreview = document.getElementById(
+        "prescription-preview"
+      );
+      const removePrescription = document.getElementById("remove-prescription");
+      const submitPrescription = document.getElementById("submit-prescription");
+      const medicineSearch = document.getElementById("medicine-search");
+      const categoryBtns = document.querySelectorAll(".category-btn");
+      const recentOrdersContainer = document.getElementById("recent-orders");
+      const myOrdersBtn = document.getElementById("my-orders-btn");
+      const notification = document.getElementById("notification");
+      const notificationText = document.getElementById("notification-text");
+      const checkoutModal = document.getElementById("checkout-modal");
+      const closeCheckoutModal = document.getElementById(
+        "close-checkout-modal"
+      );
+      const cancelCheckout = document.getElementById("cancel-checkout");
+      const confirmOrder = document.getElementById("confirm-order");
+      const checkoutItems = document.getElementById("checkout-items");
+      const checkoutSubtotal = document.getElementById("checkout-subtotal");
+      const checkoutTotal = document.getElementById("checkout-total");
+      const prescriptionCheck = document.getElementById("prescription-check");
+      const uploadPrescriptionCheckout = document.getElementById(
+        "upload-prescription-checkout"
+      );
+      const studentInfoForm = document.getElementById("student-info-form");
+      const orderConfirmationModal = document.getElementById(
+        "order-confirmation-modal"
+      );
+      const closeConfirmation = document.getElementById("close-confirmation");
+      const confirmedOrderId = document.getElementById("confirmed-order-id");
+      const confirmedDeliveryAddress = document.getElementById(
+        "confirmed-delivery-address"
+      );
+      const confirmedContact = document.getElementById("confirmed-contact");
+
+      // Initialize the application
+      function init() {
+        updateDateTime();
+        populateMedicinesGrid();
+        populateRecentOrders();
+        setupEventListeners();
+      }
+
+      // Update date and time
+      function updateDateTime() {
+        const now = new Date();
+        const options = {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        };
+        const formattedDateTime = now.toLocaleDateString("en-US", options);
+        document.getElementById("date-time-display").textContent =
+          formattedDateTime;
+      }
+
+      // Populate medicines grid
+      function populateMedicinesGrid(filteredMedicines = medicines) {
+        medicinesGrid.innerHTML = "";
+
+        if (filteredMedicines.length === 0) {
+          medicinesGrid.innerHTML = `
+                    <div class="col-span-2 text-center py-8 text-gray-500">
+                        <i class="fas fa-search text-3xl mb-3"></i>
+                        <p>No medicines found</p>
+                        <p class="text-sm mt-1">Try adjusting your search or filter</p>
+                    </div>
+                `;
+          return;
+        }
+
+        filteredMedicines.forEach((medicine) => {
+          const medicineCard = document.createElement("div");
+          medicineCard.className = "medicine-card card p-4";
+          medicineCard.innerHTML = `
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <h4 class="font-bold text-white">${
+                              medicine.name
+                            }</h4>
+                            <p class="text-sm text-gray-400">${
+                              medicine.category
+                            }</p>
+                        </div>
+                        <span class="status-badge ${
+                          medicine.requiresPrescription
+                            ? "status-pending"
+                            : "status-confirmed"
+                        }">
+                            ${
+                              medicine.requiresPrescription
+                                ? "Prescription"
+                                : "OTC"
+                            }
+                        </span>
+                    </div>
+                    <p class="text-sm text-gray-300 mb-4">${
+                      medicine.description
+                    }</p>
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <div class="text-lg font-bold text-white">₹${
+                              medicine.price
+                            }</div>
+                            <div class="text-xs text-gray-400">Stock: ${
+                              medicine.stock
+                            }</div>
+                        </div>
+                        <button class="add-to-cart-btn bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition flex items-center ${
+                          medicine.stock === 0
+                            ? "opacity-50 cursor-not-allowed"
+                            : ""
+                        }" 
+                            data-id="${medicine.id}" ${
+            medicine.stock === 0 ? "disabled" : ""
+          }>
+                            <i class="fas fa-plus mr-1"></i> Add
+                        </button>
+                    </div>
+                `;
+          medicinesGrid.appendChild(medicineCard);
+        });
+      }
+
+      // Populate recent orders
+      function populateRecentOrders() {
+        recentOrdersContainer.innerHTML = "";
+
+        recentOrders.forEach((order) => {
+          const orderElement = document.createElement("div");
+          orderElement.className = "bg-gray-700 rounded-lg p-4";
+          orderElement.innerHTML = `
+                    <div class="flex justify-between items-start mb-2">
+                        <div>
+                            <div class="font-medium text-white">Order #${
+                              order.id
+                            }</div>
+                            <div class="text-sm text-gray-400">${new Date(
+                              order.date
+                            ).toLocaleDateString()}</div>
+                        </div>
+                        <span class="status-badge status-${order.status}">${
+            order.status.charAt(0).toUpperCase() + order.status.slice(1)
+          }</span>
+                    </div>
+                    <div class="text-sm space-y-1">
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Items:</span>
+                            <span class="text-white">${order.items.join(
+                              ", "
+                            )}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Total:</span>
+                            <span class="text-white">₹${order.total}</span>
+                        </div>
+                    </div>
+                `;
+          recentOrdersContainer.appendChild(orderElement);
+        });
+      }
+
+      // Update cart UI
+      function updateCartUI() {
+        // Update cart count
+        const totalItems = cart.reduce(
+          (total, item) => total + item.quantity,
+          0
+        );
+        cartCount.textContent = totalItems;
+
+        // Update cart items
+        renderCartItems();
+
+        // Update totals
+        const subtotal = cart.reduce(
+          (total, item) => total + item.price * item.quantity,
+          0
+        );
+        cartSubtotal.textContent = `₹${subtotal.toFixed(2)}`;
+        cartTotal.textContent = `₹${subtotal.toFixed(2)}`;
+
+        // Enable/disable checkout button
+        checkoutBtn.disabled = cart.length === 0;
+      }
+
+      // Render cart items
+      function renderCartItems() {
+        cartItems.innerHTML = "";
+
+        if (cart.length === 0) {
+          cartItems.innerHTML = `
+                    <div class="text-center py-8 text-gray-500">
+                        <i class="fas fa-shopping-cart text-3xl mb-3"></i>
+                        <p>Your cart is empty</p>
+                        <p class="text-sm mt-1">Add medicines from the catalog</p>
+                    </div>
+                `;
+          return;
+        }
+
+        cart.forEach((item) => {
+          const cartItem = document.createElement("div");
+          cartItem.className =
+            "flex justify-between items-center bg-gray-700 rounded-lg p-3";
+          cartItem.innerHTML = `
+                    <div class="flex-1">
+                        <div class="font-medium text-white">${item.name}</div>
+                        <div class="text-sm text-gray-400">₹${item.price} each</div>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <button class="decrease-qty text-gray-400 hover:text-white" data-id="${item.id}">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <span class="text-white font-medium w-8 text-center">${item.quantity}</span>
+                        <button class="increase-qty text-gray-400 hover:text-white" data-id="${item.id}">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                        <button class="remove-item text-red-400 hover:text-red-300 ml-2" data-id="${item.id}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+          cartItems.appendChild(cartItem);
+        });
+      }
+
+      // Add to cart
+      function addToCart(medicineId) {
+        const medicine = medicines.find((m) => m.id === medicineId);
+        if (!medicine) return;
+
+        const existingItem = cart.find((item) => item.id === medicineId);
+
+        if (existingItem) {
+          if (existingItem.quantity < medicine.stock) {
+            existingItem.quantity++;
+          } else {
+            showNotification(
+              `Only ${medicine.stock} units of ${medicine.name} available`,
+              "error"
+            );
+            return;
+          }
+        } else {
+          cart.push({
+            id: medicine.id,
+            name: medicine.name,
+            price: medicine.price,
+            quantity: 1,
+            requiresPrescription: medicine.requiresPrescription,
+          });
+        }
+
+        updateCartUI();
+        showNotification(`${medicine.name} added to cart`, "success");
+      }
+
+      // Remove from cart
+      function removeFromCart(medicineId) {
+        cart = cart.filter((item) => item.id !== medicineId);
+        updateCartUI();
+        showNotification("Item removed from cart", "info");
+      }
+
+      // Update quantity
+      function updateQuantity(medicineId, change) {
+        const item = cart.find((item) => item.id === medicineId);
+        if (!item) return;
+
+        const medicine = medicines.find((m) => m.id === medicineId);
+
+        if (change > 0) {
+          // Increasing quantity
+          if (item.quantity < medicine.stock) {
+            item.quantity++;
+          } else {
+            showNotification(
+              `Only ${medicine.stock} units of ${medicine.name} available`,
+              "error"
+            );
+            return;
+          }
+        } else {
+          // Decreasing quantity
+          if (item.quantity > 1) {
+            item.quantity--;
+          } else {
+            removeFromCart(medicineId);
+            return;
+          }
+        }
+
+        updateCartUI();
+      }
+
+      // Filter medicines by category
+      function filterMedicinesByCategory(category) {
+        if (category === "all") {
+          populateMedicinesGrid(medicines);
+        } else {
+          const filtered = medicines.filter(
+            (medicine) => medicine.category === category
+          );
+          populateMedicinesGrid(filtered);
+        }
+      }
+
+      // Search medicines
+      function searchMedicines(query) {
+        const filtered = medicines.filter(
+          (medicine) =>
+            medicine.name.toLowerCase().includes(query.toLowerCase()) ||
+            medicine.category.toLowerCase().includes(query.toLowerCase()) ||
+            medicine.description.toLowerCase().includes(query.toLowerCase())
+        );
+        populateMedicinesGrid(filtered);
+      }
+
+      // Show checkout modal
+      function showCheckoutModal() {
+        // Check if cart has items
+        if (cart.length === 0) {
+          showNotification("Your cart is empty", "error");
+          return;
+        }
+
+        // Populate checkout items
+        checkoutItems.innerHTML = "";
+        let subtotal = 0;
+
+        cart.forEach((item) => {
+          const itemTotal = item.price * item.quantity;
+          subtotal += itemTotal;
+
+          const checkoutItem = document.createElement("div");
+          checkoutItem.className = "flex justify-between items-center";
+          checkoutItem.innerHTML = `
+                    <div>
+                        <div class="font-medium text-white">${item.name}</div>
+                        <div class="text-sm text-gray-400">Qty: ${
+                          item.quantity
+                        } × ₹${item.price}</div>
+                    </div>
+                    <div class="font-medium text-white">₹${itemTotal.toFixed(
+                      2
+                    )}</div>
+                `;
+          checkoutItems.appendChild(checkoutItem);
+        });
+
+        checkoutSubtotal.textContent = `₹${subtotal.toFixed(2)}`;
+        checkoutTotal.textContent = `₹${subtotal.toFixed(2)}`;
+
+        // Check if prescription is required
+        const requiresPrescription = cart.some(
+          (item) => item.requiresPrescription
+        );
+        if (requiresPrescription) {
+          prescriptionCheck.classList.remove("hidden");
+        } else {
+          prescriptionCheck.classList.add("hidden");
+        }
+
+        // Reset form
+        studentInfoForm.reset();
+        document.getElementById("terms-agreement").checked = false;
+
+        // Show modal
+        checkoutModal.classList.remove("hidden");
+      }
+
+      // Process order
+      function processOrder() {
+        // Get form data
+        const studentName = document.getElementById("student-name").value;
+        const registrationNumber = document.getElementById(
+          "registration-number"
+        ).value;
+        const hostelBlock = document.getElementById("hostel-block").value;
+        const roomNumber = document.getElementById("room-number").value;
+        const phoneNumber = document.getElementById("phone-number").value;
+        const email = document.getElementById("email").value;
+        const emergencyContact =
+          document.getElementById("emergency-contact").value;
+        const additionalNotes =
+          document.getElementById("additional-notes").value;
+        const termsAgreed = document.getElementById("terms-agreement").checked;
+
+        // Validate form
+        if (
+          !studentName ||
+          !registrationNumber ||
+          !hostelBlock ||
+          !roomNumber ||
+          !phoneNumber ||
+          !email ||
+          !emergencyContact
+        ) {
+          showNotification("Please fill in all required fields", "error");
+          return;
+        }
+
+        // Validate phone number
+        const phoneRegex = /^[0-9]{10}$/;
+        if (!phoneRegex.test(phoneNumber.replace(/\D/g, ""))) {
+          showNotification(
+            "Please enter a valid 10-digit phone number",
+            "error"
+          );
+          return;
+        }
+
+        // Validate emergency contact
+        if (!phoneRegex.test(emergencyContact.replace(/\D/g, ""))) {
+          showNotification(
+            "Please enter a valid 10-digit emergency contact number",
+            "error"
+          );
+          return;
+        }
+
+        // Validate email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+          showNotification("Please enter a valid email address", "error");
+          return;
+        }
+
+        if (!termsAgreed) {
+          showNotification("Please agree to the terms and conditions", "error");
+          return;
+        }
+
+        // Check if prescription is required but not uploaded
+        const requiresPrescription = cart.some(
+          (item) => item.requiresPrescription
+        );
+        if (requiresPrescription && prescriptionFile.files.length === 0) {
+          showNotification(
+            "Please upload prescription for prescription-only medicines",
+            "error"
+          );
+          return;
+        }
+
+        // Generate order ID
+        const orderId = Math.floor(1000 + Math.random() * 9000);
+
+        // Show confirmation
+        confirmedOrderId.textContent = `#${orderId}`;
+        confirmedDeliveryAddress.textContent = `Room ${roomNumber}, Block ${hostelBlock}`;
+        confirmedContact.textContent = phoneNumber;
+
+        // Close checkout modal and show confirmation
+        checkoutModal.classList.add("hidden");
+        orderConfirmationModal.classList.remove("hidden");
+
+        // Reset cart
+        cart = [];
+        updateCartUI();
+
+        // Reset prescription file
+        prescriptionFile.value = "";
+        prescriptionPreview.classList.add("hidden");
+
+        showNotification(`Order #${orderId} placed successfully!`, "success");
+      }
+
+      // Show notification
+      function showNotification(message, type = "info") {
+        notificationText.textContent = message;
+        notification.className = `notification ${type} slide-in`;
+        notification.classList.remove("hidden");
+
+        setTimeout(() => {
+          notification.classList.add("hidden");
+        }, 4000);
+      }
+
+      // Setup event listeners
+      function setupEventListeners() {
+        // Update date and time every minute
+        setInterval(updateDateTime, 60000);
+
+        // Add active state to sidebar items on click
+        const sidebarItems = document.querySelectorAll(".sidebar-item");
+        sidebarItems.forEach((item) => {
+          item.addEventListener("click", function (e) {
+            e.preventDefault();
+            sidebarItems.forEach((i) => i.classList.remove("active"));
+            this.classList.add("active");
+          });
+        });
+
+        // Add to cart buttons - FIXED EVENT LISTENER
+        document.addEventListener("click", function (e) {
+          if (
+            e.target.classList.contains("add-to-cart-btn") ||
+            e.target.closest(".add-to-cart-btn")
+          ) {
+            const btn = e.target.classList.contains("add-to-cart-btn")
+              ? e.target
+              : e.target.closest(".add-to-cart-btn");
+            const medicineId = parseInt(btn.dataset.id);
+            addToCart(medicineId);
+          }
+
+          // Decrease quantity
+          if (
+            e.target.classList.contains("decrease-qty") ||
+            e.target.closest(".decrease-qty")
+          ) {
+            const btn = e.target.classList.contains("decrease-qty")
+              ? e.target
+              : e.target.closest(".decrease-qty");
+            const medicineId = parseInt(btn.dataset.id);
+            updateQuantity(medicineId, -1);
+          }
+
+          // Increase quantity
+          if (
+            e.target.classList.contains("increase-qty") ||
+            e.target.closest(".increase-qty")
+          ) {
+            const btn = e.target.classList.contains("increase-qty")
+              ? e.target
+              : e.target.closest(".increase-qty");
+            const medicineId = parseInt(btn.dataset.id);
+            updateQuantity(medicineId, 1);
+          }
+
+          // Remove item
+          if (
+            e.target.classList.contains("remove-item") ||
+            e.target.closest(".remove-item")
+          ) {
+            const btn = e.target.classList.contains("remove-item")
+              ? e.target
+              : e.target.closest(".remove-item");
+            const medicineId = parseInt(btn.dataset.id);
+            removeFromCart(medicineId);
+          }
+        });
+
+        // Checkout button
+        checkoutBtn.addEventListener("click", showCheckoutModal);
+
+        // Checkout modal
+        closeCheckoutModal.addEventListener("click", () => {
+          checkoutModal.classList.add("hidden");
+        });
+
+        cancelCheckout.addEventListener("click", () => {
+          checkoutModal.classList.add("hidden");
+        });
+
+        confirmOrder.addEventListener("click", processOrder);
+
+        // Upload prescription from checkout
+        uploadPrescriptionCheckout.addEventListener("click", () => {
+          checkoutModal.classList.add("hidden");
+          prescriptionModal.classList.remove("hidden");
+        });
+
+        // Prescription modal
+        prescriptionBtn.addEventListener("click", () => {
+          prescriptionModal.classList.remove("hidden");
+        });
+
+        closePrescriptionModal.addEventListener("click", () => {
+          prescriptionModal.classList.add("hidden");
+        });
+
+        cancelPrescription.addEventListener("click", () => {
+          prescriptionModal.classList.add("hidden");
+        });
+
+        // Prescription file handling
+        prescriptionDropzone.addEventListener("click", () => {
+          prescriptionFile.click();
+        });
+
+        prescriptionFile.addEventListener("change", function (e) {
+          if (this.files.length > 0) {
+            const file = this.files[0];
+            const filename = file.name;
+            const filesize = (file.size / (1024 * 1024)).toFixed(2) + " MB";
+
+            document.getElementById("prescription-filename").textContent =
+              filename;
+            document.getElementById("prescription-filesize").textContent =
+              filesize;
+            prescriptionPreview.classList.remove("hidden");
+          }
+        });
+
+        removePrescription.addEventListener("click", () => {
+          prescriptionFile.value = "";
+          prescriptionPreview.classList.add("hidden");
+        });
+
+        submitPrescription.addEventListener("click", () => {
+          if (prescriptionFile.files.length === 0) {
+            showNotification("Please select a prescription file", "error");
+            return;
+          }
+
+          // Simulate upload
+          showNotification("Prescription uploaded successfully", "success");
+          prescriptionModal.classList.add("hidden");
+
+          // Return to checkout if we came from there
+          if (cart.length > 0) {
+            checkoutModal.classList.remove("hidden");
+          }
+        });
+
+        // Drag and drop for prescription
+        prescriptionDropzone.addEventListener("dragover", (e) => {
+          e.preventDefault();
+          prescriptionDropzone.classList.add("dragover");
+        });
+
+        prescriptionDropzone.addEventListener("dragleave", () => {
+          prescriptionDropzone.classList.remove("dragover");
+        });
+
+        prescriptionDropzone.addEventListener("drop", (e) => {
+          e.preventDefault();
+          prescriptionDropzone.classList.remove("dragover");
+
+          if (e.dataTransfer.files.length > 0) {
+            prescriptionFile.files = e.dataTransfer.files;
+            const event = new Event("change", { bubbles: true });
+            prescriptionFile.dispatchEvent(event);
+          }
+        });
+
+        // Search functionality
+        medicineSearch.addEventListener("input", (e) => {
+          searchMedicines(e.target.value);
+        });
+
+        // Category filters
+        categoryBtns.forEach((btn) => {
+          btn.addEventListener("click", () => {
+            categoryBtns.forEach((b) =>
+              b.classList.remove("active", "bg-blue-600", "text-white")
+            );
+            categoryBtns.forEach((b) =>
+              b.classList.add("bg-gray-700", "text-gray-300")
+            );
+
+            btn.classList.remove("bg-gray-700", "text-gray-300");
+            btn.classList.add("active", "bg-blue-600", "text-white");
+
+            currentCategory = btn.dataset.category;
+            filterMedicinesByCategory(currentCategory);
+          });
+        });
+
+        // Order confirmation modal
+        closeConfirmation.addEventListener("click", () => {
+          orderConfirmationModal.classList.add("hidden");
+        });
+
+        // My orders button
+        myOrdersBtn.addEventListener("click", () => {
+          document
+            .getElementById("recent-orders")
+            .scrollIntoView({ behavior: "smooth" });
+        });
+      }
+
+      // Initialize the application when DOM is loaded
+      document.addEventListener("DOMContentLoaded", init);
+    </script>
+    <script src="auth_guard.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

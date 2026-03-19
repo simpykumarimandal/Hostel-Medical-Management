@@ -1,0 +1,1749 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VIT Bhopal | Professional Complaint Management System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
+    />
+    <style> @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"); body { font-family: "Inter", sans-serif; color: #d1d5db; } .active-nav-link { background-color: #374151; color: white; } .bg-card { background-color: #374151; } .message-box { animation: slideIn 0.5s forwards; } @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } } .fade-in { animation: fadeIn 0.5s ease-in; } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } } .gradient-border { background: linear-gradient(135deg, #3b82f6, #8b5cf6); padding: 2px; border-radius: 12px; } .gradient-border > div { background: #374151; border-radius: 10px; padding: 1.5rem; } .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); z-index: 1000; align-items: center; justify-content: center; } .modal.active { display: flex; } .modal-content { background: #1f2937; border-radius: 12px; padding: 2rem; max-width: 800px; width: 90%; max-height: 90vh; overflow-y: auto; } .form-group { margin-bottom: 1.5rem; } .form-label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: #d1d5db; } .form-input { width: 100%; background-color: #4b5563; border: 1px solid #6b7280; border-radius: 0.5rem; padding: 0.75rem 1rem; color: white; transition: all 0.3s ease; } .form-input:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3); } .complaint-feature-card { background: linear-gradient(135deg, #1e40af, #3730a3); border-radius: 0.75rem; padding: 1.5rem; color: white; transition: all 0.3s ease; } .complaint-feature-card:hover { transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3); } .tracking-card { background: linear-gradient(135deg, #059669, #047857); border-radius: 0.75rem; padding: 1.5rem; color: white; transition: all 0.3s ease; } .tracking-card:hover { transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3); } .analytics-card { background: linear-gradient(135deg, #7c3aed, #6d28d9); border-radius: 0.75rem; padding: 1.5rem; color: white; transition: all 0.3s ease; } .analytics-card:hover { transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3); } .escalation-card { background: linear-gradient(135deg, #dc2626, #b91c1c); border-radius: 0.75rem; padding: 1.5rem; color: white; transition: all 0.3s ease; } .escalation-card:hover { transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3); } .complaint-item-card { border-left: 4px solid #3b82f6; background-color: #374151; border-radius: 0.5rem; padding: 1rem; margin-bottom: 1rem; } .status-indicator { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 5px; } .status-new { background-color: #3b82f6; } .status-in-progress { background-color: #f59e0b; } .status-resolved { background-color: #10b981; } .status-escalated { background-color: #ef4444; } .status-closed { background-color: #6b7280; } .professional-header { background: linear-gradient(135deg, #1e3a8a, #3730a3); border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; border-left: 6px solid #f59e0b; } .progress-bar { height: 8px; background-color: #4b5563; border-radius: 4px; overflow: hidden; margin: 10px 0; } .progress-fill { height: 100%; background: linear-gradient(90deg, #3b82f6, #8b5cf6); border-radius: 4px; transition: width 0.3s ease; } .priority-high { border-left: 4px solid #ef4444; } .priority-medium { border-left: 4px solid #f59e0b; } .priority-low { border-left: 4px solid #10b981; } .escalation-matrix { border-collapse: collapse; width: 100%; } .escalation-matrix th, .escalation-matrix td { padding: 12px; text-align: left; border-bottom: 1px solid #374151; } .escalation-matrix th { background-color: #374151; color: #d1d5db; font-weight: 600; } .escalation-matrix tr:hover { background-color: #374151; } .satisfaction-rating { display: flex; justify-content: center; margin: 20px 0; } .rating-star { font-size: 2rem; color: #6b7280; cursor: pointer; transition: color 0.2s; margin: 0 5px; } .rating-star.active { color: #f59e0b; } .category-tag { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; margin-right: 8px; margin-bottom: 8px; } .category-academic { background-color: #3b82f6; color: white; } .category-infrastructure { background-color: #10b981; color: white; } .category-administrative { background-color: #f59e0b; color: white; } .category-hostel { background-color: #8b5cf6; color: white; } .category-other { background-color: #6b7280; color: white; } .dashboard-stat { text-align: center; padding: 1.5rem; border-radius: 0.75rem; background: #374151; transition: all 0.3s ease; } .dashboard-stat:hover { transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3); } .stat-value { font-size: 2.5rem; font-weight: bold; margin-bottom: 0.5rem; } .stat-label { font-size: 0.875rem; color: #9ca3af; } .timeline { position: relative; padding-left: 30px; } .timeline::before { content: ""; position: absolute; left: 15px; top: 0; bottom: 0; width: 2px; background: #4b5563; } .timeline-item { position: relative; margin-bottom: 20px; } .timeline-item::before { content: ""; position: absolute; left: -25px; top: 5px; width: 12px; height: 12px; border-radius: 50%; background: #3b82f6; } .timeline-item.resolved::before { background: #10b981; } .timeline-item.escalated::before { background: #ef4444; } .knowledge-base-item { border: 1px solid #4b5563; border-radius: 0.5rem; padding: 1rem; margin-bottom: 1rem; cursor: pointer; transition: all 0.3s ease; } .knowledge-base-item:hover { border-color: #3b82f6; background-color: #374151; } .sla-card { border: 1px solid #4b5563; border-radius: 0.5rem; padding: 1rem; margin-bottom: 1rem; } .sla-card.met { border-color: #10b981; } .sla-card.breached { border-color: #ef4444; } .chat-bubble { max-width: 70%; padding: 12px 16px; border-radius: 18px; margin-bottom: 10px; } .chat-bubble.user { background-color: #3b82f6; color: white; margin-left: auto; } .chat-bubble.support { background-color: #374151; color: white; } .chat-container { height: 300px; overflow-y: auto; padding: 10px; border: 1px solid #4b5563; border-radius: 0.5rem; margin-bottom: 1rem; } </style> <style> .sidebar { transition: transform 0.25s ease-in-out; } .sidebar-collapsed .sidebar { transform: translateX(-110%); } .main-content { transition: margin-left 0.25s ease-in-out; } .sidebar-collapsed .main-content { margin-left: 0 !important; } @media (max-width: 768px) { .sidebar { transform: translateX(-110%); } .sidebar-open .sidebar { transform: translateX(0); } } </style></head>
+  <body class="bg-gray-900 flex flex-col md:flex-row min-h-screen">
+
+    <!-- Sidebar -->
+    <aside
+      class="sidebar w-full md:w-64 bg-gray-950 text-white p-6 flex flex-col items-center md:items-start space-y-8 shadow-2xl">
+      <div class="flex items-center space-x-2 mb-4">
+        <i class="fas fa-university text-xl text-blue-400"></i>
+        <h1 class="text-xl font-bold">VIT Bhopal</h1>
+        <span class="text-sm text-gray-400 ml-2">Complaint System</span>
+      </div>
+      <nav class="w-full">
+  <ul class="space-y-2">
+    <li>
+      <a href="demo.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-chart-line mr-3"></i>
+        <span class="font-medium">Dashboard</span>
+      </a>
+    </li>
+    <li>
+      <a href="ambulance.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-truck-medical mr-3"></i>
+        <span class="font-medium">Ambulance</span>
+      </a>
+    </li>
+    <li>
+      <a href="doctors.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-user-doctor mr-3"></i>
+        <span class="font-medium">Doctors</span>
+      </a>
+    </li>
+    <li>
+      <a href="medicine_order.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-pills mr-3"></i>
+        <span class="font-medium">Pharmacy</span>
+      </a>
+    </li>
+    <li>
+      <a href="medicine_reminder.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bell mr-3"></i>
+        <span class="font-medium">Medicine Reminder</span>
+      </a>
+    </li>
+    <li>
+      <a href="symptoms_checker.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-stethoscope mr-3"></i>
+        <span class="font-medium">Symptoms Checker</span>
+      </a>
+    </li>
+    <li>
+      <a href="lab_tests.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-vial-circle-check mr-3"></i>
+        <span class="font-medium">Lab Tests</span>
+      </a>
+    </li>
+    <li>
+      <a href="emergency_requests.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-hand-holding-medical mr-3"></i>
+        <span class="font-medium">Emergency Requests</span>
+      </a>
+    </li>
+    <li>
+      <a href="sos.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-sos mr-3"></i>
+        <span class="font-medium">SOS</span>
+      </a>
+    </li>
+    <li>
+      <a href="electronic_health_records.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-file-medical mr-3"></i>
+        <span class="font-medium">Health Records</span>
+      </a>
+    </li>
+    <li>
+      <a href="health_insurance.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-shield-heart mr-3"></i>
+        <span class="font-medium">Health Insurance</span>
+      </a>
+    </li>
+    <li>
+      <a href="reports_and_analytics.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-chart-pie mr-3"></i>
+        <span class="font-medium">Reports & Analytics</span>
+      </a>
+    </li>
+    <li>
+      <a href="restocking.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-box-open mr-3"></i>
+        <span class="font-medium">Inventory</span>
+      </a>
+    </li>
+    <li>
+      <a href="studentrequest.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-cash-register mr-3"></i>
+        <span class="font-medium">Student Requests</span>
+      </a>
+    </li>
+    <li>
+      <a href="student_transport.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bus mr-3"></i>
+        <span class="font-medium">Student Transport</span>
+      </a>
+    </li>
+    <li>
+      <a href="transport_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-route mr-3"></i>
+        <span class="font-medium">Transport Management</span>
+      </a>
+    </li>
+    <li>
+      <a href="room_management.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bed mr-3"></i>
+        <span class="font-medium">Room Management</span>
+      </a>
+    </li>
+    <li>
+      <a href="room_sanitation.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-spray-can-sparkles mr-3"></i>
+        <span class="font-medium">Room Sanitation</span>
+      </a>
+    </li>
+    <li>
+      <a href="mess_menu.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-utensils mr-3"></i>
+        <span class="font-medium">Mess Menu</span>
+      </a>
+    </li>
+    <li>
+      <a href="mess_food_order_service.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bowl-food mr-3"></i>
+        <span class="font-medium">Mess Food Order</span>
+      </a>
+    </li>
+    <li>
+      <a href="laundry_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-shirt mr-3"></i>
+        <span class="font-medium">Laundry</span>
+      </a>
+    </li>
+    <li>
+      <a href="leave_and_outing.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-door-open mr-3"></i>
+        <span class="font-medium">Leave & Outing</span>
+      </a>
+    </li>
+    <li>
+      <a href="vit_bhopal_community.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-users mr-3"></i>
+        <span class="font-medium">VIT Community</span>
+      </a>
+    </li>
+    <li>
+      <a href="parent_notification.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-comments mr-3"></i>
+        <span class="font-medium">Parent Notification</span>
+      </a>
+    </li>
+    <li>
+      <a href="payment_gateway.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-credit-card mr-3"></i>
+        <span class="font-medium">Payment Gateway</span>
+      </a>
+    </li>
+    <li>
+      <a href="complaint_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-circle-exclamation mr-3"></i>
+        <span class="font-medium">Complaints</span>
+      </a>
+    </li>
+    <li>
+      <a href="exam_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-clipboard-list mr-3"></i>
+        <span class="font-medium">Exam Management</span>
+      </a>
+    </li>
+    <li>
+      <a href="local_hospital_network.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-hospital mr-3"></i>
+        <span class="font-medium">Local Hospitals</span>
+      </a>
+    </li>
+    <li>
+      <a href="medical_camps.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-hand-holding-heart mr-3"></i>
+        <span class="font-medium">Medical Camps</span>
+      </a>
+    </li>
+    <li>
+      <a href="virtual_consultation.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-video mr-3"></i>
+        <span class="font-medium">Virtual Consultation</span>
+      </a>
+    </li>
+    <li>
+      <a href="wearables.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-watch-fitness mr-3"></i>
+        <span class="font-medium">Wearables</span>
+      </a>
+    </li>
+    <li>
+      <a href="biometric.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-fingerprint mr-3"></i>
+        <span class="font-medium">Biometric</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+      <div class="mt-auto w-full">
+        <a href="/index.html" data-logout="true"
+          class="flex items-center justify-center w-full px-4 py-3 rounded-lg bg-red-600 hover:bg-red-700 transition-colors duration-200"
+        >
+          <i class="fa-solid fa-right-from-bracket mr-2"></i>
+          <span class="font-semibold">Log Out</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content flex-1 p-8 overflow-y-auto bg-gray-800">
+      <!-- Professional Header -->
+      <div class="professional-header">
+        <div class="flex items-center justify-between">
+          <div>
+            <h1 class="text-3xl font-bold text-white mb-2">
+              VIT Bhopal University
+            </h1>
+            <h2 class="text-xl text-blue-200">Complaint Management System</h2>
+            <p class="text-gray-300 mt-2">
+              Professional complaint resolution for students, faculty and staff
+            </p>
+          </div>
+          <div class="text-right">
+            <div class="text-white font-semibold">Complaint Support</div>
+            <div class="text-blue-300 font-bold text-xl">07562-654321</div>
+            <div class="text-sm text-gray-300">Mon-Sat: 8:00 AM - 8:00 PM</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Top Header -->
+      <header
+        class="flex items-center justify-between text-sm text-gray-400 mb-8"
+      >
+        <div id="date-time-display"></div>
+        <div class="flex items-center space-x-6">
+          <div class="relative">
+            <i
+              class="fa-solid fa-bell text-xl hover:text-white transition duration-200"
+            ></i>
+            <span
+              id="notification-badge"
+              class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center"
+              >5</span
+            >
+          </div>
+          <div class="flex items-center space-x-2">
+            <i class="fa-solid fa-user-circle text-xl"></i>
+            <span>Student Portal</span>
+          </div>
+          <div class="flex items-center space-x-2 cursor-pointer">
+            <i class="fa-solid fa-globe text-xl"></i>
+            <span>English</span>
+            <i class="fa-solid fa-chevron-down text-xs"></i>
+          </div>
+        </div>
+      </header>
+
+      <!-- Dashboard Stats -->
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
+        <div class="dashboard-stat">
+          <div class="stat-value text-blue-400" id="total-complaints">24</div>
+          <div class="stat-label">Total Complaints</div>
+        </div>
+        <div class="dashboard-stat">
+          <div class="stat-value text-yellow-400" id="pending-complaints">
+            8
+          </div>
+          <div class="stat-label">Pending Resolution</div>
+        </div>
+        <div class="dashboard-stat">
+          <div class="stat-value text-green-400" id="resolved-complaints">
+            14
+          </div>
+          <div class="stat-label">Resolved Complaints</div>
+        </div>
+        <div class="dashboard-stat">
+          <div class="stat-value text-red-400" id="escalated-complaints">2</div>
+          <div class="stat-label">Escalated Complaints</div>
+        </div>
+      </div>
+
+      <!-- Main Features Section -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <!-- Submit Complaint -->
+        <div class="complaint-feature-card">
+          <div class="flex items-center mb-3">
+            <i class="fa-solid fa-plus-circle text-2xl mr-3"></i>
+            <h3 class="font-bold text-lg">Submit New Complaint</h3>
+          </div>
+          <p class="text-sm opacity-90 mb-4">
+            Register a new complaint with categorized options and priority
+            levels
+          </p>
+          <div class="flex space-x-2">
+            <button
+              id="submit-complaint-btn"
+              class="bg-white text-blue-600 text-sm font-semibold py-2 px-4 rounded-lg transition"
+            >
+              Submit Complaint
+            </button>
+            <button
+              id="quick-complaint-btn"
+              class="bg-transparent border border-white text-white text-sm font-semibold py-2 px-4 rounded-lg transition"
+            >
+              Quick Complaint
+            </button>
+          </div>
+        </div>
+
+        <!-- Track Complaint -->
+        <div class="tracking-card">
+          <div class="flex items-center mb-3">
+            <i class="fa-solid fa-search text-2xl mr-3"></i>
+            <h3 class="font-bold text-lg">Track Complaint Status</h3>
+          </div>
+          <p class="text-sm opacity-90 mb-4">
+            Monitor the progress of your complaints with real-time updates
+          </p>
+          <div class="flex space-x-2">
+            <button
+              id="track-complaint-btn"
+              class="bg-white text-green-600 text-sm font-semibold py-2 px-4 rounded-lg transition"
+            >
+              Track Complaint
+            </button>
+            <button
+              id="view-all-complaints-btn"
+              class="bg-transparent border border-white text-white text-sm font-semibold py-2 px-4 rounded-lg transition"
+            >
+              View All
+            </button>
+          </div>
+        </div>
+
+        <!-- Analytics & Reports -->
+        <div class="analytics-card">
+          <div class="flex items-center mb-3">
+            <i class="fa-solid fa-chart-bar text-2xl mr-3"></i>
+            <h3 class="font-bold text-lg">Analytics & Reports</h3>
+          </div>
+          <p class="text-sm opacity-90 mb-4">
+            Access detailed analytics and reports on complaint resolution
+          </p>
+          <div class="flex space-x-2">
+            <button
+              id="view-analytics-btn"
+              class="bg-white text-purple-600 text-sm font-semibold py-2 px-4 rounded-lg transition"
+            >
+              View Analytics
+            </button>
+            <button
+              id="generate-report-btn"
+              class="bg-transparent border border-white text-white text-sm font-semibold py-2 px-4 rounded-lg transition"
+            >
+              Generate Report
+            </button>
+          </div>
+        </div>
+
+        <!-- Escalation Matrix -->
+        <div class="escalation-card">
+          <div class="flex items-center mb-3">
+            <i class="fa-solid fa-arrow-up text-2xl mr-3"></i>
+            <h3 class="font-bold text-lg">Escalation Matrix</h3>
+          </div>
+          <p class="text-sm opacity-90 mb-4">
+            Understand the complaint escalation process and hierarchy
+          </p>
+          <div class="flex space-x-2">
+            <button
+              id="view-escalation-btn"
+              class="bg-white text-red-600 text-sm font-semibold py-2 px-4 rounded-lg transition"
+            >
+              View Matrix
+            </button>
+            <button
+              id="escalate-complaint-btn"
+              class="bg-transparent border border-white text-white text-sm font-semibold py-2 px-4 rounded-lg transition"
+            >
+              Escalate Complaint
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Complaints Section -->
+      <div class="bg-card rounded-xl shadow-lg p-6 mb-6">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">Recent Complaints</h3>
+          <button
+            class="text-blue-400 hover:text-blue-300 font-medium text-sm"
+            id="view-all-complaints"
+          >
+            <i class="fa-solid fa-eye mr-1"></i> View All
+          </button>
+        </div>
+        <div class="space-y-4">
+          <div class="complaint-item-card priority-high">
+            <div class="flex justify-between items-start mb-3">
+              <div>
+                <h4 class="font-bold text-white">
+                  Hostel Wi-Fi Connectivity Issue
+                </h4>
+                <p class="text-sm text-gray-400 mb-2">
+                  Complaint ID: CMP2025001 | Submitted: Dec 10, 2025
+                </p>
+                <div>
+                  <span class="category-tag category-hostel">Hostel</span>
+                  <span class="category-tag category-infrastructure"
+                    >Infrastructure</span
+                  >
+                </div>
+              </div>
+              <div class="text-right">
+                <span
+                  class="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full"
+                  >High Priority</span
+                >
+                <div class="mt-2 flex items-center">
+                  <span class="status-indicator status-in-progress"></span>
+                  <span class="text-xs text-yellow-400">In Progress</span>
+                </div>
+              </div>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: 60%"></div>
+            </div>
+            <div class="text-xs text-gray-400 mt-1">
+              60% Complete - Under Investigation
+            </div>
+          </div>
+
+          <div class="complaint-item-card priority-medium">
+            <div class="flex justify-between items-start mb-3">
+              <div>
+                <h4 class="font-bold text-white">Library Book Availability</h4>
+                <p class="text-sm text-gray-400 mb-2">
+                  Complaint ID: CMP2025002 | Submitted: Dec 9, 2025
+                </p>
+                <div>
+                  <span class="category-tag category-academic">Academic</span>
+                  <span class="category-tag category-infrastructure"
+                    >Infrastructure</span
+                  >
+                </div>
+              </div>
+              <div class="text-right">
+                <span
+                  class="bg-yellow-500 text-white text-xs font-bold px-2 py-1 rounded-full"
+                  >Medium Priority</span
+                >
+                <div class="mt-2 flex items-center">
+                  <span class="status-indicator status-resolved"></span>
+                  <span class="text-xs text-green-400">Resolved</span>
+                </div>
+              </div>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: 100%"></div>
+            </div>
+            <div class="text-xs text-gray-400 mt-1">
+              100% Complete - Resolved on Dec 11, 2025
+            </div>
+          </div>
+
+          <div class="complaint-item-card priority-low">
+            <div class="flex justify-between items-start mb-3">
+              <div>
+                <h4 class="font-bold text-white">Cafeteria Food Quality</h4>
+                <p class="text-sm text-gray-400 mb-2">
+                  Complaint ID: CMP2025003 | Submitted: Dec 8, 2025
+                </p>
+                <div>
+                  <span class="category-tag category-hostel">Hostel</span>
+                  <span class="category-tag category-other">Other</span>
+                </div>
+              </div>
+              <div class="text-right">
+                <span
+                  class="bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full"
+                  >Low Priority</span
+                >
+                <div class="mt-2 flex items-center">
+                  <span class="status-indicator status-new"></span>
+                  <span class="text-xs text-blue-400">New</span>
+                </div>
+              </div>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: 20%"></div>
+            </div>
+            <div class="text-xs text-gray-400 mt-1">
+              20% Complete - Awaiting Assignment
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resolution Time Tracking & Satisfaction Ratings -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <!-- Resolution Time Tracking -->
+        <div class="bg-card rounded-xl shadow-lg p-6">
+          <div class="flex justify-between items-center mb-6">
+            <h3 class="text-xl font-bold text-white">
+              Resolution Time Tracking
+            </h3>
+            <div class="flex items-center text-sm text-green-400">
+              <span class="status-indicator bg-green-500"></span>
+              On Track
+            </div>
+          </div>
+
+          <div class="space-y-4">
+            <div>
+              <h5 class="font-bold text-white mb-2">
+                Average Resolution Times
+              </h5>
+              <div class="space-y-2">
+                <div class="flex justify-between text-sm">
+                  <span class="text-gray-400">High Priority Complaints:</span>
+                  <span class="text-white">2.3 days</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                  <span class="text-gray-400">Medium Priority Complaints:</span>
+                  <span class="text-white">4.7 days</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                  <span class="text-gray-400">Low Priority Complaints:</span>
+                  <span class="text-white">7.2 days</span>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h5 class="font-bold text-white mb-2">
+                Your Complaint Resolution
+              </h5>
+              <div class="space-y-2">
+                <div class="flex justify-between text-sm">
+                  <span class="text-gray-400">Fastest Resolution:</span>
+                  <span class="text-green-400">1 day</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                  <span class="text-gray-400">Average Resolution:</span>
+                  <span class="text-white">3.5 days</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                  <span class="text-gray-400">Longest Resolution:</span>
+                  <span class="text-yellow-400">12 days</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-6 flex space-x-2">
+            <button
+              id="view-resolution-times-btn"
+              class="flex-1 bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition"
+            >
+              <i class="fa-solid fa-clock mr-2"></i>View Details
+            </button>
+          </div>
+        </div>
+
+        <!-- Satisfaction Ratings -->
+        <div class="bg-card rounded-xl shadow-lg p-6">
+          <div class="flex justify-between items-center mb-6">
+            <h3 class="text-xl font-bold text-white">Satisfaction Ratings</h3>
+            <button
+              class="text-blue-400 hover:text-blue-300 font-medium text-sm"
+              id="view-all-ratings-btn"
+            >
+              <i class="fa-solid fa-eye mr-1"></i> View All
+            </button>
+          </div>
+
+          <div class="space-y-4">
+            <div>
+              <h5 class="font-bold text-white mb-2">Your Recent Ratings</h5>
+              <div class="space-y-3">
+                <div class="flex justify-between items-center">
+                  <span class="text-gray-400">Hostel Maintenance</span>
+                  <div class="flex">
+                    <i class="fas fa-star text-yellow-400"></i>
+                    <i class="fas fa-star text-yellow-400"></i>
+                    <i class="fas fa-star text-yellow-400"></i>
+                    <i class="fas fa-star text-yellow-400"></i>
+                    <i class="far fa-star text-yellow-400"></i>
+                  </div>
+                </div>
+                <div class="flex justify-between items-center">
+                  <span class="text-gray-400">Academic Support</span>
+                  <div class="flex">
+                    <i class="fas fa-star text-yellow-400"></i>
+                    <i class="fas fa-star text-yellow-400"></i>
+                    <i class="fas fa-star text-yellow-400"></i>
+                    <i class="fas fa-star text-yellow-400"></i>
+                    <i class="fas fa-star text-yellow-400"></i>
+                  </div>
+                </div>
+                <div class="flex justify-between items-center">
+                  <span class="text-gray-400">Administrative Services</span>
+                  <div class="flex">
+                    <i class="fas fa-star text-yellow-400"></i>
+                    <i class="fas fa-star text-yellow-400"></i>
+                    <i class="fas fa-star text-yellow-400"></i>
+                    <i class="far fa-star text-yellow-400"></i>
+                    <i class="far fa-star text-yellow-400"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h5 class="font-bold text-white mb-2">Overall Satisfaction</h5>
+              <div class="flex items-center">
+                <div class="text-3xl font-bold text-yellow-400 mr-3">4.2</div>
+                <div class="flex">
+                  <i class="fas fa-star text-yellow-400"></i>
+                  <i class="fas fa-star text-yellow-400"></i>
+                  <i class="fas fa-star text-yellow-400"></i>
+                  <i class="fas fa-star text-yellow-400"></i>
+                  <i class="far fa-star text-yellow-400"></i>
+                </div>
+              </div>
+              <p class="text-sm text-gray-400 mt-1">
+                Based on 14 resolved complaints
+              </p>
+            </div>
+          </div>
+
+          <div class="mt-6 flex space-x-2">
+            <button
+              id="provide-feedback-btn"
+              class="flex-1 bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition"
+            >
+              <i class="fa-solid fa-comment mr-2"></i>Provide Feedback
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Additional Features Section -->
+      <div class="bg-card rounded-xl shadow-lg p-6">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">
+            Additional Complaint Management Features
+          </h3>
+          <div class="flex items-center text-sm text-blue-400">
+            <span class="status-indicator bg-blue-500"></span>
+            All Features Active
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Knowledge Base -->
+          <div class="complaint-feature-card">
+            <div class="flex items-center mb-3">
+              <i class="fa-solid fa-book text-2xl mr-3"></i>
+              <h4 class="font-bold text-lg">Knowledge Base</h4>
+            </div>
+            <p class="text-sm opacity-90 mb-4">
+              Access solutions to common issues before submitting a complaint
+            </p>
+            <button
+              id="view-knowledge-base-btn"
+              class="w-full bg-white text-blue-600 text-sm font-semibold py-2 px-4 rounded-lg transition"
+            >
+              View Knowledge Base
+            </button>
+          </div>
+
+          <!-- Service Level Agreements -->
+          <div class="tracking-card">
+            <div class="flex items-center mb-3">
+              <i class="fa-solid fa-file-contract text-2xl mr-3"></i>
+              <h4 class="font-bold text-lg">Service Level Agreements</h4>
+            </div>
+            <p class="text-sm opacity-90 mb-4">
+              Understand the expected resolution times for different complaint
+              types
+            </p>
+            <button
+              id="view-sla-btn"
+              class="w-full bg-white text-green-600 text-sm font-semibold py-2 px-4 rounded-lg transition"
+            >
+              View SLAs
+            </button>
+          </div>
+
+          <!-- Support & Help -->
+          <div class="escalation-card">
+            <div class="flex items-center mb-3">
+              <i class="fa-solid fa-headset text-2xl mr-3"></i>
+              <h4 class="font-bold text-lg">Support & Help</h4>
+            </div>
+            <p class="text-sm opacity-90 mb-4">
+              Get assistance with the complaint submission and tracking process
+            </p>
+            <button
+              id="contact-support-btn"
+              class="w-full bg-white text-red-600 text-sm font-semibold py-2 px-4 rounded-lg transition"
+            >
+              Contact Support
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Submit Complaint Modal -->
+    <div id="submit-complaint-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">Submit New Complaint</h3>
+          <button
+            id="close-submit-complaint"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <div class="space-y-6">
+          <div class="bg-gray-700 rounded-lg p-4">
+            <h4 class="font-bold text-white mb-4">Complaint Details</h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="form-group">
+                <label class="form-label">Complaint Category</label>
+                <select class="form-input" id="complaint-category">
+                  <option value="">Select Category</option>
+                  <option value="academic">Academic</option>
+                  <option value="infrastructure">Infrastructure</option>
+                  <option value="administrative">Administrative</option>
+                  <option value="hostel">Hostel</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Priority Level</label>
+                <select class="form-input" id="complaint-priority">
+                  <option value="">Select Priority</option>
+                  <option value="low">Low</option>
+                  <option value="medium">Medium</option>
+                  <option value="high">High</option>
+                  <option value="urgent">Urgent</option>
+                </select>
+              </div>
+              <div class="form-group md:col-span-2">
+                <label class="form-label">Complaint Title</label>
+                <input
+                  type="text"
+                  class="form-input"
+                  placeholder="Brief description of your complaint"
+                />
+              </div>
+              <div class="form-group md:col-span-2">
+                <label class="form-label">Complaint Description</label>
+                <textarea
+                  class="form-input"
+                  rows="4"
+                  placeholder="Please provide detailed information about your complaint"
+                ></textarea>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Location</label>
+                <select class="form-input">
+                  <option value="">Select Location</option>
+                  <option value="boys-a">Boys Hostel A</option>
+                  <option value="boys-b">Boys Hostel B</option>
+                  <option value="girls-a">Girls Hostel A</option>
+                  <option value="girls-b">Girls Hostel B</option>
+                  <option value="academic-block">Academic Block</option>
+                  <option value="library">Library</option>
+                  <option value="cafeteria">Cafeteria</option>
+                  <option value="sports-complex">Sports Complex</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Preferred Contact Method</label>
+                <select class="form-input">
+                  <option value="email">Email</option>
+                  <option value="phone">Phone</option>
+                  <option value="both">Both</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-gray-700 rounded-lg p-4">
+            <h4 class="font-bold text-white mb-4">Attachments (Optional)</h4>
+            <div
+              class="border-2 border-dashed border-gray-600 rounded-lg p-4 text-center"
+            >
+              <i
+                class="fa-solid fa-cloud-arrow-up text-2xl text-gray-400 mb-2"
+              ></i>
+              <p class="text-gray-400">
+                Upload supporting documents or images (Max: 5 files, 10MB each)
+              </p>
+              <button
+                class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg mt-2 hover:bg-blue-700 transition"
+              >
+                Choose Files
+              </button>
+            </div>
+          </div>
+
+          <div class="flex justify-end space-x-2">
+            <button
+              id="submit-complaint-confirm-btn"
+              class="bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition"
+            >
+              Submit Complaint
+            </button>
+            <button
+              class="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+              onclick="closeModal('submit-complaint-modal')"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Track Complaint Modal -->
+    <div id="track-complaint-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">Track Complaint Status</h3>
+          <button
+            id="close-track-complaint"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <div class="space-y-6">
+          <div class="bg-gray-700 rounded-lg p-4">
+            <h4 class="font-bold text-white mb-4">Enter Complaint Details</h4>
+            <div class="form-group">
+              <label class="form-label">Complaint ID</label>
+              <input
+                type="text"
+                class="form-input"
+                id="tracking-id"
+                placeholder="e.g., CMP2025001"
+                value="CMP2025001"
+              />
+            </div>
+            <button
+              id="track-complaint-submit"
+              class="w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition"
+            >
+              Track Complaint
+            </button>
+          </div>
+
+          <div class="bg-gray-700 rounded-lg p-4">
+            <h4 class="font-bold text-white mb-4">Complaint Status</h4>
+            <div class="timeline">
+              <div class="timeline-item">
+                <h5 class="font-bold text-white">Complaint Submitted</h5>
+                <p class="text-sm text-gray-400">Dec 10, 2025 - 2:00 PM</p>
+                <p class="text-sm text-gray-400 mt-1">
+                  Your complaint has been registered successfully.
+                </p>
+              </div>
+              <div class="timeline-item">
+                <h5 class="font-bold text-white">Under Review</h5>
+                <p class="text-sm text-gray-400">Dec 10, 2025 - 3:30 PM</p>
+                <p class="text-sm text-gray-400 mt-1">
+                  Complaint has been assigned to the relevant department.
+                </p>
+              </div>
+              <div class="timeline-item">
+                <h5 class="font-bold text-white">Investigation In Progress</h5>
+                <p class="text-sm text-gray-400">Dec 11, 2025 - 10:15 AM</p>
+                <p class="text-sm text-gray-400 mt-1">
+                  Our team is currently investigating your complaint.
+                </p>
+              </div>
+              <div class="timeline-item">
+                <h5 class="font-bold text-white">Resolution Proposed</h5>
+                <p class="text-sm text-gray-400">Dec 12, 2025 - 11:45 AM</p>
+                <p class="text-sm text-gray-400 mt-1">
+                  A resolution has been proposed and is awaiting your feedback.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex justify-end">
+            <button
+              class="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+              onclick="closeModal('track-complaint-modal')"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Escalation Matrix Modal -->
+    <div id="escalation-matrix-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">
+            Complaint Escalation Matrix
+          </h3>
+          <button
+            id="close-escalation-matrix"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <div class="space-y-6">
+          <div class="bg-gray-700 rounded-lg p-4">
+            <h4 class="font-bold text-white mb-4">Escalation Hierarchy</h4>
+            <div class="overflow-x-auto">
+              <table class="escalation-matrix">
+                <thead>
+                  <tr>
+                    <th>Level</th>
+                    <th>Time Frame</th>
+                    <th>Responsible Person/Department</th>
+                    <th>Contact</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Level 1</td>
+                    <td>0-24 hours</td>
+                    <td>Frontline Support Staff</td>
+                    <td>support@vitbhopal.ac.in</td>
+                  </tr>
+                  <tr>
+                    <td>Level 2</td>
+                    <td>24-72 hours</td>
+                    <td>Department Head</td>
+                    <td>dept-head@vitbhopal.ac.in</td>
+                  </tr>
+                  <tr>
+                    <td>Level 3</td>
+                    <td>3-7 days</td>
+                    <td>Administrative Officer</td>
+                    <td>admin@vitbhopal.ac.in</td>
+                  </tr>
+                  <tr>
+                    <td>Level 4</td>
+                    <td>7+ days</td>
+                    <td>Dean of Students</td>
+                    <td>dean@vitbhopal.ac.in</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="bg-gray-700 rounded-lg p-4">
+            <h4 class="font-bold text-white mb-4">Escalation Criteria</h4>
+            <div class="space-y-3">
+              <div class="flex justify-between">
+                <span class="text-gray-400">Automatic Escalation:</span>
+                <span class="text-white"
+                  >After 72 hours without resolution</span
+                >
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-400">Manual Escalation:</span>
+                <span class="text-white">Available after 24 hours</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-400">High Priority Complaints:</span>
+                <span class="text-white">Automatically start at Level 2</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex justify-end">
+            <button
+              class="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+              onclick="closeModal('escalation-matrix-modal')"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Satisfaction Rating Modal -->
+    <div id="satisfaction-rating-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">Rate Your Satisfaction</h3>
+          <button
+            id="close-satisfaction-rating"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <div class="space-y-6">
+          <div class="bg-gray-700 rounded-lg p-4">
+            <h4 class="font-bold text-white mb-4">
+              Complaint: Hostel Wi-Fi Connectivity Issue
+            </h4>
+            <p class="text-sm text-gray-400 mb-4">
+              Complaint ID: CMP2025001 | Resolved on: Dec 12, 2025
+            </p>
+
+            <div class="form-group">
+              <label class="form-label">Overall Satisfaction</label>
+              <div class="satisfaction-rating">
+                <i class="fas fa-star rating-star" data-rating="1"></i>
+                <i class="fas fa-star rating-star" data-rating="2"></i>
+                <i class="fas fa-star rating-star" data-rating="3"></i>
+                <i class="fas fa-star rating-star" data-rating="4"></i>
+                <i class="fas fa-star rating-star" data-rating="5"></i>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Additional Feedback (Optional)</label>
+              <textarea
+                class="form-input"
+                rows="3"
+                placeholder="Please share any additional comments about your experience"
+              ></textarea>
+            </div>
+          </div>
+
+          <div class="flex justify-end space-x-2">
+            <button
+              id="submit-rating-btn"
+              class="bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition"
+            >
+              Submit Rating
+            </button>
+            <button
+              class="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+              onclick="closeModal('satisfaction-rating-modal')"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Analytics Modal -->
+    <div id="analytics-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">Complaint Analytics</h3>
+          <button
+            id="close-analytics"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <div class="space-y-6">
+          <div class="bg-gray-700 rounded-lg p-4">
+            <h4 class="font-bold text-white mb-4">Complaint Statistics</h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="bg-blue-900 p-4 rounded-lg text-center">
+                <div class="text-2xl font-bold text-white">24</div>
+                <div class="text-sm text-blue-300">Total Complaints</div>
+              </div>
+              <div class="bg-green-900 p-4 rounded-lg text-center">
+                <div class="text-2xl font-bold text-white">14</div>
+                <div class="text-sm text-green-300">Resolved Complaints</div>
+              </div>
+              <div class="bg-yellow-900 p-4 rounded-lg text-center">
+                <div class="text-2xl font-bold text-white">8</div>
+                <div class="text-sm text-yellow-300">Pending Complaints</div>
+              </div>
+              <div class="bg-red-900 p-4 rounded-lg text-center">
+                <div class="text-2xl font-bold text-white">2</div>
+                <div class="text-sm text-red-300">Escalated Complaints</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-gray-700 rounded-lg p-4">
+            <h4 class="font-bold text-white mb-4">
+              Complaint Distribution by Category
+            </h4>
+            <div class="space-y-3">
+              <div>
+                <div class="flex justify-between mb-1">
+                  <span class="text-gray-400">Academic</span>
+                  <span class="text-white">35%</span>
+                </div>
+                <div class="progress-bar">
+                  <div class="progress-fill" style="width: 35%"></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between mb-1">
+                  <span class="text-gray-400">Infrastructure</span>
+                  <span class="text-white">25%</span>
+                </div>
+                <div class="progress-bar">
+                  <div class="progress-fill" style="width: 25%"></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between mb-1">
+                  <span class="text-gray-400">Hostel</span>
+                  <span class="text-white">20%</span>
+                </div>
+                <div class="progress-bar">
+                  <div class="progress-fill" style="width: 20%"></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between mb-1">
+                  <span class="text-gray-400">Administrative</span>
+                  <span class="text-white">15%</span>
+                </div>
+                <div class="progress-bar">
+                  <div class="progress-fill" style="width: 15%"></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between mb-1">
+                  <span class="text-gray-400">Other</span>
+                  <span class="text-white">5%</span>
+                </div>
+                <div class="progress-bar">
+                  <div class="progress-fill" style="width: 5%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex justify-end">
+            <button
+              class="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+              onclick="closeModal('analytics-modal')"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Knowledge Base Modal -->
+    <div id="knowledge-base-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">Knowledge Base</h3>
+          <button
+            id="close-knowledge-base"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <div class="space-y-6">
+          <div class="bg-gray-700 rounded-lg p-4">
+            <h4 class="font-bold text-white mb-4">
+              Frequently Asked Questions
+            </h4>
+            <div class="space-y-4">
+              <div class="knowledge-base-item">
+                <h5 class="font-bold text-white">
+                  How long does it take to resolve a complaint?
+                </h5>
+                <p class="text-sm text-gray-400 mt-2">
+                  Resolution times vary based on complaint priority. High
+                  priority complaints are typically resolved within 3 days,
+                  medium within 7 days, and low priority within 14 days.
+                </p>
+              </div>
+              <div class="knowledge-base-item">
+                <h5 class="font-bold text-white">
+                  Can I update my complaint after submission?
+                </h5>
+                <p class="text-sm text-gray-400 mt-2">
+                  Yes, you can add additional information to your complaint by
+                  using the "Update Complaint" feature in the complaint tracking
+                  section.
+                </p>
+              </div>
+              <div class="knowledge-base-item">
+                <h5 class="font-bold text-white">
+                  What should I do if my complaint hasn't been resolved in the
+                  expected time?
+                </h5>
+                <p class="text-sm text-gray-400 mt-2">
+                  If your complaint exceeds the expected resolution time, you
+                  can use the escalation feature to bring it to the attention of
+                  higher authorities.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-gray-700 rounded-lg p-4">
+            <h4 class="font-bold text-white mb-4">Quick Solutions</h4>
+            <div class="space-y-4">
+              <div class="knowledge-base-item">
+                <h5 class="font-bold text-white">Wi-Fi Connectivity Issues</h5>
+                <p class="text-sm text-gray-400 mt-2">
+                  Try restarting your router, checking cable connections, or
+                  contacting the IT department directly at
+                  it-support@vitbhopal.ac.in
+                </p>
+              </div>
+              <div class="knowledge-base-item">
+                <h5 class="font-bold text-white">Library Book Availability</h5>
+                <p class="text-sm text-gray-400 mt-2">
+                  Check the online library catalog first. If the book is listed
+                  as available but you can't find it, ask the librarian for
+                  assistance.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex justify-end">
+            <button
+              class="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+              onclick="closeModal('knowledge-base-modal')"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLA Modal -->
+    <div id="sla-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">Service Level Agreements</h3>
+          <button
+            id="close-sla"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <div class="space-y-6">
+          <div class="bg-gray-700 rounded-lg p-4">
+            <h4 class="font-bold text-white mb-4">Complaint Resolution SLAs</h4>
+            <div class="space-y-4">
+              <div class="sla-card met">
+                <h5 class="font-bold text-white">High Priority Complaints</h5>
+                <p class="text-sm text-gray-400 mt-2">
+                  Resolution Time: 3 business days
+                </p>
+                <p class="text-sm text-green-400 mt-1">
+                  Current Performance: 2.3 days (Meeting SLA)
+                </p>
+              </div>
+              <div class="sla-card met">
+                <h5 class="font-bold text-white">Medium Priority Complaints</h5>
+                <p class="text-sm text-gray-400 mt-2">
+                  Resolution Time: 7 business days
+                </p>
+                <p class="text-sm text-green-400 mt-1">
+                  Current Performance: 4.7 days (Meeting SLA)
+                </p>
+              </div>
+              <div class="sla-card met">
+                <h5 class="font-bold text-white">Low Priority Complaints</h5>
+                <p class="text-sm text-gray-400 mt-2">
+                  Resolution Time: 14 business days
+                </p>
+                <p class="text-sm text-green-400 mt-1">
+                  Current Performance: 7.2 days (Meeting SLA)
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-gray-700 rounded-lg p-4">
+            <h4 class="font-bold text-white mb-4">Response Time SLAs</h4>
+            <div class="space-y-4">
+              <div class="sla-card met">
+                <h5 class="font-bold text-white">Initial Response</h5>
+                <p class="text-sm text-gray-400 mt-2">
+                  Response Time: 24 hours
+                </p>
+                <p class="text-sm text-green-400 mt-1">
+                  Current Performance: 12 hours (Meeting SLA)
+                </p>
+              </div>
+              <div class="sla-card met">
+                <h5 class="font-bold text-white">Status Updates</h5>
+                <p class="text-sm text-gray-400 mt-2">
+                  Update Frequency: Every 3 days
+                </p>
+                <p class="text-sm text-green-400 mt-1">
+                  Current Performance: Every 2 days (Meeting SLA)
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex justify-end">
+            <button
+              class="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+              onclick="closeModal('sla-modal')"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Support Modal -->
+    <div id="support-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">Support & Help</h3>
+          <button
+            id="close-support"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <div class="space-y-6">
+          <div class="bg-gray-700 rounded-lg p-4">
+            <h4 class="font-bold text-white mb-4">Live Chat Support</h4>
+            <div class="chat-container">
+              <div class="chat-bubble support">
+                <p>Hello! How can I help you with your complaint today?</p>
+              </div>
+              <div class="chat-bubble user">
+                <p>
+                  I submitted a complaint 3 days ago but haven't received any
+                  update.
+                </p>
+              </div>
+              <div class="chat-bubble support">
+                <p>
+                  I can check the status for you. Could you please provide your
+                  complaint ID?
+                </p>
+              </div>
+            </div>
+            <div class="flex mt-4">
+              <input
+                type="text"
+                class="form-input flex-grow mr-2"
+                placeholder="Type your message..."
+              />
+              <button
+                class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition"
+              >
+                Send
+              </button>
+            </div>
+          </div>
+
+          <div class="bg-gray-700 rounded-lg p-4">
+            <h4 class="font-bold text-white mb-4">Contact Information</h4>
+            <div class="space-y-3">
+              <div class="flex justify-between">
+                <span class="text-gray-400">Phone Support:</span>
+                <span class="text-white">07562-654321</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-400">Email Support:</span>
+                <span class="text-white">complaints@vitbhopal.ac.in</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-400">Office Hours:</span>
+                <span class="text-white">Mon-Sat: 8:00 AM - 8:00 PM</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-400">Emergency Support:</span>
+                <span class="text-white">07562-654322 (24/7)</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex justify-end">
+            <button
+              class="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+              onclick="closeModal('support-modal')"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Message Box for notifications -->
+    <div
+      id="message-box"
+      class="fixed bottom-4 right-4 bg-gray-700 text-white p-4 rounded-lg shadow-lg hidden message-box"
+    >
+      <p id="message-text"></p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+      // JavaScript to display the current date and time
+      function updateDateTime() {
+        const now = new Date();
+        const options = {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        };
+        const formattedDateTime = now.toLocaleDateString("en-US", options);
+        document.getElementById("date-time-display").textContent =
+          formattedDateTime;
+      }
+      updateDateTime();
+      setInterval(updateDateTime, 60000);
+
+      // Modal functionality
+      function showModal(modalId) {
+        document.getElementById(modalId).classList.add("active");
+      }
+
+      function closeModal(modalId) {
+        document.getElementById(modalId).classList.remove("active");
+      }
+
+      // Function to show a custom message box
+      function showMessage(text, type = "info") {
+        const messageBox = document.getElementById("message-box");
+        const messageText = document.getElementById("message-text");
+
+        messageText.textContent = text;
+        messageBox.classList.remove(
+          "hidden",
+          "bg-red-700",
+          "bg-green-700",
+          "bg-blue-700"
+        );
+
+        if (type === "error") {
+          messageBox.classList.add("bg-red-700");
+        } else if (type === "success") {
+          messageBox.classList.add("bg-green-700");
+        } else if (type === "info") {
+          messageBox.classList.add("bg-blue-700");
+        } else {
+          messageBox.classList.add("bg-gray-700");
+        }
+
+        setTimeout(() => {
+          messageBox.classList.add("hidden");
+        }, 4000);
+      }
+
+      // Initialize the application
+      function init() {
+        // Submit Complaint button
+        document
+          .getElementById("submit-complaint-btn")
+          .addEventListener("click", function () {
+            showModal("submit-complaint-modal");
+          });
+
+        // Quick Complaint button
+        document
+          .getElementById("quick-complaint-btn")
+          .addEventListener("click", function () {
+            showModal("submit-complaint-modal");
+          });
+
+        // Track Complaint button
+        document
+          .getElementById("track-complaint-btn")
+          .addEventListener("click", function () {
+            showModal("track-complaint-modal");
+          });
+
+        // View All Complaints button
+        document
+          .getElementById("view-all-complaints-btn")
+          .addEventListener("click", function () {
+            showMessage("Opening all complaints view...", "info");
+          });
+
+        // View Analytics button
+        document
+          .getElementById("view-analytics-btn")
+          .addEventListener("click", function () {
+            showModal("analytics-modal");
+          });
+
+        // Generate Report button
+        document
+          .getElementById("generate-report-btn")
+          .addEventListener("click", function () {
+            showMessage("Generating complaint report...", "info");
+          });
+
+        // View Escalation Matrix button
+        document
+          .getElementById("view-escalation-btn")
+          .addEventListener("click", function () {
+            showModal("escalation-matrix-modal");
+          });
+
+        // Escalate Complaint button
+        document
+          .getElementById("escalate-complaint-btn")
+          .addEventListener("click", function () {
+            showMessage("Opening complaint escalation form...", "info");
+          });
+
+        // View All Complaints link
+        document
+          .getElementById("view-all-complaints")
+          .addEventListener("click", function () {
+            showMessage("Loading all complaints...", "info");
+          });
+
+        // View Resolution Times button
+        document
+          .getElementById("view-resolution-times-btn")
+          .addEventListener("click", function () {
+            showMessage("Opening resolution time details...", "info");
+          });
+
+        // View All Ratings button
+        document
+          .getElementById("view-all-ratings-btn")
+          .addEventListener("click", function () {
+            showMessage("Loading all satisfaction ratings...", "info");
+          });
+
+        // Provide Feedback button
+        document
+          .getElementById("provide-feedback-btn")
+          .addEventListener("click", function () {
+            showModal("satisfaction-rating-modal");
+          });
+
+        // Knowledge Base button
+        document
+          .getElementById("view-knowledge-base-btn")
+          .addEventListener("click", function () {
+            showModal("knowledge-base-modal");
+          });
+
+        // View SLA button
+        document
+          .getElementById("view-sla-btn")
+          .addEventListener("click", function () {
+            showModal("sla-modal");
+          });
+
+        // Contact Support button
+        document
+          .getElementById("contact-support-btn")
+          .addEventListener("click", function () {
+            showModal("support-modal");
+          });
+
+        // Close modals
+        document
+          .getElementById("close-submit-complaint")
+          .addEventListener("click", function () {
+            closeModal("submit-complaint-modal");
+          });
+
+        document
+          .getElementById("close-track-complaint")
+          .addEventListener("click", function () {
+            closeModal("track-complaint-modal");
+          });
+
+        document
+          .getElementById("close-escalation-matrix")
+          .addEventListener("click", function () {
+            closeModal("escalation-matrix-modal");
+          });
+
+        document
+          .getElementById("close-satisfaction-rating")
+          .addEventListener("click", function () {
+            closeModal("satisfaction-rating-modal");
+          });
+
+        document
+          .getElementById("close-analytics")
+          .addEventListener("click", function () {
+            closeModal("analytics-modal");
+          });
+
+        document
+          .getElementById("close-knowledge-base")
+          .addEventListener("click", function () {
+            closeModal("knowledge-base-modal");
+          });
+
+        document
+          .getElementById("close-sla")
+          .addEventListener("click", function () {
+            closeModal("sla-modal");
+          });
+
+        document
+          .getElementById("close-support")
+          .addEventListener("click", function () {
+            closeModal("support-modal");
+          });
+
+        // Form submission handlers
+        document
+          .getElementById("submit-complaint-confirm-btn")
+          .addEventListener("click", function () {
+            const category =
+              document.getElementById("complaint-category").value;
+            const priority =
+              document.getElementById("complaint-priority").value;
+
+            if (!category || !priority) {
+              showMessage("Please select both category and priority", "error");
+              return;
+            }
+
+            showMessage("Complaint submitted successfully!", "success");
+            closeModal("submit-complaint-modal");
+
+            // Update dashboard stats
+            const totalComplaints = document.getElementById("total-complaints");
+            totalComplaints.textContent =
+              parseInt(totalComplaints.textContent) + 1;
+
+            const pendingComplaints =
+              document.getElementById("pending-complaints");
+            pendingComplaints.textContent =
+              parseInt(pendingComplaints.textContent) + 1;
+          });
+
+        document
+          .getElementById("track-complaint-submit")
+          .addEventListener("click", function () {
+            const trackingId = document.getElementById("tracking-id").value;
+            if (!trackingId) {
+              showMessage("Please enter a complaint ID", "error");
+              return;
+            }
+            showMessage(`Tracking complaint: ${trackingId}`, "success");
+          });
+
+        document
+          .getElementById("submit-rating-btn")
+          .addEventListener("click", function () {
+            showMessage("Thank you for your feedback!", "success");
+            closeModal("satisfaction-rating-modal");
+          });
+
+        // Star rating functionality
+        const ratingStars = document.querySelectorAll(".rating-star");
+        let currentRating = 0;
+
+        ratingStars.forEach((star) => {
+          star.addEventListener("click", function () {
+            const rating = parseInt(this.getAttribute("data-rating"));
+            currentRating = rating;
+
+            // Update star display
+            ratingStars.forEach((s, index) => {
+              if (index < rating) {
+                s.classList.add("active");
+                s.classList.remove("far");
+                s.classList.add("fas");
+              } else {
+                s.classList.remove("active");
+                s.classList.remove("fas");
+                s.classList.add("far");
+              }
+            });
+          });
+        });
+      }
+
+      // Initialize when DOM is loaded
+      document.addEventListener("DOMContentLoaded", init);
+    </script>
+    <script src="auth_guard.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

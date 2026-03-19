@@ -1,0 +1,2516 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VIT Bhopal | Professional Exam Management System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
+    />
+    <style> @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"); body { font-family: "Inter", sans-serif; color: #d1d5db; } .active-nav-link { background-color: #374151; color: white; } .bg-card { background-color: #374151; } .message-box { animation: slideIn 0.5s forwards; } @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } } .fade-in { animation: fadeIn 0.5s ease-in; } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } } .gradient-border { background: linear-gradient(135deg, #3b82f6, #8b5cf6); padding: 2px; border-radius: 12px; } .gradient-border > div { background: #374151; border-radius: 10px; padding: 1.5rem; } .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); z-index: 1000; align-items: center; justify-content: center; } .modal.active { display: flex; } .modal-content { background: #1f2937; border-radius: 12px; padding: 2rem; max-width: 800px; width: 90%; max-height: 90vh; overflow-y: auto; } .form-group { margin-bottom: 1.5rem; } .form-label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: #d1d5db; } .form-input { width: 100%; background-color: #4b5563; border: 1px solid #6b7280; border-radius: 0.5rem; padding: 0.75rem 1rem; color: white; transition: all 0.3s ease; } .form-input:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3); } .exam-feature-card { background: linear-gradient(135deg, #1e40af, #3730a3); border-radius: 0.75rem; padding: 1.5rem; color: white; transition: all 0.3s ease; } .exam-feature-card:hover { transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3); } .arrangement-card { background: linear-gradient(135deg, #059669, #047857); border-radius: 0.75rem; padding: 1.5rem; color: white; transition: all 0.3s ease; } .arrangement-card:hover { transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3); } .quiet-hours-card { background: linear-gradient(135deg, #7c3aed, #6d28d9); border-radius: 0.75rem; padding: 1.5rem; color: white; transition: all 0.3s ease; } .quiet-hours-card:hover { transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3); } .study-group-card { background: linear-gradient(135deg, #dc2626, #b91c1c); border-radius: 0.75rem; padding: 1.5rem; color: white; transition: all 0.3s ease; } .study-group-card:hover { transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3); } .exam-schedule-card { border-left: 4px solid #3b82f6; background-color: #374151; border-radius: 0.5rem; padding: 1rem; margin-bottom: 1rem; } .special-arrangement-card { border-left: 4px solid #10b981; background-color: #374151; border-radius: 0.5rem; padding: 1rem; margin-bottom: 1rem; } .quiet-hours-status { border-left: 4px solid #8b5cf6; background-color: #374151; border-radius: 0.5rem; padding: 1rem; margin-bottom: 1rem; } .study-group-card-item { border-left: 4px solid #ef4444; background-color: #374151; border-radius: 0.5rem; padding: 1rem; margin-bottom: 1rem; } .status-indicator { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 5px; } .status-active { background-color: #10b981; } .status-inactive { background-color: #6b7280; } .status-violation { background-color: #ef4444; } .calendar-day { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; margin: 2px; cursor: pointer; } .calendar-day.exam { background-color: #ef4444; color: white; } .calendar-day.today { background-color: #3b82f6; color: white; } .calendar-day.selected { background-color: #10b981; color: white; } .noise-level-indicator { height: 20px; background: linear-gradient(90deg, #10b981, #f59e0b, #ef4444); border-radius: 10px; margin: 10px 0; position: relative; } .noise-marker { position: absolute; top: -5px; width: 4px; height: 30px; background-color: white; border-radius: 2px; cursor: pointer; } .exam-countdown { font-size: 2rem; font-weight: bold; text-align: center; background: linear-gradient(135deg, #1e293b, #0f172a); border-radius: 0.75rem; padding: 1.5rem; color: white; } .countdown-unit { display: inline-block; margin: 0 10px; } .countdown-value { font-size: 3rem; font-weight: bold; color: #3b82f6; } .countdown-label { font-size: 0.8rem; color: #d1d5db; text-transform: uppercase; } .schedule-table { width: 100%; border-collapse: collapse; } .schedule-table th, .schedule-table td { padding: 12px; text-align: left; border-bottom: 1px solid #374151; } .schedule-table th { background-color: #374151; color: #d1d5db; font-weight: 600; } .schedule-table tr:hover { background-color: #374151; } .calendar-container { background: linear-gradient(135deg, #1e293b, #0f172a); border-radius: 0.75rem; padding: 1.5rem; } .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; } .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; } .calendar-weekday { text-align: center; font-weight: 600; color: #9ca3af; padding: 5px; } .professional-header { background: linear-gradient(135deg, #1e3a8a, #3730a3); border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; border-left: 6px solid #f59e0b; } </style> <style> .sidebar { transition: transform 0.25s ease-in-out; } .sidebar-collapsed .sidebar { transform: translateX(-110%); } .main-content { transition: margin-left 0.25s ease-in-out; } .sidebar-collapsed .main-content { margin-left: 0 !important; } @media (max-width: 768px) { .sidebar { transform: translateX(-110%); } .sidebar-open .sidebar { transform: translateX(0); } } </style></head>
+  <body class="bg-gray-900 flex flex-col md:flex-row min-h-screen">
+
+    <!-- Sidebar -->
+    <aside
+      class="sidebar w-full md:w-64 bg-gray-950 text-white p-6 flex flex-col items-center md:items-start space-y-8 shadow-2xl">
+      <div class="flex items-center space-x-2 mb-4">
+        <i class="fas fa-university text-xl text-blue-400"></i>
+        <h1 class="text-xl font-bold">VIT Bhopal</h1>
+        <span class="text-sm text-gray-400 ml-2">Exam Management</span>
+      </div>
+      <nav class="w-full">
+  <ul class="space-y-2">
+    <li>
+      <a href="demo.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-chart-line mr-3"></i>
+        <span class="font-medium">Dashboard</span>
+      </a>
+    </li>
+    <li>
+      <a href="ambulance.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-truck-medical mr-3"></i>
+        <span class="font-medium">Ambulance</span>
+      </a>
+    </li>
+    <li>
+      <a href="doctors.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-user-doctor mr-3"></i>
+        <span class="font-medium">Doctors</span>
+      </a>
+    </li>
+    <li>
+      <a href="medicine_order.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-pills mr-3"></i>
+        <span class="font-medium">Pharmacy</span>
+      </a>
+    </li>
+    <li>
+      <a href="medicine_reminder.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bell mr-3"></i>
+        <span class="font-medium">Medicine Reminder</span>
+      </a>
+    </li>
+    <li>
+      <a href="symptoms_checker.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-stethoscope mr-3"></i>
+        <span class="font-medium">Symptoms Checker</span>
+      </a>
+    </li>
+    <li>
+      <a href="lab_tests.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-vial-circle-check mr-3"></i>
+        <span class="font-medium">Lab Tests</span>
+      </a>
+    </li>
+    <li>
+      <a href="emergency_requests.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-hand-holding-medical mr-3"></i>
+        <span class="font-medium">Emergency Requests</span>
+      </a>
+    </li>
+    <li>
+      <a href="sos.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-sos mr-3"></i>
+        <span class="font-medium">SOS</span>
+      </a>
+    </li>
+    <li>
+      <a href="electronic_health_records.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-file-medical mr-3"></i>
+        <span class="font-medium">Health Records</span>
+      </a>
+    </li>
+    <li>
+      <a href="health_insurance.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-shield-heart mr-3"></i>
+        <span class="font-medium">Health Insurance</span>
+      </a>
+    </li>
+    <li>
+      <a href="reports_and_analytics.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-chart-pie mr-3"></i>
+        <span class="font-medium">Reports & Analytics</span>
+      </a>
+    </li>
+    <li>
+      <a href="restocking.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-box-open mr-3"></i>
+        <span class="font-medium">Inventory</span>
+      </a>
+    </li>
+    <li>
+      <a href="studentrequest.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-cash-register mr-3"></i>
+        <span class="font-medium">Student Requests</span>
+      </a>
+    </li>
+    <li>
+      <a href="student_transport.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bus mr-3"></i>
+        <span class="font-medium">Student Transport</span>
+      </a>
+    </li>
+    <li>
+      <a href="transport_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-route mr-3"></i>
+        <span class="font-medium">Transport Management</span>
+      </a>
+    </li>
+    <li>
+      <a href="room_management.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bed mr-3"></i>
+        <span class="font-medium">Room Management</span>
+      </a>
+    </li>
+    <li>
+      <a href="room_sanitation.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-spray-can-sparkles mr-3"></i>
+        <span class="font-medium">Room Sanitation</span>
+      </a>
+    </li>
+    <li>
+      <a href="mess_menu.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-utensils mr-3"></i>
+        <span class="font-medium">Mess Menu</span>
+      </a>
+    </li>
+    <li>
+      <a href="mess_food_order_service.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bowl-food mr-3"></i>
+        <span class="font-medium">Mess Food Order</span>
+      </a>
+    </li>
+    <li>
+      <a href="laundry_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-shirt mr-3"></i>
+        <span class="font-medium">Laundry</span>
+      </a>
+    </li>
+    <li>
+      <a href="leave_and_outing.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-door-open mr-3"></i>
+        <span class="font-medium">Leave & Outing</span>
+      </a>
+    </li>
+    <li>
+      <a href="vit_bhopal_community.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-users mr-3"></i>
+        <span class="font-medium">VIT Community</span>
+      </a>
+    </li>
+    <li>
+      <a href="parent_notification.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-comments mr-3"></i>
+        <span class="font-medium">Parent Notification</span>
+      </a>
+    </li>
+    <li>
+      <a href="payment_gateway.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-credit-card mr-3"></i>
+        <span class="font-medium">Payment Gateway</span>
+      </a>
+    </li>
+    <li>
+      <a href="complaint_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-circle-exclamation mr-3"></i>
+        <span class="font-medium">Complaints</span>
+      </a>
+    </li>
+    <li>
+      <a href="exam_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-clipboard-list mr-3"></i>
+        <span class="font-medium">Exam Management</span>
+      </a>
+    </li>
+    <li>
+      <a href="local_hospital_network.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-hospital mr-3"></i>
+        <span class="font-medium">Local Hospitals</span>
+      </a>
+    </li>
+    <li>
+      <a href="medical_camps.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-hand-holding-heart mr-3"></i>
+        <span class="font-medium">Medical Camps</span>
+      </a>
+    </li>
+    <li>
+      <a href="virtual_consultation.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-video mr-3"></i>
+        <span class="font-medium">Virtual Consultation</span>
+      </a>
+    </li>
+    <li>
+      <a href="wearables.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-watch-fitness mr-3"></i>
+        <span class="font-medium">Wearables</span>
+      </a>
+    </li>
+    <li>
+      <a href="biometric.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-fingerprint mr-3"></i>
+        <span class="font-medium">Biometric</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+      <div class="mt-auto w-full">
+        <a href="/index.html" data-logout="true"
+          class="flex items-center justify-center w-full px-4 py-3 rounded-lg bg-red-600 hover:bg-red-700 transition-colors duration-200"
+        >
+          <i class="fa-solid fa-right-from-bracket mr-2"></i>
+          <span class="font-semibold">Log Out</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content flex-1 p-8 overflow-y-auto bg-gray-800">
+      <!-- Professional Header -->
+      <div class="professional-header">
+        <div class="flex items-center justify-between">
+          <div>
+            <h1 class="text-3xl font-bold text-white mb-2">
+              VIT Bhopal University
+            </h1>
+            <h2 class="text-xl text-blue-200">Exam Management System</h2>
+            <p class="text-gray-300 mt-2">
+              End Semester Examinations - December 2025
+            </p>
+          </div>
+          <div class="text-right">
+            <div class="text-white font-semibold">Exam Control Room</div>
+            <div class="text-blue-300 font-bold text-xl">07562-654322</div>
+            <div class="text-sm text-gray-300">24/7 During Exam Period</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Top Header -->
+      <header
+        class="flex items-center justify-between text-sm text-gray-400 mb-8"
+      >
+        <div id="date-time-display"></div>
+        <div class="flex items-center space-x-6">
+          <div class="relative">
+            <i
+              class="fa-solid fa-bell text-xl hover:text-white transition duration-200"
+            ></i>
+            <span
+              id="notification-badge"
+              class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center"
+              >5</span
+            >
+          </div>
+          <div class="flex items-center space-x-2">
+            <i class="fa-solid fa-user-circle text-xl"></i>
+            <span>Exam Coordinator</span>
+          </div>
+          <div class="flex items-center space-x-2 cursor-pointer">
+            <i class="fa-solid fa-globe text-xl"></i>
+            <span>English</span>
+            <i class="fa-solid fa-chevron-down text-xs"></i>
+          </div>
+        </div>
+      </header>
+
+      <!-- Quick Stats Dashboard -->
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
+        <!-- Upcoming Exams -->
+        <div class="gradient-border">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-2xl font-bold text-white" id="upcoming-exams">
+                14
+              </div>
+              <div class="text-sm text-blue-300">Upcoming Exams</div>
+            </div>
+            <i class="fa-solid fa-file-pen text-blue-400 text-2xl"></i>
+          </div>
+        </div>
+
+        <!-- Special Arrangements -->
+        <div class="gradient-border">
+          <div class="flex items-center justify-between">
+            <div>
+              <div
+                class="text-2xl font-bold text-white"
+                id="special-arrangements"
+              >
+                23
+              </div>
+              <div class="text-sm text-green-300">Special Arrangements</div>
+            </div>
+            <i class="fa-solid fa-wheelchair text-green-400 text-2xl"></i>
+          </div>
+        </div>
+
+        <!-- Active Study Groups -->
+        <div class="gradient-border">
+          <div class="flex items-center justify-between">
+            <div>
+              <div
+                class="text-2xl font-bold text-white"
+                id="active-study-groups"
+              >
+                42
+              </div>
+              <div class="text-sm text-purple-300">Active Study Groups</div>
+            </div>
+            <i class="fa-solid fa-people-group text-purple-400 text-2xl"></i>
+          </div>
+        </div>
+
+        <!-- Quiet Hours Status -->
+        <div class="gradient-border">
+          <div class="flex items-center justify-between">
+            <div>
+              <div
+                class="text-2xl font-bold text-white"
+                id="quiet-hours-status"
+              >
+                Active
+              </div>
+              <div class="text-sm text-yellow-300">Quiet Hours Status</div>
+            </div>
+            <i class="fa-solid fa-volume-xmark text-yellow-400 text-2xl"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Exam Countdown -->
+      <div class="exam-countdown mb-8">
+        <div class="text-lg text-gray-400 mb-2">
+          Next Exam: Data Structures & Algorithms
+        </div>
+        <div id="countdown-timer">
+          <div class="countdown-unit">
+            <div class="countdown-value" id="countdown-days">05</div>
+            <div class="countdown-label">Days</div>
+          </div>
+          <div class="countdown-unit">
+            <div class="countdown-value" id="countdown-hours">12</div>
+            <div class="countdown-label">Hours</div>
+          </div>
+          <div class="countdown-unit">
+            <div class="countdown-value" id="countdown-minutes">45</div>
+            <div class="countdown-label">Minutes</div>
+          </div>
+          <div class="countdown-unit">
+            <div class="countdown-value" id="countdown-seconds">30</div>
+            <div class="countdown-label">Seconds</div>
+          </div>
+        </div>
+        <div class="text-sm text-gray-400 mt-4">
+          Exam Date: December 15, 2025 | Time: 9:00 AM - 12:00 PM | Venue:
+          Academic Block A-201
+        </div>
+      </div>
+
+      <!-- Main Features Section -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <!-- Special Exam Arrangements -->
+        <div class="exam-feature-card">
+          <div class="flex items-center mb-3">
+            <i class="fa-solid fa-wheelchair text-2xl mr-3"></i>
+            <h3 class="font-bold text-lg">Special Exam Arrangements</h3>
+          </div>
+          <p class="text-sm opacity-90 mb-4">
+            Manage special accommodations for students with disabilities,
+            medical conditions, or other needs
+          </p>
+          <div class="flex space-x-2">
+            <button
+              id="view-arrangements-btn"
+              class="bg-white text-blue-600 text-sm font-semibold py-2 px-4 rounded-lg transition"
+            >
+              View Arrangements
+            </button>
+            <button
+              id="request-arrangement-btn"
+              class="bg-transparent border border-white text-white text-sm font-semibold py-2 px-4 rounded-lg transition"
+            >
+              Request New
+            </button>
+          </div>
+        </div>
+
+        <!-- Quiet Hours Enforcement -->
+        <div
+          class="exam-feature-card"
+          style="background: linear-gradient(135deg, #7c3aed, #6d28d9)"
+        >
+          <div class="flex items-center mb-3">
+            <i class="fa-solid fa-volume-xmark text-2xl mr-3"></i>
+            <h3 class="font-bold text-lg">Quiet Hours Enforcement</h3>
+          </div>
+          <p class="text-sm opacity-90 mb-4">
+            Monitor and enforce quiet hours in hostels and academic blocks
+            during exam periods
+          </p>
+          <div class="flex space-x-2">
+            <button
+              id="view-quiet-hours-btn"
+              class="bg-white text-purple-600 text-sm font-semibold py-2 px-4 rounded-lg transition"
+            >
+              View Status
+            </button>
+            <button
+              id="manage-quiet-hours-btn"
+              class="bg-transparent border border-white text-white text-sm font-semibold py-2 px-4 rounded-lg transition"
+            >
+              Manage Hours
+            </button>
+          </div>
+        </div>
+
+        <!-- Study Group Coordination -->
+        <div
+          class="exam-feature-card"
+          style="background: linear-gradient(135deg, #059669, #047857)"
+        >
+          <div class="flex items-center mb-3">
+            <i class="fa-solid fa-people-group text-2xl mr-3"></i>
+            <h3 class="font-bold text-lg">Study Group Coordination</h3>
+          </div>
+          <p class="text-sm opacity-90 mb-4">
+            Coordinate study groups in hostels and academic blocks with room
+            bookings and schedules
+          </p>
+          <div class="flex space-x-2">
+            <button
+              id="view-study-groups-btn"
+              class="bg-white text-green-600 text-sm font-semibold py-2 px-4 rounded-lg transition"
+            >
+              View Groups
+            </button>
+            <button
+              id="create-study-group-btn"
+              class="bg-transparent border border-white text-white text-sm font-semibold py-2 px-4 rounded-lg transition"
+            >
+              Create Group
+            </button>
+          </div>
+        </div>
+
+        <!-- Exam Schedule & Calendar -->
+        <div
+          class="exam-feature-card"
+          style="background: linear-gradient(135deg, #dc2626, #b91c1c)"
+        >
+          <div class="flex items-center mb-3">
+            <i class="fa-solid fa-calendar-days text-2xl mr-3"></i>
+            <h3 class="font-bold text-lg">Exam Schedule & Calendar</h3>
+          </div>
+          <p class="text-sm opacity-90 mb-4">
+            View and manage the complete exam schedule with dates, times, and
+            venues
+          </p>
+          <div class="flex space-x-2">
+            <button
+              id="view-schedule-btn"
+              class="bg-white text-red-600 text-sm font-semibold py-2 px-4 rounded-lg transition"
+            >
+              View Schedule
+            </button>
+            <button
+              id="download-schedule-btn"
+              class="bg-transparent border border-white text-white text-sm font-semibold py-2 px-4 rounded-lg transition"
+            >
+              Download
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Upcoming Exams Section -->
+      <div class="bg-card rounded-xl shadow-lg p-6 mb-6">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">
+            Upcoming Exams - December 2025
+          </h3>
+          <div class="flex items-center text-sm text-green-400">
+            <span class="status-indicator bg-green-500"></span>
+            All Systems Operational
+          </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="exam-schedule-card">
+            <div class="flex justify-between items-start mb-3">
+              <h4 class="font-bold text-white">Data Structures & Algorithms</h4>
+              <span
+                class="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full"
+                >Major</span
+              >
+            </div>
+            <p class="text-sm text-gray-400 mb-2">
+              Course Code: 20CSE201 | Dr. Sharma
+            </p>
+            <div class="flex justify-between text-sm mb-3">
+              <span
+                ><i class="fa-solid fa-calendar mr-1"></i> Dec 15, 2025</span
+              >
+              <span
+                ><i class="fa-solid fa-clock mr-1"></i> 9:00 AM - 12:00 PM</span
+              >
+            </div>
+            <div class="flex justify-between text-sm">
+              <span
+                ><i class="fa-solid fa-location-dot mr-1"></i> Academic Block
+                A-201</span
+              >
+              <span class="text-green-400"
+                ><i class="fa-solid fa-users mr-1"></i> 85 Students</span
+              >
+            </div>
+          </div>
+
+          <div class="exam-schedule-card">
+            <div class="flex justify-between items-start mb-3">
+              <h4 class="font-bold text-white">Database Management Systems</h4>
+              <span
+                class="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full"
+                >Major</span
+              >
+            </div>
+            <p class="text-sm text-gray-400 mb-2">
+              Course Code: 20CSE202 | Prof. Gupta
+            </p>
+            <div class="flex justify-between text-sm mb-3">
+              <span
+                ><i class="fa-solid fa-calendar mr-1"></i> Dec 18, 2025</span
+              >
+              <span
+                ><i class="fa-solid fa-clock mr-1"></i> 2:00 PM - 5:00 PM</span
+              >
+            </div>
+            <div class="flex justify-between text-sm">
+              <span
+                ><i class="fa-solid fa-location-dot mr-1"></i> Academic Block
+                B-105</span
+              >
+              <span class="text-green-400"
+                ><i class="fa-solid fa-users mr-1"></i> 78 Students</span
+              >
+            </div>
+          </div>
+
+          <div class="exam-schedule-card">
+            <div class="flex justify-between items-start mb-3">
+              <h4 class="font-bold text-white">Operating Systems</h4>
+              <span
+                class="bg-yellow-500 text-white text-xs font-bold px-2 py-1 rounded-full"
+                >Minor</span
+              >
+            </div>
+            <p class="text-sm text-gray-400 mb-2">
+              Course Code: 20CSE203 | Dr. Verma
+            </p>
+            <div class="flex justify-between text-sm mb-3">
+              <span
+                ><i class="fa-solid fa-calendar mr-1"></i> Dec 20, 2025</span
+              >
+              <span
+                ><i class="fa-solid fa-clock mr-1"></i> 9:00 AM - 11:00 AM</span
+              >
+            </div>
+            <div class="flex justify-between text-sm">
+              <span
+                ><i class="fa-solid fa-location-dot mr-1"></i> Academic Block
+                A-305</span
+              >
+              <span class="text-green-400"
+                ><i class="fa-solid fa-users mr-1"></i> 92 Students</span
+              >
+            </div>
+          </div>
+
+          <!-- Additional Major Subjects -->
+          <div class="exam-schedule-card">
+            <div class="flex justify-between items-start mb-3">
+              <h4 class="font-bold text-white">Computer Networks</h4>
+              <span
+                class="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full"
+                >Major</span
+              >
+            </div>
+            <p class="text-sm text-gray-400 mb-2">
+              Course Code: 20CSE204 | Dr. Singh
+            </p>
+            <div class="flex justify-between text-sm mb-3">
+              <span
+                ><i class="fa-solid fa-calendar mr-1"></i> Dec 22, 2025</span
+              >
+              <span
+                ><i class="fa-solid fa-clock mr-1"></i> 2:00 PM - 5:00 PM</span
+              >
+            </div>
+            <div class="flex justify-between text-sm">
+              <span
+                ><i class="fa-solid fa-location-dot mr-1"></i> Academic Block
+                C-101</span
+              >
+              <span class="text-green-400"
+                ><i class="fa-solid fa-users mr-1"></i> 88 Students</span
+              >
+            </div>
+          </div>
+
+          <div class="exam-schedule-card">
+            <div class="flex justify-between items-start mb-3">
+              <h4 class="font-bold text-white">Software Engineering</h4>
+              <span
+                class="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full"
+                >Major</span
+              >
+            </div>
+            <p class="text-sm text-gray-400 mb-2">
+              Course Code: 20CSE205 | Prof. Joshi
+            </p>
+            <div class="flex justify-between text-sm mb-3">
+              <span
+                ><i class="fa-solid fa-calendar mr-1"></i> Dec 25, 2025</span
+              >
+              <span
+                ><i class="fa-solid fa-clock mr-1"></i> 9:00 AM - 12:00 PM</span
+              >
+            </div>
+            <div class="flex justify-between text-sm">
+              <span
+                ><i class="fa-solid fa-location-dot mr-1"></i> Academic Block
+                B-204</span
+              >
+              <span class="text-green-400"
+                ><i class="fa-solid fa-users mr-1"></i> 76 Students</span
+              >
+            </div>
+          </div>
+
+          <div class="exam-schedule-card">
+            <div class="flex justify-between items-start mb-3">
+              <h4 class="font-bold text-white">Artificial Intelligence</h4>
+              <span
+                class="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full"
+                >Major</span
+              >
+            </div>
+            <p class="text-sm text-gray-400 mb-2">
+              Course Code: 20CSE206 | Dr. Reddy
+            </p>
+            <div class="flex justify-between text-sm mb-3">
+              <span
+                ><i class="fa-solid fa-calendar mr-1"></i> Dec 28, 2025</span
+              >
+              <span
+                ><i class="fa-solid fa-clock mr-1"></i> 2:00 PM - 5:00 PM</span
+              >
+            </div>
+            <div class="flex justify-between text-sm">
+              <span
+                ><i class="fa-solid fa-location-dot mr-1"></i> Academic Block
+                A-201</span
+              >
+              <span class="text-green-400"
+                ><i class="fa-solid fa-users mr-1"></i> 81 Students</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quiet Hours & Study Groups Section -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <!-- Quiet Hours Status -->
+        <div class="bg-card rounded-xl shadow-lg p-6">
+          <div class="flex justify-between items-center mb-6">
+            <h3 class="text-xl font-bold text-white">Quiet Hours Status</h3>
+            <div class="flex items-center text-sm text-green-400">
+              <span class="status-indicator bg-green-500"></span>
+              Active
+            </div>
+          </div>
+
+          <div class="space-y-4">
+            <div class="quiet-hours-status">
+              <div class="flex justify-between items-start">
+                <div>
+                  <h5 class="font-bold text-white">
+                    Current Status: Quiet Hours Active
+                  </h5>
+                  <p class="text-sm text-gray-400 mt-1">
+                    10:00 PM - 6:00 AM (Hostels) | 8:00 PM - 8:00 AM (Academic
+                    Block)
+                  </p>
+                </div>
+                <span class="text-xs text-green-400 font-semibold"
+                  >ENFORCED</span
+                >
+              </div>
+            </div>
+
+            <div>
+              <h5 class="font-bold text-white mb-2">Noise Level Monitoring</h5>
+              <div class="noise-level-indicator" id="noise-level-indicator">
+                <div
+                  class="noise-marker"
+                  id="noise-marker"
+                  style="left: 30%"
+                ></div>
+              </div>
+              <div class="flex justify-between text-xs text-gray-400">
+                <span>Quiet</span>
+                <span>Moderate</span>
+                <span>Loud</span>
+              </div>
+              <div class="text-center mt-2">
+                <button
+                  id="test-noise-btn"
+                  class="bg-blue-600 text-white text-xs font-semibold py-1 px-3 rounded-lg"
+                >
+                  Test Noise Level
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <h5 class="font-bold text-white mb-2">Recent Violations</h5>
+              <div class="space-y-2">
+                <div class="flex justify-between text-sm">
+                  <span class="text-gray-400">Boys Hostel B, Floor 2</span>
+                  <span class="text-red-400">12 min ago</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                  <span class="text-gray-400">Academic Block Library</span>
+                  <span class="text-yellow-400">45 min ago</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-6 flex space-x-2">
+            <button
+              id="send-reminder-btn"
+              class="flex-1 bg-purple-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-purple-700 transition"
+            >
+              <i class="fa-solid fa-bell mr-2"></i>Send Reminder
+            </button>
+            <button
+              id="quiet-settings-btn"
+              class="flex-1 bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+            >
+              <i class="fa-solid fa-sliders mr-2"></i>Settings
+            </button>
+          </div>
+        </div>
+
+        <!-- Study Groups -->
+        <div class="bg-card rounded-xl shadow-lg p-6">
+          <div class="flex justify-between items-center mb-6">
+            <h3 class="text-xl font-bold text-white">Active Study Groups</h3>
+            <button
+              class="text-blue-400 hover:text-blue-300 font-medium text-sm"
+              id="view-all-groups-btn"
+            >
+              <i class="fa-solid fa-eye mr-1"></i> View All
+            </button>
+          </div>
+
+          <div class="space-y-4">
+            <div class="study-group-card-item">
+              <div class="flex justify-between items-start">
+                <div>
+                  <h5 class="font-bold text-white">
+                    Data Structures Study Group
+                  </h5>
+                  <p class="text-sm text-gray-400 mt-1">
+                    Hostel Common Room A | Today 7:00 PM - 9:00 PM
+                  </p>
+                  <p class="text-xs text-blue-400 mt-1">
+                    12 Members | Rahul Sharma (Coordinator)
+                  </p>
+                </div>
+                <span class="text-xs text-green-400 font-semibold">ACTIVE</span>
+              </div>
+            </div>
+
+            <div class="study-group-card-item">
+              <div class="flex justify-between items-start">
+                <div>
+                  <h5 class="font-bold text-white">DBMS Revision Session</h5>
+                  <p class="text-sm text-gray-400 mt-1">
+                    Academic Block Room 205 | Tomorrow 4:00 PM - 6:00 PM
+                  </p>
+                  <p class="text-xs text-blue-400 mt-1">
+                    8 Members | Priya Patel (Coordinator)
+                  </p>
+                </div>
+                <span class="text-xs text-yellow-400 font-semibold"
+                  >SCHEDULED</span
+                >
+              </div>
+            </div>
+
+            <div class="study-group-card-item">
+              <div class="flex justify-between items-start">
+                <div>
+                  <h5 class="font-bold text-white">
+                    Operating Systems Workshop
+                  </h5>
+                  <p class="text-sm text-gray-400 mt-1">
+                    Library Study Room 3 | Dec 14, 2:00 PM - 5:00 PM
+                  </p>
+                  <p class="text-xs text-blue-400 mt-1">
+                    15 Members | Amit Kumar (Coordinator)
+                  </p>
+                </div>
+                <span class="text-xs text-yellow-400 font-semibold"
+                  >SCHEDULED</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-6 flex space-x-2">
+            <button
+              id="create-group-btn"
+              class="flex-1 bg-red-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-red-700 transition"
+            >
+              <i class="fa-solid fa-plus mr-2"></i>Create Group
+            </button>
+            <button
+              id="book-study-room-btn"
+              class="flex-1 bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+            >
+              <i class="fa-solid fa-calendar mr-2"></i>Book Study Room
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Additional Features Section -->
+      <div class="bg-card rounded-xl shadow-lg p-6">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">
+            Additional Exam Management Features
+          </h3>
+          <div class="flex items-center text-sm text-blue-400">
+            <span class="status-indicator bg-blue-500"></span>
+            All Features Active
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Exam Venue Management -->
+          <div class="arrangement-card">
+            <div class="flex items-center mb-3">
+              <i class="fa-solid fa-location-dot text-2xl mr-3"></i>
+              <h4 class="font-bold text-lg">Venue Management</h4>
+            </div>
+            <p class="text-sm opacity-90 mb-4">
+              Manage exam venues, seating arrangements, and invigilation duties
+            </p>
+            <button
+              id="manage-venues-btn"
+              class="w-full bg-white text-green-600 text-sm font-semibold py-2 px-4 rounded-lg transition"
+            >
+              Manage Venues
+            </button>
+          </div>
+
+          <!-- Invigilation Schedule -->
+          <div class="quiet-hours-card">
+            <div class="flex items-center mb-3">
+              <i class="fa-solid fa-user-check text-2xl mr-3"></i>
+              <h4 class="font-bold text-lg">Invigilation Schedule</h4>
+            </div>
+            <p class="text-sm opacity-90 mb-4">
+              Schedule and manage faculty invigilation duties across all exam
+              venues
+            </p>
+            <button
+              id="view-invigilation-btn"
+              class="w-full bg-white text-purple-600 text-sm font-semibold py-2 px-4 rounded-lg transition"
+            >
+              View Schedule
+            </button>
+          </div>
+
+          <!-- Exam Materials & Resources -->
+          <div class="study-group-card">
+            <div class="flex items-center mb-3">
+              <i class="fa-solid fa-box-archive text-2xl mr-3"></i>
+              <h4 class="font-bold text-lg">Exam Resources</h4>
+            </div>
+            <p class="text-sm opacity-90 mb-4">
+              Manage question papers, answer sheets, and other exam materials
+              securely
+            </p>
+            <button
+              id="manage-resources-btn"
+              class="w-full bg-white text-red-600 text-sm font-semibold py-2 px-4 rounded-lg transition"
+            >
+              Manage Resources
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- View Arrangements Modal -->
+    <div id="view-arrangements-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">
+            View Special Arrangements
+          </h3>
+          <button
+            id="close-view-arrangements"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <div class="space-y-6">
+          <div>
+            <h4 class="font-bold text-white mb-4">All Special Arrangements</h4>
+            <div class="bg-gray-700 rounded-lg p-4">
+              <div class="overflow-x-auto">
+                <table class="schedule-table">
+                  <thead>
+                    <tr>
+                      <th>Student</th>
+                      <th>Arrangement</th>
+                      <th>Status</th>
+                      <th>Exam</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Rahul Sharma (20BCE1001)</td>
+                      <td>Extra Time (30 mins)</td>
+                      <td><span class="text-green-400">Approved</span></td>
+                      <td>Data Structures</td>
+                      <td>
+                        <button class="text-blue-400 text-sm">
+                          View Details
+                        </button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Priya Patel (20BCE1002)</td>
+                      <td>Separate Room</td>
+                      <td><span class="text-yellow-400">Pending</span></td>
+                      <td>DBMS</td>
+                      <td>
+                        <button class="text-blue-400 text-sm">Review</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Amit Kumar (20BCE1003)</td>
+                      <td>Scribe Required</td>
+                      <td><span class="text-green-400">Approved</span></td>
+                      <td>All Exams</td>
+                      <td>
+                        <button class="text-blue-400 text-sm">
+                          View Details
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex justify-end">
+            <button
+              class="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+              onclick="closeModal('view-arrangements-modal')"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Request New Arrangement Modal -->
+    <div id="request-arrangement-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">
+            Request New Special Arrangement
+          </h3>
+          <button
+            id="close-request-arrangement"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <div class="space-y-6">
+          <div class="bg-gray-700 rounded-lg p-4">
+            <h4 class="font-bold text-white mb-4">
+              New Arrangement Request Form
+            </h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="form-group">
+                <label class="form-label">Student Name</label>
+                <input
+                  type="text"
+                  class="form-input"
+                  placeholder="Enter student name"
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Student ID</label>
+                <input
+                  type="text"
+                  class="form-input"
+                  placeholder="Enter student ID"
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Exam</label>
+                <select class="form-input">
+                  <option value="">Select Exam</option>
+                  <option value="ds">Data Structures & Algorithms</option>
+                  <option value="dbms">Database Management Systems</option>
+                  <option value="os">Operating Systems</option>
+                  <option value="cn">Computer Networks</option>
+                  <option value="se">Software Engineering</option>
+                  <option value="ai">Artificial Intelligence</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Arrangement Type</label>
+                <select class="form-input">
+                  <option value="">Select Arrangement Type</option>
+                  <option value="extra-time">Extra Time</option>
+                  <option value="separate-room">Separate Room</option>
+                  <option value="scribe">Scribe Required</option>
+                  <option value="reader">Reader Required</option>
+                  <option value="breaks">Frequent Breaks</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Description of Need</label>
+              <textarea
+                class="form-input"
+                rows="4"
+                placeholder="Please describe the specific accommodation needed and the reason for this request"
+              ></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Supporting Documentation</label>
+              <div
+                class="border-2 border-dashed border-gray-600 rounded-lg p-4 text-center"
+              >
+                <i
+                  class="fa-solid fa-cloud-arrow-up text-2xl text-gray-400 mb-2"
+                ></i>
+                <p class="text-gray-400">
+                  Upload supporting documents (medical certificate, etc.)
+                </p>
+                <button
+                  class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg mt-2 hover:bg-blue-700 transition"
+                >
+                  Choose Files
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex justify-end space-x-2">
+            <button
+              class="bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition"
+            >
+              Submit Request
+            </button>
+            <button
+              class="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+              onclick="closeModal('request-arrangement-modal')"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- View Study Groups Modal -->
+    <div id="view-study-groups-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">All Study Groups</h3>
+          <button
+            id="close-view-groups"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <div class="space-y-6">
+          <div class="bg-gray-700 rounded-lg p-4">
+            <div class="overflow-x-auto">
+              <table class="schedule-table">
+                <thead>
+                  <tr>
+                    <th>Group Name</th>
+                    <th>Subject</th>
+                    <th>Location</th>
+                    <th>Schedule</th>
+                    <th>Members</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Data Structures Study Group</td>
+                    <td>Data Structures</td>
+                    <td>Hostel Common Room A</td>
+                    <td>Daily 7-9 PM</td>
+                    <td>12</td>
+                    <td><span class="text-green-400">Active</span></td>
+                  </tr>
+                  <tr>
+                    <td>DBMS Revision Session</td>
+                    <td>Database Systems</td>
+                    <td>Academic Block 205</td>
+                    <td>Tomorrow 4-6 PM</td>
+                    <td>8</td>
+                    <td><span class="text-yellow-400">Scheduled</span></td>
+                  </tr>
+                  <tr>
+                    <td>OS Workshop</td>
+                    <td>Operating Systems</td>
+                    <td>Library Study Room 3</td>
+                    <td>Dec 14, 2-5 PM</td>
+                    <td>15</td>
+                    <td><span class="text-yellow-400">Scheduled</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="flex justify-end">
+            <button
+              class="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+              onclick="closeModal('view-study-groups-modal')"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- View Schedule Modal -->
+    <div id="view-schedule-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">Complete Exam Schedule</h3>
+          <button
+            id="close-view-schedule"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <div class="space-y-6">
+          <div class="bg-gray-700 rounded-lg p-4">
+            <div class="overflow-x-auto">
+              <table class="schedule-table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Subject</th>
+                    <th>Course Code</th>
+                    <th>Venue</th>
+                    <th>Type</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Dec 15, 2025</td>
+                    <td>9:00 AM - 12:00 PM</td>
+                    <td>Data Structures & Algorithms</td>
+                    <td>20CSE201</td>
+                    <td>Academic Block A-201</td>
+                    <td>
+                      <span
+                        class="bg-red-500 text-white px-2 py-1 rounded text-xs"
+                        >Major</span
+                      >
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Dec 18, 2025</td>
+                    <td>2:00 PM - 5:00 PM</td>
+                    <td>Database Management Systems</td>
+                    <td>20CSE202</td>
+                    <td>Academic Block B-105</td>
+                    <td>
+                      <span
+                        class="bg-red-500 text-white px-2 py-1 rounded text-xs"
+                        >Major</span
+                      >
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Dec 20, 2025</td>
+                    <td>9:00 AM - 11:00 AM</td>
+                    <td>Operating Systems</td>
+                    <td>20CSE203</td>
+                    <td>Academic Block A-305</td>
+                    <td>
+                      <span
+                        class="bg-yellow-500 text-white px-2 py-1 rounded text-xs"
+                        >Minor</span
+                      >
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Dec 22, 2025</td>
+                    <td>2:00 PM - 5:00 PM</td>
+                    <td>Computer Networks</td>
+                    <td>20CSE204</td>
+                    <td>Academic Block C-101</td>
+                    <td>
+                      <span
+                        class="bg-red-500 text-white px-2 py-1 rounded text-xs"
+                        >Major</span
+                      >
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Dec 25, 2025</td>
+                    <td>9:00 AM - 12:00 PM</td>
+                    <td>Software Engineering</td>
+                    <td>20CSE205</td>
+                    <td>Academic Block B-204</td>
+                    <td>
+                      <span
+                        class="bg-red-500 text-white px-2 py-1 rounded text-xs"
+                        >Major</span
+                      >
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Dec 28, 2025</td>
+                    <td>2:00 PM - 5:00 PM</td>
+                    <td>Artificial Intelligence</td>
+                    <td>20CSE206</td>
+                    <td>Academic Block A-201</td>
+                    <td>
+                      <span
+                        class="bg-red-500 text-white px-2 py-1 rounded text-xs"
+                        >Major</span
+                      >
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="flex justify-end space-x-2">
+            <button
+              id="print-schedule-btn"
+              class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition"
+            >
+              <i class="fa-solid fa-print mr-2"></i>Print Schedule
+            </button>
+            <button
+              class="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+              onclick="closeModal('view-schedule-modal')"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Create Study Group Modal -->
+    <div id="create-group-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">Create New Study Group</h3>
+          <button
+            id="close-create-group"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <div class="space-y-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="form-group">
+              <label class="form-label">Group Name</label>
+              <input
+                type="text"
+                class="form-input"
+                placeholder="e.g., Data Structures Study Group"
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Subject</label>
+              <select class="form-input">
+                <option value="">Select Subject</option>
+                <option value="ds">Data Structures & Algorithms</option>
+                <option value="dbms">Database Management Systems</option>
+                <option value="os">Operating Systems</option>
+                <option value="cn">Computer Networks</option>
+                <option value="se">Software Engineering</option>
+                <option value="ai">Artificial Intelligence</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="form-group">
+              <label class="form-label">Preferred Location</label>
+              <select class="form-input">
+                <option value="">Select Location</option>
+                <option value="hostel-a">Hostel Common Room A</option>
+                <option value="hostel-b">Hostel Common Room B</option>
+                <option value="ab-205">Academic Block 205</option>
+                <option value="ab-301">Academic Block 301</option>
+                <option value="library-1">Library Study Room 1</option>
+                <option value="library-2">Library Study Room 2</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Maximum Members</label>
+              <input
+                type="number"
+                class="form-input"
+                placeholder="e.g., 15"
+                min="2"
+                max="30"
+              />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="form-group">
+              <label class="form-label">Start Date & Time</label>
+              <input
+                type="text"
+                id="group-start-time"
+                class="form-input"
+                placeholder="Select date and time"
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label">End Date & Time</label>
+              <input
+                type="text"
+                id="group-end-time"
+                class="form-input"
+                placeholder="Select date and time"
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Group Description</label>
+            <textarea
+              class="form-input"
+              rows="3"
+              placeholder="Describe the purpose and focus of this study group"
+            ></textarea>
+          </div>
+
+          <div class="flex space-x-2">
+            <button
+              class="flex-1 bg-green-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-green-700 transition"
+            >
+              <i class="fa-solid fa-check mr-2"></i>Create Group
+            </button>
+            <button
+              class="flex-1 bg-gray-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-gray-700 transition"
+              onclick="closeModal('create-group-modal')"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quiet Hours Status Modal -->
+    <div id="quiet-hours-status-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">Quiet Hours Status</h3>
+          <button
+            id="close-quiet-hours-status"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <div class="space-y-6">
+          <div class="bg-gray-700 rounded-lg p-4">
+            <h4 class="font-bold text-white mb-4">
+              Current Quiet Hours Status
+            </h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="quiet-hours-status">
+                <h5 class="font-bold text-white">Hostels</h5>
+                <p class="text-sm text-gray-400 mt-1">10:00 PM - 6:00 AM</p>
+                <div class="flex items-center mt-2">
+                  <span class="status-indicator bg-green-500"></span>
+                  <span class="text-green-400 text-sm">Active</span>
+                </div>
+              </div>
+              <div class="quiet-hours-status">
+                <h5 class="font-bold text-white">Academic Block</h5>
+                <p class="text-sm text-gray-400 mt-1">8:00 PM - 8:00 AM</p>
+                <div class="flex items-center mt-2">
+                  <span class="status-indicator bg-green-500"></span>
+                  <span class="text-green-400 text-sm">Active</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-gray-700 rounded-lg p-4">
+            <h4 class="font-bold text-white mb-4">Recent Violations</h4>
+            <div class="overflow-x-auto">
+              <table class="schedule-table">
+                <thead>
+                  <tr>
+                    <th>Location</th>
+                    <th>Time</th>
+                    <th>Noise Level</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Boys Hostel B, Floor 2</td>
+                    <td>12 minutes ago</td>
+                    <td>High</td>
+                    <td><span class="text-red-400">Warning Sent</span></td>
+                  </tr>
+                  <tr>
+                    <td>Academic Block Library</td>
+                    <td>45 minutes ago</td>
+                    <td>Moderate</td>
+                    <td><span class="text-yellow-400">Reminder Sent</span></td>
+                  </tr>
+                  <tr>
+                    <td>Girls Hostel A, Common Room</td>
+                    <td>1 hour ago</td>
+                    <td>High</td>
+                    <td><span class="text-red-400">Warning Sent</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="flex justify-end">
+            <button
+              class="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+              onclick="closeModal('quiet-hours-status-modal')"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Manage Quiet Hours Modal -->
+    <div id="manage-quiet-hours-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">Manage Quiet Hours</h3>
+          <button
+            id="close-manage-quiet-hours"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <div class="space-y-6">
+          <div class="bg-gray-700 rounded-lg p-4">
+            <h4 class="font-bold text-white mb-4">Set Quiet Hours Schedule</h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="form-group">
+                <label class="form-label">Hostels Start Time</label>
+                <input type="time" class="form-input" value="22:00" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Hostels End Time</label>
+                <input type="time" class="form-input" value="06:00" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Academic Block Start Time</label>
+                <input type="time" class="form-input" value="20:00" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Academic Block End Time</label>
+                <input type="time" class="form-input" value="08:00" />
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-gray-700 rounded-lg p-4">
+            <h4 class="font-bold text-white mb-4">Notification Settings</h4>
+            <div class="space-y-4">
+              <div class="flex items-center">
+                <input
+                  type="checkbox"
+                  id="enable-reminders"
+                  class="mr-2"
+                  checked
+                />
+                <label for="enable-reminders" class="text-white"
+                  >Enable automatic reminders before quiet hours</label
+                >
+              </div>
+              <div class="flex items-center">
+                <input
+                  type="checkbox"
+                  id="enable-violation-alerts"
+                  class="mr-2"
+                  checked
+                />
+                <label for="enable-violation-alerts" class="text-white"
+                  >Send alerts for noise violations</label
+                >
+              </div>
+              <div class="form-group">
+                <label class="form-label">Reminder Time (minutes before)</label>
+                <input
+                  type="number"
+                  class="form-input"
+                  value="15"
+                  min="5"
+                  max="60"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="flex justify-end space-x-2">
+            <button
+              class="bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition"
+            >
+              Save Changes
+            </button>
+            <button
+              class="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+              onclick="closeModal('manage-quiet-hours-modal')"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Book Study Room Modal -->
+    <div id="book-study-room-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">Book Study Room</h3>
+          <button
+            id="close-book-study-room"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <div class="space-y-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="form-group">
+              <label class="form-label">Select Room</label>
+              <select class="form-input">
+                <option value="">Select Room</option>
+                <option value="hostel-a">Hostel Common Room A</option>
+                <option value="hostel-b">Hostel Common Room B</option>
+                <option value="ab-205">Academic Block 205</option>
+                <option value="ab-301">Academic Block 301</option>
+                <option value="library-1">Library Study Room 1</option>
+                <option value="library-2">Library Study Room 2</option>
+                <option value="library-3">Library Study Room 3</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Group Size</label>
+              <input
+                type="number"
+                class="form-input"
+                placeholder="Number of people"
+                min="2"
+                max="30"
+              />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="form-group">
+              <label class="form-label">Start Date & Time</label>
+              <input
+                type="text"
+                id="room-start-time"
+                class="form-input"
+                placeholder="Select date and time"
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label">End Date & Time</label>
+              <input
+                type="text"
+                id="room-end-time"
+                class="form-input"
+                placeholder="Select date and time"
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Purpose</label>
+            <textarea
+              class="form-input"
+              rows="3"
+              placeholder="Describe the purpose of this booking"
+            ></textarea>
+          </div>
+
+          <div class="bg-gray-700 rounded-lg p-4">
+            <h4 class="font-bold text-white mb-2">Available Rooms</h4>
+            <div class="space-y-2">
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-400">Hostel Common Room A</span>
+                <span class="text-green-400">Available</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-400">Academic Block 205</span>
+                <span class="text-green-400">Available</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-400">Library Study Room 2</span>
+                <span class="text-red-400">Booked until 5:00 PM</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex space-x-2">
+            <button
+              class="flex-1 bg-green-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-green-700 transition"
+            >
+              <i class="fa-solid fa-check mr-2"></i>Book Room
+            </button>
+            <button
+              class="flex-1 bg-gray-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-gray-700 transition"
+              onclick="closeModal('book-study-room-modal')"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Manage Venues Modal -->
+    <div id="manage-venues-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">Manage Exam Venues</h3>
+          <button
+            id="close-manage-venues"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <div class="space-y-6">
+          <div class="bg-gray-700 rounded-lg p-4">
+            <h4 class="font-bold text-white mb-4">Available Exam Venues</h4>
+            <div class="overflow-x-auto">
+              <table class="schedule-table">
+                <thead>
+                  <tr>
+                    <th>Venue</th>
+                    <th>Capacity</th>
+                    <th>Availability</th>
+                    <th>Facilities</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Academic Block A-201</td>
+                    <td>90</td>
+                    <td><span class="text-green-400">Available</span></td>
+                    <td>Projector, AC</td>
+                    <td>
+                      <button class="text-blue-400 text-sm">
+                        View Details
+                      </button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Academic Block B-105</td>
+                    <td>80</td>
+                    <td><span class="text-green-400">Available</span></td>
+                    <td>AC</td>
+                    <td>
+                      <button class="text-blue-400 text-sm">
+                        View Details
+                      </button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Academic Block A-305</td>
+                    <td>100</td>
+                    <td>
+                      <span class="text-yellow-400">Partially Booked</span>
+                    </td>
+                    <td>Projector, AC, CCTV</td>
+                    <td>
+                      <button class="text-blue-400 text-sm">
+                        View Details
+                      </button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Academic Block C-101</td>
+                    <td>120</td>
+                    <td><span class="text-green-400">Available</span></td>
+                    <td>AC, CCTV</td>
+                    <td>
+                      <button class="text-blue-400 text-sm">
+                        View Details
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="bg-gray-700 rounded-lg p-4">
+            <h4 class="font-bold text-white mb-4">Add New Venue</h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="form-group">
+                <label class="form-label">Venue Name</label>
+                <input
+                  type="text"
+                  class="form-input"
+                  placeholder="e.g., Academic Block D-201"
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Capacity</label>
+                <input
+                  type="number"
+                  class="form-input"
+                  placeholder="Number of seats"
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Facilities</label>
+                <div class="space-y-2">
+                  <div class="flex items-center">
+                    <input type="checkbox" id="facility-ac" class="mr-2" />
+                    <label for="facility-ac" class="text-white"
+                      >Air Conditioning</label
+                    >
+                  </div>
+                  <div class="flex items-center">
+                    <input
+                      type="checkbox"
+                      id="facility-projector"
+                      class="mr-2"
+                    />
+                    <label for="facility-projector" class="text-white"
+                      >Projector</label
+                    >
+                  </div>
+                  <div class="flex items-center">
+                    <input type="checkbox" id="facility-cctv" class="mr-2" />
+                    <label for="facility-cctv" class="text-white">CCTV</label>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Status</label>
+                <select class="form-input">
+                  <option value="available">Available</option>
+                  <option value="maintenance">Under Maintenance</option>
+                  <option value="booked">Booked</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex justify-end space-x-2">
+            <button
+              class="bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition"
+            >
+              Save Changes
+            </button>
+            <button
+              class="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+              onclick="closeModal('manage-venues-modal')"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Invigilation Schedule Modal -->
+    <div id="invigilation-schedule-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">Invigilation Schedule</h3>
+          <button
+            id="close-invigilation-schedule"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <div class="space-y-6">
+          <div class="bg-gray-700 rounded-lg p-4">
+            <h4 class="font-bold text-white mb-4">
+              Upcoming Invigilation Duties
+            </h4>
+            <div class="overflow-x-auto">
+              <table class="schedule-table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Exam</th>
+                    <th>Venue</th>
+                    <th>Invigilator</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Dec 15, 2025</td>
+                    <td>9:00 AM - 12:00 PM</td>
+                    <td>Data Structures</td>
+                    <td>Academic Block A-201</td>
+                    <td>Dr. Sharma</td>
+                    <td><span class="text-green-400">Confirmed</span></td>
+                  </tr>
+                  <tr>
+                    <td>Dec 18, 2025</td>
+                    <td>2:00 PM - 5:00 PM</td>
+                    <td>DBMS</td>
+                    <td>Academic Block B-105</td>
+                    <td>Prof. Gupta</td>
+                    <td><span class="text-green-400">Confirmed</span></td>
+                  </tr>
+                  <tr>
+                    <td>Dec 20, 2025</td>
+                    <td>9:00 AM - 11:00 AM</td>
+                    <td>Operating Systems</td>
+                    <td>Academic Block A-305</td>
+                    <td>Dr. Verma</td>
+                    <td><span class="text-yellow-400">Pending</span></td>
+                  </tr>
+                  <tr>
+                    <td>Dec 22, 2025</td>
+                    <td>2:00 PM - 5:00 PM</td>
+                    <td>Computer Networks</td>
+                    <td>Academic Block C-101</td>
+                    <td>Dr. Singh</td>
+                    <td><span class="text-green-400">Confirmed</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="bg-gray-700 rounded-lg p-4">
+            <h4 class="font-bold text-white mb-4">Assign New Invigilation</h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="form-group">
+                <label class="form-label">Select Exam</label>
+                <select class="form-input">
+                  <option value="">Select Exam</option>
+                  <option value="ds">Data Structures & Algorithms</option>
+                  <option value="dbms">Database Management Systems</option>
+                  <option value="os">Operating Systems</option>
+                  <option value="cn">Computer Networks</option>
+                  <option value="se">Software Engineering</option>
+                  <option value="ai">Artificial Intelligence</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Select Invigilator</label>
+                <select class="form-input">
+                  <option value="">Select Faculty</option>
+                  <option value="sharma">Dr. Sharma</option>
+                  <option value="gupta">Prof. Gupta</option>
+                  <option value="verma">Dr. Verma</option>
+                  <option value="singh">Dr. Singh</option>
+                  <option value="joshi">Prof. Joshi</option>
+                  <option value="reddy">Dr. Reddy</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Date</label>
+                <input type="date" class="form-input" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Time</label>
+                <input type="time" class="form-input" />
+              </div>
+            </div>
+          </div>
+
+          <div class="flex justify-end space-x-2">
+            <button
+              class="bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition"
+            >
+              Assign Duty
+            </button>
+            <button
+              class="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+              onclick="closeModal('invigilation-schedule-modal')"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Manage Resources Modal -->
+    <div id="manage-resources-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">Manage Exam Resources</h3>
+          <button
+            id="close-manage-resources"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <div class="space-y-6">
+          <div class="bg-gray-700 rounded-lg p-4">
+            <h4 class="font-bold text-white mb-4">
+              Exam Resources - October/November 2025
+            </h4>
+            <div class="overflow-x-auto">
+              <table class="schedule-table">
+                <thead>
+                  <tr>
+                    <th>Resource</th>
+                    <th>Exam</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Question Paper Set A</td>
+                    <td>Data Structures</td>
+                    <td>Oct 15, 2025</td>
+                    <td><span class="text-green-400">Ready</span></td>
+                    <td>
+                      <button class="text-blue-400 text-sm">Download</button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Answer Sheets (Bundle of 100)</td>
+                    <td>All Exams</td>
+                    <td>Oct 20, 2025</td>
+                    <td><span class="text-yellow-400">In Transit</span></td>
+                    <td>
+                      <button class="text-blue-400 text-sm">Track</button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Special Answer Booklets</td>
+                    <td>Special Needs</td>
+                    <td>Oct 25, 2025</td>
+                    <td><span class="text-green-400">Available</span></td>
+                    <td>
+                      <button class="text-blue-400 text-sm">View</button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Question Paper Set B</td>
+                    <td>Database Systems</td>
+                    <td>Nov 5, 2025</td>
+                    <td><span class="text-red-400">Pending Approval</span></td>
+                    <td>
+                      <button class="text-blue-400 text-sm">Review</button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Invigilation Kits</td>
+                    <td>All Exams</td>
+                    <td>Nov 10, 2025</td>
+                    <td><span class="text-green-400">Ready</span></td>
+                    <td>
+                      <button class="text-blue-400 text-sm">
+                        Check Contents
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="bg-gray-700 rounded-lg p-4">
+            <h4 class="font-bold text-white mb-4">Add New Resource</h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="form-group">
+                <label class="form-label">Resource Name</label>
+                <input
+                  type="text"
+                  class="form-input"
+                  placeholder="e.g., Question Paper Set C"
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label">For Exam</label>
+                <select class="form-input">
+                  <option value="">Select Exam</option>
+                  <option value="ds">Data Structures & Algorithms</option>
+                  <option value="dbms">Database Management Systems</option>
+                  <option value="os">Operating Systems</option>
+                  <option value="cn">Computer Networks</option>
+                  <option value="se">Software Engineering</option>
+                  <option value="ai">Artificial Intelligence</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Required Date</label>
+                <input type="date" class="form-input" value="2025-10-30" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Status</label>
+                <select class="form-input">
+                  <option value="ready">Ready</option>
+                  <option value="pending">Pending</option>
+                  <option value="in-transit">In Transit</option>
+                  <option value="needs-approval">Needs Approval</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex justify-end space-x-2">
+            <button
+              class="bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition"
+            >
+              Add Resource
+            </button>
+            <button
+              class="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+              onclick="closeModal('manage-resources-modal')"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Message Box for notifications -->
+    <div
+      id="message-box"
+      class="fixed bottom-4 right-4 bg-gray-700 text-white p-4 rounded-lg shadow-lg hidden message-box"
+    >
+      <p id="message-text"></p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+      // JavaScript to display the current date and time
+      function updateDateTime() {
+        const now = new Date();
+        const options = {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        };
+        const formattedDateTime = now.toLocaleDateString("en-US", options);
+        document.getElementById("date-time-display").textContent =
+          formattedDateTime;
+      }
+      updateDateTime();
+      setInterval(updateDateTime, 60000);
+
+      // Countdown timer for next exam
+      function updateCountdown() {
+        const examDate = new Date("December 15, 2025 09:00:00").getTime();
+        const now = new Date().getTime();
+        const distance = examDate - now;
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor(
+          (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+        );
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        document.getElementById("countdown-days").textContent = days
+          .toString()
+          .padStart(2, "0");
+        document.getElementById("countdown-hours").textContent = hours
+          .toString()
+          .padStart(2, "0");
+        document.getElementById("countdown-minutes").textContent = minutes
+          .toString()
+          .padStart(2, "0");
+        document.getElementById("countdown-seconds").textContent = seconds
+          .toString()
+          .padStart(2, "0");
+      }
+      setInterval(updateCountdown, 1000);
+      updateCountdown();
+
+      // Modal functionality
+      function showModal(modalId) {
+        document.getElementById(modalId).classList.add("active");
+      }
+
+      function closeModal(modalId) {
+        document.getElementById(modalId).classList.remove("active");
+      }
+
+      // Function to show a custom message box
+      function showMessage(text, type = "info") {
+        const messageBox = document.getElementById("message-box");
+        const messageText = document.getElementById("message-text");
+
+        messageText.textContent = text;
+        messageBox.classList.remove(
+          "hidden",
+          "bg-red-700",
+          "bg-green-700",
+          "bg-blue-700"
+        );
+
+        if (type === "error") {
+          messageBox.classList.add("bg-red-700");
+        } else if (type === "success") {
+          messageBox.classList.add("bg-green-700");
+        } else if (type === "info") {
+          messageBox.classList.add("bg-blue-700");
+        } else {
+          messageBox.classList.add("bg-gray-700");
+        }
+
+        setTimeout(() => {
+          messageBox.classList.add("hidden");
+        }, 4000);
+      }
+
+      // Initialize the application
+      function init() {
+        // Initialize date and time pickers
+        flatpickr("#group-start-time", {
+          enableTime: true,
+          dateFormat: "Y-m-d H:i",
+          time_24hr: false,
+        });
+
+        flatpickr("#group-end-time", {
+          enableTime: true,
+          dateFormat: "Y-m-d H:i",
+          time_24hr: false,
+        });
+
+        flatpickr("#room-start-time", {
+          enableTime: true,
+          dateFormat: "Y-m-d H:i",
+          time_24hr: false,
+        });
+
+        flatpickr("#room-end-time", {
+          enableTime: true,
+          dateFormat: "Y-m-d H:i",
+          time_24hr: false,
+        });
+
+        // Special Arrangements buttons - FIXED: Request New button now opens modal
+        document
+          .getElementById("view-arrangements-btn")
+          .addEventListener("click", function () {
+            showModal("view-arrangements-modal");
+          });
+
+        document
+          .getElementById("request-arrangement-btn")
+          .addEventListener("click", function () {
+            showModal("request-arrangement-modal");
+          });
+
+        // Quiet Hours buttons
+        document
+          .getElementById("view-quiet-hours-btn")
+          .addEventListener("click", function () {
+            showModal("quiet-hours-status-modal");
+          });
+
+        document
+          .getElementById("manage-quiet-hours-btn")
+          .addEventListener("click", function () {
+            showModal("manage-quiet-hours-modal");
+          });
+
+        // Study Group buttons
+        document
+          .getElementById("view-study-groups-btn")
+          .addEventListener("click", function () {
+            showModal("view-study-groups-modal");
+          });
+
+        document
+          .getElementById("create-study-group-btn")
+          .addEventListener("click", function () {
+            showModal("create-group-modal");
+          });
+
+        // Exam Schedule buttons
+        document
+          .getElementById("view-schedule-btn")
+          .addEventListener("click", function () {
+            showModal("view-schedule-modal");
+          });
+
+        document
+          .getElementById("download-schedule-btn")
+          .addEventListener("click", function () {
+            // Create a fake download
+            showMessage("Downloading exam schedule as PDF...", "success");
+            // Simulate download
+            setTimeout(() => {
+              showMessage("Exam schedule downloaded successfully!", "success");
+            }, 1500);
+          });
+
+        // Quiet Hours panel buttons
+        document
+          .getElementById("send-reminder-btn")
+          .addEventListener("click", function () {
+            showMessage(
+              "Quiet hours reminder sent to all students!",
+              "success"
+            );
+          });
+
+        document
+          .getElementById("quiet-settings-btn")
+          .addEventListener("click", function () {
+            showModal("manage-quiet-hours-modal");
+          });
+
+        // Study Groups panel buttons
+        document
+          .getElementById("create-group-btn")
+          .addEventListener("click", function () {
+            showModal("create-group-modal");
+          });
+
+        document
+          .getElementById("book-study-room-btn")
+          .addEventListener("click", function () {
+            showModal("book-study-room-modal");
+          });
+
+        // Additional features buttons
+        document
+          .getElementById("manage-venues-btn")
+          .addEventListener("click", function () {
+            showModal("manage-venues-modal");
+          });
+
+        document
+          .getElementById("view-invigilation-btn")
+          .addEventListener("click", function () {
+            showModal("invigilation-schedule-modal");
+          });
+
+        document
+          .getElementById("manage-resources-btn")
+          .addEventListener("click", function () {
+            showModal("manage-resources-modal");
+          });
+
+        // Close modals
+        document
+          .getElementById("close-view-arrangements")
+          .addEventListener("click", function () {
+            closeModal("view-arrangements-modal");
+          });
+
+        document
+          .getElementById("close-request-arrangement")
+          .addEventListener("click", function () {
+            closeModal("request-arrangement-modal");
+          });
+
+        document
+          .getElementById("close-view-groups")
+          .addEventListener("click", function () {
+            closeModal("view-study-groups-modal");
+          });
+
+        document
+          .getElementById("close-view-schedule")
+          .addEventListener("click", function () {
+            closeModal("view-schedule-modal");
+          });
+
+        document
+          .getElementById("close-create-group")
+          .addEventListener("click", function () {
+            closeModal("create-group-modal");
+          });
+
+        document
+          .getElementById("close-quiet-hours-status")
+          .addEventListener("click", function () {
+            closeModal("quiet-hours-status-modal");
+          });
+
+        document
+          .getElementById("close-manage-quiet-hours")
+          .addEventListener("click", function () {
+            closeModal("manage-quiet-hours-modal");
+          });
+
+        document
+          .getElementById("close-book-study-room")
+          .addEventListener("click", function () {
+            closeModal("book-study-room-modal");
+          });
+
+        document
+          .getElementById("close-manage-venues")
+          .addEventListener("click", function () {
+            closeModal("manage-venues-modal");
+          });
+
+        document
+          .getElementById("close-invigilation-schedule")
+          .addEventListener("click", function () {
+            closeModal("invigilation-schedule-modal");
+          });
+
+        document
+          .getElementById("close-manage-resources")
+          .addEventListener("click", function () {
+            closeModal("manage-resources-modal");
+          });
+
+        // Print schedule button
+        document
+          .getElementById("print-schedule-btn")
+          .addEventListener("click", function () {
+            showMessage("Printing exam schedule...", "success");
+          });
+
+        // Test noise level button
+        document
+          .getElementById("test-noise-btn")
+          .addEventListener("click", function () {
+            const marker = document.getElementById("noise-marker");
+            const randomPosition = Math.floor(Math.random() * 100);
+            marker.style.left = `${randomPosition}%`;
+
+            if (randomPosition < 33) {
+              showMessage(
+                "Noise level: Quiet - Good studying environment",
+                "success"
+              );
+            } else if (randomPosition < 66) {
+              showMessage(
+                "Noise level: Moderate - Acceptable for studying",
+                "info"
+              );
+            } else {
+              showMessage(
+                "Noise level: Loud - Quiet hours violation detected",
+                "error"
+              );
+            }
+          });
+
+        // View all groups button
+        document
+          .getElementById("view-all-groups-btn")
+          .addEventListener("click", function () {
+            showModal("view-study-groups-modal");
+          });
+
+        // Form submission handlers
+        document.querySelectorAll("button.bg-green-600").forEach((button) => {
+          if (button.textContent.includes("Create Group")) {
+            button.addEventListener("click", function () {
+              showMessage("Study group created successfully!", "success");
+              closeModal("create-group-modal");
+            });
+          }
+          if (button.textContent.includes("Book Room")) {
+            button.addEventListener("click", function () {
+              showMessage("Study room booked successfully!", "success");
+              closeModal("book-study-room-modal");
+            });
+          }
+          if (button.textContent.includes("Save Changes")) {
+            button.addEventListener("click", function () {
+              showMessage("Changes saved successfully!", "success");
+              // Don't close modal to allow further changes
+            });
+          }
+          if (button.textContent.includes("Assign Duty")) {
+            button.addEventListener("click", function () {
+              showMessage(
+                "Invigilation duty assigned successfully!",
+                "success"
+              );
+              closeModal("invigilation-schedule-modal");
+            });
+          }
+          if (button.textContent.includes("Add Resource")) {
+            button.addEventListener("click", function () {
+              showMessage("Resource added successfully!", "success");
+              closeModal("manage-resources-modal");
+            });
+          }
+          if (button.textContent.includes("Submit Request")) {
+            button.addEventListener("click", function () {
+              showMessage(
+                "Special arrangement request submitted successfully!",
+                "success"
+              );
+              closeModal("request-arrangement-modal");
+            });
+          }
+        });
+      }
+
+      // Initialize when DOM is loaded
+      document.addEventListener("DOMContentLoaded", init);
+    </script>
+    <script src="auth_guard.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

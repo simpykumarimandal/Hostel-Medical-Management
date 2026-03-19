@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HMS | Restocking & Inventory Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style> @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"); body { font-family: "Inter", sans-serif; color: #d1d5db; } .active-nav-link { background-color: #374151; color: white; } .bg-card { background-color: #374151; } .message-box { animation: slideIn 0.5s forwards; } @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } } .fade-in { animation: fadeIn 0.5s ease-in; } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } } .gradient-border { background: linear-gradient(135deg, #3b82f6, #8b5cf6); padding: 2px; border-radius: 12px; } .gradient-border > div { background: #374151; border-radius: 10px; padding: 1.5rem; } .low-stock { border-left: 4px solid #ef4444; } .medium-stock { border-left: 4px solid #f59e0b; } .adequate-stock { border-left: 4px solid #10b981; } .status-pulse { animation: pulse 2s infinite; } @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } } .stock-alert { animation: stockAlert 1.5s infinite; } @keyframes stockAlert { 0%, 100% { background-color: rgba(239, 68, 68, 0.1); } 50% { background-color: rgba(239, 68, 68, 0.2); } } </style> <style> .sidebar { transition: transform 0.25s ease-in-out; } .sidebar-collapsed .sidebar { transform: translateX(-110%); } .main-content { transition: margin-left 0.25s ease-in-out; } .sidebar-collapsed .main-content { margin-left: 0 !important; } @media (max-width: 768px) { .sidebar { transform: translateX(-110%); } .sidebar-open .sidebar { transform: translateX(0); } } </style></head>
+  <body class="bg-gray-900 flex flex-col md:flex-row min-h-screen">
+
+    <!-- Sidebar -->
+    <aside
+      class="sidebar w-full md:w-64 bg-gray-950 text-white p-6 flex flex-col items-center md:items-start space-y-8 shadow-2xl">
+      <div class="flex items-center space-x-2 mb-4">
+        <i class="fas fa-hospital text-xl text-blue-400"></i>
+        <h1 class="text-xl font-bold">HMS</h1>
+        <span class="text-sm text-gray-400 ml-2">Student Mode</span>
+      </div>
+      <nav class="w-full">
+  <ul class="space-y-2">
+    <li>
+      <a href="demo.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-chart-line mr-3"></i>
+        <span class="font-medium">Dashboard</span>
+      </a>
+    </li>
+    <li>
+      <a href="ambulance.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-truck-medical mr-3"></i>
+        <span class="font-medium">Ambulance</span>
+      </a>
+    </li>
+    <li>
+      <a href="doctors.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-user-doctor mr-3"></i>
+        <span class="font-medium">Doctors</span>
+      </a>
+    </li>
+    <li>
+      <a href="medicine_order.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-pills mr-3"></i>
+        <span class="font-medium">Pharmacy</span>
+      </a>
+    </li>
+    <li>
+      <a href="medicine_reminder.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bell mr-3"></i>
+        <span class="font-medium">Medicine Reminder</span>
+      </a>
+    </li>
+    <li>
+      <a href="symptoms_checker.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-stethoscope mr-3"></i>
+        <span class="font-medium">Symptoms Checker</span>
+      </a>
+    </li>
+    <li>
+      <a href="lab_tests.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-vial-circle-check mr-3"></i>
+        <span class="font-medium">Lab Tests</span>
+      </a>
+    </li>
+    <li>
+      <a href="emergency_requests.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-hand-holding-medical mr-3"></i>
+        <span class="font-medium">Emergency Requests</span>
+      </a>
+    </li>
+    <li>
+      <a href="sos.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-sos mr-3"></i>
+        <span class="font-medium">SOS</span>
+      </a>
+    </li>
+    <li>
+      <a href="electronic_health_records.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-file-medical mr-3"></i>
+        <span class="font-medium">Health Records</span>
+      </a>
+    </li>
+    <li>
+      <a href="health_insurance.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-shield-heart mr-3"></i>
+        <span class="font-medium">Health Insurance</span>
+      </a>
+    </li>
+    <li>
+      <a href="reports_and_analytics.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-chart-pie mr-3"></i>
+        <span class="font-medium">Reports & Analytics</span>
+      </a>
+    </li>
+    <li>
+      <a href="restocking.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-box-open mr-3"></i>
+        <span class="font-medium">Inventory</span>
+      </a>
+    </li>
+    <li>
+      <a href="studentrequest.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-cash-register mr-3"></i>
+        <span class="font-medium">Student Requests</span>
+      </a>
+    </li>
+    <li>
+      <a href="student_transport.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bus mr-3"></i>
+        <span class="font-medium">Student Transport</span>
+      </a>
+    </li>
+    <li>
+      <a href="transport_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-route mr-3"></i>
+        <span class="font-medium">Transport Management</span>
+      </a>
+    </li>
+    <li>
+      <a href="room_management.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bed mr-3"></i>
+        <span class="font-medium">Room Management</span>
+      </a>
+    </li>
+    <li>
+      <a href="room_sanitation.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-spray-can-sparkles mr-3"></i>
+        <span class="font-medium">Room Sanitation</span>
+      </a>
+    </li>
+    <li>
+      <a href="mess_menu.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-utensils mr-3"></i>
+        <span class="font-medium">Mess Menu</span>
+      </a>
+    </li>
+    <li>
+      <a href="mess_food_order_service.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bowl-food mr-3"></i>
+        <span class="font-medium">Mess Food Order</span>
+      </a>
+    </li>
+    <li>
+      <a href="laundry_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-shirt mr-3"></i>
+        <span class="font-medium">Laundry</span>
+      </a>
+    </li>
+    <li>
+      <a href="leave_and_outing.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-door-open mr-3"></i>
+        <span class="font-medium">Leave & Outing</span>
+      </a>
+    </li>
+    <li>
+      <a href="vit_bhopal_community.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-users mr-3"></i>
+        <span class="font-medium">VIT Community</span>
+      </a>
+    </li>
+    <li>
+      <a href="parent_notification.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-comments mr-3"></i>
+        <span class="font-medium">Parent Notification</span>
+      </a>
+    </li>
+    <li>
+      <a href="payment_gateway.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-credit-card mr-3"></i>
+        <span class="font-medium">Payment Gateway</span>
+      </a>
+    </li>
+    <li>
+      <a href="complaint_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-circle-exclamation mr-3"></i>
+        <span class="font-medium">Complaints</span>
+      </a>
+    </li>
+    <li>
+      <a href="exam_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-clipboard-list mr-3"></i>
+        <span class="font-medium">Exam Management</span>
+      </a>
+    </li>
+    <li>
+      <a href="local_hospital_network.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-hospital mr-3"></i>
+        <span class="font-medium">Local Hospitals</span>
+      </a>
+    </li>
+    <li>
+      <a href="medical_camps.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-hand-holding-heart mr-3"></i>
+        <span class="font-medium">Medical Camps</span>
+      </a>
+    </li>
+    <li>
+      <a href="virtual_consultation.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-video mr-3"></i>
+        <span class="font-medium">Virtual Consultation</span>
+      </a>
+    </li>
+    <li>
+      <a href="wearables.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-watch-fitness mr-3"></i>
+        <span class="font-medium">Wearables</span>
+      </a>
+    </li>
+    <li>
+      <a href="biometric.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-fingerprint mr-3"></i>
+        <span class="font-medium">Biometric</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+      <div class="mt-auto w-full">
+        <a href="/index.html" data-logout="true"
+          class="flex items-center justify-center w-full px-4 py-3 rounded-lg bg-red-600 hover:bg-red-700 transition-colors duration-200"
+        >
+          <i class="fa-solid fa-right-from-bracket mr-2"></i>
+          <span class="font-semibold">Log Out</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content flex-1 p-8 overflow-y-auto bg-gray-800">
+      <!-- Top Header -->
+      <header
+        class="flex items-center justify-between text-sm text-gray-400 mb-8"
+      >
+        <div id="date-time-display"></div>
+        <div class="flex items-center space-x-6">
+          <div class="relative">
+            <i
+              class="fa-solid fa-bell text-xl hover:text-white transition duration-200"
+            ></i>
+            <span
+              id="notification-badge"
+              class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center"
+              >5</span
+            >
+          </div>
+          <div class="flex items-center space-x-2">
+            <i class="fa-solid fa-user-circle text-xl"></i>
+            <span>Student Mode</span>
+          </div>
+          <div class="flex items-center space-x-2 cursor-pointer">
+            <i class="fa-solid fa-globe text-xl"></i>
+            <span>English</span>
+            <i class="fa-solid fa-chevron-down text-xs"></i>
+          </div>
+        </div>
+      </header>
+
+      <!-- Page Title & Actions -->
+      <div class="flex justify-between items-center mb-8">
+        <div>
+          <h2 class="text-3xl font-bold text-white mb-1">
+            Medicine Restocking & Inventory Management
+          </h2>
+          <p class="text-gray-400">
+            Monitor stock levels, manage suppliers, and place restocking orders
+          </p>
+        </div>
+        <div class="flex space-x-3">
+          <button
+            id="auto-restock-btn"
+            class="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center"
+          >
+            <i class="fa-solid fa-robot mr-2"></i>
+            Auto-Restock Low Items
+          </button>
+          <button
+            id="refresh-inventory-btn"
+            class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center"
+          >
+            <i class="fa-solid fa-rotate mr-2"></i>
+            Refresh Inventory
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick Stats -->
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
+        <!-- Low Stock Items -->
+        <div class="gradient-border">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-2xl font-bold text-white" id="low-stock-count">
+                0
+              </div>
+              <div class="text-sm text-red-300">Low Stock Items</div>
+            </div>
+            <i
+              class="fa-solid fa-exclamation-triangle text-red-400 text-2xl"
+            ></i>
+          </div>
+        </div>
+
+        <!-- Medium Stock Items -->
+        <div class="gradient-border">
+          <div class="flex items-center justify-between">
+            <div>
+              <div
+                class="text-2xl font-bold text-white"
+                id="medium-stock-count"
+              >
+                0
+              </div>
+              <div class="text-sm text-yellow-300">Medium Stock Items</div>
+            </div>
+            <i class="fa-solid fa-minus-circle text-yellow-400 text-2xl"></i>
+          </div>
+        </div>
+
+        <!-- Adequate Stock Items -->
+        <div class="gradient-border">
+          <div class="flex items-center justify-between">
+            <div>
+              <div
+                class="text-2xl font-bold text-white"
+                id="adequate-stock-count"
+              >
+                0
+              </div>
+              <div class="text-sm text-green-300">Adequate Stock Items</div>
+            </div>
+            <i class="fa-solid fa-check-circle text-green-400 text-2xl"></i>
+          </div>
+        </div>
+
+        <!-- Pending Orders -->
+        <div class="gradient-border">
+          <div class="flex items-center justify-between">
+            <div>
+              <div
+                class="text-2xl font-bold text-white"
+                id="pending-orders-count"
+              >
+                0
+              </div>
+              <div class="text-sm text-blue-300">Pending Orders</div>
+            </div>
+            <i class="fa-solid fa-truck text-blue-400 text-2xl"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Content Grid -->
+      <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-6">
+        <!-- Low Stock Medicines -->
+        <div class="xl:col-span-2">
+          <div class="bg-card rounded-xl shadow-lg p-6">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-xl font-bold text-white">Low Stock Medicines</h3>
+              <div class="flex space-x-2">
+                <button
+                  id="order-all-low-btn"
+                  class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200 flex items-center"
+                >
+                  <i class="fa-solid fa-cart-plus mr-2"></i>
+                  Order All Low Stock
+                </button>
+              </div>
+            </div>
+            <div
+              id="low-stock-medicines"
+              class="space-y-4 max-h-96 overflow-y-auto"
+            >
+              <!-- Low stock medicines will be populated here -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Restocking -->
+        <div>
+          <div class="bg-card rounded-xl shadow-lg p-6">
+            <h3 class="text-xl font-bold text-white mb-4">Quick Restocking</h3>
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-400 mb-2"
+                  >Select Medicine</label
+                >
+                <select
+                  id="medicine-select"
+                  class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-blue-500 focus:border-blue-500"
+                  required
+                >
+                  <option value="">Select Medicine to Restock</option>
+                  <!-- Options will be populated dynamically -->
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-400 mb-2"
+                  >Quantity to Order</label
+                >
+                <input
+                  type="number"
+                  id="order-quantity"
+                  min="1"
+                  max="1000"
+                  class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="Enter quantity"
+                  required
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-400 mb-2"
+                  >Select Supplier</label
+                >
+                <select
+                  id="supplier-select"
+                  class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-blue-500 focus:border-blue-500"
+                  required
+                >
+                  <option value="">Select Supplier</option>
+                  <!-- Options will be populated dynamically -->
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-400 mb-2"
+                  >Urgency Level</label
+                >
+                <div class="flex space-x-2">
+                  <button
+                    class="urgency-btn flex-1 bg-gray-600 hover:bg-gray-700 text-white py-2 rounded-lg transition"
+                    data-urgency="low"
+                  >
+                    Low
+                  </button>
+                  <button
+                    class="urgency-btn flex-1 bg-yellow-600 hover:bg-yellow-700 text-white py-2 rounded-lg transition"
+                    data-urgency="medium"
+                  >
+                    Medium
+                  </button>
+                  <button
+                    class="urgency-btn flex-1 bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg transition"
+                    data-urgency="high"
+                  >
+                    High
+                  </button>
+                </div>
+              </div>
+              <button
+                id="quick-order-btn"
+                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center justify-center"
+              >
+                <i class="fa-solid fa-truck mr-2"></i>
+                Place Order
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Additional Sections -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Supplier Information -->
+        <div class="bg-card rounded-xl shadow-lg p-6">
+          <h3 class="text-xl font-bold text-white mb-4">Approved Suppliers</h3>
+          <div id="supplier-list" class="space-y-3">
+            <!-- Suppliers will be populated here -->
+          </div>
+        </div>
+
+        <!-- Recent Orders -->
+        <div class="bg-card rounded-xl shadow-lg p-6">
+          <h3 class="text-xl font-bold text-white mb-4">Recent Orders</h3>
+          <div id="recent-orders" class="space-y-3">
+            <!-- Recent orders will be populated here -->
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Order Confirmation Modal -->
+    <div
+      id="order-modal"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden"
+    >
+      <div class="bg-gray-800 rounded-xl p-6 w-full max-w-md">
+        <h3 class="text-xl font-bold text-white mb-4">
+          Confirm Medicine Order
+        </h3>
+        <div id="order-modal-content">
+          <!-- Modal content will be populated here -->
+        </div>
+        <div class="flex justify-end mt-4 space-x-2">
+          <button
+            id="cancel-order"
+            class="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition duration-200"
+          >
+            Cancel
+          </button>
+          <button
+            id="confirm-order"
+            class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-200"
+          >
+            Confirm Order
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Message Box for notifications -->
+    <div
+      id="message-box"
+      class="fixed bottom-4 right-4 bg-gray-700 text-white p-4 rounded-lg shadow-lg hidden message-box"
+    >
+      <p id="message-text"></p>
+    </div>
+
+    <script>
+      // JavaScript to display the current date and time
+      function updateDateTime() {
+        const now = new Date();
+        const options = {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+        };
+        const formattedDateTime = now.toLocaleDateString("en-US", options);
+        document.getElementById("date-time-display").textContent =
+          formattedDateTime;
+      }
+      updateDateTime();
+      setInterval(updateDateTime, 1000);
+
+      // Medicine database
+      const medicineDatabase = [
+        {
+          id: 1,
+          name: "Paracetamol 500mg",
+          currentStock: 15,
+          minStock: 50,
+          category: "Pain Relief",
+          supplierId: 1,
+          price: 5.5,
+          unit: "tablets",
+          lastOrdered: "2023-10-15",
+          expiryDate: "2024-12-01",
+        },
+        {
+          id: 2,
+          name: "Amoxicillin 250mg",
+          currentStock: 8,
+          minStock: 30,
+          category: "Antibiotic",
+          supplierId: 2,
+          price: 12.75,
+          unit: "capsules",
+          lastOrdered: "2023-10-10",
+          expiryDate: "2024-10-15",
+        },
+        {
+          id: 3,
+          name: "Ibuprofen 400mg",
+          currentStock: 22,
+          minStock: 40,
+          category: "Pain Relief",
+          supplierId: 1,
+          price: 8.25,
+          unit: "tablets",
+          lastOrdered: "2023-10-05",
+          expiryDate: "2025-03-20",
+        },
+        {
+          id: 4,
+          name: "Cetirizine 10mg",
+          currentStock: 45,
+          minStock: 30,
+          category: "Antihistamine",
+          supplierId: 3,
+          price: 6.8,
+          unit: "tablets",
+          lastOrdered: "2023-09-28",
+          expiryDate: "2024-11-30",
+        },
+        {
+          id: 5,
+          name: "Omeprazole 20mg",
+          currentStock: 5,
+          minStock: 25,
+          category: "Antacid",
+          supplierId: 2,
+          price: 15.4,
+          unit: "capsules",
+          lastOrdered: "2023-10-12",
+          expiryDate: "2024-09-15",
+        },
+        {
+          id: 6,
+          name: "Vitamin C 500mg",
+          currentStock: 60,
+          minStock: 30,
+          category: "Supplement",
+          supplierId: 4,
+          price: 9.9,
+          unit: "tablets",
+          lastOrdered: "2023-09-15",
+          expiryDate: "2025-01-10",
+        },
+        {
+          id: 7,
+          name: "Aspirin 75mg",
+          currentStock: 12,
+          minStock: 40,
+          category: "Blood Thinner",
+          supplierId: 1,
+          price: 4.75,
+          unit: "tablets",
+          lastOrdered: "2023-10-08",
+          expiryDate: "2024-08-22",
+        },
+        {
+          id: 8,
+          name: "Metformin 500mg",
+          currentStock: 18,
+          minStock: 35,
+          category: "Diabetes",
+          supplierId: 2,
+          price: 11.2,
+          unit: "tablets",
+          lastOrdered: "2023-10-03",
+          expiryDate: "2024-12-05",
+        },
+      ];
+
+      // Supplier database
+      const supplierDatabase = [
+        {
+          id: 1,
+          name: "MediCorp Pharmaceuticals",
+          contact: "+91-9876543201",
+          email: "orders@medicorp.com",
+          deliveryTime: "2-3 days",
+          rating: "4.8",
+          specialties: ["Pain Relief", "General Medicine"],
+        },
+        {
+          id: 2,
+          name: "HealthPlus Distributors",
+          contact: "+91-9876543202",
+          email: "supply@healthplus.com",
+          deliveryTime: "1-2 days",
+          rating: "4.9",
+          specialties: ["Antibiotics", "Diabetes", "Antacids"],
+        },
+        {
+          id: 3,
+          name: "PharmaDirect Solutions",
+          contact: "+91-9876543203",
+          email: "orders@pharmadirect.com",
+          deliveryTime: "3-4 days",
+          rating: "4.6",
+          specialties: ["Antihistamines", "Supplements"],
+        },
+        {
+          id: 4,
+          name: "VitaCare Suppliers",
+          contact: "+91-9876543204",
+          email: "contact@vitacare.com",
+          deliveryTime: "2 days",
+          rating: "4.7",
+          specialties: ["Vitamins", "Supplements"],
+        },
+      ];
+
+      // Recent orders database
+      let recentOrders = [
+        {
+          id: 1001,
+          medicineId: 2,
+          quantity: 50,
+          supplierId: 2,
+          date: "2023-10-10",
+          status: "Delivered",
+          totalCost: 637.5,
+        },
+        {
+          id: 1002,
+          medicineId: 5,
+          quantity: 30,
+          supplierId: 2,
+          date: "2023-10-12",
+          status: "In Transit",
+          totalCost: 462.0,
+        },
+        {
+          id: 1003,
+          medicineId: 7,
+          quantity: 60,
+          supplierId: 1,
+          date: "2023-10-08",
+          status: "Delivered",
+          totalCost: 285.0,
+        },
+      ];
+
+      // DOM Elements
+      const messageBox = document.getElementById("message-box");
+      const messageText = document.getElementById("message-text");
+
+      // Function to show a custom message box
+      function showMessage(text, type = "info") {
+        messageText.textContent = text;
+        messageBox.classList.remove(
+          "hidden",
+          "bg-red-700",
+          "bg-green-700",
+          "bg-blue-700"
+        );
+        if (type === "error") {
+          messageBox.classList.add("bg-red-700");
+        } else if (type === "success") {
+          messageBox.classList.add("bg-green-700");
+        } else if (type === "info") {
+          messageBox.classList.add("bg-blue-700");
+        } else {
+          messageBox.classList.add("bg-gray-700");
+        }
+        setTimeout(() => {
+          messageBox.classList.add("hidden");
+        }, 4000);
+      }
+
+      // Function to determine stock status
+      function getStockStatus(medicine) {
+        const stockPercentage =
+          (medicine.currentStock / medicine.minStock) * 100;
+        if (stockPercentage <= 30) return "low";
+        if (stockPercentage <= 70) return "medium";
+        return "adequate";
+      }
+
+      // Function to update statistics
+      function updateStatistics() {
+        const lowStockCount = medicineDatabase.filter(
+          (medicine) => getStockStatus(medicine) === "low"
+        ).length;
+        const mediumStockCount = medicineDatabase.filter(
+          (medicine) => getStockStatus(medicine) === "medium"
+        ).length;
+        const adequateStockCount = medicineDatabase.filter(
+          (medicine) => getStockStatus(medicine) === "adequate"
+        ).length;
+        const pendingOrdersCount = recentOrders.filter(
+          (order) => order.status !== "Delivered"
+        ).length;
+
+        document.getElementById("low-stock-count").textContent = lowStockCount;
+        document.getElementById("medium-stock-count").textContent =
+          mediumStockCount;
+        document.getElementById("adequate-stock-count").textContent =
+          adequateStockCount;
+        document.getElementById("pending-orders-count").textContent =
+          pendingOrdersCount;
+      }
+
+      // Function to populate low stock medicines
+      function populateLowStockMedicines() {
+        const container = document.getElementById("low-stock-medicines");
+        const lowStockMedicines = medicineDatabase.filter(
+          (medicine) => getStockStatus(medicine) === "low"
+        );
+
+        if (lowStockMedicines.length === 0) {
+          container.innerHTML = `
+            <div class="text-center py-8 text-gray-500">
+              <i class="fa-solid fa-check-circle text-4xl mb-3 text-green-500"></i>
+              <p class="text-lg">All medicines are adequately stocked</p>
+              <p class="text-sm mt-2">No restocking needed at this time</p>
+            </div>
+          `;
+          return;
+        }
+
+        container.innerHTML = lowStockMedicines
+          .map((medicine) => {
+            const supplier = supplierDatabase.find(
+              (s) => s.id === medicine.supplierId
+            );
+            const stockPercentage = Math.round(
+              (medicine.currentStock / medicine.minStock) * 100
+            );
+
+            return `
+              <div class="low-stock bg-gray-700 rounded-lg p-4 hover:bg-gray-600 transition duration-200 stock-alert">
+                <div class="flex justify-between items-start mb-3">
+                  <div>
+                    <div class="font-semibold text-white text-lg">${
+                      medicine.name
+                    }</div>
+                    <div class="text-sm text-gray-400">${
+                      medicine.category
+                    }</div>
+                  </div>
+                  <div class="text-right">
+                    <span class="px-2 py-1 text-xs rounded-full bg-red-600 text-white">
+                      Critical Stock
+                    </span>
+                    <div class="text-xs text-gray-400 mt-1">${stockPercentage}% of minimum</div>
+                  </div>
+                </div>
+                <div class="text-sm space-y-2">
+                  <div class="flex justify-between">
+                    <span class="text-gray-400">Current Stock:</span>
+                    <span class="text-white">${medicine.currentStock} ${
+              medicine.unit
+            }</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-gray-400">Minimum Required:</span>
+                    <span class="text-white">${medicine.minStock} ${
+              medicine.unit
+            }</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-gray-400">Supplier:</span>
+                    <span class="text-blue-400">${supplier.name}</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-gray-400">Price:</span>
+                    <span class="text-white">₹${
+                      medicine.price
+                    } per ${medicine.unit.slice(0, -1)}</span>
+                  </div>
+                </div>
+                <div class="flex space-x-2 mt-3">
+                  <button
+                    class="order-medicine-btn flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200 flex items-center justify-center"
+                    data-id="${medicine.id}"
+                  >
+                    <i class="fa-solid fa-cart-plus mr-2"></i>
+                    Order Now
+                  </button>
+                  <button
+                    class="view-details-btn flex-1 bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200 flex items-center justify-center"
+                    data-id="${medicine.id}"
+                  >
+                    <i class="fa-solid fa-info-circle mr-2"></i>
+                    Details
+                  </button>
+                </div>
+              </div>
+            `;
+          })
+          .join("");
+      }
+
+      // Function to populate supplier list
+      function populateSupplierList() {
+        const container = document.getElementById("supplier-list");
+
+        container.innerHTML = supplierDatabase
+          .map(
+            (supplier) => `
+            <div class="flex items-center justify-between p-3 bg-gray-700 rounded-lg hover:bg-gray-600 transition cursor-pointer">
+              <div class="flex items-center">
+                <div
+                  class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center mr-3"
+                >
+                  <i class="fa-solid fa-truck text-white"></i>
+                </div>
+                <div>
+                  <div class="font-medium text-white">${supplier.name}</div>
+                  <div class="text-sm text-gray-300">${supplier.specialties.join(
+                    ", "
+                  )}</div>
+                </div>
+              </div>
+              <div class="text-right">
+                <div class="text-blue-400 font-semibold">${
+                  supplier.deliveryTime
+                }</div>
+                <div class="text-sm text-yellow-400">${supplier.rating} ★</div>
+              </div>
+            </div>
+          `
+          )
+          .join("");
+      }
+
+      // Function to populate recent orders
+      function populateRecentOrders() {
+        const container = document.getElementById("recent-orders");
+
+        if (recentOrders.length === 0) {
+          container.innerHTML = `
+            <div class="text-center py-4 text-gray-500">
+              <i class="fa-solid fa-clipboard-list text-3xl mb-2"></i>
+              <p>No recent orders</p>
+            </div>
+          `;
+          return;
+        }
+
+        container.innerHTML = recentOrders
+          .map((order) => {
+            const medicine = medicineDatabase.find(
+              (m) => m.id === order.medicineId
+            );
+            const supplier = supplierDatabase.find(
+              (s) => s.id === order.supplierId
+            );
+            let statusClass = "bg-green-600";
+            if (order.status === "In Transit") statusClass = "bg-yellow-600";
+            if (order.status === "Processing") statusClass = "bg-blue-600";
+
+            return `
+              <div class="flex items-center justify-between p-3 bg-gray-700 rounded-lg">
+                <div class="flex items-center">
+                  <div class="mr-3">
+                    <div class="font-medium text-white">${medicine.name}</div>
+                    <div class="text-sm text-gray-300">${supplier.name}</div>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <span class="px-2 py-1 text-xs rounded-full ${statusClass} text-white">
+                    ${order.status}
+                  </span>
+                  <div class="text-sm text-gray-400 mt-1">${order.quantity} units</div>
+                </div>
+              </div>
+            `;
+          })
+          .join("");
+      }
+
+      // Function to populate medicine select dropdown
+      function populateMedicineSelect() {
+        const select = document.getElementById("medicine-select");
+        select.innerHTML =
+          '<option value="">Select Medicine to Restock</option>';
+
+        medicineDatabase.forEach((medicine) => {
+          const option = document.createElement("option");
+          option.value = medicine.id;
+          option.textContent = `${medicine.name} (${medicine.currentStock} in stock)`;
+          select.appendChild(option);
+        });
+      }
+
+      // Function to populate supplier select dropdown
+      function populateSupplierSelect() {
+        const select = document.getElementById("supplier-select");
+        select.innerHTML = '<option value="">Select Supplier</option>';
+
+        supplierDatabase.forEach((supplier) => {
+          const option = document.createElement("option");
+          option.value = supplier.id;
+          option.textContent = `${supplier.name} (${supplier.deliveryTime})`;
+          select.appendChild(option);
+        });
+      }
+
+      // Function to show order confirmation modal
+      function showOrderConfirmationModal(
+        medicineId,
+        quantity,
+        supplierId,
+        urgency
+      ) {
+        const medicine = medicineDatabase.find((m) => m.id === medicineId);
+        const supplier = supplierDatabase.find((s) => s.id === supplierId);
+        const modalContent = document.getElementById("order-modal-content");
+
+        const totalCost = medicine.price * quantity;
+
+        modalContent.innerHTML = `
+          <div class="space-y-4">
+            <div class="bg-gray-700 rounded-lg p-4">
+              <div class="font-semibold text-white mb-2">Order Details</div>
+              <div class="text-sm space-y-2">
+                <div class="flex justify-between">
+                  <span class="text-gray-400">Medicine:</span>
+                  <span class="text-white">${medicine.name}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-400">Quantity:</span>
+                  <span class="text-white">${quantity} ${medicine.unit}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-400">Supplier:</span>
+                  <span class="text-white">${supplier.name}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-400">Unit Price:</span>
+                  <span class="text-white">₹${medicine.price}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-400">Total Cost:</span>
+                  <span class="text-white font-semibold">₹${totalCost.toFixed(
+                    2
+                  )}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-400">Estimated Delivery:</span>
+                  <span class="text-white">${supplier.deliveryTime}</span>
+                </div>
+              </div>
+            </div>
+            <div class="text-sm text-yellow-400 bg-yellow-900/30 p-3 rounded-lg">
+              <i class="fa-solid fa-exclamation-triangle mr-2"></i>
+              Please verify order details before confirming.
+            </div>
+          </div>
+        `;
+
+        document.getElementById("order-modal").classList.remove("hidden");
+
+        // Store order details for confirmation
+        document.getElementById("confirm-order").dataset.orderDetails =
+          JSON.stringify({
+            medicineId,
+            quantity,
+            supplierId,
+            urgency,
+            totalCost,
+          });
+      }
+
+      // Function to place an order
+      function placeOrder(orderDetails) {
+        const { medicineId, quantity, supplierId, urgency, totalCost } =
+          orderDetails;
+        const medicine = medicineDatabase.find((m) => m.id === medicineId);
+        const supplier = supplierDatabase.find((s) => s.id === supplierId);
+
+        // Create new order
+        const newOrder = {
+          id: Date.now(),
+          medicineId,
+          quantity,
+          supplierId,
+          date: new Date().toISOString().split("T")[0],
+          status: "Processing",
+          totalCost,
+          urgency,
+        };
+
+        // Add to recent orders
+        recentOrders.unshift(newOrder);
+
+        showMessage(
+          `Order placed for ${quantity} ${medicine.unit} of ${
+            medicine.name
+          } with ${supplier.name}. Total: ₹${totalCost.toFixed(2)}`,
+          "success"
+        );
+
+        // Update UI
+        updateStatistics();
+        populateRecentOrders();
+
+        // Close modal
+        document.getElementById("order-modal").classList.add("hidden");
+      }
+
+      // Function to auto-restock all low stock items
+      function autoRestockLowItems() {
+        const lowStockMedicines = medicineDatabase.filter(
+          (medicine) => getStockStatus(medicine) === "low"
+        );
+
+        if (lowStockMedicines.length === 0) {
+          showMessage("No low stock items to restock", "info");
+          return;
+        }
+
+        let ordersPlaced = 0;
+
+        lowStockMedicines.forEach((medicine) => {
+          const quantityToOrder = medicine.minStock * 2; // Order double the minimum stock
+          const supplierId = medicine.supplierId;
+
+          // Create order
+          const newOrder = {
+            id: Date.now() + ordersPlaced,
+            medicineId: medicine.id,
+            quantity: quantityToOrder,
+            supplierId,
+            date: new Date().toISOString().split("T")[0],
+            status: "Processing",
+            totalCost: medicine.price * quantityToOrder,
+            urgency: "high",
+          };
+
+          // Add to recent orders
+          recentOrders.unshift(newOrder);
+          ordersPlaced++;
+        });
+
+        showMessage(
+          `Auto-restock completed. ${ordersPlaced} orders placed for low stock items.`,
+          "success"
+        );
+
+        // Update UI
+        updateStatistics();
+        populateRecentOrders();
+        populateLowStockMedicines();
+      }
+
+      // Initialize the application
+      function init() {
+        updateStatistics();
+        populateLowStockMedicines();
+        populateSupplierList();
+        populateRecentOrders();
+        populateMedicineSelect();
+        populateSupplierSelect();
+
+        // Set up urgency buttons
+        document.querySelectorAll(".urgency-btn").forEach((btn) => {
+          btn.addEventListener("click", function () {
+            document.querySelectorAll(".urgency-btn").forEach((b) => {
+              b.classList.remove("bg-blue-600", "bg-red-600", "bg-yellow-600");
+              b.classList.add("bg-gray-600");
+            });
+            this.classList.remove("bg-gray-600");
+            if (this.dataset.urgency === "low") {
+              this.classList.add("bg-blue-600");
+            } else if (this.dataset.urgency === "medium") {
+              this.classList.add("bg-yellow-600");
+            } else {
+              this.classList.add("bg-red-600");
+            }
+          });
+        });
+      }
+
+      // Event Listeners
+      document.addEventListener("DOMContentLoaded", function () {
+        init();
+
+        // Refresh inventory
+        document
+          .getElementById("refresh-inventory-btn")
+          .addEventListener("click", function () {
+            // Simulate stock changes
+            medicineDatabase.forEach((medicine) => {
+              if (Math.random() > 0.7) {
+                medicine.currentStock = Math.max(
+                  0,
+                  medicine.currentStock - Math.floor(Math.random() * 10)
+                );
+              }
+            });
+
+            updateStatistics();
+            populateLowStockMedicines();
+            populateMedicineSelect();
+            showMessage("Inventory status updated", "info");
+          });
+
+        // Auto-restock button
+        document
+          .getElementById("auto-restock-btn")
+          .addEventListener("click", autoRestockLowItems);
+
+        // Order all low stock button
+        document
+          .getElementById("order-all-low-btn")
+          .addEventListener("click", autoRestockLowItems);
+
+        // Quick order button
+        document
+          .getElementById("quick-order-btn")
+          .addEventListener("click", function () {
+            const medicineId = parseInt(
+              document.getElementById("medicine-select").value
+            );
+            const quantity = parseInt(
+              document.getElementById("order-quantity").value
+            );
+            const supplierId = parseInt(
+              document.getElementById("supplier-select").value
+            );
+
+            if (!medicineId || !quantity || !supplierId) {
+              showMessage("Please fill in all required fields", "error");
+              return;
+            }
+
+            if (quantity <= 0) {
+              showMessage("Please enter a valid quantity", "error");
+              return;
+            }
+
+            // Get selected urgency
+            let urgency = "medium";
+            document.querySelectorAll(".urgency-btn").forEach((btn) => {
+              if (!btn.classList.contains("bg-gray-600")) {
+                urgency = btn.dataset.urgency;
+              }
+            });
+
+            showOrderConfirmationModal(
+              medicineId,
+              quantity,
+              supplierId,
+              urgency
+            );
+          });
+
+        // Order medicine buttons
+        document.addEventListener("click", function (e) {
+          if (
+            e.target.classList.contains("order-medicine-btn") ||
+            e.target.parentElement.classList.contains("order-medicine-btn")
+          ) {
+            const medicineId = parseInt(
+              e.target.dataset.id || e.target.parentElement.dataset.id
+            );
+            const medicine = medicineDatabase.find((m) => m.id === medicineId);
+            const quantity = medicine.minStock * 2; // Default to double the minimum stock
+            const supplierId = medicine.supplierId;
+
+            showOrderConfirmationModal(
+              medicineId,
+              quantity,
+              supplierId,
+              "high"
+            );
+          }
+        });
+
+        // Confirm order
+        document
+          .getElementById("confirm-order")
+          .addEventListener("click", function () {
+            const orderDetails = JSON.parse(this.dataset.orderDetails);
+            placeOrder(orderDetails);
+          });
+
+        // Cancel order
+        document
+          .getElementById("cancel-order")
+          .addEventListener("click", function () {
+            document.getElementById("order-modal").classList.add("hidden");
+          });
+      });
+    </script>
+    <script src="auth_guard.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

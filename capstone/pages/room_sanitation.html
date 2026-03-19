@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HMS | Room Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&display=swap");
+      :root {
+        --bg-0: #0b0f1a;
+        --bg-1: #0f172a;
+        --card: #0f1b2d;
+        --border: rgba(148, 163, 184, 0.18);
+        --accent: #22d3ee;
+        --accent-2: #f59e0b;
+        --mint: #34d399;
+      }
+      body {
+        font-family: "Sora", sans-serif;
+        background: radial-gradient(1200px 600px at 20% -10%, #1e293b 0%, rgba(15, 23, 42, 0.2) 60%, transparent 100%),
+          radial-gradient(800px 500px at 90% 10%, #0e7490 0%, rgba(14, 116, 144, 0.15) 40%, transparent 100%),
+          var(--bg-0);
+        color: #e2e8f0;
+      }
+      .top-nav {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 18px 28px;
+        background: rgba(15, 23, 42, 0.85);
+        border-bottom: 1px solid var(--border);
+        backdrop-filter: blur(12px);
+      }
+      .user-type-btn {
+        padding: 8px 14px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        background: rgba(30, 41, 59, 0.8);
+        color: #cbd5f5;
+        border: 1px solid transparent;
+        transition: all 0.2s ease;
+      }
+      .user-type-btn.active {
+        background: rgba(34, 211, 238, 0.2);
+        border-color: rgba(34, 211, 238, 0.5);
+        color: #7dd3fc;
+        box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.1);
+      }
+      .active-nav-link {
+        background: rgba(34, 211, 238, 0.12);
+        border: 1px solid rgba(34, 211, 238, 0.35);
+        color: #7dd3fc;
+      }
+      .glass {
+        background: rgba(15, 23, 42, 0.72);
+        border: 1px solid var(--border);
+        box-shadow: 0 30px 60px rgba(15, 23, 42, 0.35);
+      }
+      .stat-card {
+        background: rgba(15, 23, 42, 0.8);
+        border: 1px solid var(--border);
+      }
+      .status-pill {
+        padding: 2px 10px;
+        border-radius: 999px;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.03em;
+      }
+      .status-clean {
+        background: rgba(52, 211, 153, 0.16);
+        color: #6ee7b7;
+      }
+      .status-alert {
+        background: rgba(248, 113, 113, 0.15);
+        color: #fca5a5;
+      }
+      .status-progress {
+        background: rgba(251, 191, 36, 0.18);
+        color: #fcd34d;
+      }
+      .time-btn.selected {
+        background: rgba(34, 211, 238, 0.2);
+        border-color: rgba(34, 211, 238, 0.5);
+        color: #7dd3fc;
+      }
+      .soft-divider {
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(148, 163, 184, 0.35), transparent);
+      }
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: rgba(148, 163, 184, 0.4);
+        border-radius: 999px;
+      }
+    </style>
+  </head>
+  <body class="min-h-screen">
+    <nav class="top-nav">
+      <div class="nav-brand flex items-center gap-3">
+        <span class="h-10 w-10 rounded-2xl flex items-center justify-center bg-cyan-500/15 text-cyan-300">
+          <i class="fas fa-hospital text-lg"></i>
+        </span>
+        <div>
+          <h1 class="text-lg font-bold tracking-tight">HMS | Room Management</h1>
+          <p class="text-xs text-slate-400">VIT Bhopal Hostel Services</p>
+        </div>
+      </div>
+
+      <div class="nav-actions flex items-center gap-6">
+        <div class="user-type-selector flex items-center gap-2">
+          <button id="student-view-btn" class="user-type-btn active">Student</button>
+          <button id="admin-view-btn" class="user-type-btn">Admin</button>
+          <button id="staff-view-btn" class="user-type-btn">Staff</button>
+        </div>
+        <div class="flex items-center space-x-4">
+          <div class="relative cursor-pointer" id="notif-trigger">
+            <i class="fa-solid fa-bell text-xl text-slate-300"></i>
+            <span
+              id="notification-badge"
+              class="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] rounded-full h-4 w-4 flex items-center justify-center"
+              >3</span
+            >
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="flex flex-col md:flex-row">
+      <aside class="w-full md:w-64 bg-slate-950 text-white p-6 flex flex-col min-h-[calc(100vh-72px)] shadow-2xl">
+        <nav class="w-full flex-1">
+          <ul class="space-y-2">
+            <li>
+              <a href="dashboard.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-slate-800 transition">
+                <i class="fa-solid fa-chart-line mr-3"></i>Dashboard
+              </a>
+            </li>
+            <li>
+              <a href="room_sanitation.html" class="flex items-center px-4 py-3 rounded-lg active-nav-link">
+                <i class="fa-solid fa-broom mr-3"></i>Room Management
+              </a>
+            </li>
+            <li>
+              <a href="sos.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-slate-800 transition">
+                <i class="fa-solid fa-circle-exclamation mr-3 text-red-400"></i>SOS Emergency
+              </a>
+            </li>
+          </ul>
+        </nav>
+        <a
+          href="index.html"
+          class="flex items-center justify-center w-full px-4 py-3 rounded-lg bg-red-600/15 text-red-400 hover:bg-red-600 hover:text-white transition-all font-bold"
+        >
+          <i class="fa-solid fa-right-from-bracket mr-2"></i> Log Out
+        </a>
+      </aside>
+
+      <main id="student-view" class="view-section flex-1 p-6 lg:p-10">
+        <div class="flex flex-col lg:flex-row justify-between gap-6 mb-8">
+          <div>
+            <h2 class="text-3xl font-bold text-white mb-2">Room Care Request</h2>
+            <p class="text-slate-400">
+              Room <span id="display-room" class="text-cyan-300 font-bold">B-402</span> ·
+              Last Sanitized <span class="text-emerald-300">2 days ago</span>
+            </p>
+          </div>
+          <div class="flex gap-3">
+            <div class="stat-card p-4 rounded-2xl text-center">
+              <p class="text-[10px] uppercase text-slate-400">Status</p>
+              <p class="text-sm font-bold text-emerald-300">Clean</p>
+            </div>
+            <div class="stat-card p-4 rounded-2xl text-center">
+              <p class="text-[10px] uppercase text-slate-400">Next Cycle</p>
+              <p class="text-sm font-bold text-cyan-300">Mar 12</p>
+            </div>
+            <div class="stat-card p-4 rounded-2xl text-center">
+              <p class="text-[10px] uppercase text-slate-400">Open Issues</p>
+              <p class="text-sm font-bold text-amber-300">1</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div class="lg:col-span-2 glass p-6 rounded-3xl">
+            <form id="cleaningForm" class="space-y-5">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="space-y-2">
+                  <label class="text-xs font-bold text-slate-400 uppercase">Hostel Block</label>
+                  <select id="block" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white outline-none focus:border-cyan-400">
+                    <option>Block A</option>
+                    <option selected>Block B</option>
+                    <option>Block C</option>
+                  </select>
+                </div>
+                <div class="space-y-2">
+                  <label class="text-xs font-bold text-slate-400 uppercase">Room No.</label>
+                  <input type="text" value="402" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white outline-none focus:border-cyan-400" />
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="space-y-2">
+                  <label class="text-xs font-bold text-slate-400 uppercase">Request Type</label>
+                  <select class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white outline-none focus:border-cyan-400">
+                    <option>Regular Cleaning</option>
+                    <option>Deep Cleaning</option>
+                    <option>Pest Control</option>
+                    <option>Washroom Disinfection</option>
+                  </select>
+                </div>
+                <div class="space-y-2">
+                  <label class="text-xs font-bold text-slate-400 uppercase">Preferred Date</label>
+                  <input type="date" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white outline-none focus:border-cyan-400" />
+                </div>
+              </div>
+
+              <div class="space-y-2">
+                <label class="text-xs font-bold text-slate-400 uppercase">Preferred Time</label>
+                <div class="grid grid-cols-3 gap-2">
+                  <button type="button" class="time-btn p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs hover:bg-cyan-600/30 transition">Morning</button>
+                  <button type="button" class="time-btn p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs hover:bg-cyan-600/30 transition">Afternoon</button>
+                  <button type="button" class="time-btn p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs hover:bg-cyan-600/30 transition">Evening</button>
+                </div>
+              </div>
+
+              <div class="space-y-2">
+                <label class="text-xs font-bold text-slate-400 uppercase">Access & Notes</label>
+                <textarea
+                  placeholder="e.g. Please call on arrival, key with warden."
+                  class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white h-24 outline-none focus:border-cyan-400"
+                ></textarea>
+              </div>
+
+              <label class="flex items-center gap-3 text-sm text-slate-300">
+                <input type="checkbox" class="h-4 w-4 accent-cyan-400" />
+                I consent to housekeeping access during the selected time window.
+              </label>
+
+              <button type="submit" class="w-full bg-cyan-500 hover:bg-cyan-600 text-slate-900 font-bold py-4 rounded-2xl shadow-lg shadow-cyan-900/30 transition-all">
+                Submit Request
+              </button>
+            </form>
+          </div>
+
+          <div class="space-y-6">
+            <div class="glass p-5 rounded-3xl">
+              <h3 class="font-semibold text-white mb-4">Room Snapshot</h3>
+              <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <p class="text-xs uppercase text-slate-400">Occupancy</p>
+                    <p class="text-sm font-semibold">2 of 2 residents</p>
+                  </div>
+                  <span class="status-pill status-clean">Stable</span>
+                </div>
+                <div class="soft-divider"></div>
+                <div class="flex items-center justify-between">
+                  <div>
+                    <p class="text-xs uppercase text-slate-400">Air Quality</p>
+                    <p class="text-sm font-semibold">Good · 95%</p>
+                  </div>
+                  <span class="status-pill status-progress">Monitor</span>
+                </div>
+                <div class="soft-divider"></div>
+                <div class="flex items-center justify-between">
+                  <div>
+                    <p class="text-xs uppercase text-slate-400">Sanitation Score</p>
+                    <p class="text-sm font-semibold">4.6 / 5</p>
+                  </div>
+                  <span class="status-pill status-clean">Top 12%</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="space-y-4">
+              <h3 class="font-semibold text-white">Recent Requests</h3>
+              <div class="glass p-4 rounded-2xl border-l-4 border-emerald-400">
+                <p class="text-xs text-slate-400">Mar 08, 2026</p>
+                <p class="font-semibold text-sm">Deep Cleaning</p>
+                <span class="status-pill status-clean">Completed</span>
+              </div>
+              <div class="glass p-4 rounded-2xl border-l-4 border-amber-400">
+                <p class="text-xs text-slate-400">Mar 06, 2026</p>
+                <p class="font-semibold text-sm">Regular Sweep</p>
+                <span class="status-pill status-progress">Pending</span>
+              </div>
+              <div class="glass p-4 rounded-2xl border-l-4 border-red-400">
+                <p class="text-xs text-slate-400">Mar 02, 2026</p>
+                <p class="font-semibold text-sm">Washroom Disinfection</p>
+                <span class="status-pill status-alert">Escalated</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <main id="admin-view" class="view-section hidden flex-1 p-6 lg:p-10">
+        <div class="flex flex-col lg:flex-row justify-between gap-6 mb-8">
+          <div>
+            <h2 class="text-3xl font-bold text-white mb-2">Admin Oversight</h2>
+            <p class="text-slate-400">Track workloads, SLAs, and escalation risk across blocks.</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <button class="px-4 py-2 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 text-xs font-semibold">
+              Export Daily Report
+            </button>
+            <button class="px-4 py-2 rounded-full bg-slate-800 text-slate-200 border border-slate-700 text-xs font-semibold">
+              Reassign Staff
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div class="stat-card p-6 rounded-3xl">
+            <p class="text-slate-400 text-sm">Total Requests Today</p>
+            <p class="text-4xl font-bold text-cyan-300">142</p>
+            <p class="text-xs text-slate-500 mt-2">+8% vs last Tuesday</p>
+          </div>
+          <div class="stat-card p-6 rounded-3xl">
+            <p class="text-slate-400 text-sm">Staff On Duty</p>
+            <p class="text-4xl font-bold text-amber-300">18</p>
+            <p class="text-xs text-slate-500 mt-2">3 teams rotating</p>
+          </div>
+          <div class="stat-card p-6 rounded-3xl">
+            <p class="text-slate-400 text-sm">Pending Escalations</p>
+            <p class="text-4xl font-bold text-red-400">3</p>
+            <p class="text-xs text-slate-500 mt-2">2 critical, 1 moderate</p>
+          </div>
+        </div>
+
+        <div class="glass p-6 rounded-3xl">
+          <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+            <h3 class="text-lg font-semibold text-white">Live Queue</h3>
+            <div class="flex flex-wrap gap-3 text-xs">
+              <span class="status-pill status-progress">SLA &lt; 4 hrs: 21</span>
+              <span class="status-pill status-alert">Overdue: 3</span>
+              <span class="status-pill status-clean">Resolved: 96</span>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 gap-4">
+            <div class="stat-card p-4 rounded-2xl flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+              <div>
+                <p class="text-sm font-semibold">Block B · Room 402</p>
+                <p class="text-xs text-slate-400">Deep Cleaning · Requested 09:30 AM</p>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="status-pill status-progress">Assigned</span>
+                <span class="text-xs text-slate-400">Team Indigo</span>
+                <button class="px-3 py-1 rounded-full bg-cyan-500/15 text-cyan-300 text-xs">Details</button>
+              </div>
+            </div>
+            <div class="stat-card p-4 rounded-2xl flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+              <div>
+                <p class="text-sm font-semibold">Block A · Room 118</p>
+                <p class="text-xs text-slate-400">Pest Control · Requested 10:05 AM</p>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="status-pill status-alert">Escalated</span>
+                <span class="text-xs text-slate-400">Team Onyx</span>
+                <button class="px-3 py-1 rounded-full bg-red-500/15 text-red-300 text-xs">Resolve</button>
+              </div>
+            </div>
+            <div class="stat-card p-4 rounded-2xl flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+              <div>
+                <p class="text-sm font-semibold">Block C · Room 304</p>
+                <p class="text-xs text-slate-400">Regular Cleaning · Requested 11:20 AM</p>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="status-pill status-clean">Completed</span>
+                <span class="text-xs text-slate-400">Team Nova</span>
+                <button class="px-3 py-1 rounded-full bg-slate-700 text-slate-200 text-xs">Review</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <main id="staff-view" class="view-section hidden flex-1 p-6 lg:p-10">
+        <div class="flex flex-col lg:flex-row justify-between gap-6 mb-8">
+          <div>
+            <h2 class="text-3xl font-bold text-white mb-2">Staff Route Board</h2>
+            <p class="text-slate-400">Prioritize tasks by urgency and location. Keep SLAs green.</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="status-pill status-clean">Shift: 7 AM - 3 PM</span>
+            <span class="status-pill status-progress">Team Indigo</span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="glass p-6 rounded-3xl">
+            <h3 class="font-semibold text-white mb-4">Today's Route</h3>
+            <div class="space-y-4">
+              <div class="stat-card p-4 rounded-2xl">
+                <p class="text-sm font-semibold">Block B · Room 402</p>
+                <p class="text-xs text-slate-400">Deep Cleaning · ETA 30 mins</p>
+                <div class="flex gap-2 mt-3">
+                  <span class="status-pill status-progress">In Progress</span>
+                  <span class="status-pill status-clean">Priority</span>
+                </div>
+              </div>
+              <div class="stat-card p-4 rounded-2xl">
+                <p class="text-sm font-semibold">Block B · Room 405</p>
+                <p class="text-xs text-slate-400">Regular Cleaning · ETA 50 mins</p>
+                <div class="flex gap-2 mt-3">
+                  <span class="status-pill status-progress">Assigned</span>
+                </div>
+              </div>
+              <div class="stat-card p-4 rounded-2xl">
+                <p class="text-sm font-semibold">Block B · Room 412</p>
+                <p class="text-xs text-slate-400">Washroom Disinfection · ETA 90 mins</p>
+                <div class="flex gap-2 mt-3">
+                  <span class="status-pill status-alert">Urgent</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="glass p-6 rounded-3xl">
+            <h3 class="font-semibold text-white mb-4">Quick Actions</h3>
+            <div class="space-y-4">
+              <button class="w-full px-4 py-3 rounded-2xl bg-emerald-400/15 text-emerald-200 border border-emerald-400/40 font-semibold">
+                Mark Current Task Complete
+              </button>
+              <button class="w-full px-4 py-3 rounded-2xl bg-amber-400/15 text-amber-200 border border-amber-400/40 font-semibold">
+                Report Supply Shortage
+              </button>
+              <button class="w-full px-4 py-3 rounded-2xl bg-red-500/15 text-red-200 border border-red-500/40 font-semibold">
+                Escalate Issue to Supervisor
+              </button>
+              <button class="w-full px-4 py-3 rounded-2xl bg-slate-800 text-slate-200 border border-slate-700 font-semibold">
+                Update ETA for Next Block
+              </button>
+            </div>
+          </div>
+
+          <div class="glass p-6 rounded-3xl">
+            <h3 class="font-semibold text-white mb-4">Supplies Check</h3>
+            <div class="space-y-4 text-sm text-slate-300">
+              <div class="flex items-center justify-between">
+                <span>Disinfectant</span>
+                <span class="status-pill status-clean">70%</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span>Gloves</span>
+                <span class="status-pill status-progress">45%</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span>Cleaning Cloths</span>
+                <span class="status-pill status-alert">20%</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span>Air Freshener</span>
+                <span class="status-pill status-clean">80%</span>
+              </div>
+              <button class="w-full mt-2 px-4 py-3 rounded-2xl bg-cyan-500/20 text-cyan-200 border border-cyan-400/40 font-semibold">
+                Request Refill
+              </button>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      const buttons = document.querySelectorAll(".user-type-btn");
+      const views = document.querySelectorAll(".view-section");
+
+      buttons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          buttons.forEach((b) => b.classList.remove("active"));
+          views.forEach((v) => v.classList.add("hidden"));
+
+          btn.classList.add("active");
+          const targetId = btn.id.replace("-btn", "");
+          document.getElementById(targetId).classList.remove("hidden");
+        });
+      });
+
+      document.getElementById("cleaningForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        alert("Request Submitted Successfully! A staff member will be assigned shortly.");
+      });
+
+      const timeBtns = document.querySelectorAll(".time-btn");
+      timeBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          timeBtns.forEach((b) => b.classList.remove("selected"));
+          btn.classList.add("selected");
+        });
+      });
+    </script>
+  </body>
+</html>

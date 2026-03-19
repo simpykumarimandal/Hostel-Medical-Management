@@ -1,0 +1,3402 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HMS | Room Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+      body {
+        font-family: "Inter", sans-serif;
+        color: #d1d5db;
+      }
+      .active-nav-link {
+        background-color: #374151;
+        color: white;
+      }
+      .bg-card {
+        background-color: #374151;
+      }
+      .message-box {
+        animation: slideIn 0.5s forwards;
+      }
+      @keyframes slideIn {
+        from {
+          transform: translateX(100%);
+        }
+        to {
+          transform: translateX(0);
+        }
+      }
+      .fade-in {
+        animation: fadeIn 0.5s ease-in;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .gradient-border {
+        background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+        padding: 2px;
+        border-radius: 12px;
+      }
+      .gradient-border > div {
+        background: #374151;
+        border-radius: 10px;
+        padding: 1.5rem;
+      }
+      .user-type-selector {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 0;
+        background: #1f2937;
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+      }
+      .user-type-btn {
+        padding: 0.5rem 1.5rem;
+        margin: 0 0.25rem;
+        border-radius: 0.375rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        font-size: 0.875rem;
+      }
+      .user-type-btn.active {
+        background-color: #3b82f6;
+        color: white;
+        box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3);
+      }
+      .user-type-btn:not(.active) {
+        background-color: #4b5563;
+        color: #d1d5db;
+      }
+      .user-type-btn:not(.active):hover {
+        background-color: #6b7280;
+      }
+      .hidden {
+        display: none;
+      }
+      .top-nav {
+        background: #111827;
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid #374151;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .nav-brand {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+      .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+      }
+      .room-card {
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+      .room-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+      }
+      .occupied {
+        border-left: 4px solid #ef4444;
+      }
+      .available {
+        border-left: 4px solid #10b981;
+      }
+      .maintenance {
+        border-left: 4px solid #f59e0b;
+      }
+      .reserved {
+        border-left: 4px solid #8b5cf6;
+      }
+      .match-score {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 0.875rem;
+      }
+      .high-match {
+        background-color: #10b981;
+        color: white;
+      }
+      .medium-match {
+        background-color: #f59e0b;
+        color: white;
+      }
+      .low-match {
+        background-color: #ef4444;
+        color: white;
+      }
+      .calendar-day {
+        width: 14.28%;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+      .calendar-day:hover {
+        background-color: #4b5563;
+      }
+      .calendar-day.selected {
+        background-color: #3b82f6;
+        color: white;
+      }
+      .calendar-day.unavailable {
+        background-color: #ef4444;
+        color: white;
+        cursor: not-allowed;
+      }
+      .calendar-day.maintenance {
+        background-color: #f59e0b;
+        color: white;
+        cursor: not-allowed;
+      }
+      .virtual-tour-container {
+        position: relative;
+        width: 100%;
+        height: 300px;
+        border-radius: 12px;
+        overflow: hidden;
+        background: #1f2937;
+      }
+      .tour-controls {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 10px;
+      }
+      .inventory-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px;
+        border-radius: 8px;
+        background-color: #4b5563;
+        margin-bottom: 8px;
+      }
+      .inventory-status {
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        font-weight: 600;
+      }
+      .status-available {
+        background-color: #10b981;
+        color: white;
+      }
+      .status-low {
+        background-color: #f59e0b;
+        color: white;
+      }
+      .status-out {
+        background-color: #ef4444;
+        color: white;
+      }
+      .preference-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px;
+        border-radius: 8px;
+        background-color: #4b5563;
+        margin-bottom: 8px;
+      }
+      .preference-badge {
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        background-color: #3b82f6;
+        color: white;
+      }
+      .transfer-request {
+        border-left: 4px solid #8b5cf6;
+      }
+      .swap-request {
+        border-left: 4px solid #f59e0b;
+      }
+      .chart-container {
+        position: relative;
+        height: 300px;
+        width: 100%;
+      }
+      .progress-bar {
+        height: 8px;
+        border-radius: 4px;
+        background-color: #4b5563;
+        overflow: hidden;
+      }
+      .progress-fill {
+        height: 100%;
+        border-radius: 4px;
+        transition: width 0.5s ease;
+      }
+      .notification-item {
+        transition: all 0.3s ease;
+      }
+      .notification-item:hover {
+        background-color: #4b5563;
+      }
+      .notification-item.unread {
+        background-color: #1e3a8a;
+      }
+      .roommate-card {
+        transition: all 0.3s ease;
+      }
+      .roommate-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px -3px rgba(0, 0, 0, 0.3);
+      }
+      .priority-high {
+        border-left: 4px solid #ef4444;
+      }
+      .priority-medium {
+        border-left: 4px solid #f59e0b;
+      }
+      .priority-low {
+        border-left: 4px solid #10b981;
+      }
+      .task-completed {
+        opacity: 0.7;
+      }
+      .task-completed .task-title {
+        text-decoration: line-through;
+      }
+    </style>
+    <style>
+      .sidebar {
+        transition: transform 0.25s ease-in-out;
+      }
+      .sidebar-collapsed .sidebar {
+        transform: translateX(-110%);
+      }
+      .main-content {
+        transition: margin-left 0.25s ease-in-out;
+      }
+      .sidebar-collapsed .main-content {
+        margin-left: 0 !important;
+      }
+      @media (max-width: 768px) {
+        .sidebar {
+          transform: translateX(-110%);
+        }
+        .sidebar-open .sidebar {
+          transform: translateX(0);
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-gray-900 min-h-screen">
+    <!-- Top Navigation Bar -->
+    >
+
+    <div class="flex flex-col md:flex-row">
+      <!-- Sidebar -->
+      <aside
+        class="sidebar w-full md:w-64 bg-gray-950 text-white p-6 flex flex-col items-center md:items-start space-y-8 shadow-2xl"
+      >
+        <nav class="w-full">
+          <ul class="space-y-2">
+            <li>
+              <a
+                href="demo.html"
+                class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200"
+              >
+                <i class="fa-solid fa-chart-line mr-3"></i>
+                <span class="font-medium">Dashboard</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="ambulance.html"
+                class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200"
+              >
+                <i class="fa-solid fa-truck-medical mr-3"></i>
+                <span class="font-medium">Ambulance</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="doctors.html"
+                class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200"
+              >
+                <i class="fa-solid fa-user-doctor mr-3"></i>
+                <span class="font-medium">Doctors</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="medicine_order.html"
+                class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200"
+              >
+                <i class="fa-solid fa-pills mr-3"></i>
+                <span class="font-medium">Pharmacy</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="medicine_reminder.html"
+                class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200"
+              >
+                <i class="fa-solid fa-bell mr-3"></i>
+                <span class="font-medium">Medicine Reminder</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="symptoms_checker.html"
+                class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200"
+              >
+                <i class="fa-solid fa-stethoscope mr-3"></i>
+                <span class="font-medium">Symptoms Checker</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="lab_tests.html"
+                class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200"
+              >
+                <i class="fa-solid fa-vial-circle-check mr-3"></i>
+                <span class="font-medium">Lab Tests</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="emergency_requests.html"
+                class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200"
+              >
+                <i class="fa-solid fa-hand-holding-medical mr-3"></i>
+                <span class="font-medium">Emergency Requests</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="sos.html"
+                class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200"
+              >
+                <i class="fa-solid fa-sos mr-3"></i>
+                <span class="font-medium">SOS</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="electronic_health_records.html"
+                class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200"
+              >
+                <i class="fa-solid fa-file-medical mr-3"></i>
+                <span class="font-medium">Health Records</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="health_insurance.html"
+                class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200"
+              >
+                <i class="fa-solid fa-shield-heart mr-3"></i>
+                <span class="font-medium">Health Insurance</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="reports_and_analytics.html"
+                class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200"
+              >
+                <i class="fa-solid fa-chart-pie mr-3"></i>
+                <span class="font-medium">Reports & Analytics</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="restocking.html"
+                class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200"
+              >
+                <i class="fa-solid fa-box-open mr-3"></i>
+                <span class="font-medium">Inventory</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="studentrequest.html"
+                class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200"
+              >
+                <i class="fa-solid fa-cash-register mr-3"></i>
+                <span class="font-medium">Student Requests</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="student_transport.html"
+                class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200"
+              >
+                <i class="fa-solid fa-bus mr-3"></i>
+                <span class="font-medium">Student Transport</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="transport_management_system.html"
+                class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200"
+              >
+                <i class="fa-solid fa-route mr-3"></i>
+                <span class="font-medium">Transport Management</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="room_management.html"
+                class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200"
+              >
+                <i class="fa-solid fa-bed mr-3"></i>
+                <span class="font-medium">Room Management</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="room_sanitation.html"
+                class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200"
+              >
+                <i class="fa-solid fa-spray-can-sparkles mr-3"></i>
+                <span class="font-medium">Room Sanitation</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="mess_menu.html"
+                class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200"
+              >
+                <i class="fa-solid fa-utensils mr-3"></i>
+                <span class="font-medium">Mess Menu</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="mess_food_order_service.html"
+                class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200"
+              >
+                <i class="fa-solid fa-bowl-food mr-3"></i>
+                <span class="font-medium">Mess Food Order</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="laundry_management_system.html"
+                class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200"
+              >
+                <i class="fa-solid fa-shirt mr-3"></i>
+                <span class="font-medium">Laundry</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="leave_and_outing.html"
+                class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200"
+              >
+                <i class="fa-solid fa-door-open mr-3"></i>
+                <span class="font-medium">Leave & Outing</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="vit_bhopal_community.html"
+                class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200"
+              >
+                <i class="fa-solid fa-users mr-3"></i>
+                <span class="font-medium">VIT Community</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="parent_notification.html"
+                class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200"
+              >
+                <i class="fa-solid fa-comments mr-3"></i>
+                <span class="font-medium">Parent Notification</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="payment_gateway.html"
+                class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200"
+              >
+                <i class="fa-solid fa-credit-card mr-3"></i>
+                <span class="font-medium">Payment Gateway</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="complaint_management_system.html"
+                class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200"
+              >
+                <i class="fa-solid fa-circle-exclamation mr-3"></i>
+                <span class="font-medium">Complaints</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="exam_management_system.html"
+                class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200"
+              >
+                <i class="fa-solid fa-clipboard-list mr-3"></i>
+                <span class="font-medium">Exam Management</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="local_hospital_network.html"
+                class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200"
+              >
+                <i class="fa-solid fa-hospital mr-3"></i>
+                <span class="font-medium">Local Hospitals</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="medical_camps.html"
+                class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200"
+              >
+                <i class="fa-solid fa-hand-holding-heart mr-3"></i>
+                <span class="font-medium">Medical Camps</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="virtual_consultation.html"
+                class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200"
+              >
+                <i class="fa-solid fa-video mr-3"></i>
+                <span class="font-medium">Virtual Consultation</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="wearables.html"
+                class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200"
+              >
+                <i class="fa-solid fa-watch-fitness mr-3"></i>
+                <span class="font-medium">Wearables</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="biometric.html"
+                class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200"
+              >
+                <i class="fa-solid fa-fingerprint mr-3"></i>
+                <span class="font-medium">Biometric</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+        <div class="mt-auto w-full">
+          <a
+            href="/index.html"
+            data-logout="true"
+            class="flex items-center justify-center w-full px-4 py-3 rounded-lg bg-red-600 hover:bg-red-700 transition-colors duration-200"
+          >
+            <i class="fa-solid fa-right-from-bracket mr-2"></i>
+            <span class="font-semibold">Log Out</span>
+          </a>
+        </div>
+      </aside>
+
+      <!-- Student View -->
+      <main
+        id="student-view"
+        class="main-content flex-1 p-8 overflow-y-auto bg-gray-800"
+      >
+        <!-- Header -->
+        <header
+          class="flex items-center justify-between text-sm text-gray-400 mb-8"
+        >
+          <div id="date-time-display"></div>
+          <div class="flex items-center space-x-6">
+            <div
+              class="text-sm bg-blue-900/30 text-blue-300 px-3 py-1 rounded-full"
+            >
+              <i class="fa-solid fa-user-graduate mr-1"></i> Student Portal
+            </div>
+          </div>
+        </header>
+
+        <!-- Page Title -->
+        <div class="flex justify-between items-center mb-8">
+          <div>
+            <h2 class="text-3xl font-bold text-white mb-1">Room Management</h2>
+            <p class="text-gray-400">
+              Manage your room preferences, find compatible roommates, and
+              request transfers
+            </p>
+          </div>
+          <div class="flex space-x-3">
+            <button
+              id="find-roommate-btn"
+              class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center"
+            >
+              <i class="fa-solid fa-users mr-2"></i>Find Roommate
+            </button>
+            <button
+              id="request-transfer-btn"
+              class="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center"
+            >
+              <i class="fa-solid fa-arrows-rotate mr-2"></i>Request Transfer
+            </button>
+          </div>
+        </div>
+
+        <!-- Student Stats -->
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
+          <div class="gradient-border">
+            <div class="flex items-center justify-between">
+              <div>
+                <div class="text-2xl font-bold text-white" id="current-room">
+                  B-201
+                </div>
+                <div class="text-sm text-blue-300">Your Room</div>
+              </div>
+              <i class="fa-solid fa-door-closed text-blue-400 text-2xl"></i>
+            </div>
+          </div>
+          <div class="gradient-border">
+            <div class="flex items-center justify-between">
+              <div>
+                <div class="text-2xl font-bold text-white" id="roommate-match">
+                  85%
+                </div>
+                <div class="text-sm text-green-300">Compatibility</div>
+              </div>
+              <i class="fa-solid fa-heart text-green-400 text-2xl"></i>
+            </div>
+          </div>
+          <div class="gradient-border">
+            <div class="flex items-center justify-between">
+              <div>
+                <div
+                  class="text-2xl font-bold text-white"
+                  id="pending-requests"
+                >
+                  1
+                </div>
+                <div class="text-sm text-yellow-300">Pending Requests</div>
+              </div>
+              <i class="fa-solid fa-clock text-yellow-400 text-2xl"></i>
+            </div>
+          </div>
+          <div class="gradient-border">
+            <div class="flex items-center justify-between">
+              <div>
+                <div class="text-2xl font-bold text-white" id="room-rating">
+                  4.2
+                </div>
+                <div class="text-sm text-purple-300">Room Rating</div>
+              </div>
+              <i class="fa-solid fa-star text-purple-400 text-2xl"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Content Grid -->
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-6">
+          <!-- Roommate Matching -->
+          <div class="xl:col-span-2">
+            <div class="bg-card rounded-xl shadow-lg p-6">
+              <h3 class="text-xl font-bold text-white mb-4">
+                AI-Based Roommate Matching
+              </h3>
+              <div class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-400 mb-2"
+                      >Study Habits</label
+                    >
+                    <select
+                      id="study-habits"
+                      class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-blue-500 focus:border-blue-500"
+                    >
+                      <option value="early-bird">
+                        Early Bird (6 AM - 10 PM)
+                      </option>
+                      <option value="night-owl">
+                        Night Owl (10 PM - 2 AM)
+                      </option>
+                      <option value="flexible">Flexible</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-400 mb-2"
+                      >Cleanliness</label
+                    >
+                    <select
+                      id="cleanliness"
+                      class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-blue-500 focus:border-blue-500"
+                    >
+                      <option value="very-clean">Very Clean</option>
+                      <option value="moderate">Moderate</option>
+                      <option value="relaxed">Relaxed</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-400 mb-2"
+                      >Social Preferences</label
+                    >
+                    <select
+                      id="social-pref"
+                      class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-blue-500 focus:border-blue-500"
+                    >
+                      <option value="social">Social</option>
+                      <option value="balanced">Balanced</option>
+                      <option value="quiet">Quiet</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-400 mb-2"
+                      >Temperature Preference</label
+                    >
+                    <select
+                      id="temperature"
+                      class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-blue-500 focus:border-blue-500"
+                    >
+                      <option value="cool">Cool (18-20°C)</option>
+                      <option value="moderate">Moderate (20-22°C)</option>
+                      <option value="warm">Warm (22-24°C)</option>
+                    </select>
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-400 mb-2"
+                    >Interests & Hobbies</label
+                  >
+                  <div class="flex flex-wrap gap-2" id="interests-container">
+                    <span
+                      class="interest-tag bg-blue-600 text-white px-3 py-1 rounded-full text-sm cursor-pointer"
+                      >Sports</span
+                    >
+                    <span
+                      class="interest-tag bg-blue-600 text-white px-3 py-1 rounded-full text-sm cursor-pointer"
+                      >Music</span
+                    >
+                    <span
+                      class="interest-tag bg-blue-600 text-white px-3 py-1 rounded-full text-sm cursor-pointer"
+                      >Gaming</span
+                    >
+                    <span
+                      class="interest-tag bg-blue-600 text-white px-3 py-1 rounded-full text-sm cursor-pointer"
+                      >Reading</span
+                    >
+                    <span
+                      class="interest-tag bg-blue-600 text-white px-3 py-1 rounded-full text-sm cursor-pointer"
+                      >Movies</span
+                    >
+                    <span
+                      class="interest-tag bg-blue-600 text-white px-3 py-1 rounded-full text-sm cursor-pointer"
+                      >Coding</span
+                    >
+                  </div>
+                  <div class="mt-2 flex">
+                    <input
+                      type="text"
+                      id="new-interest"
+                      class="flex-1 bg-gray-700 border border-gray-600 rounded-l-lg p-2 text-white focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="Add custom interest"
+                    />
+                    <button
+                      id="add-interest"
+                      class="bg-blue-600 text-white px-4 rounded-r-lg hover:bg-blue-700 transition duration-200"
+                    >
+                      Add
+                    </button>
+                  </div>
+                </div>
+                <button
+                  id="find-compatible-btn"
+                  class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center justify-center"
+                >
+                  <i class="fa-solid fa-robot mr-2"></i>Find Compatible
+                  Roommates
+                </button>
+              </div>
+            </div>
+
+            <!-- Roommate Suggestions -->
+            <div class="bg-card rounded-xl shadow-lg p-6 mt-6">
+              <h3 class="text-xl font-bold text-white mb-4">
+                Compatible Roommate Suggestions
+              </h3>
+              <div id="roommate-suggestions" class="space-y-4">
+                <!-- Roommate suggestions will be dynamically added here -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Room Info & Actions -->
+          <div class="space-y-6">
+            <!-- Current Room Info -->
+            <div class="bg-card rounded-xl shadow-lg p-6">
+              <h3 class="text-xl font-bold text-white mb-4">
+                Your Room Details
+              </h3>
+              <div class="space-y-3">
+                <div class="flex justify-between">
+                  <span class="text-gray-400">Room Number:</span>
+                  <span class="text-white font-semibold">B-201</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-400">Block:</span>
+                  <span class="text-white font-semibold">B Block</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-400">Floor:</span>
+                  <span class="text-white font-semibold">2nd Floor</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-400">Room Type:</span>
+                  <span class="text-white font-semibold">Double Occupancy</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-400">AC:</span>
+                  <span class="text-green-400 font-semibold">Available</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-400">Status:</span>
+                  <span class="text-green-400 font-semibold">Occupied</span>
+                </div>
+              </div>
+              <button
+                id="view-virtual-tour"
+                class="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200"
+              >
+                <i class="fa-solid fa-eye mr-2"></i>View Virtual Tour
+              </button>
+            </div>
+
+            <!-- Room Transfer Requests -->
+            <div class="bg-card rounded-xl shadow-lg p-6">
+              <h3 class="text-xl font-bold text-white mb-4">
+                Transfer Requests
+              </h3>
+              <div id="transfer-requests-container" class="space-y-4">
+                <!-- Transfer requests will be dynamically added here -->
+              </div>
+              <button
+                id="new-transfer-request"
+                class="w-full mt-4 bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200"
+              >
+                <i class="fa-solid fa-plus mr-2"></i>New Transfer Request
+              </button>
+            </div>
+
+            <!-- Room Preferences -->
+            <div class="bg-card rounded-xl shadow-lg p-6">
+              <h3 class="text-xl font-bold text-white mb-4">
+                Your Preferences
+              </h3>
+              <div id="preferences-container" class="space-y-2">
+                <!-- Preferences will be dynamically added here -->
+              </div>
+              <button
+                id="edit-preferences"
+                class="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200"
+              >
+                <i class="fa-solid fa-edit mr-2"></i>Edit Preferences
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Available Rooms -->
+        <div class="bg-card rounded-xl shadow-lg p-6 mt-6">
+          <h3 class="text-xl font-bold text-white mb-4">Available Rooms</h3>
+          <div
+            id="available-rooms-container"
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+          >
+            <!-- Available rooms will be dynamically added here -->
+          </div>
+        </div>
+      </main>
+
+      <!-- Admin View -->
+      <main
+        id="admin-view"
+        class="main-content flex-1 p-8 overflow-y-auto bg-gray-800 hidden"
+      >
+        <!-- Header -->
+        <header
+          class="flex items-center justify-between text-sm text-gray-400 mb-8"
+        >
+          <div id="admin-date-time-display"></div>
+          <div class="flex items-center space-x-6">
+            <div
+              class="text-sm bg-purple-900/30 text-purple-300 px-3 py-1 rounded-full"
+            >
+              <i class="fa-solid fa-user-shield mr-1"></i> Admin Portal
+            </div>
+          </div>
+        </header>
+
+        <!-- Admin Title -->
+        <div class="flex justify-between items-center mb-8">
+          <div>
+            <h2 class="text-3xl font-bold text-white mb-1">
+              Room Management Dashboard
+            </h2>
+            <p class="text-gray-400">
+              Manage room allocations, transfers, and maintenance schedules
+            </p>
+          </div>
+          <div class="flex space-x-3">
+            <button
+              id="refresh-admin-btn"
+              class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center"
+            >
+              <i class="fa-solid fa-rotate mr-2"></i>Refresh
+            </button>
+            <button
+              id="add-room-btn"
+              class="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center"
+            >
+              <i class="fa-solid fa-plus mr-2"></i>Add Room
+            </button>
+            <button
+              id="room-analytics-btn"
+              class="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center"
+            >
+              <i class="fa-solid fa-chart-bar mr-2"></i>Analytics
+            </button>
+          </div>
+        </div>
+
+        <!-- Admin Stats -->
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
+          <div class="gradient-border">
+            <div class="flex items-center justify-between">
+              <div>
+                <div class="text-2xl font-bold text-white" id="total-rooms">
+                  156
+                </div>
+                <div class="text-sm text-blue-300">Total Rooms</div>
+              </div>
+              <i class="fa-solid fa-door-closed text-blue-400 text-2xl"></i>
+            </div>
+          </div>
+          <div class="gradient-border">
+            <div class="flex items-center justify-between">
+              <div>
+                <div class="text-2xl font-bold text-white" id="occupied-rooms">
+                  142
+                </div>
+                <div class="text-sm text-green-300">Occupied</div>
+              </div>
+              <i class="fa-solid fa-bed text-green-400 text-2xl"></i>
+            </div>
+          </div>
+          <div class="gradient-border">
+            <div class="flex items-center justify-between">
+              <div>
+                <div
+                  class="text-2xl font-bold text-white"
+                  id="available-rooms-admin"
+                >
+                  8
+                </div>
+                <div class="text-sm text-yellow-300">Available</div>
+              </div>
+              <i class="fa-solid fa-door-open text-yellow-400 text-2xl"></i>
+            </div>
+          </div>
+          <div class="gradient-border">
+            <div class="flex items-center justify-between">
+              <div>
+                <div
+                  class="text-2xl font-bold text-white"
+                  id="maintenance-rooms"
+                >
+                  6
+                </div>
+                <div class="text-sm text-red-300">Under Maintenance</div>
+              </div>
+              <i class="fa-solid fa-tools text-red-400 text-2xl"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Admin Grid -->
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-6">
+          <!-- Room Management -->
+          <div class="xl:col-span-2">
+            <div class="bg-card rounded-xl shadow-lg p-6">
+              <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-white">
+                  Room Allocation & Transfers
+                </h3>
+                <div class="flex space-x-2">
+                  <button
+                    class="filter-btn active px-3 py-1 bg-blue-600 text-white rounded-lg text-sm"
+                    data-filter="all"
+                  >
+                    All
+                  </button>
+                  <button
+                    class="filter-btn px-3 py-1 bg-gray-600 text-white rounded-lg text-sm"
+                    data-filter="pending"
+                  >
+                    Pending
+                  </button>
+                  <button
+                    class="filter-btn px-3 py-1 bg-gray-600 text-white rounded-lg text-sm"
+                    data-filter="transfers"
+                  >
+                    Transfers
+                  </button>
+                  <button
+                    class="filter-btn px-3 py-1 bg-gray-600 text-white rounded-lg text-sm"
+                    data-filter="swaps"
+                  >
+                    Swaps
+                  </button>
+                </div>
+              </div>
+              <div
+                id="admin-requests-container"
+                class="space-y-4 max-h-96 overflow-y-auto"
+              >
+                <!-- Admin requests will be dynamically added here -->
+              </div>
+            </div>
+
+            <!-- Room Inventory -->
+            <div class="bg-card rounded-xl shadow-lg p-6 mt-6">
+              <h3 class="text-xl font-bold text-white mb-4">
+                Room Inventory Tracking
+              </h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <h4 class="text-lg font-semibold text-white mb-3">
+                    Furniture Inventory
+                  </h4>
+                  <div id="furniture-inventory" class="space-y-2">
+                    <!-- Furniture inventory will be dynamically added here -->
+                  </div>
+                </div>
+                <div>
+                  <h4 class="text-lg font-semibold text-white mb-3">
+                    Amenities Status
+                  </h4>
+                  <div id="amenities-inventory" class="space-y-2">
+                    <!-- Amenities inventory will be dynamically added here -->
+                  </div>
+                </div>
+              </div>
+              <button
+                id="generate-inventory-report"
+                class="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200"
+              >
+                <i class="fa-solid fa-clipboard-list mr-2"></i>Generate
+                Inventory Report
+              </button>
+            </div>
+          </div>
+
+          <!-- Maintenance & Calendar -->
+          <div class="space-y-6">
+            <!-- Maintenance Scheduling -->
+            <div class="bg-card rounded-xl shadow-lg p-6">
+              <h3 class="text-xl font-bold text-white mb-4">
+                Maintenance Scheduling
+              </h3>
+              <div id="maintenance-tasks-container" class="space-y-4">
+                <!-- Maintenance tasks will be dynamically added here -->
+              </div>
+              <button
+                id="schedule-maintenance"
+                class="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200"
+              >
+                <i class="fa-solid fa-calendar-plus mr-2"></i>Schedule
+                Maintenance
+              </button>
+            </div>
+
+            <!-- Room Availability Calendar -->
+            <div class="bg-card rounded-xl shadow-lg p-6">
+              <h3 class="text-xl font-bold text-white mb-4">
+                Room Availability Calendar
+              </h3>
+              <div class="bg-gray-700 rounded-lg p-4">
+                <div class="flex justify-between items-center mb-4">
+                  <button
+                    id="prev-month"
+                    class="text-gray-400 hover:text-white"
+                  >
+                    <i class="fa-solid fa-chevron-left"></i>
+                  </button>
+                  <div id="current-month" class="font-semibold text-white">
+                    November 2023
+                  </div>
+                  <button
+                    id="next-month"
+                    class="text-gray-400 hover:text-white"
+                  >
+                    <i class="fa-solid fa-chevron-right"></i>
+                  </button>
+                </div>
+                <div
+                  class="grid grid-cols-7 gap-1 text-xs text-center text-gray-400 mb-2"
+                >
+                  <div>Sun</div>
+                  <div>Mon</div>
+                  <div>Tue</div>
+                  div>
+                  <div>Wed</div>
+                  <div>Thu</div>
+                  <div>Fri</div>
+                  <div>Sat</div>
+                </div>
+                <div id="calendar-days" class="grid grid-cols-7 gap-1">
+                  <!-- Calendar days will be dynamically added here -->
+                </div>
+              </div>
+              <div class="mt-4 space-y-2 text-sm">
+                <div class="flex items-center">
+                  <div class="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
+                  <span class="text-gray-400">Available</span>
+                </div>
+                <div class="flex items-center">
+                  <div class="w-3 h-3 rounded-full bg-yellow-500 mr-2"></div>
+                  <span class="text-gray-400">Maintenance</span>
+                </div>
+                <div class="flex items-center">
+                  <div class="w-3 h-3 rounded-full bg-red-500 mr-2"></div>
+                  <span class="text-gray-400">Occupied</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="bg-card rounded-xl shadow-lg p-6">
+              <h3 class="text-xl font-bold text-white mb-4">Quick Actions</h3>
+              <div class="space-y-3">
+                <button
+                  id="assign-room-btn"
+                  class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200 flex items-center justify-center"
+                >
+                  <i class="fa-solid fa-bed mr-2"></i>Assign Room
+                </button>
+                <button
+                  id="room-inspection-btn"
+                  class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200 flex items-center justify-center"
+                >
+                  <i class="fa-solid fa-clipboard-check mr-2"></i>Room
+                  Inspection
+                </button>
+                <button
+                  id="export-reports-btn"
+                  class="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200 flex items-center justify-center"
+                >
+                  <i class="fa-solid fa-file-export mr-2"></i>Export Reports
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- Staff View -->
+      <main
+        id="staff-view"
+        class="main-content flex-1 p-8 overflow-y-auto bg-gray-800 hidden"
+      >
+        <!-- Header -->
+        <header
+          class="flex items-center justify-between text-sm text-gray-400 mb-8"
+        >
+          <div id="staff-date-time-display"></div>
+          <div class="flex items-center space-x-6">
+            <div
+              class="text-sm bg-green-900/30 text-green-300 px-3 py-1 rounded-full"
+            >
+              <i class="fa-solid fa-user-tie mr-1"></i> Staff Portal
+            </div>
+          </div>
+        </header>
+
+        <!-- Staff Title -->
+        <div class="flex justify-between items-center mb-8">
+          <div>
+            <h2 class="text-3xl font-bold text-white mb-1">
+              Maintenance Staff Dashboard
+            </h2>
+            <p class="text-gray-400">
+              Manage maintenance tasks and room inspections
+            </p>
+          </div>
+          <div class="flex space-x-3">
+            <button
+              id="refresh-staff-btn"
+              class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center"
+            >
+              <i class="fa-solid fa-rotate mr-2"></i>Refresh
+            </button>
+            <button
+              id="start-shift-btn"
+              class="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center"
+            >
+              <i class="fa-solid fa-play mr-2"></i>Start Shift
+            </button>
+          </div>
+        </div>
+
+        <!-- Staff Stats -->
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
+          <div class="gradient-border">
+            <div class="flex items-center justify-between">
+              <div>
+                <div class="text-2xl font-bold text-white" id="assigned-tasks">
+                  8
+                </div>
+                <div class="text-sm text-blue-300">Assigned Tasks</div>
+              </div>
+              <i class="fa-solid fa-list-check text-blue-400 text-2xl"></i>
+            </div>
+          </div>
+          <div class="gradient-border">
+            <div class="flex items-center justify-between">
+              <div>
+                <div class="text-2xl font-bold text-white" id="completed-tasks">
+                  12
+                </div>
+                <div class="text-sm text-green-300">Completed Today</div>
+              </div>
+              <i class="fa-solid fa-check-circle text-green-400 text-2xl"></i>
+            </div>
+          </div>
+          <div class="gradient-border">
+            <div class="flex items-center justify-between">
+              <div>
+                <div class="text-2xl font-bold text-white" id="pending-tasks">
+                  3
+                </div>
+                <div class="text-sm text-yellow-300">Pending</div>
+              </div>
+              <i class="fa-solid fa-clock text-yellow-400 text-2xl"></i>
+            </div>
+          </div>
+          <div class="gradient-border">
+            <div class="flex items-center justify-between">
+              <div>
+                <div class="text-2xl font-bold text-white" id="staff-rating">
+                  4.5
+                </div>
+                <div class="text-sm text-purple-300">Your Rating</div>
+              </div>
+              <i class="fa-solid fa-star text-purple-400 text-2xl"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Staff Grid -->
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-6">
+          <!-- Task Management -->
+          <div class="xl:col-span-2">
+            <div class="bg-card rounded-xl shadow-lg p-6">
+              <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-white">
+                  Your Maintenance Tasks
+                </h3>
+                <div class="flex space-x-2">
+                  <button
+                    class="task-filter-btn active px-3 py-1 bg-blue-600 text-white rounded-lg text-sm"
+                    data-filter="all"
+                  >
+                    All
+                  </button>
+                  <button
+                    class="task-filter-btn px-3 py-1 bg-gray-600 text-white rounded-lg text-sm"
+                    data-filter="pending"
+                  >
+                    Pending
+                  </button>
+                  <button
+                    class="task-filter-btn px-3 py-1 bg-gray-600 text-white rounded-lg text-sm"
+                    data-filter="in-progress"
+                  >
+                    In Progress
+                  </button>
+                </div>
+              </div>
+              <div
+                id="staff-tasks-container"
+                class="space-y-4 max-h-96 overflow-y-auto"
+              >
+                <!-- Staff tasks will be dynamically added here -->
+              </div>
+            </div>
+
+            <!-- Virtual Room Tours -->
+            <div class="bg-card rounded-xl shadow-lg p-6 mt-6">
+              <h3 class="text-xl font-bold text-white mb-4">
+                Virtual Room Tours
+              </h3>
+              <div class="virtual-tour-container">
+                <div
+                  id="virtual-tour-view"
+                  class="absolute inset-0 flex items-center justify-center text-gray-500"
+                >
+                  <div class="text-center">
+                    <i class="fa-solid fa-camera text-4xl mb-2"></i>
+                    <p>360° Room View</p>
+                    <p class="text-sm mt-1" id="current-room-view">
+                      B-201 - Double Occupancy AC Room
+                    </p>
+                  </div>
+                </div>
+                <div class="tour-controls">
+                  <button
+                    id="tour-left"
+                    class="bg-blue-600 text-white p-2 rounded-full"
+                  >
+                    <i class="fa-solid fa-arrow-left"></i>
+                  </button>
+                  <button
+                    id="tour-right"
+                    class="bg-blue-600 text-white p-2 rounded-full"
+                  >
+                    <i class="fa-solid fa-arrow-right"></i>
+                  </button>
+                  <button
+                    id="tour-expand"
+                    class="bg-blue-600 text-white p-2 rounded-full"
+                  >
+                    <i class="fa-solid fa-expand"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="grid grid-cols-3 gap-2 mt-4">
+                <div
+                  class="room-view-option bg-gray-700 rounded h-20 flex items-center justify-center cursor-pointer"
+                  data-view="bed"
+                >
+                  <i class="fa-solid fa-bed text-gray-400"></i>
+                </div>
+                <div
+                  class="room-view-option bg-gray-700 rounded h-20 flex items-center justify-center cursor-pointer"
+                  data-view="door"
+                >
+                  <i class="fa-solid fa-door-open text-gray-400"></i>
+                </div>
+                <div
+                  class="room-view-option bg-gray-700 rounded h-20 flex items-center justify-center cursor-pointer"
+                  data-view="bath"
+                >
+                  <i class="fa-solid fa-bath text-gray-400"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Task Details & Tools -->
+          <div class="space-y-6">
+            <div class="bg-card rounded-xl shadow-lg p-6">
+              <h3 class="text-xl font-bold text-white mb-4">Task Details</h3>
+              <div id="task-details" class="space-y-4">
+                <div class="text-center py-8 text-gray-500">
+                  <i class="fa-solid fa-clipboard-list text-3xl mb-2"></i>
+                  <p>Select a task to view details</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-card rounded-xl shadow-lg p-6">
+              <h3 class="text-xl font-bold text-white mb-4">Quick Actions</h3>
+              <div class="space-y-3">
+                <button
+                  id="view-schedule-btn"
+                  class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200 flex items-center justify-center"
+                >
+                  <i class="fa-solid fa-clock-rotate-left mr-2"></i>View
+                  Schedule
+                </button>
+                <button
+                  id="submit-report-btn"
+                  class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200 flex items-center justify-center"
+                >
+                  <i class="fa-solid fa-clipboard-check mr-2"></i>Submit Report
+                </button>
+                <button
+                  id="request-supplies-btn"
+                  class="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200 flex items-center justify-center"
+                >
+                  <i class="fa-solid fa-toolbox mr-2"></i>Request Supplies
+                </button>
+              </div>
+            </div>
+
+            <div class="bg-card rounded-xl shadow-lg p-6">
+              <h3 class="text-xl font-bold text-white mb-4">
+                Today's Schedule
+              </h3>
+              <div id="today-schedule" class="space-y-3">
+                <!-- Today's schedule will be dynamically added here -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Modals -->
+    <div
+      id="roommate-modal"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden"
+    >
+      <div class="bg-gray-800 rounded-xl p-6 w-full max-w-md">
+        <h3 class="text-xl font-bold text-white mb-4">Roommate Request</h3>
+        <div id="roommate-modal-content"></div>
+        <div class="flex justify-end mt-4 space-x-2">
+          <button
+            id="cancel-roommate"
+            class="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition duration-200"
+          >
+            Cancel
+          </button>
+          <button
+            id="confirm-roommate"
+            class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-200"
+          >
+            Send Request
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="transfer-modal"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden"
+    >
+      <div class="bg-gray-800 rounded-xl p-6 w-full max-w-md">
+        <h3 class="text-xl font-bold text-white mb-4">Room Transfer Request</h3>
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-400 mb-2"
+              >Current Room</label
+            >
+            <input
+              type="text"
+              class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white"
+              value="B-201"
+              disabled
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-400 mb-2"
+              >Requested Room</label
+            >
+            <select
+              id="requested-room"
+              class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-blue-500 focus:border-blue-500"
+            >
+              <option value="">Select Room</option>
+              <option value="A-305">A-305 (Available)</option>
+              <option value="C-112">C-112 (Available)</option>
+              <option value="D-208">D-208 (Available from 15 Dec)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-400 mb-2"
+              >Reason for Transfer</label
+            >
+            <textarea
+              id="transfer-reason"
+              class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-blue-500 focus:border-blue-500"
+              rows="3"
+              placeholder="Explain your reason for requesting a room transfer..."
+            ></textarea>
+          </div>
+          <div class="flex items-center">
+            <input
+              type="checkbox"
+              id="urgency-transfer"
+              class="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500"
+            />
+            <label for="urgency-transfer" class="ml-2 text-sm text-gray-400"
+              >Mark as urgent request</label
+            >
+          </div>
+        </div>
+        <div class="flex justify-end mt-4 space-x-2">
+          <button
+            id="cancel-transfer"
+            class="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition duration-200"
+          >
+            Cancel
+          </button>
+          <button
+            id="confirm-transfer"
+            class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-200"
+          >
+            Submit Request
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="preferences-modal"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden"
+    >
+      <div class="bg-gray-800 rounded-xl p-6 w-full max-w-md">
+        <h3 class="text-xl font-bold text-white mb-4">Edit Preferences</h3>
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-400 mb-2"
+              >Room Type Preference</label
+            >
+            <select
+              id="room-type-pref"
+              class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-blue-500 focus:border-blue-500"
+            >
+              <option value="single">Single Occupancy</option>
+              <option value="double" selected>Double Occupancy</option>
+              <option value="triple">Triple Occupancy</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-400 mb-2"
+              >AC Preference</label
+            >
+            <select
+              id="ac-pref"
+              class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-blue-500 focus:border-blue-500"
+            >
+              <option value="ac">AC Room</option>
+              <option value="non-ac">Non-AC Room</option>
+              <option value="no-pref">No Preference</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-400 mb-2"
+              >Floor Preference</label
+            >
+            <select
+              id="floor-pref"
+              class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-blue-500 focus:border-blue-500"
+            >
+              <option value="ground">Ground Floor</option>
+              <option value="first">First Floor</option>
+              <option value="second" selected>Second Floor</option>
+              <option value="third">Third Floor</option>
+              <option value="no-pref">No Preference</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-400 mb-2"
+              >Block Preference</label
+            >
+            <select
+              id="block-pref"
+              class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-blue-500 focus:border-blue-500"
+            >
+              <option value="A">A Block</option>
+              <option value="B" selected>B Block</option>
+              <option value="C">C Block</option>
+              <option value="D">D Block</option>
+              <option value="no-pref">No Preference</option>
+            </select>
+          </div>
+        </div>
+        <div class="flex justify-end mt-4 space-x-2">
+          <button
+            id="cancel-preferences"
+            class="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition duration-200"
+          >
+            Cancel
+          </button>
+          <button
+            id="save-preferences"
+            class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-200"
+          >
+            Save Preferences
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="notification-modal"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden"
+    >
+      <div class="bg-gray-800 rounded-xl p-6 w-full max-w-md">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-xl font-bold text-white">Notifications</h3>
+          <button
+            id="close-notification-modal"
+            class="text-gray-400 hover:text-white"
+          >
+            <i class="fa-solid fa-times text-xl"></i>
+          </button>
+        </div>
+        <div id="notification-list" class="max-h-96 overflow-y-auto space-y-3">
+          <!-- Notifications will be dynamically added here -->
+        </div>
+        <div class="flex justify-end mt-4">
+          <button
+            id="mark-all-read"
+            class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-200"
+          >
+            Mark All as Read
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Message Box -->
+    <div
+      id="message-box"
+      class="fixed bottom-4 right-4 bg-gray-700 text-white p-4 rounded-lg shadow-lg hidden message-box"
+    >
+      <p id="message-text"></p>
+    </div>
+
+    <script>
+      // Enhanced Room Management System
+      class RoomManagementSystem {
+        constructor() {
+          this.studentData = {
+            name: "Rahul Sharma",
+            regNumber: "CS2021001",
+            room: "B-201",
+            preferences: {
+              studyHabits: "early-bird",
+              cleanliness: "very-clean",
+              socialPref: "balanced",
+              temperature: "cool",
+              interests: ["Sports", "Music", "Gaming", "Reading"],
+              roomType: "double",
+              acPref: "ac",
+              floorPref: "second",
+              blockPref: "B",
+            },
+          };
+
+          this.roommateSuggestions = [
+            {
+              id: 1,
+              name: "Rahul Sharma",
+              program: "Computer Science, 2nd Year",
+              interests: ["Coding", "Gaming", "Music"],
+              matchScore: 92,
+              room: "B-201",
+            },
+            {
+              id: 2,
+              name: "Priya Patel",
+              program: "Electrical Engineering, 2nd Year",
+              interests: ["Reading", "Music", "Sports"],
+              matchScore: 78,
+              room: "B-305",
+            },
+            {
+              id: 3,
+              name: "Amit Kumar",
+              program: "Mechanical Engineering, 2nd Year",
+              interests: ["Sports", "Movies", "Gaming"],
+              matchScore: 65,
+              room: "C-112",
+            },
+          ];
+
+          this.availableRooms = [
+            {
+              id: 1,
+              number: "A-305",
+              block: "A",
+              floor: "3",
+              type: "Double Occupancy",
+              ac: true,
+              status: "available",
+              rating: 4.5,
+            },
+            {
+              id: 2,
+              number: "C-112",
+              block: "C",
+              floor: "1",
+              type: "Single Occupancy",
+              ac: false,
+              status: "available",
+              rating: 4.0,
+            },
+            {
+              id: 3,
+              number: "D-208",
+              block: "D",
+              floor: "2",
+              type: "Double Occupancy",
+              ac: true,
+              status: "maintenance",
+              availableFrom: "2023-12-15",
+              rating: 4.2,
+            },
+          ];
+
+          this.transferRequests = [
+            {
+              id: 1,
+              fromRoom: "B-201",
+              toRoom: "A-305",
+              reason: "Need quieter environment for studies",
+              submitted: "2023-11-15",
+              status: "pending",
+            },
+          ];
+
+          this.adminRequests = [
+            {
+              id: 1,
+              type: "transfer",
+              fromRoom: "B-201",
+              toRoom: "A-305",
+              studentName: "Rahul Sharma",
+              regNumber: "CS2021001",
+              reason: "Need quieter environment for studies",
+              submitted: "2023-11-15",
+              status: "pending",
+              urgency: false,
+            },
+            {
+              id: 2,
+              type: "swap",
+              studentA: { name: "Priya Patel", room: "B-305" },
+              studentB: { name: "Amit Kumar", room: "C-112" },
+              reason: "Both students prefer each other's room locations",
+              submitted: "2023-11-14",
+              status: "pending",
+              urgency: false,
+            },
+            {
+              id: 3,
+              type: "allocation",
+              room: "D-105",
+              studentName: "New Admission",
+              reason: "Based on preferences: AC, Single Occupancy",
+              submitted: "2023-11-13",
+              status: "pending",
+              urgency: true,
+            },
+          ];
+
+          this.maintenanceTasks = [
+            {
+              id: 1,
+              title: "AC Repair - B-305",
+              scheduled: "2023-11-20T10:00",
+              technician: "Rajesh Kumar",
+              priority: "high",
+              status: "scheduled",
+              description: "AC not cooling properly",
+            },
+            {
+              id: 2,
+              title: "Plumbing - D Block Common",
+              scheduled: "2023-11-18T14:00",
+              technician: "Sanjay Patel",
+              priority: "medium",
+              status: "in-progress",
+              description: "Leaking pipe in common bathroom",
+            },
+            {
+              id: 3,
+              title: "Painting - A Block Corridor",
+              scheduled: "2023-11-15T09:00",
+              technician: "ColorPlus Painters",
+              priority: "low",
+              status: "completed",
+              description: "Corridor painting work",
+              rating: 4.5,
+            },
+          ];
+
+          this.staffTasks = [
+            {
+              id: 1,
+              title: "AC Repair - B-305",
+              scheduled: "2023-11-20T10:00",
+              room: "B-305",
+              priority: "high",
+              status: "pending",
+              description: "AC not cooling properly",
+              estimatedDuration: "1.5 hours",
+            },
+            {
+              id: 2,
+              title: "Plumbing - D Block Common",
+              scheduled: "2023-11-18T14:00",
+              room: "D Block Common Area",
+              priority: "medium",
+              status: "in-progress",
+              description: "Leaking pipe in common bathroom",
+              estimatedDuration: "1.5 hours",
+            },
+            {
+              id: 3,
+              title: "Electrical - C-112",
+              scheduled: "2023-11-17T11:00",
+              room: "C-112",
+              priority: "medium",
+              status: "completed",
+              description: "Power socket not working",
+              rating: 4,
+            },
+          ];
+
+          this.inventory = {
+            furniture: [
+              { item: "Beds", available: 312, status: "available" },
+              { item: "Study Tables", available: 310, status: "available" },
+              { item: "Chairs", available: 12, status: "low" },
+              { item: "Wardrobes", available: 305, status: "available" },
+            ],
+            amenities: [
+              { item: "AC Units", available: 78, status: "available" },
+              { item: "Geysers", available: 5, status: "low" },
+              { item: "Fans", available: 312, status: "available" },
+              { item: "Light Fixtures", available: 8, status: "out" },
+            ],
+          };
+
+          this.notifications = [
+            {
+              id: 1,
+              title: "Room Transfer Approved",
+              message: "Your transfer to A-305 has been approved",
+              timestamp: "2023-11-15T10:30:00",
+              read: false,
+            },
+            {
+              id: 2,
+              title: "New Roommate Match",
+              message:
+                "You have a new compatible roommate suggestion (92% match)",
+              timestamp: "2023-11-14T16:15:00",
+              read: true,
+            },
+            {
+              id: 3,
+              title: "Maintenance Scheduled",
+              message: "AC maintenance scheduled for your room on 20 Nov",
+              timestamp: "2023-11-13T11:20:00",
+              read: true,
+            },
+          ];
+
+          this.currentDate = new Date();
+          this.currentView = "student";
+          this.selectedRoommate = null;
+          this.selectedTask = null;
+        }
+
+        // Student methods
+        updatePreferences(newPreferences) {
+          this.studentData.preferences = {
+            ...this.studentData.preferences,
+            ...newPreferences,
+          };
+          this.showMessage("Preferences updated successfully!", "success");
+        }
+
+        submitTransferRequest(toRoom, reason, urgent) {
+          const newRequest = {
+            id: this.transferRequests.length + 1,
+            fromRoom: this.studentData.room,
+            toRoom,
+            reason,
+            submitted: new Date().toISOString().split("T")[0],
+            status: "pending",
+            urgency: urgent,
+          };
+          this.transferRequests.push(newRequest);
+
+          // Also add to admin requests
+          this.adminRequests.push({
+            id: this.adminRequests.length + 1,
+            type: "transfer",
+            fromRoom: this.studentData.room,
+            toRoom,
+            studentName: this.studentData.name,
+            regNumber: this.studentData.regNumber,
+            reason,
+            submitted: new Date().toISOString().split("T")[0],
+            status: "pending",
+            urgency: urgent,
+          });
+
+          this.showMessage(
+            "Transfer request submitted successfully!",
+            "success",
+          );
+        }
+
+        sendRoommateRequest(roommateId) {
+          const roommate = this.roommateSuggestions.find(
+            (r) => r.id === roommateId,
+          );
+          if (roommate) {
+            this.showMessage(
+              `Roommate request sent to ${roommate.name}`,
+              "success",
+            );
+            // In a real app, this would send a notification to the roommate
+          }
+        }
+
+        // Admin methods
+        approveRequest(requestId) {
+          const request = this.adminRequests.find((r) => r.id === requestId);
+          if (request) {
+            request.status = "approved";
+            this.showMessage("Request approved successfully!", "success");
+
+            // If it's a transfer request, update the student's room
+            if (request.type === "transfer") {
+              const studentReg = request.regNumber;
+              // In a real app, this would update the student's room in the database
+              this.showMessage(
+                `Room transferred for ${request.studentName}`,
+                "info",
+              );
+            }
+          }
+        }
+
+        rejectRequest(requestId) {
+          const request = this.adminRequests.find((r) => r.id === requestId);
+          if (request) {
+            request.status = "rejected";
+            this.showMessage("Request rejected", "info");
+          }
+        }
+
+        scheduleMaintenance(task) {
+          this.maintenanceTasks.push(task);
+          this.showMessage("Maintenance scheduled successfully!", "success");
+        }
+
+        // Staff methods
+        updateTaskStatus(taskId, status) {
+          const task = this.staffTasks.find((t) => t.id === taskId);
+          if (task) {
+            task.status = status;
+            this.showMessage(`Task status updated to ${status}`, "success");
+          }
+        }
+
+        // Notification methods
+        markAllNotificationsAsRead() {
+          this.notifications.forEach((notification) => {
+            notification.read = true;
+          });
+          this.showMessage("All notifications marked as read", "success");
+        }
+
+        getUnreadNotificationCount() {
+          return this.notifications.filter((n) => !n.read).length;
+        }
+
+        // Utility methods
+        showMessage(text, type = "info") {
+          const messageBox = document.getElementById("message-box");
+          const messageText = document.getElementById("message-text");
+
+          messageText.textContent = text;
+          messageBox.className = `fixed bottom-4 right-4 text-white p-4 rounded-lg shadow-lg message-box ${
+            type === "error"
+              ? "bg-red-700"
+              : type === "success"
+                ? "bg-green-700"
+                : "bg-blue-700"
+          }`;
+          messageBox.classList.remove("hidden");
+
+          setTimeout(() => {
+            messageBox.classList.add("hidden");
+          }, 4000);
+        }
+
+        switchView(view) {
+          this.currentView = view;
+
+          const studentView = document.getElementById("student-view");
+          const adminView = document.getElementById("admin-view");
+          const staffView = document.getElementById("staff-view");
+          const studentBtn = document.getElementById("student-view-btn");
+          const adminBtn = document.getElementById("admin-view-btn");
+          const staffBtn = document.getElementById("staff-view-btn");
+          const userMode = document.getElementById("user-mode");
+          const currentUser = document.getElementById("current-user");
+
+          // Hide all views
+          studentView.classList.add("hidden");
+          adminView.classList.add("hidden");
+          staffView.classList.add("hidden");
+
+          // Remove active class from all buttons
+          studentBtn.classList.remove("active");
+          adminBtn.classList.remove("active");
+          staffBtn.classList.remove("active");
+
+          if (view === "student") {
+            studentView.classList.remove("hidden");
+            studentBtn.classList.add("active");
+            userMode.textContent = "Student Mode";
+            currentUser.textContent = "Student User";
+            this.renderStudentView();
+          } else if (view === "admin") {
+            adminView.classList.remove("hidden");
+            adminBtn.classList.add("active");
+            userMode.textContent = "Admin Mode";
+            currentUser.textContent = "Admin User";
+            this.renderAdminView();
+          } else {
+            staffView.classList.remove("hidden");
+            staffBtn.classList.add("active");
+            userMode.textContent = "Staff Mode";
+            currentUser.textContent = "Staff User";
+            this.renderStaffView();
+          }
+
+          this.updateNotificationBadge();
+        }
+
+        // Rendering methods
+        renderStudentView() {
+          this.renderRoommateSuggestions();
+          this.renderTransferRequests();
+          this.renderPreferences();
+          this.renderAvailableRooms();
+
+          // Set current values in the form
+          document.getElementById("study-habits").value =
+            this.studentData.preferences.studyHabits;
+          document.getElementById("cleanliness").value =
+            this.studentData.preferences.cleanliness;
+          document.getElementById("social-pref").value =
+            this.studentData.preferences.socialPref;
+          document.getElementById("temperature").value =
+            this.studentData.preferences.temperature;
+
+          // Update interests
+          const interestsContainer = document.getElementById(
+            "interests-container",
+          );
+          interestsContainer.innerHTML = "";
+          this.studentData.preferences.interests.forEach((interest) => {
+            const interestEl = document.createElement("span");
+            interestEl.className =
+              "interest-tag bg-blue-600 text-white px-3 py-1 rounded-full text-sm cursor-pointer";
+            interestEl.textContent = interest;
+            interestEl.addEventListener("click", () => {
+              this.studentData.preferences.interests =
+                this.studentData.preferences.interests.filter(
+                  (i) => i !== interest,
+                );
+              this.renderStudentView();
+            });
+            interestsContainer.appendChild(interestEl);
+          });
+        }
+
+        renderRoommateSuggestions() {
+          const container = document.getElementById("roommate-suggestions");
+          container.innerHTML = "";
+
+          this.roommateSuggestions.forEach((roommate) => {
+            const roommateEl = document.createElement("div");
+            roommateEl.className =
+              "roommate-card bg-gray-700 rounded-lg p-4 flex items-center justify-between";
+
+            const matchClass =
+              roommate.matchScore >= 80
+                ? "high-match"
+                : roommate.matchScore >= 60
+                  ? "medium-match"
+                  : "low-match";
+
+            roommateEl.innerHTML = `
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center mr-4">
+                                <i class="fa-solid fa-user text-white"></i>
+                            </div>
+                            <div>
+                                <div class="font-semibold text-white">${
+                                  roommate.name
+                                }</div>
+                                <div class="text-sm text-gray-400">${
+                                  roommate.program
+                                }</div>
+                                <div class="text-xs text-blue-400 mt-1">Interests: ${roommate.interests.join(
+                                  ", ",
+                                )}</div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="match-score ${matchClass}">${
+                              roommate.matchScore
+                            }%</div>
+                            <button class="mt-2 send-request-btn bg-green-600 hover:bg-green-700 text-white text-xs font-semibold py-1 px-3 rounded transition duration-200" data-id="${
+                              roommate.id
+                            }">
+                                Send Request
+                            </button>
+                        </div>
+                    `;
+
+            container.appendChild(roommateEl);
+          });
+
+          // Add event listeners to send request buttons
+          document.querySelectorAll(".send-request-btn").forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+              const roommateId = parseInt(e.target.getAttribute("data-id"));
+              this.sendRoommateRequest(roommateId);
+            });
+          });
+        }
+
+        renderTransferRequests() {
+          const container = document.getElementById(
+            "transfer-requests-container",
+          );
+          container.innerHTML = "";
+
+          if (this.transferRequests.length === 0) {
+            container.innerHTML = `
+                        <div class="text-center py-4 text-gray-500">
+                            <i class="fa-solid fa-inbox text-2xl mb-2"></i>
+                            <p>No transfer requests</p>
+                        </div>
+                    `;
+            return;
+          }
+
+          this.transferRequests.forEach((request) => {
+            const requestEl = document.createElement("div");
+            requestEl.className = `transfer-request bg-gray-700 rounded-lg p-4 ${
+              request.urgency ? "priority-high" : ""
+            }`;
+
+            const statusClass =
+              request.status === "pending"
+                ? "bg-yellow-600"
+                : request.status === "approved"
+                  ? "bg-green-600"
+                  : "bg-red-600";
+
+            requestEl.innerHTML = `
+                        <div class="flex justify-between items-start mb-2">
+                            <div>
+                                <div class="font-semibold text-white">Transfer to ${
+                                  request.toRoom
+                                }</div>
+                                <div class="text-sm text-gray-400">Submitted: ${
+                                  request.submitted
+                                }</div>
+                            </div>
+                            <span class="px-2 py-1 text-xs rounded-full ${statusClass} text-white">${
+                              request.status
+                            }</span>
+                        </div>
+                        <div class="text-sm text-gray-300">${
+                          request.reason
+                        }</div>
+                        <div class="flex space-x-2 mt-3">
+                            <button class="flex-1 view-details-btn bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold py-1 px-2 rounded transition duration-200" data-id="${
+                              request.id
+                            }">
+                                View Details
+                            </button>
+                            ${
+                              request.status === "pending"
+                                ? `
+                            <button class="flex-1 cancel-request-btn bg-red-600 hover:bg-red-700 text-white text-xs font-semibold py-1 px-2 rounded transition duration-200" data-id="${request.id}">
+                                Cancel
+                            </button>
+                            `
+                                : ""
+                            }
+                        </div>
+                    `;
+
+            container.appendChild(requestEl);
+          });
+
+          // Add event listeners to buttons
+          document.querySelectorAll(".view-details-btn").forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+              const requestId = parseInt(e.target.getAttribute("data-id"));
+              const request = this.transferRequests.find(
+                (r) => r.id === requestId,
+              );
+              if (request) {
+                this.showMessage(
+                  `Transfer request details: ${request.reason}`,
+                  "info",
+                );
+              }
+            });
+          });
+
+          document.querySelectorAll(".cancel-request-btn").forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+              const requestId = parseInt(e.target.getAttribute("data-id"));
+              this.transferRequests = this.transferRequests.filter(
+                (r) => r.id !== requestId,
+              );
+              this.renderTransferRequests();
+              this.showMessage("Transfer request cancelled", "info");
+            });
+          });
+        }
+
+        renderPreferences() {
+          const container = document.getElementById("preferences-container");
+          container.innerHTML = "";
+
+          const preferences = [
+            { name: "Quiet Environment", priority: "High Priority" },
+            { name: "AC Room", priority: "Medium Priority" },
+            { name: "Upper Floor", priority: "Low Priority" },
+            { name: "Near Common Area", priority: "Medium Priority" },
+          ];
+
+          preferences.forEach((pref) => {
+            const prefEl = document.createElement("div");
+            prefEl.className = "preference-item";
+            prefEl.innerHTML = `
+                        <span class="text-white">${pref.name}</span>
+                        <span class="preference-badge">${pref.priority}</span>
+                    `;
+            container.appendChild(prefEl);
+          });
+        }
+
+        renderAvailableRooms() {
+          const container = document.getElementById(
+            "available-rooms-container",
+          );
+          container.innerHTML = "";
+
+          this.availableRooms.forEach((room) => {
+            const roomEl = document.createElement("div");
+            roomEl.className = `room-card ${room.status} bg-gray-700 rounded-lg p-4`;
+
+            const statusClass =
+              room.status === "available"
+                ? "bg-green-600"
+                : room.status === "maintenance"
+                  ? "bg-yellow-600"
+                  : "bg-red-600";
+            const statusText =
+              room.status === "available"
+                ? "Available"
+                : room.status === "maintenance"
+                  ? "Maintenance"
+                  : "Occupied";
+
+            roomEl.innerHTML = `
+                        <div class="flex justify-between items-start mb-3">
+                            <div>
+                                <div class="font-semibold text-white">${
+                                  room.number
+                                }</div>
+                                <div class="text-sm text-gray-400">${
+                                  room.block
+                                } Block • ${room.floor}${this.getOrdinalSuffix(
+                                  room.floor,
+                                )} Floor</div>
+                            </div>
+                            <span class="px-2 py-1 text-xs rounded-full ${statusClass} text-white">${statusText}</span>
+                        </div>
+                        <div class="text-sm space-y-1 mb-3">
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Type:</span>
+                                <span class="text-white">${room.type}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">AC:</span>
+                                <span class="${
+                                  room.ac ? "text-green-400" : "text-red-400"
+                                }">${
+                                  room.ac ? "Available" : "Not Available"
+                                }</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Rating:</span>
+                                <span class="text-yellow-400">${
+                                  room.rating
+                                }/5</span>
+                            </div>
+                            ${
+                              room.availableFrom
+                                ? `
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Available From:</span>
+                                <span class="text-white">${room.availableFrom}</span>
+                            </div>
+                            `
+                                : ""
+                            }
+                        </div>
+                        <button class="w-full view-room-details bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded transition duration-200" data-id="${
+                          room.id
+                        }">
+                            ${
+                              room.status === "available"
+                                ? "View Details"
+                                : "Unavailable"
+                            }
+                        </button>
+                    `;
+
+            if (room.status !== "available") {
+              roomEl.querySelector("button").disabled = true;
+              roomEl
+                .querySelector("button")
+                .classList.remove("bg-blue-600", "hover:bg-blue-700");
+              roomEl.querySelector("button").classList.add("bg-gray-600");
+            }
+
+            container.appendChild(roomEl);
+          });
+
+          // Add event listeners to view room details buttons
+          document.querySelectorAll(".view-room-details").forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+              const roomId = parseInt(e.target.getAttribute("data-id"));
+              const room = this.availableRooms.find((r) => r.id === roomId);
+              if (room) {
+                this.showMessage(`Viewing details for ${room.number}`, "info");
+              }
+            });
+          });
+        }
+
+        renderAdminView() {
+          this.renderAdminRequests();
+          this.renderInventory();
+          this.renderMaintenanceTasks();
+          this.renderCalendar();
+        }
+
+        renderAdminRequests() {
+          const container = document.getElementById("admin-requests-container");
+          container.innerHTML = "";
+
+          if (this.adminRequests.length === 0) {
+            container.innerHTML = `
+                        <div class="text-center py-8 text-gray-500">
+                            <i class="fa-solid fa-inbox text-4xl mb-3"></i>
+                            <p class="text-lg">No requests found</p>
+                        </div>
+                    `;
+            return;
+          }
+
+          this.adminRequests.forEach((request) => {
+            const requestEl = document.createElement("div");
+            const typeClass =
+              request.type === "transfer"
+                ? "transfer-request"
+                : request.type === "swap"
+                  ? "swap-request"
+                  : "bg-gray-700";
+
+            requestEl.className = `${typeClass} bg-gray-700 rounded-lg p-4 ${
+              request.urgency ? "priority-high" : ""
+            }`;
+
+            let requestTitle = "";
+            let requestDetails = "";
+
+            if (request.type === "transfer") {
+              requestTitle = "Room Transfer Request";
+              requestDetails = `From: ${request.fromRoom} • To: ${request.toRoom}`;
+            } else if (request.type === "swap") {
+              requestTitle = "Room Swap Request";
+              requestDetails = `Student A: ${request.studentA.name} (${request.studentA.room}) • Student B: ${request.studentB.name} (${request.studentB.room})`;
+            } else {
+              requestTitle = "New Room Allocation";
+              requestDetails = `Room: ${request.room} • Student: ${request.studentName}`;
+            }
+
+            const statusClass =
+              request.status === "pending"
+                ? "bg-yellow-600"
+                : request.status === "approved"
+                  ? "bg-green-600"
+                  : "bg-red-600";
+
+            requestEl.innerHTML = `
+                        <div class="flex justify-between items-start mb-2">
+                            <div>
+                                <div class="font-semibold text-white">${requestTitle}</div>
+                                <div class="text-sm text-gray-400">${requestDetails}</div>
+                                <div class="text-xs text-blue-400 mt-1">
+                                    ${
+                                      request.type === "transfer"
+                                        ? `Student: ${request.studentName} (${request.regNumber})`
+                                        : ""
+                                    }
+                                    ${
+                                      request.type === "allocation"
+                                        ? `AI Recommendation: 94% match with room preferences`
+                                        : ""
+                                    }
+                                    ${
+                                      request.type === "swap"
+                                        ? `Mutual Agreement`
+                                        : ""
+                                    }
+                                </div>
+                            </div>
+                            <span class="px-2 py-1 text-xs rounded-full ${statusClass} text-white">${
+                              request.status
+                            }</span>
+                        </div>
+                        <div class="text-sm text-gray-300 mb-3">${
+                          request.reason
+                        }</div>
+                        <div class="flex space-x-2">
+                            ${
+                              request.status === "pending"
+                                ? `
+                            <button class="flex-1 approve-request bg-green-600 hover:bg-green-700 text-white text-xs font-semibold py-2 px-3 rounded transition duration-200" data-id="${request.id}">
+                                Approve
+                            </button>
+                            <button class="flex-1 reject-request bg-red-600 hover:bg-red-700 text-white text-xs font-semibold py-2 px-3 rounded transition duration-200" data-id="${request.id}">
+                                Reject
+                            </button>
+                            `
+                                : ""
+                            }
+                            <button class="flex-1 view-details bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold py-2 px-3 rounded transition duration-200" data-id="${
+                              request.id
+                            }">
+                                View Details
+                            </button>
+                        </div>
+                    `;
+
+            container.appendChild(requestEl);
+          });
+
+          // Add event listeners to buttons
+          document.querySelectorAll(".approve-request").forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+              const requestId = parseInt(e.target.getAttribute("data-id"));
+              this.approveRequest(requestId);
+              this.renderAdminView();
+            });
+          });
+
+          document.querySelectorAll(".reject-request").forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+              const requestId = parseInt(e.target.getAttribute("data-id"));
+              this.rejectRequest(requestId);
+              this.renderAdminView();
+            });
+          });
+
+          document.querySelectorAll(".view-details").forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+              const requestId = parseInt(e.target.getAttribute("data-id"));
+              const request = this.adminRequests.find(
+                (r) => r.id === requestId,
+              );
+              if (request) {
+                this.showMessage(`Request details: ${request.reason}`, "info");
+              }
+            });
+          });
+        }
+
+        renderInventory() {
+          const furnitureContainer = document.getElementById(
+            "furniture-inventory",
+          );
+          const amenitiesContainer = document.getElementById(
+            "amenities-inventory",
+          );
+
+          furnitureContainer.innerHTML = "";
+          amenitiesContainer.innerHTML = "";
+
+          this.inventory.furniture.forEach((item) => {
+            const itemEl = document.createElement("div");
+            itemEl.className = "inventory-item";
+            const statusClass =
+              item.status === "available"
+                ? "status-available"
+                : item.status === "low"
+                  ? "status-low"
+                  : "status-out";
+
+            itemEl.innerHTML = `
+                        <span class="text-white">${item.item}</span>
+                        <span class="inventory-status ${statusClass}">Available: ${item.available}</span>
+                    `;
+            furnitureContainer.appendChild(itemEl);
+          });
+
+          this.inventory.amenities.forEach((item) => {
+            const itemEl = document.createElement("div");
+            itemEl.className = "inventory-item";
+            const statusClass =
+              item.status === "available"
+                ? "status-available"
+                : item.status === "low"
+                  ? "status-low"
+                  : "status-out";
+
+            itemEl.innerHTML = `
+                        <span class="text-white">${item.item}</span>
+                        <span class="inventory-status ${statusClass}">${
+                          item.status === "available"
+                            ? "Working"
+                            : item.status === "low"
+                              ? "Maintenance"
+                              : "Replace"
+                        }: ${item.available}</span>
+                    `;
+            amenitiesContainer.appendChild(itemEl);
+          });
+        }
+
+        renderMaintenanceTasks() {
+          const container = document.getElementById(
+            "maintenance-tasks-container",
+          );
+          container.innerHTML = "";
+
+          this.maintenanceTasks.forEach((task) => {
+            const taskEl = document.createElement("div");
+            taskEl.className = "bg-gray-700 rounded-lg p-4";
+
+            const statusClass =
+              task.status === "scheduled"
+                ? "bg-blue-600"
+                : task.status === "in-progress"
+                  ? "bg-yellow-600"
+                  : "bg-green-600";
+            const statusText =
+              task.status === "scheduled"
+                ? "Scheduled"
+                : task.status === "in-progress"
+                  ? "In Progress"
+                  : "Completed";
+
+            const priorityClass =
+              task.priority === "high"
+                ? "priority-high"
+                : task.priority === "medium"
+                  ? "priority-medium"
+                  : "priority-low";
+
+            taskEl.innerHTML = `
+                        <div class="flex justify-between items-start mb-2">
+                            <div>
+                                <div class="font-semibold text-white">${
+                                  task.title
+                                }</div>
+                                <div class="text-sm text-gray-400">Scheduled: ${new Date(
+                                  task.scheduled,
+                                ).toLocaleString()}</div>
+                            </div>
+                            <span class="px-2 py-1 text-xs rounded-full ${statusClass} text-white">${statusText}</span>
+                        </div>
+                        <div class="text-sm text-gray-300">Technician: ${
+                          task.technician
+                        } • Priority: <span class="capitalize">${
+                          task.priority
+                        }</span></div>
+                        ${
+                          task.rating
+                            ? `<div class="text-sm text-yellow-400 mt-1">Rating: ${task.rating}/5</div>`
+                            : ""
+                        }
+                    `;
+
+            container.appendChild(taskEl);
+          });
+        }
+
+        renderCalendar() {
+          const currentMonthEl = document.getElementById("current-month");
+          const calendarDaysEl = document.getElementById("calendar-days");
+
+          const year = this.currentDate.getFullYear();
+          const month = this.currentDate.getMonth();
+
+          currentMonthEl.textContent = this.currentDate.toLocaleString(
+            "default",
+            { month: "long", year: "numeric" },
+          );
+
+          // Get first day of month and number of days
+          const firstDay = new Date(year, month, 1);
+          const lastDay = new Date(year, month + 1, 0);
+          const daysInMonth = lastDay.getDate();
+
+          calendarDaysEl.innerHTML = "";
+
+          // Add empty cells for days before the first day of the month
+          for (let i = 0; i < firstDay.getDay(); i++) {
+            const emptyDay = document.createElement("div");
+            emptyDay.className = "calendar-day";
+            calendarDaysEl.appendChild(emptyDay);
+          }
+
+          // Add days of the month
+          for (let day = 1; day <= daysInMonth; day++) {
+            const dayEl = document.createElement("div");
+            dayEl.className = "calendar-day";
+            dayEl.textContent = day;
+
+            // Randomly assign status for demo purposes
+            const random = Math.random();
+            if (random < 0.2) {
+              dayEl.classList.add("unavailable");
+            } else if (random < 0.4) {
+              dayEl.classList.add("maintenance");
+            }
+
+            calendarDaysEl.appendChild(dayEl);
+          }
+        }
+
+        renderStaffView() {
+          this.renderStaffTasks();
+          this.renderTodaySchedule();
+        }
+
+        renderStaffTasks() {
+          const container = document.getElementById("staff-tasks-container");
+          container.innerHTML = "";
+
+          this.staffTasks.forEach((task) => {
+            const taskEl = document.createElement("div");
+            taskEl.className = `bg-gray-700 rounded-lg p-4 ${
+              task.status === "completed" ? "task-completed" : ""
+            }`;
+
+            const statusClass =
+              task.status === "pending"
+                ? "bg-yellow-600"
+                : task.status === "in-progress"
+                  ? "bg-blue-600"
+                  : "bg-green-600";
+            const statusText =
+              task.status === "pending"
+                ? "Pending"
+                : task.status === "in-progress"
+                  ? "In Progress"
+                  : "Completed";
+
+            const priorityClass =
+              task.priority === "high"
+                ? "priority-high"
+                : task.priority === "medium"
+                  ? "priority-medium"
+                  : "priority-low";
+
+            taskEl.innerHTML = `
+                        <div class="flex justify-between items-start mb-2">
+                            <div>
+                                <div class="font-semibold text-white task-title">${
+                                  task.title
+                                }</div>
+                                <div class="text-sm text-gray-400">Scheduled: ${new Date(
+                                  task.scheduled,
+                                ).toLocaleString()}</div>
+                            </div>
+                            <span class="px-2 py-1 text-xs rounded-full ${statusClass} text-white">${statusText}</span>
+                        </div>
+                        <div class="text-sm text-gray-300 mb-3">${
+                          task.description
+                        } • Estimated: ${task.estimatedDuration}</div>
+                        <div class="flex space-x-2">
+                            ${
+                              task.status === "pending"
+                                ? `
+                            <button class="flex-1 start-task bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold py-2 px-3 rounded transition duration-200" data-id="${task.id}">
+                                Start Task
+                            </button>
+                            `
+                                : ""
+                            }
+                            ${
+                              task.status === "in-progress"
+                                ? `
+                            <button class="flex-1 complete-task bg-green-600 hover:bg-green-700 text-white text-xs font-semibold py-2 px-3 rounded transition duration-200" data-id="${task.id}">
+                                Complete
+                            </button>
+                            `
+                                : ""
+                            }
+                            ${
+                              task.status === "completed"
+                                ? `
+                            <button class="flex-1 view-details bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold py-2 px-3 rounded transition duration-200" data-id="${task.id}">
+                                View Details
+                            </button>
+                            <button class="flex-1 add-note bg-purple-600 hover:bg-purple-700 text-white text-xs font-semibold py-2 px-3 rounded transition duration-200" data-id="${task.id}">
+                                Add Note
+                            </button>
+                            `
+                                : ""
+                            }
+                        </div>
+                    `;
+
+            container.appendChild(taskEl);
+          });
+
+          // Add event listeners to buttons
+          document.querySelectorAll(".start-task").forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+              const taskId = parseInt(e.target.getAttribute("data-id"));
+              this.updateTaskStatus(taskId, "in-progress");
+              this.renderStaffView();
+            });
+          });
+
+          document.querySelectorAll(".complete-task").forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+              const taskId = parseInt(e.target.getAttribute("data-id"));
+              this.updateTaskStatus(taskId, "completed");
+              this.renderStaffView();
+            });
+          });
+
+          document.querySelectorAll(".view-details").forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+              const taskId = parseInt(e.target.getAttribute("data-id"));
+              const task = this.staffTasks.find((t) => t.id === taskId);
+              if (task) {
+                this.showTaskDetails(task);
+              }
+            });
+          });
+
+          document.querySelectorAll(".add-note").forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+              const taskId = parseInt(e.target.getAttribute("data-id"));
+              this.showMessage(`Add note for task ${taskId}`, "info");
+            });
+          });
+        }
+
+        renderTodaySchedule() {
+          const container = document.getElementById("today-schedule");
+          container.innerHTML = "";
+
+          const today = new Date().toISOString().split("T")[0];
+          const todayTasks = this.staffTasks.filter(
+            (task) => task.scheduled.split("T")[0] === today,
+          );
+
+          if (todayTasks.length === 0) {
+            container.innerHTML = `
+                        <div class="text-center py-4 text-gray-500">
+                            <i class="fa-solid fa-calendar-day text-xl mb-2"></i>
+                            <p>No tasks scheduled for today</p>
+                        </div>
+                    `;
+            return;
+          }
+
+          todayTasks.forEach((task) => {
+            const taskEl = document.createElement("div");
+            taskEl.className = "bg-gray-700 rounded-lg p-3";
+
+            taskEl.innerHTML = `
+                        <div class="font-semibold text-white">${
+                          task.title
+                        }</div>
+                        <div class="text-sm text-gray-400">${new Date(
+                          task.scheduled,
+                        ).toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}</div>
+                    `;
+
+            container.appendChild(taskEl);
+          });
+        }
+
+        showTaskDetails(task) {
+          const container = document.getElementById("task-details");
+
+          container.innerHTML = `
+                    <div class="space-y-4">
+                        <div class="bg-gray-700 rounded-lg p-4">
+                            <div class="font-semibold text-white mb-2">Task Information</div>
+                            <div class="text-sm space-y-2">
+                                <div class="flex justify-between"><span class="text-gray-400">Room:</span><span class="text-white">${
+                                  task.room
+                                }</span></div>
+                                <div class="flex justify-between"><span class="text-gray-400">Scheduled:</span><span class="text-white">${new Date(
+                                  task.scheduled,
+                                ).toLocaleString()}</span></div>
+                                <div class="flex justify-between"><span class="text-gray-400">Priority:</span><span class="text-white capitalize">${
+                                  task.priority
+                                }</span></div>
+                                <div class="flex justify-between"><span class="text-gray-400">Status:</span><span class="text-white">${
+                                  task.status
+                                }</span></div>
+                                <div class="flex justify-between"><span class="text-gray-400">Estimated Duration:</span><span class="text-white">${
+                                  task.estimatedDuration
+                                }</span></div>
+                            </div>
+                        </div>
+                        <div class="bg-gray-700 rounded-lg p-4">
+                            <div class="font-semibold text-white mb-2">Description</div>
+                            <div class="text-sm text-white">${
+                              task.description
+                            }</div>
+                        </div>
+                        <div class="flex space-x-2">
+                            ${
+                              task.status === "pending"
+                                ? `
+                            <button class="flex-1 start-task-details bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded transition duration-200" data-id="${task.id}">
+                                Start Task
+                            </button>
+                            `
+                                : ""
+                            }
+                            ${
+                              task.status === "in-progress"
+                                ? `
+                            <button class="flex-1 complete-task-details bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded transition duration-200" data-id="${task.id}">
+                                Complete
+                            </button>
+                            `
+                                : ""
+                            }
+                        </div>
+                    </div>
+                `;
+
+          // Add event listeners to buttons in task details
+          const startBtn = container.querySelector(".start-task-details");
+          if (startBtn) {
+            startBtn.addEventListener("click", () => {
+              this.updateTaskStatus(task.id, "in-progress");
+              this.renderStaffView();
+            });
+          }
+
+          const completeBtn = container.querySelector(".complete-task-details");
+          if (completeBtn) {
+            completeBtn.addEventListener("click", () => {
+              this.updateTaskStatus(task.id, "completed");
+              this.renderStaffView();
+            });
+          }
+        }
+
+        renderNotifications() {
+          const container = document.getElementById("notification-list");
+          container.innerHTML = "";
+
+          if (this.notifications.length === 0) {
+            container.innerHTML = `
+                        <div class="text-center py-4 text-gray-500">
+                            <i class="fa-solid fa-bell-slash text-2xl mb-2"></i>
+                            <p>No notifications</p>
+                        </div>
+                    `;
+            return;
+          }
+
+          this.notifications.forEach((notification) => {
+            const notificationEl = document.createElement("div");
+            notificationEl.className = `notification-item p-3 bg-gray-700 rounded-lg ${
+              notification.read ? "" : "unread"
+            }`;
+
+            notificationEl.innerHTML = `
+                        <div class="flex justify-between items-start">
+                            <div class="flex-1">
+                                <div class="font-medium text-white">${
+                                  notification.title
+                                }</div>
+                                <div class="text-sm text-gray-300 mt-1">${
+                                  notification.message
+                                }</div>
+                                <div class="text-xs text-gray-500 mt-2">${new Date(
+                                  notification.timestamp,
+                                ).toLocaleString()}</div>
+                            </div>
+                            <div class="w-2 h-2 rounded-full ${
+                              notification.read ? "bg-gray-500" : "bg-blue-500"
+                            } ml-2 mt-1"></div>
+                        </div>
+                    `;
+
+            container.appendChild(notificationEl);
+          });
+        }
+
+        updateNotificationBadge() {
+          const badge = document.getElementById("notification-badge");
+          badge.textContent = this.getUnreadNotificationCount();
+        }
+
+        // Utility methods
+        getOrdinalSuffix(n) {
+          const s = ["th", "st", "nd", "rd"];
+          const v = n % 100;
+          return n + (s[(v - 20) % 10] || s[v] || s[0]);
+        }
+      }
+
+      // Initialize the application
+      document.addEventListener("DOMContentLoaded", function () {
+        const roomSystem = new RoomManagementSystem();
+
+        // Initialize date and time
+        function updateDateTime() {
+          const now = new Date();
+          const options = {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+          };
+          const formattedDateTime = now.toLocaleDateString("en-US", options);
+          document.getElementById("date-time-display").textContent =
+            formattedDateTime;
+          document.getElementById("admin-date-time-display").textContent =
+            formattedDateTime;
+          document.getElementById("staff-date-time-display").textContent =
+            formattedDateTime;
+        }
+        updateDateTime();
+        setInterval(updateDateTime, 1000);
+
+        // View switching
+        document
+          .getElementById("student-view-btn")
+          .addEventListener("click", () => roomSystem.switchView("student"));
+        document
+          .getElementById("admin-view-btn")
+          .addEventListener("click", () => roomSystem.switchView("admin"));
+        document
+          .getElementById("staff-view-btn")
+          .addEventListener("click", () => roomSystem.switchView("staff"));
+
+        // Student view buttons
+        document
+          .getElementById("find-roommate-btn")
+          .addEventListener("click", () => {
+            document
+              .getElementById("roommate-modal")
+              .classList.remove("hidden");
+            document.getElementById("roommate-modal-content").innerHTML = `
+                    <div class="space-y-4">
+                        <div class="bg-gray-700 rounded-lg p-4">
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center mr-4">
+                                    <i class="fa-solid fa-user text-white"></i>
+                                </div>
+                                <div>
+                                    <div class="font-semibold text-white">Rahul Sharma</div>
+                                    <div class="text-sm text-gray-400">Computer Science, 2nd Year</div>
+                                    <div class="text-xs text-blue-400 mt-1">Match Score: 92%</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-sm text-green-400 bg-green-900/30 p-3 rounded-lg">
+                            <i class="fa-solid fa-check-circle mr-2"></i>
+                            High compatibility based on your preferences
+                        </div>
+                    </div>
+                `;
+          });
+
+        document
+          .getElementById("request-transfer-btn")
+          .addEventListener("click", () => {
+            document
+              .getElementById("transfer-modal")
+              .classList.remove("hidden");
+          });
+
+        document
+          .getElementById("view-virtual-tour")
+          .addEventListener("click", () => {
+            roomSystem.showMessage("Opening virtual tour of your room", "info");
+          });
+
+        document
+          .getElementById("new-transfer-request")
+          .addEventListener("click", () => {
+            document
+              .getElementById("transfer-modal")
+              .classList.remove("hidden");
+          });
+
+        document
+          .getElementById("edit-preferences")
+          .addEventListener("click", () => {
+            document
+              .getElementById("preferences-modal")
+              .classList.remove("hidden");
+
+            // Set current values
+            document.getElementById("room-type-pref").value =
+              roomSystem.studentData.preferences.roomType;
+            document.getElementById("ac-pref").value =
+              roomSystem.studentData.preferences.acPref;
+            document.getElementById("floor-pref").value =
+              roomSystem.studentData.preferences.floorPref;
+            document.getElementById("block-pref").value =
+              roomSystem.studentData.preferences.blockPref;
+          });
+
+        document
+          .getElementById("find-compatible-btn")
+          .addEventListener("click", () => {
+            roomSystem.showMessage(
+              "Finding compatible roommates based on your preferences...",
+              "info",
+            );
+            setTimeout(() => {
+              roomSystem.renderRoommateSuggestions();
+              roomSystem.showMessage(
+                "Roommate suggestions updated!",
+                "success",
+              );
+            }, 1500);
+          });
+
+        document
+          .getElementById("add-interest")
+          .addEventListener("click", () => {
+            const newInterest = document
+              .getElementById("new-interest")
+              .value.trim();
+            if (
+              newInterest &&
+              !roomSystem.studentData.preferences.interests.includes(
+                newInterest,
+              )
+            ) {
+              roomSystem.studentData.preferences.interests.push(newInterest);
+              roomSystem.renderStudentView();
+              document.getElementById("new-interest").value = "";
+            }
+          });
+
+        // Admin view buttons
+        document
+          .getElementById("refresh-admin-btn")
+          .addEventListener("click", () => {
+            roomSystem.showMessage("Admin data refreshed", "info");
+            roomSystem.renderAdminView();
+          });
+
+        document
+          .getElementById("add-room-btn")
+          .addEventListener("click", () => {
+            roomSystem.showMessage(
+              "Add new room functionality would open here",
+              "info",
+            );
+          });
+
+        document
+          .getElementById("room-analytics-btn")
+          .addEventListener("click", () => {
+            roomSystem.showMessage(
+              "Room analytics dashboard would open here",
+              "info",
+            );
+          });
+
+        document
+          .getElementById("generate-inventory-report")
+          .addEventListener("click", () => {
+            roomSystem.showMessage(
+              "Inventory report generated successfully!",
+              "success",
+            );
+          });
+
+        document
+          .getElementById("schedule-maintenance")
+          .addEventListener("click", () => {
+            roomSystem.showMessage(
+              "Maintenance scheduling form would open here",
+              "info",
+            );
+          });
+
+        document
+          .getElementById("assign-room-btn")
+          .addEventListener("click", () => {
+            roomSystem.showMessage(
+              "Room assignment interface would open here",
+              "info",
+            );
+          });
+
+        document
+          .getElementById("room-inspection-btn")
+          .addEventListener("click", () => {
+            roomSystem.showMessage(
+              "Room inspection form would open here",
+              "info",
+            );
+          });
+
+        document
+          .getElementById("export-reports-btn")
+          .addEventListener("click", () => {
+            roomSystem.showMessage("Reports exported successfully!", "success");
+          });
+
+        // Calendar navigation
+        document.getElementById("prev-month").addEventListener("click", () => {
+          roomSystem.currentDate.setMonth(
+            roomSystem.currentDate.getMonth() - 1,
+          );
+          roomSystem.renderCalendar();
+        });
+
+        document.getElementById("next-month").addEventListener("click", () => {
+          roomSystem.currentDate.setMonth(
+            roomSystem.currentDate.getMonth() + 1,
+          );
+          roomSystem.renderCalendar();
+        });
+
+        // Staff view buttons
+        document
+          .getElementById("refresh-staff-btn")
+          .addEventListener("click", () => {
+            roomSystem.showMessage("Staff data refreshed", "info");
+            roomSystem.renderStaffView();
+          });
+
+        document
+          .getElementById("start-shift-btn")
+          .addEventListener("click", () => {
+            roomSystem.showMessage("Shift started successfully", "success");
+          });
+
+        document
+          .getElementById("view-schedule-btn")
+          .addEventListener("click", () => {
+            roomSystem.showMessage("Viewing your schedule", "info");
+          });
+
+        document
+          .getElementById("submit-report-btn")
+          .addEventListener("click", () => {
+            roomSystem.showMessage("Report submitted successfully!", "success");
+          });
+
+        document
+          .getElementById("request-supplies-btn")
+          .addEventListener("click", () => {
+            roomSystem.showMessage(
+              "Supply request form would open here",
+              "info",
+            );
+          });
+
+        // Virtual tour controls
+        document.getElementById("tour-left").addEventListener("click", () => {
+          roomSystem.showMessage("Rotating view left", "info");
+        });
+
+        document.getElementById("tour-right").addEventListener("click", () => {
+          roomSystem.showMessage("Rotating view right", "info");
+        });
+
+        document.getElementById("tour-expand").addEventListener("click", () => {
+          roomSystem.showMessage("Expanding virtual tour view", "info");
+        });
+
+        document.querySelectorAll(".room-view-option").forEach((option) => {
+          option.addEventListener("click", (e) => {
+            const view = e.currentTarget.getAttribute("data-view");
+            roomSystem.showMessage(`Switching to ${view} view`, "info");
+          });
+        });
+
+        // Modal actions
+        document
+          .getElementById("cancel-roommate")
+          .addEventListener("click", () => {
+            document.getElementById("roommate-modal").classList.add("hidden");
+          });
+
+        document
+          .getElementById("confirm-roommate")
+          .addEventListener("click", () => {
+            document.getElementById("roommate-modal").classList.add("hidden");
+            roomSystem.showMessage(
+              "Roommate request sent successfully!",
+              "success",
+            );
+          });
+
+        document
+          .getElementById("cancel-transfer")
+          .addEventListener("click", () => {
+            document.getElementById("transfer-modal").classList.add("hidden");
+          });
+
+        document
+          .getElementById("confirm-transfer")
+          .addEventListener("click", () => {
+            const toRoom = document.getElementById("requested-room").value;
+            const reason = document.getElementById("transfer-reason").value;
+            const urgent = document.getElementById("urgency-transfer").checked;
+
+            if (!toRoom || !reason) {
+              roomSystem.showMessage(
+                "Please fill in all required fields",
+                "error",
+              );
+              return;
+            }
+
+            document.getElementById("transfer-modal").classList.add("hidden");
+            roomSystem.submitTransferRequest(toRoom, reason, urgent);
+            roomSystem.renderStudentView();
+          });
+
+        document
+          .getElementById("cancel-preferences")
+          .addEventListener("click", () => {
+            document
+              .getElementById("preferences-modal")
+              .classList.add("hidden");
+          });
+
+        document
+          .getElementById("save-preferences")
+          .addEventListener("click", () => {
+            const roomType = document.getElementById("room-type-pref").value;
+            const acPref = document.getElementById("ac-pref").value;
+            const floorPref = document.getElementById("floor-pref").value;
+            const blockPref = document.getElementById("block-pref").value;
+
+            roomSystem.updatePreferences({
+              roomType,
+              acPref,
+              floorPref,
+              blockPref,
+            });
+
+            document
+              .getElementById("preferences-modal")
+              .classList.add("hidden");
+            roomSystem.renderStudentView();
+          });
+
+        // Notifications
+        document
+          .getElementById("notification-icon")
+          .addEventListener("click", () => {
+            document
+              .getElementById("notification-modal")
+              .classList.remove("hidden");
+            roomSystem.renderNotifications();
+          });
+
+        document
+          .getElementById("close-notification-modal")
+          .addEventListener("click", () => {
+            document
+              .getElementById("notification-modal")
+              .classList.add("hidden");
+          });
+
+        document
+          .getElementById("mark-all-read")
+          .addEventListener("click", () => {
+            roomSystem.markAllNotificationsAsRead();
+            roomSystem.renderNotifications();
+            roomSystem.updateNotificationBadge();
+          });
+
+        // Filter buttons
+        document.querySelectorAll(".filter-btn").forEach((btn) => {
+          btn.addEventListener("click", (e) => {
+            document.querySelectorAll(".filter-btn").forEach((b) => {
+              b.classList.remove("bg-blue-600");
+              b.classList.add("bg-gray-600");
+            });
+            e.target.classList.remove("bg-gray-600");
+            e.target.classList.add("bg-blue-600");
+
+            const filter = e.target.getAttribute("data-filter");
+            roomSystem.showMessage(`Filtering by: ${filter}`, "info");
+          });
+        });
+
+        document.querySelectorAll(".task-filter-btn").forEach((btn) => {
+          btn.addEventListener("click", (e) => {
+            document.querySelectorAll(".task-filter-btn").forEach((b) => {
+              b.classList.remove("bg-blue-600");
+              b.classList.add("bg-gray-600");
+            });
+            e.target.classList.remove("bg-gray-600");
+            e.target.classList.add("bg-blue-600");
+
+            const filter = e.target.getAttribute("data-filter");
+            roomSystem.showMessage(`Filtering tasks by: ${filter}`, "info");
+          });
+        });
+
+        // Initialize the system
+        roomSystem.switchView("student");
+      });
+    </script>
+    <script src="auth_guard.js"></script>
+  </body>
+</html>

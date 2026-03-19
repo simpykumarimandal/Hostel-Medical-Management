@@ -1,0 +1,3429 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HMS | Electronic Health Records</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style> @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"); body { font-family: "Inter", sans-serif; color: #d1d5db; } .active-nav-link { background-color: #374151; color: white; } .bg-card { background-color: #374151; } .message-box { animation: slideIn 0.5s forwards; } @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } } .fade-in { animation: fadeIn 0.5s ease-in; } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } } .gradient-border { background: linear-gradient(135deg, #3b82f6, #8b5cf6); padding: 2px; border-radius: 12px; } .gradient-border > div { background: #374151; border-radius: 10px; padding: 1.5rem; } .health-card { transition: all 0.3s ease; } .health-card:hover { transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3); } .vital-normal { background: linear-gradient(135deg, #10b981, #059669); color: white; } .vital-warning { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; } .vital-critical { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; } .record-normal { border-left: 4px solid #10b981; } .record-warning { border-left: 4px solid #f59e0b; } .record-critical { border-left: 4px solid #ef4444; } .timeline-item { position: relative; padding-left: 2rem; } .timeline-item::before { content: ""; position: absolute; left: 0; top: 0; width: 12px; height: 12px; border-radius: 50%; background: #3b82f6; } .timeline-item::after { content: ""; position: absolute; left: 5px; top: 12px; width: 2px; height: calc(100% - 12px); background: #4b5563; } .timeline-item:last-child::after { display: none; } .medication-card { background: #374151; border-radius: 0.5rem; padding: 1rem; margin-bottom: 0.75rem; } .allergy-critical { background: linear-gradient(135deg, #ef4444, #dc2626); } .allergy-moderate { background: linear-gradient(135deg, #f59e0b, #d97706); } .allergy-mild { background: linear-gradient(135deg, #3b82f6, #2563eb); } .tab-active { background: #3b82f6; color: white; } .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); z-index: 1000; align-items: center; justify-content: center; } .modal.active { display: flex; } .modal-content { background: #1f2937; border-radius: 12px; padding: 2rem; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto; } .form-group { margin-bottom: 1.5rem; } .form-label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: #d1d5db; } .form-input { width: 100%; background-color: #4b5563; border: 1px solid #6b7280; border-radius: 0.5rem; padding: 0.75rem 1rem; color: white; transition: all 0.3s ease; } .form-input:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3); } .form-select { width: 100%; background-color: #4b5563; border: 1px solid #6b7280; border-radius: 0.5rem; padding: 0.75rem 1rem; color: white; transition: all 0.3s ease; } .vital-card { background: linear-gradient(135deg, #1e40af, #3730a3); border-radius: 0.75rem; padding: 1.5rem; color: white; position: relative; overflow: hidden; } .vital-card::before { content: ""; position: absolute; top: 0; right: 0; width: 100px; height: 100px; background: rgba(255, 255, 255, 0.1); border-radius: 50%; transform: translate(30px, -30px); } .vital-icon { background: rgba(255, 255, 255, 0.2); border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; } .share-options { display: flex; gap: 10px; margin-top: 15px; } .share-option { flex: 1; text-align: center; padding: 10px; border-radius: 8px; background: #4b5563; cursor: pointer; transition: background 0.3s; } .share-option:hover { background: #3b82f6; } </style> <style> .sidebar { transition: transform 0.25s ease-in-out; } .sidebar-collapsed .sidebar { transform: translateX(-110%); } .main-content { transition: margin-left 0.25s ease-in-out; } .sidebar-collapsed .main-content { margin-left: 0 !important; } @media (max-width: 768px) { .sidebar { transform: translateX(-110%); } .sidebar-open .sidebar { transform: translateX(0); } } </style></head>
+  <body class="bg-gray-900 flex flex-col md:flex-row min-h-screen">
+
+    <!-- Sidebar -->
+    <aside
+      class="sidebar w-full md:w-64 bg-gray-950 text-white p-6 flex flex-col items-center md:items-start space-y-8 shadow-2xl">
+      <div class="flex items-center space-x-2 mb-4">
+        <i class="fas fa-hospital text-xl text-blue-400"></i>
+        <h1 class="text-xl font-bold">HMS</h1>
+        <span class="text-sm text-gray-400 ml-2">Doctor Mode</span>
+      </div>
+      <nav class="w-full">
+  <ul class="space-y-2">
+    <li>
+      <a href="demo.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-chart-line mr-3"></i>
+        <span class="font-medium">Dashboard</span>
+      </a>
+    </li>
+    <li>
+      <a href="ambulance.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-truck-medical mr-3"></i>
+        <span class="font-medium">Ambulance</span>
+      </a>
+    </li>
+    <li>
+      <a href="doctors.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-user-doctor mr-3"></i>
+        <span class="font-medium">Doctors</span>
+      </a>
+    </li>
+    <li>
+      <a href="medicine_order.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-pills mr-3"></i>
+        <span class="font-medium">Pharmacy</span>
+      </a>
+    </li>
+    <li>
+      <a href="medicine_reminder.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bell mr-3"></i>
+        <span class="font-medium">Medicine Reminder</span>
+      </a>
+    </li>
+    <li>
+      <a href="symptoms_checker.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-stethoscope mr-3"></i>
+        <span class="font-medium">Symptoms Checker</span>
+      </a>
+    </li>
+    <li>
+      <a href="lab_tests.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-vial-circle-check mr-3"></i>
+        <span class="font-medium">Lab Tests</span>
+      </a>
+    </li>
+    <li>
+      <a href="emergency_requests.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-hand-holding-medical mr-3"></i>
+        <span class="font-medium">Emergency Requests</span>
+      </a>
+    </li>
+    <li>
+      <a href="sos.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-sos mr-3"></i>
+        <span class="font-medium">SOS</span>
+      </a>
+    </li>
+    <li>
+      <a href="electronic_health_records.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-file-medical mr-3"></i>
+        <span class="font-medium">Health Records</span>
+      </a>
+    </li>
+    <li>
+      <a href="health_insurance.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-shield-heart mr-3"></i>
+        <span class="font-medium">Health Insurance</span>
+      </a>
+    </li>
+    <li>
+      <a href="reports_and_analytics.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-chart-pie mr-3"></i>
+        <span class="font-medium">Reports & Analytics</span>
+      </a>
+    </li>
+    <li>
+      <a href="restocking.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-box-open mr-3"></i>
+        <span class="font-medium">Inventory</span>
+      </a>
+    </li>
+    <li>
+      <a href="studentrequest.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-cash-register mr-3"></i>
+        <span class="font-medium">Student Requests</span>
+      </a>
+    </li>
+    <li>
+      <a href="student_transport.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bus mr-3"></i>
+        <span class="font-medium">Student Transport</span>
+      </a>
+    </li>
+    <li>
+      <a href="transport_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-route mr-3"></i>
+        <span class="font-medium">Transport Management</span>
+      </a>
+    </li>
+    <li>
+      <a href="room_management.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bed mr-3"></i>
+        <span class="font-medium">Room Management</span>
+      </a>
+    </li>
+    <li>
+      <a href="room_sanitation.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-spray-can-sparkles mr-3"></i>
+        <span class="font-medium">Room Sanitation</span>
+      </a>
+    </li>
+    <li>
+      <a href="mess_menu.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-utensils mr-3"></i>
+        <span class="font-medium">Mess Menu</span>
+      </a>
+    </li>
+    <li>
+      <a href="mess_food_order_service.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bowl-food mr-3"></i>
+        <span class="font-medium">Mess Food Order</span>
+      </a>
+    </li>
+    <li>
+      <a href="laundry_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-shirt mr-3"></i>
+        <span class="font-medium">Laundry</span>
+      </a>
+    </li>
+    <li>
+      <a href="leave_and_outing.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-door-open mr-3"></i>
+        <span class="font-medium">Leave & Outing</span>
+      </a>
+    </li>
+    <li>
+      <a href="vit_bhopal_community.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-users mr-3"></i>
+        <span class="font-medium">VIT Community</span>
+      </a>
+    </li>
+    <li>
+      <a href="parent_notification.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-comments mr-3"></i>
+        <span class="font-medium">Parent Notification</span>
+      </a>
+    </li>
+    <li>
+      <a href="payment_gateway.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-credit-card mr-3"></i>
+        <span class="font-medium">Payment Gateway</span>
+      </a>
+    </li>
+    <li>
+      <a href="complaint_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-circle-exclamation mr-3"></i>
+        <span class="font-medium">Complaints</span>
+      </a>
+    </li>
+    <li>
+      <a href="exam_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-clipboard-list mr-3"></i>
+        <span class="font-medium">Exam Management</span>
+      </a>
+    </li>
+    <li>
+      <a href="local_hospital_network.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-hospital mr-3"></i>
+        <span class="font-medium">Local Hospitals</span>
+      </a>
+    </li>
+    <li>
+      <a href="medical_camps.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-hand-holding-heart mr-3"></i>
+        <span class="font-medium">Medical Camps</span>
+      </a>
+    </li>
+    <li>
+      <a href="virtual_consultation.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-video mr-3"></i>
+        <span class="font-medium">Virtual Consultation</span>
+      </a>
+    </li>
+    <li>
+      <a href="wearables.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-watch-fitness mr-3"></i>
+        <span class="font-medium">Wearables</span>
+      </a>
+    </li>
+    <li>
+      <a href="biometric.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-fingerprint mr-3"></i>
+        <span class="font-medium">Biometric</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+      <div class="mt-auto w-full">
+        <a href="/index.html" data-logout="true"
+          class="flex items-center justify-center w-full px-4 py-3 rounded-lg bg-red-600 hover:bg-red-700 transition-colors duration-200"
+        >
+          <i class="fa-solid fa-right-from-bracket mr-2"></i>
+          <span class="font-semibold">Log Out</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content flex-1 p-8 overflow-y-auto bg-gray-800">
+      <!-- Top Header -->
+      <header
+        class="flex items-center justify-between text-sm text-gray-400 mb-8"
+      >
+        <div id="date-time-display"></div>
+        <div class="flex items-center space-x-6">
+          <div class="relative">
+            <i
+              class="fa-solid fa-bell text-xl hover:text-white transition duration-200"
+            ></i>
+            <span
+              id="notification-badge"
+              class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center"
+              >3</span
+            >
+          </div>
+          <div class="flex items-center space-x-2">
+            <i class="fa-solid fa-user-circle text-xl"></i>
+            <span>Student Mode</span>
+          </div>
+          <div class="flex items-center space-x-2 cursor-pointer">
+            <i class="fa-solid fa-globe text-xl"></i>
+            <span>English</span>
+            <i class="fa-solid fa-chevron-down text-xs"></i>
+          </div>
+        </div>
+      </header>
+
+      <!-- Page Title & Actions -->
+      <div class="flex justify-between items-center mb-8">
+        <div>
+          <h2 class="text-3xl font-bold text-white mb-1">
+            Electronic Health Records
+          </h2>
+          <p class="text-gray-400">
+            Complete medical history, prescriptions, lab results, and health
+            monitoring
+          </p>
+        </div>
+        <div class="flex space-x-3">
+          <button
+            id="download-records-btn"
+            class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center"
+          >
+            <i class="fa-solid fa-download mr-2"></i>
+            Download Records
+          </button>
+          <button
+            id="share-records-btn"
+            class="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center"
+          >
+            <i class="fa-solid fa-share-alt mr-2"></i>
+            Share Records
+          </button>
+          <button
+            id="emergency-access-btn"
+            class="bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center"
+          >
+            <i class="fa-solid fa-triangle-exclamation mr-2"></i>
+            Emergency Access
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick Stats -->
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
+        <!-- Medical Visits -->
+        <div class="gradient-border">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-2xl font-bold text-white" id="total-visits">
+                24
+              </div>
+              <div class="text-sm text-blue-300">Medical Visits</div>
+            </div>
+            <i class="fa-solid fa-calendar-check text-blue-400 text-2xl"></i>
+          </div>
+        </div>
+
+        <!-- Active Medications -->
+        <div class="gradient-border">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-2xl font-bold text-white" id="active-meds">
+                3
+              </div>
+              <div class="text-sm text-green-300">Active Medications</div>
+            </div>
+            <i class="fa-solid fa-pills text-green-400 text-2xl"></i>
+          </div>
+        </div>
+
+        <!-- Lab Reports -->
+        <div class="gradient-border">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-2xl font-bold text-white" id="lab-reports">
+                12
+              </div>
+              <div class="text-sm text-yellow-300">Lab Reports</div>
+            </div>
+            <i class="fa-solid fa-file-medical text-yellow-400 text-2xl"></i>
+          </div>
+        </div>
+
+        <!-- Allergies -->
+        <div class="gradient-border">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-2xl font-bold text-white" id="allergies-count">
+                2
+              </div>
+              <div class="text-sm text-purple-300">Known Allergies</div>
+            </div>
+            <i class="fa-solid fa-allergies text-purple-400 text-2xl"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Content Grid -->
+      <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-6">
+        <!-- Patient Summary & Vitals -->
+        <div class="xl:col-span-2">
+          <div class="bg-card rounded-xl shadow-lg p-6 mb-6">
+            <div class="flex justify-between items-center mb-6">
+              <h3 class="text-xl font-bold text-white">Patient Summary</h3>
+              <div class="flex space-x-2">
+                <button
+                  id="edit-profile-btn"
+                  class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold py-2 px-4 rounded-lg transition duration-200"
+                >
+                  <i class="fa-solid fa-edit mr-2"></i>Edit Profile
+                </button>
+                <button
+                  id="qr-code-btn"
+                  class="bg-purple-600 hover:bg-purple-700 text-white text-sm font-semibold py-2 px-4 rounded-lg transition duration-200"
+                >
+                  <i class="fa-solid fa-qrcode mr-2"></i>Health ID
+                </button>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <!-- Personal Information -->
+              <div>
+                <h4 class="font-bold text-white mb-4">Personal Information</h4>
+                <div class="space-y-3">
+                  <div class="flex justify-between">
+                    <span class="text-gray-400">Full Name:</span>
+                    <span class="text-white" id="patient-name"
+                      >Piyush Wali</span
+                    >
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-gray-400">Student ID:</span>
+                    <span class="text-white" id="student-id">22BHI10111</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-gray-400">Date of Birth:</span>
+                    <span class="text-white" id="patient-dob"
+                      >10 January 2003</span
+                    >
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-gray-400">Blood Group:</span>
+                    <span class="text-white" id="patient-blood">B+</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-gray-400">Emergency Contact:</span>
+                    <span class="text-white" id="emergency-contact"
+                      >+91 7006775560</span
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <!-- Health Overview -->
+              <div>
+                <h4 class="font-bold text-white mb-4">Health Overview</h4>
+                <div class="space-y-3">
+                  <div class="flex justify-between">
+                    <span class="text-gray-400">Last Checkup:</span>
+                    <span class="text-white" id="last-checkup"
+                      >15 September 2025</span
+                    >
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-gray-400">Primary Doctor:</span>
+                    <span class="text-white" id="primary-doctor"
+                      >Dr. Priya Sharma</span
+                    >
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-gray-400">Chronic Conditions:</span>
+                    <span class="text-white" id="chronic-conditions">None</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-gray-400">Insurance:</span>
+                    <span class="text-white" id="insurance"
+                      >Student Health Plan</span
+                    >
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-gray-400">Health Score:</span>
+                    <span class="text-white font-bold" id="health-score"
+                      >87/100</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Vital Signs -->
+          <div class="bg-card rounded-xl shadow-lg p-6">
+            <div class="flex justify-between items-center mb-6">
+              <h3 class="text-xl font-bold text-white">Vital Signs</h3>
+              <button
+                id="add-vital-btn"
+                class="text-blue-400 hover:text-blue-300 text-sm font-semibold"
+              >
+                <i class="fa-solid fa-plus mr-1"></i>Add New Reading
+              </button>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+              <div class="vital-card">
+                <div class="vital-icon">
+                  <i class="fa-solid fa-heart-pulse text-white text-xl"></i>
+                </div>
+                <div class="text-2xl font-bold" id="heart-rate">72</div>
+                <div class="text-sm">BPM</div>
+                <div class="text-xs mt-2 opacity-80">Heart Rate</div>
+                <div class="text-xs mt-1 text-green-300 font-semibold">
+                  Normal
+                </div>
+              </div>
+              <div class="vital-card">
+                <div class="vital-icon">
+                  <i class="fa-solid fa-heartbeat text-white text-xl"></i>
+                </div>
+                <div class="text-2xl font-bold" id="blood-pressure">120/80</div>
+                <div class="text-sm">mmHg</div>
+                <div class="text-xs mt-2 opacity-80">Blood Pressure</div>
+                <div class="text-xs mt-1 text-green-300 font-semibold">
+                  Normal
+                </div>
+              </div>
+              <div
+                class="vital-card"
+                style="background: linear-gradient(135deg, #f59e0b, #d97706)"
+              >
+                <div class="vital-icon">
+                  <i class="fa-solid fa-thermometer text-white text-xl"></i>
+                </div>
+                <div class="text-2xl font-bold" id="temperature">37.8°C</div>
+                <div class="text-sm">Temperature</div>
+                <div class="text-xs mt-2 opacity-80">Body Temp</div>
+                <div class="text-xs mt-1 text-yellow-300 font-semibold">
+                  Elevated
+                </div>
+              </div>
+              <div class="vital-card">
+                <div class="vital-icon">
+                  <i class="fa-solid fa-lungs text-white text-xl"></i>
+                </div>
+                <div class="text-2xl font-bold" id="oxygen-level">98%</div>
+                <div class="text-sm">SpO2</div>
+                <div class="text-xs mt-2 opacity-80">Oxygen Level</div>
+                <div class="text-xs mt-1 text-green-300 font-semibold">
+                  Normal
+                </div>
+              </div>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div
+                class="vital-card"
+                style="background: linear-gradient(135deg, #8b5cf6, #7c3aed)"
+              >
+                <div class="vital-icon">
+                  <i class="fa-solid fa-wind text-white text-xl"></i>
+                </div>
+                <div class="text-2xl font-bold" id="respiratory-rate">16</div>
+                <div class="text-sm">breaths/min</div>
+                <div class="text-xs mt-2 opacity-80">Respiratory Rate</div>
+              </div>
+              <div
+                class="vital-card"
+                style="background: linear-gradient(135deg, #ec4899, #db2777)"
+              >
+                <div class="vital-icon">
+                  <i class="fa-solid fa-tint text-white text-xl"></i>
+                </div>
+                <div class="text-2xl font-bold" id="blood-glucose">95</div>
+                <div class="text-sm">mg/dL</div>
+                <div class="text-xs mt-2 opacity-80">Blood Glucose</div>
+              </div>
+              <div
+                class="vital-card"
+                style="background: linear-gradient(135deg, #06b6d4, #0891b2)"
+              >
+                <div class="vital-icon">
+                  <i class="fa-solid fa-weight-scale text-white text-xl"></i>
+                </div>
+                <div class="text-2xl font-bold" id="bmi">22.5</div>
+                <div class="text-sm">kg/m²</div>
+                <div class="text-xs mt-2 opacity-80">BMI</div>
+              </div>
+              <div
+                class="vital-card"
+                style="background: linear-gradient(135deg, #f97316, #ea580c)"
+              >
+                <div class="vital-icon">
+                  <i class="fa-solid fa-weight text-white text-xl"></i>
+                </div>
+                <div class="text-2xl font-bold" id="weight">68</div>
+                <div class="text-sm">kg</div>
+                <div class="text-xs mt-2 opacity-80">Weight</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions & Allergies -->
+        <div class="space-y-6">
+          <!-- Quick Actions -->
+          <div class="bg-card rounded-xl shadow-lg p-6">
+            <h3 class="text-xl font-bold text-white mb-4">Quick Actions</h3>
+            <div class="space-y-3">
+              <button
+                id="request-report-btn"
+                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-200 flex items-center justify-center"
+              >
+                <i class="fa-solid fa-file-medical mr-2"></i>
+                Request Medical Report
+              </button>
+              <button
+                id="prescription-refill-btn"
+                class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-200 flex items-center justify-center"
+              >
+                <i class="fa-solid fa-prescription mr-2"></i>
+                Request Prescription Refill
+              </button>
+              <button
+                id="schedule-followup-btn"
+                class="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-200 flex items-center justify-center"
+              >
+                <i class="fa-solid fa-calendar-plus mr-2"></i>
+                Schedule Follow-up
+              </button>
+              <button
+                id="upload-documents-btn"
+                class="w-full bg-yellow-600 hover:bg-yellow-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-200 flex items-center justify-center"
+              >
+                <i class="fa-solid fa-upload mr-2"></i>
+                Upload Documents
+              </button>
+            </div>
+          </div>
+
+          <!-- Allergies & Conditions -->
+          <div class="bg-card rounded-xl shadow-lg p-6">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-xl font-bold text-white">
+                Allergies & Conditions
+              </h3>
+              <button
+                id="add-allergy-btn"
+                class="text-blue-400 hover:text-blue-300 text-sm font-semibold"
+              >
+                <i class="fa-solid fa-plus mr-1"></i>Add New Allergy
+              </button>
+            </div>
+            <div class="space-y-3" id="allergies-list">
+              <div class="allergy-critical text-white rounded-lg p-3">
+                <div class="flex justify-between items-start">
+                  <div>
+                    <div class="font-semibold">Penicillin</div>
+                    <div class="text-sm opacity-90">
+                      Severe allergic reaction
+                    </div>
+                  </div>
+                  <button
+                    class="delete-allergy-btn text-white opacity-70 hover:opacity-100"
+                    data-allergy="Penicillin"
+                  >
+                    <i class="fa-solid fa-times"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="allergy-moderate text-white rounded-lg p-3">
+                <div class="flex justify-between items-start">
+                  <div>
+                    <div class="font-semibold">Dust Mites</div>
+                    <div class="text-sm opacity-90">
+                      Causes respiratory issues
+                    </div>
+                  </div>
+                  <button
+                    class="delete-allergy-btn text-white opacity-70 hover:opacity-100"
+                    data-allergy="Dust Mites"
+                  >
+                    <i class="fa-solid fa-times"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="bg-gray-700 text-white rounded-lg p-3">
+                <div class="font-semibold">No Chronic Conditions</div>
+                <div class="text-sm opacity-90">All clear</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent Activity -->
+          <div class="bg-card rounded-xl shadow-lg p-6">
+            <h3 class="text-xl font-bold text-white mb-4">Recent Activity</h3>
+            <div class="space-y-3">
+              <div class="flex items-start">
+                <div class="bg-blue-600 rounded-full p-2 mr-3">
+                  <i class="fa-solid fa-file-medical text-white text-sm"></i>
+                </div>
+                <div class="flex-1">
+                  <div class="font-medium text-white">Lab results updated</div>
+                  <div class="text-sm text-gray-400">Complete Blood Count</div>
+                  <div class="text-xs text-gray-500">2 hours ago</div>
+                </div>
+              </div>
+              <div class="flex items-start">
+                <div class="bg-green-600 rounded-full p-2 mr-3">
+                  <i class="fa-solid fa-prescription text-white text-sm"></i>
+                </div>
+                <div class="flex-1">
+                  <div class="font-medium text-white">
+                    Prescription refilled
+                  </div>
+                  <div class="text-sm text-gray-400">Paracetamol 500mg</div>
+                  <div class="text-xs text-gray-500">1 day ago</div>
+                </div>
+              </div>
+              <div class="flex items-start">
+                <div class="bg-purple-600 rounded-full p-2 mr-3">
+                  <i class="fa-solid fa-calendar-check text-white text-sm"></i>
+                </div>
+                <div class="flex-1">
+                  <div class="font-medium text-white">
+                    Appointment scheduled
+                  </div>
+                  <div class="text-sm text-gray-400">
+                    Follow-up with Dr. Sharma
+                  </div>
+                  <div class="text-xs text-gray-500">3 days ago</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabs for Medical Records -->
+      <div class="bg-card rounded-xl shadow-lg p-6 mb-6">
+        <div class="flex border-b border-gray-700 mb-6">
+          <button
+            class="tab-btn py-3 px-6 font-semibold text-gray-400 hover:text-white tab-active"
+            data-tab="medical-history"
+          >
+            Medical History
+          </button>
+          <button
+            class="tab-btn py-3 px-6 font-semibold text-gray-400 hover:text-white"
+            data-tab="prescriptions"
+          >
+            Prescriptions
+          </button>
+          <button
+            class="tab-btn py-3 px-6 font-semibold text-gray-400 hover:text-white"
+            data-tab="lab-results"
+          >
+            Lab Results
+          </button>
+          <button
+            class="tab-btn py-3 px-6 font-semibold text-gray-400 hover:text-white"
+            data-tab="immunizations"
+          >
+            Immunizations
+          </button>
+        </div>
+
+        <!-- Medical History Tab -->
+        <div id="medical-history" class="tab-content active">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="text-xl font-bold text-white">
+              Medical History Timeline
+            </h3>
+            <button
+              id="add-medical-record-btn"
+              class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold py-2 px-4 rounded-lg transition duration-200"
+            >
+              <i class="fa-solid fa-plus mr-2"></i>Add Record
+            </button>
+          </div>
+          <div class="space-y-6">
+            <!-- Recent Visit -->
+            <div class="timeline-item record-normal bg-gray-700 rounded-lg p-4">
+              <div class="flex justify-between items-start mb-2">
+                <div class="font-semibold text-white">
+                  Fever & Respiratory Infection
+                </div>
+                <div class="text-sm text-gray-400">15 Oct 2023</div>
+              </div>
+              <div class="text-sm text-gray-300 mb-2">
+                <span class="font-medium">Doctor:</span> Dr. Priya Sharma
+              </div>
+              <div class="text-sm text-gray-300">
+                Presented with high fever, cough, and body aches. Diagnosed with
+                seasonal flu. Prescribed antipyretics and rest.
+              </div>
+              <div class="mt-2 flex space-x-2">
+                <span class="bg-blue-600 text-white text-xs px-2 py-1 rounded"
+                  >Prescription</span
+                >
+                <span class="bg-green-600 text-white text-xs px-2 py-1 rounded"
+                  >Lab Work</span
+                >
+              </div>
+            </div>
+
+            <!-- Previous Visit -->
+            <div class="timeline-item record-normal bg-gray-700 rounded-lg p-4">
+              <div class="flex justify-between items-start mb-2">
+                <div class="font-semibold text-white">
+                  Annual Health Checkup
+                </div>
+                <div class="text-sm text-gray-400">20 Aug 2023</div>
+              </div>
+              <div class="text-sm text-gray-300 mb-2">
+                <span class="font-medium">Doctor:</span> Dr. Rajesh Kumar
+              </div>
+              <div class="text-sm text-gray-300">
+                Routine annual checkup. All vitals within normal range. Blood
+                tests show normal levels. Recommended maintaining current
+                lifestyle.
+              </div>
+              <div class="mt-2 flex space-x-2">
+                <span class="bg-purple-600 text-white text-xs px-2 py-1 rounded"
+                  >Checkup</span
+                >
+                <span class="bg-green-600 text-white text-xs px-2 py-1 rounded"
+                  >Lab Work</span
+                >
+              </div>
+            </div>
+
+            <!-- Older Visit -->
+            <div
+              class="timeline-item record-warning bg-gray-700 rounded-lg p-4"
+            >
+              <div class="flex justify-between items-start mb-2">
+                <div class="font-semibold text-white">Allergic Reaction</div>
+                <div class="text-sm text-gray-400">5 May 2023</div>
+              </div>
+              <div class="text-sm text-gray-300 mb-2">
+                <span class="font-medium">Doctor:</span> Dr. Anjali Mehta
+              </div>
+              <div class="text-sm text-gray-300">
+                Severe allergic reaction to prescribed antibiotic. Treated with
+                antihistamines and monitored for 4 hours. Added penicillin to
+                allergy list.
+              </div>
+              <div class="mt-2 flex space-x-2">
+                <span class="bg-red-600 text-white text-xs px-2 py-1 rounded"
+                  >Allergy</span
+                >
+                <span class="bg-blue-600 text-white text-xs px-2 py-1 rounded"
+                  >Prescription</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Prescriptions Tab -->
+        <div id="prescriptions" class="tab-content hidden">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="text-xl font-bold text-white">Current Medications</h3>
+            <button
+              id="request-refill-btn"
+              class="bg-green-600 hover:bg-green-700 text-white text-sm font-semibold py-2 px-4 rounded-lg transition duration-200"
+            >
+              <i class="fa-solid fa-prescription mr-2"></i>Request Refill
+            </button>
+          </div>
+          <div class="space-y-4">
+            <div class="medication-card">
+              <div class="flex justify-between items-start mb-2">
+                <div class="font-semibold text-white">Paracetamol 500mg</div>
+                <span class="bg-green-600 text-white text-xs px-2 py-1 rounded"
+                  >Active</span
+                >
+              </div>
+              <div class="text-sm text-gray-300 mb-2">
+                <span class="font-medium">Dosage:</span> 1 tablet every 6 hours
+                as needed for fever
+              </div>
+              <div class="text-sm text-gray-300">
+                <span class="font-medium">Prescribed:</span> 15 Oct 2023 |
+                <span class="font-medium">Refills:</span> 0
+              </div>
+              <div class="mt-2 flex space-x-2">
+                <button
+                  class="medication-action-btn bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold py-1 px-2 rounded transition duration-200"
+                  data-medication="Paracetamol"
+                  data-action="info"
+                >
+                  <i class="fa-solid fa-info-circle mr-1"></i>Details
+                </button>
+                <button
+                  class="medication-action-btn bg-yellow-600 hover:bg-yellow-700 text-white text-xs font-semibold py-1 px-2 rounded transition duration-200"
+                  data-medication="Paracetamol"
+                  data-action="reminder"
+                >
+                  <i class="fa-solid fa-bell mr-1"></i>Reminder
+                </button>
+              </div>
+            </div>
+
+            <div class="medication-card">
+              <div class="flex justify-between items-start mb-2">
+                <div class="font-semibold text-white">Vitamin D3 1000IU</div>
+                <span class="bg-green-600 text-white text-xs px-2 py-1 rounded"
+                  >Active</span
+                >
+              </div>
+              <div class="text-sm text-gray-300 mb-2">
+                <span class="font-medium">Dosage:</span> 1 capsule daily with
+                food
+              </div>
+              <div class="text-sm text-gray-300">
+                <span class="font-medium">Prescribed:</span> 20 Aug 2023 |
+                <span class="font-medium">Refills:</span> 2
+              </div>
+              <div class="mt-2 flex space-x-2">
+                <button
+                  class="medication-action-btn bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold py-1 px-2 rounded transition duration-200"
+                  data-medication="Vitamin D3"
+                  data-action="info"
+                >
+                  <i class="fa-solid fa-info-circle mr-1"></i>Details
+                </button>
+                <button
+                  class="medication-action-btn bg-yellow-600 hover:bg-yellow-700 text-white text-xs font-semibold py-1 px-2 rounded transition duration-200"
+                  data-medication="Vitamin D3"
+                  data-action="reminder"
+                >
+                  <i class="fa-solid fa-bell mr-1"></i>Reminder
+                </button>
+              </div>
+            </div>
+
+            <div class="medication-card">
+              <div class="flex justify-between items-start mb-2">
+                <div class="font-semibold text-white">Cetirizine 10mg</div>
+                <span class="bg-yellow-600 text-white text-xs px-2 py-1 rounded"
+                  >As Needed</span
+                >
+              </div>
+              <div class="text-sm text-gray-300 mb-2">
+                <span class="font-medium">Dosage:</span> 1 tablet daily for
+                allergy symptoms
+              </div>
+              <div class="text-sm text-gray-300">
+                <span class="font-medium">Prescribed:</span> 5 May 2023 |
+                <span class="font-medium">Refills:</span> 1
+              </div>
+              <div class="mt-2 flex space-x-2">
+                <button
+                  class="medication-action-btn bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold py-1 px-2 rounded transition duration-200"
+                  data-medication="Cetirizine"
+                  data-action="info"
+                >
+                  <i class="fa-solid fa-info-circle mr-1"></i>Details
+                </button>
+                <button
+                  class="medication-action-btn bg-yellow-600 hover:bg-yellow-700 text-white text-xs font-semibold py-1 px-2 rounded transition duration-200"
+                  data-medication="Cetirizine"
+                  data-action="reminder"
+                >
+                  <i class="fa-solid fa-bell mr-1"></i>Reminder
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-6">
+            <h3 class="text-xl font-bold text-white mb-4">Past Medications</h3>
+            <div class="text-center py-8 text-gray-500">
+              <i
+                class="fa-solid fa-prescription-bottle-medical text-3xl mb-3"
+              ></i>
+              <p>No past medications found</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Lab Results Tab -->
+        <div id="lab-results" class="tab-content hidden">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="text-xl font-bold text-white">Recent Lab Results</h3>
+            <button
+              id="request-lab-btn"
+              class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold py-2 px-4 rounded-lg transition duration-200"
+            >
+              <i class="fa-solid fa-flask mr-2"></i>Request Lab Test
+            </button>
+          </div>
+          <div class="space-y-4">
+            <div class="bg-gray-700 rounded-lg p-4">
+              <div class="flex justify-between items-start mb-4">
+                <div class="font-semibold text-white">
+                  Complete Blood Count (CBC)
+                </div>
+                <div class="text-sm text-gray-400">15 Oct 2023</div>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div class="flex justify-between">
+                  <span class="text-gray-400">Hemoglobin:</span>
+                  <span class="text-white">14.2 g/dL</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-400">White Blood Cells:</span>
+                  <span class="text-yellow-400">12.5 K/μL</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-400">Platelets:</span>
+                  <span class="text-white">250 K/μL</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-400">Hematocrit:</span>
+                  <span class="text-white">42%</span>
+                </div>
+              </div>
+              <div class="mt-3 text-sm text-gray-300">
+                <span class="font-medium">Interpretation:</span> Elevated white
+                blood cells indicate possible infection. Consistent with current
+                diagnosis of flu.
+              </div>
+              <div class="mt-3 flex space-x-2">
+                <button
+                  class="lab-download-btn bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold py-1 px-2 rounded transition duration-200"
+                  data-test="Complete Blood Count"
+                >
+                  <i class="fa-solid fa-download mr-1"></i>Download PDF
+                </button>
+                <button
+                  class="lab-share-btn bg-green-600 hover:bg-green-700 text-white text-xs font-semibold py-1 px-2 rounded transition duration-200"
+                  data-test="Complete Blood Count"
+                >
+                  <i class="fa-solid fa-share-alt mr-1"></i>Share
+                </button>
+              </div>
+            </div>
+
+            <div class="bg-gray-700 rounded-lg p-4">
+              <div class="flex justify-between items-start mb-4">
+                <div class="font-semibold text-white">
+                  Basic Metabolic Panel
+                </div>
+                <div class="text-sm text-gray-400">20 Aug 2023</div>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div class="flex justify-between">
+                  <span class="text-gray-400">Glucose:</span>
+                  <span class="text-white">95 mg/dL</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-400">Calcium:</span>
+                  <span class="text-white">9.2 mg/dL</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-400">Sodium:</span>
+                  <span class="text-white">140 mEq/L</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-400">Potassium:</span>
+                  <span class="text-white">4.0 mEq/L</span>
+                </div>
+              </div>
+              <div class="mt-3 text-sm text-gray-300">
+                <span class="font-medium">Interpretation:</span> All values
+                within normal range. No abnormalities detected.
+              </div>
+              <div class="mt-3 flex space-x-2">
+                <button
+                  class="lab-download-btn bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold py-1 px-2 rounded transition duration-200"
+                  data-test="Basic Metabolic Panel"
+                >
+                  <i class="fa-solid fa-download mr-1"></i>Download PDF
+                </button>
+                <button
+                  class="lab-share-btn bg-green-600 hover:bg-green-700 text-white text-xs font-semibold py-1 px-2 rounded transition duration-200"
+                  data-test="Basic Metabolic Panel"
+                >
+                  <i class="fa-solid fa-share-alt mr-1"></i>Share
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Immunizations Tab -->
+        <div id="immunizations" class="tab-content hidden">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="text-xl font-bold text-white">Immunization Record</h3>
+            <button
+              id="schedule-vaccine-btn"
+              class="bg-green-600 hover:bg-green-700 text-white text-sm font-semibold py-2 px-4 rounded-lg transition duration-200"
+            >
+              <i class="fa-solid fa-syringe mr-2"></i>Schedule Vaccine
+            </button>
+          </div>
+          <div class="space-y-4">
+            <div class="bg-gray-700 rounded-lg p-4">
+              <div class="flex justify-between items-start mb-2">
+                <div class="font-semibold text-white">COVID-19 Vaccine</div>
+                <span class="bg-green-600 text-white text-xs px-2 py-1 rounded"
+                  >Complete</span
+                >
+              </div>
+              <div class="text-sm text-gray-300">
+                <span class="font-medium">Doses:</span> 2 doses + 1 booster |
+                <span class="font-medium">Last Dose:</span> 15 Jan 2023
+              </div>
+              <div class="mt-2">
+                <div class="text-xs text-gray-400">
+                  Next Booster Due: January 2024
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-gray-700 rounded-lg p-4">
+              <div class="flex justify-between items-start mb-2">
+                <div class="font-semibold text-white">Influenza Vaccine</div>
+                <span class="bg-green-600 text-white text-xs px-2 py-1 rounded"
+                  >Current</span
+                >
+              </div>
+              <div class="text-sm text-gray-300">
+                <span class="font-medium">Season:</span> 2023-2024 |
+                <span class="font-medium">Date:</span> 10 Sep 2023
+              </div>
+              <div class="mt-2">
+                <div class="text-xs text-gray-400">
+                  Next Dose Due: September 2024
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-gray-700 rounded-lg p-4">
+              <div class="flex justify-between items-start mb-2">
+                <div class="font-semibold text-white">Tetanus Booster</div>
+                <span class="bg-green-600 text-white text-xs px-2 py-1 rounded"
+                  >Up to Date</span
+                >
+              </div>
+              <div class="text-sm text-gray-300">
+                <span class="font-medium">Last Dose:</span> 15 Mar 2021 |
+                <span class="font-medium">Next Due:</span> 15 Mar 2031
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-6">
+            <h3 class="text-xl font-bold text-white mb-4">
+              Vaccination Schedule
+            </h3>
+            <div
+              class="bg-yellow-900/30 border border-yellow-700 rounded-lg p-4"
+            >
+              <div class="flex items-start">
+                <i
+                  class="fa-solid fa-exclamation-triangle text-yellow-400 mt-1 mr-3"
+                ></i>
+                <div>
+                  <div class="font-semibold text-yellow-400">
+                    Upcoming Vaccination
+                  </div>
+                  <div class="text-sm text-yellow-300 mt-1">
+                    MMR (Measles, Mumps, Rubella) booster due by December 2023
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Edit Profile Modal -->
+    <div id="edit-profile-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">Edit Patient Profile</h3>
+          <button
+            id="close-edit-profile"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="space-y-4">
+          <div class="grid grid-cols-2 gap-4">
+            <div class="form-group">
+              <label class="form-label">First Name</label>
+              <input
+                type="text"
+                id="edit-first-name"
+                class="form-input"
+                value="Rahul"
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Last Name</label>
+              <input
+                type="text"
+                id="edit-last-name"
+                class="form-input"
+                value="Sharma"
+              />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Date of Birth</label>
+            <input
+              type="date"
+              id="edit-patient-dob"
+              class="form-input"
+              value="2003-03-15"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Gender</label>
+            <select id="edit-patient-gender" class="form-select">
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Blood Group</label>
+            <select id="edit-patient-blood" class="form-select">
+              <option value="A+">A+</option>
+              <option value="A-">A-</option>
+              <option value="B+" selected>B+</option>
+              <option value="B-">B-</option>
+              <option value="AB+">AB+</option>
+              <option value="AB-">AB-</option>
+              <option value="O+">O+</option>
+              <option value="O-">O-</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Emergency Contact</label>
+            <input
+              type="text"
+              id="edit-emergency-contact"
+              class="form-input"
+              value="+91 9876543210"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Primary Doctor</label>
+            <input
+              type="text"
+              id="edit-primary-doctor"
+              class="form-input"
+              value="Dr. Priya Sharma"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Insurance Provider</label>
+            <input
+              type="text"
+              id="edit-insurance"
+              class="form-input"
+              value="Student Health Plan"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Insurance ID</label>
+            <input
+              type="text"
+              id="edit-insurance-id"
+              class="form-input"
+              value="STU2023VIT001"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Medical History Notes</label>
+            <textarea
+              id="edit-medical-notes"
+              class="form-input"
+              rows="3"
+              placeholder="Any additional medical information"
+            >
+No significant medical history. Regular exercise and balanced diet.</textarea
+            >
+          </div>
+          <div class="flex justify-end space-x-2">
+            <button
+              id="cancel-edit-profile"
+              class="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+            >
+              Cancel
+            </button>
+            <button
+              id="save-profile"
+              class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition"
+            >
+              Save Changes
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Vital Reading Modal -->
+    <div id="add-vital-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">Add Vital Reading</h3>
+          <button
+            id="close-add-vital"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="space-y-4">
+          <div class="form-group">
+            <label class="form-label">Vital Type</label>
+            <select id="vital-type" class="form-select">
+              <option value="heart-rate">Heart Rate</option>
+              <option value="blood-pressure">Blood Pressure</option>
+              <option value="temperature">Temperature</option>
+              <option value="oxygen-level">Oxygen Level</option>
+              <option value="respiratory-rate">Respiratory Rate</option>
+              <option value="blood-glucose">Blood Glucose</option>
+              <option value="weight">Weight</option>
+              <option value="bmi">BMI</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Value</label>
+            <input
+              type="text"
+              id="vital-value"
+              class="form-input"
+              placeholder="Enter value"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Date & Time</label>
+            <input
+              type="datetime-local"
+              id="vital-datetime"
+              class="form-input"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Notes (Optional)</label>
+            <textarea
+              id="vital-notes"
+              class="form-input"
+              rows="3"
+              placeholder="Any additional notes"
+            ></textarea>
+          </div>
+          <div class="flex justify-end space-x-2">
+            <button
+              id="cancel-add-vital"
+              class="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+            >
+              Cancel
+            </button>
+            <button
+              id="save-vital"
+              class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition"
+            >
+              Save Reading
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Allergy Modal -->
+    <div id="add-allergy-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">Add New Allergy</h3>
+          <button
+            id="close-add-allergy"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="space-y-4">
+          <div class="form-group">
+            <label class="form-label">Allergy Name</label>
+            <input
+              type="text"
+              id="allergy-name"
+              class="form-input"
+              placeholder="e.g., Penicillin, Peanuts"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Severity</label>
+            <select id="allergy-severity" class="form-select">
+              <option value="mild">Mild</option>
+              <option value="moderate">Moderate</option>
+              <option value="severe">Severe</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Reaction</label>
+            <input
+              type="text"
+              id="allergy-reaction"
+              class="form-input"
+              placeholder="e.g., Rash, Difficulty breathing"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">First Observed</label>
+            <input type="date" id="allergy-date" class="form-input" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Notes (Optional)</label>
+            <textarea
+              id="allergy-notes"
+              class="form-input"
+              rows="3"
+              placeholder="Additional information about the allergy"
+            ></textarea>
+          </div>
+          <div class="flex justify-end space-x-2">
+            <button
+              id="cancel-add-allergy"
+              class="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+            >
+              Cancel
+            </button>
+            <button
+              id="save-allergy"
+              class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition"
+            >
+              Add Allergy
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Medical Record Modal -->
+    <div id="add-medical-record-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">Add Medical Record</h3>
+          <button
+            id="close-add-medical-record"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="space-y-4">
+          <div class="form-group">
+            <label class="form-label">Visit Date</label>
+            <input type="date" id="record-date" class="form-input" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Doctor</label>
+            <input
+              type="text"
+              id="record-doctor"
+              class="form-input"
+              placeholder="Doctor's name"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Diagnosis/Condition</label>
+            <input
+              type="text"
+              id="record-diagnosis"
+              class="form-input"
+              placeholder="e.g., Fever, Cold, Injury"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Symptoms</label>
+            <textarea
+              id="record-symptoms"
+              class="form-input"
+              rows="3"
+              placeholder="Describe your symptoms"
+              required
+            ></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Treatment/Medication</label>
+            <textarea
+              id="record-treatment"
+              class="form-input"
+              rows="3"
+              placeholder="Treatment provided or medications prescribed"
+            ></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Notes</label>
+            <textarea
+              id="record-notes"
+              class="form-input"
+              rows="3"
+              placeholder="Additional notes"
+            ></textarea>
+          </div>
+          <div class="flex justify-end space-x-2">
+            <button
+              id="cancel-add-medical-record"
+              class="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+            >
+              Cancel
+            </button>
+            <button
+              id="save-medical-record"
+              class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition"
+            >
+              Save Record
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Request Refill Modal -->
+    <div id="request-refill-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">
+            Request Prescription Refill
+          </h3>
+          <button
+            id="close-request-refill"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="space-y-4">
+          <div class="form-group">
+            <label class="form-label">Medication</label>
+            <select id="refill-medication" class="form-select" required>
+              <option value="">Select Medication</option>
+              <option value="Paracetamol 500mg">Paracetamol 500mg</option>
+              <option value="Vitamin D3 1000IU">Vitamin D3 1000IU</option>
+              <option value="Cetirizine 10mg">Cetirizine 10mg</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Quantity Needed</label>
+            <input
+              type="number"
+              id="refill-quantity"
+              class="form-input"
+              placeholder="Number of units"
+              min="1"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Urgency</label>
+            <select id="refill-urgency" class="form-select" required>
+              <option value="routine">Routine (Within 3 days)</option>
+              <option value="urgent">Urgent (Within 24 hours)</option>
+              <option value="emergency">Emergency (Immediate)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Pharmacy Preference</label>
+            <input
+              type="text"
+              id="refill-pharmacy"
+              class="form-input"
+              placeholder="Preferred pharmacy (optional)"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Additional Notes</label>
+            <textarea
+              id="refill-notes"
+              class="form-input"
+              rows="3"
+              placeholder="Any additional information for the doctor"
+            ></textarea>
+          </div>
+          <div class="flex justify-end space-x-2">
+            <button
+              id="cancel-request-refill"
+              class="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+            >
+              Cancel
+            </button>
+            <button
+              id="submit-refill-request"
+              class="bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition"
+            >
+              Submit Request
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Request Lab Test Modal -->
+    <div id="request-lab-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">Request Lab Test</h3>
+          <button
+            id="close-request-lab"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="space-y-4">
+          <div class="form-group">
+            <label class="form-label">Test Type</label>
+            <select id="lab-test-type" class="form-select" required>
+              <option value="">Select Test Type</option>
+              <option value="blood-test">Blood Test</option>
+              <option value="urine-test">Urine Test</option>
+              <option value="x-ray">X-Ray</option>
+              <option value="mri">MRI Scan</option>
+              <option value="ct-scan">CT Scan</option>
+              <option value="ultrasound">Ultrasound</option>
+              <option value="ecg">ECG</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Specific Test</label>
+            <input
+              type="text"
+              id="lab-specific-test"
+              class="form-input"
+              placeholder="e.g., Complete Blood Count, Lipid Profile"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Reason for Test</label>
+            <textarea
+              id="lab-reason"
+              class="form-input"
+              rows="3"
+              placeholder="Why do you need this test?"
+              required
+            ></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Symptoms</label>
+            <textarea
+              id="lab-symptoms"
+              class="form-input"
+              rows="3"
+              placeholder="Current symptoms (if any)"
+            ></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Preferred Date</label>
+            <input type="date" id="lab-preferred-date" class="form-input" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Additional Notes</label>
+            <textarea
+              id="lab-notes"
+              class="form-input"
+              rows="3"
+              placeholder="Any additional information"
+            ></textarea>
+          </div>
+          <div class="flex justify-end space-x-2">
+            <button
+              id="cancel-request-lab"
+              class="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+            >
+              Cancel
+            </button>
+            <button
+              id="submit-lab-request"
+              class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition"
+            >
+              Submit Request
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Schedule Vaccine Modal -->
+    <div id="schedule-vaccine-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">Schedule Vaccine</h3>
+          <button
+            id="close-schedule-vaccine"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="space-y-4">
+          <div class="form-group">
+            <label class="form-label">Vaccine Type</label>
+            <select id="vaccine-type" class="form-select" required>
+              <option value="">Select Vaccine</option>
+              <option value="flu">Influenza (Flu) Vaccine</option>
+              <option value="covid">COVID-19 Booster</option>
+              <option value="mmr">MMR (Measles, Mumps, Rubella)</option>
+              <option value="tetanus">Tetanus Booster</option>
+              <option value="hepatitis">Hepatitis B</option>
+              <option value="hpv">HPV Vaccine</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Preferred Date</label>
+            <input type="date" id="vaccine-date" class="form-input" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Preferred Time</label>
+            <select id="vaccine-time" class="form-select" required>
+              <option value="">Select Time</option>
+              <option value="morning">Morning (9 AM - 12 PM)</option>
+              <option value="afternoon">Afternoon (1 PM - 4 PM)</option>
+              <option value="evening">Evening (5 PM - 7 PM)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Reason</label>
+            <select id="vaccine-reason" class="form-select" required>
+              <option value="">Select Reason</option>
+              <option value="routine">Routine Immunization</option>
+              <option value="booster">Booster Shot</option>
+              <option value="travel">Travel Requirement</option>
+              <option value="exposure">Possible Exposure</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Additional Notes</label>
+            <textarea
+              id="vaccine-notes"
+              class="form-input"
+              rows="3"
+              placeholder="Any additional information"
+            ></textarea>
+          </div>
+          <div class="flex justify-end space-x-2">
+            <button
+              id="cancel-schedule-vaccine"
+              class="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+            >
+              Cancel
+            </button>
+            <button
+              id="submit-vaccine-request"
+              class="bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition"
+            >
+              Schedule Vaccine
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Upload Documents Modal -->
+    <div id="upload-documents-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">Upload Medical Documents</h3>
+          <button
+            id="close-upload-documents"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="space-y-4">
+          <div class="form-group">
+            <label class="form-label">Document Type</label>
+            <select id="document-type" class="form-select" required>
+              <option value="">Select Document Type</option>
+              <option value="lab-report">Lab Report</option>
+              <option value="prescription">Prescription</option>
+              <option value="medical-certificate">Medical Certificate</option>
+              <option value="scan-report">
+                Scan Report (X-Ray, MRI, etc.)
+              </option>
+              <option value="insurance">Insurance Document</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Document Date</label>
+            <input type="date" id="document-date" class="form-input" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Description</label>
+            <input
+              type="text"
+              id="document-description"
+              class="form-input"
+              placeholder="Brief description of the document"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Upload File</label>
+            <div
+              class="border-2 border-dashed border-gray-600 rounded-lg p-6 text-center"
+            >
+              <i
+                class="fa-solid fa-cloud-upload-alt text-4xl text-gray-400 mb-3"
+              ></i>
+              <p class="text-gray-400 mb-2">Drag and drop files here or</p>
+              <input
+                type="file"
+                id="document-file"
+                class="hidden"
+                accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
+              />
+              <label
+                for="document-file"
+                class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg cursor-pointer hover:bg-blue-700 transition"
+              >
+                Browse Files
+              </label>
+              <p class="text-xs text-gray-500 mt-2">
+                Supported formats: PDF, JPG, PNG, DOC (Max 10MB)
+              </p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Notes</label>
+            <textarea
+              id="document-notes"
+              class="form-input"
+              rows="3"
+              placeholder="Any additional notes about this document"
+            ></textarea>
+          </div>
+          <div class="flex justify-end space-x-2">
+            <button
+              id="cancel-upload-documents"
+              class="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+            >
+              Cancel
+            </button>
+            <button
+              id="submit-document-upload"
+              class="bg-yellow-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-yellow-700 transition"
+            >
+              Upload Document
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Request Medical Report Modal -->
+    <div id="request-report-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">Request Medical Report</h3>
+          <button
+            id="close-request-report"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="space-y-4">
+          <div class="form-group">
+            <label class="form-label">Report Type</label>
+            <select id="report-type" class="form-select" required>
+              <option value="">Select Report Type</option>
+              <option value="summary">Health Summary</option>
+              <option value="detailed">Detailed Medical History</option>
+              <option value="lab-results">Lab Results Summary</option>
+              <option value="immunization">Immunization Record</option>
+              <option value="prescription">Prescription History</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Time Period</label>
+            <select id="report-period" class="form-select" required>
+              <option value="">Select Time Period</option>
+              <option value="last-month">Last Month</option>
+              <option value="last-3-months">Last 3 Months</option>
+              <option value="last-6-months">Last 6 Months</option>
+              <option value="last-year">Last Year</option>
+              <option value="all-time">All Time</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Purpose</label>
+            <select id="report-purpose" class="form-select" required>
+              <option value="">Select Purpose</option>
+              <option value="personal">Personal Records</option>
+              <option value="insurance">Insurance Claim</option>
+              <option value="specialist">Specialist Consultation</option>
+              <option value="travel">Travel Requirements</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Additional Notes</label>
+            <textarea
+              id="report-notes"
+              class="form-input"
+              rows="3"
+              placeholder="Any specific requirements or notes for the report"
+            ></textarea>
+          </div>
+          <div class="flex justify-end space-x-2">
+            <button
+              id="cancel-request-report"
+              class="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+            >
+              Cancel
+            </button>
+            <button
+              id="submit-report-request"
+              class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition"
+            >
+              Submit Request
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Medication Details Modal -->
+    <div id="medication-details-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3
+            class="text-xl font-bold text-white"
+            id="medication-details-title"
+          >
+            Medication Details
+          </h3>
+          <button
+            id="close-medication-details"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="space-y-4" id="medication-details-content">
+          <!-- Content will be dynamically populated -->
+        </div>
+        <div class="flex justify-end mt-6">
+          <button
+            id="close-medication-details-btn"
+            class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Medication Reminder Modal -->
+    <div id="medication-reminder-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3
+            class="text-xl font-bold text-white"
+            id="medication-reminder-title"
+          >
+            Set Medication Reminder
+          </h3>
+          <button
+            id="close-medication-reminder"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="space-y-4">
+          <div class="form-group">
+            <label class="form-label">Medication</label>
+            <input
+              type="text"
+              id="reminder-medication"
+              class="form-input"
+              readonly
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Dosage</label>
+            <input
+              type="text"
+              id="reminder-dosage"
+              class="form-input"
+              readonly
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Frequency</label>
+            <select id="reminder-frequency" class="form-select" required>
+              <option value="">Select Frequency</option>
+              <option value="daily">Daily</option>
+              <option value="twice-daily">Twice Daily</option>
+              <option value="three-times">Three Times Daily</option>
+              <option value="weekly">Weekly</option>
+              <option value="as-needed">As Needed</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Reminder Time</label>
+            <input type="time" id="reminder-time" class="form-input" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Start Date</label>
+            <input
+              type="date"
+              id="reminder-start-date"
+              class="form-input"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">End Date (Optional)</label>
+            <input type="date" id="reminder-end-date" class="form-input" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Reminder Method</label>
+            <div class="flex space-x-4">
+              <label class="flex items-center">
+                <input
+                  type="checkbox"
+                  id="reminder-notification"
+                  class="mr-2"
+                  checked
+                />
+                <span>Notification</span>
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" id="reminder-email" class="mr-2" />
+                <span>Email</span>
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" id="reminder-sms" class="mr-2" />
+                <span>SMS</span>
+              </label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Additional Notes</label>
+            <textarea
+              id="reminder-notes"
+              class="form-input"
+              rows="3"
+              placeholder="Any additional notes for the reminder"
+            ></textarea>
+          </div>
+          <div class="flex justify-end space-x-2">
+            <button
+              id="cancel-medication-reminder"
+              class="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+            >
+              Cancel
+            </button>
+            <button
+              id="save-medication-reminder"
+              class="bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition"
+            >
+              Set Reminder
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Share Records Modal -->
+    <div id="share-records-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">Share Health Records</h3>
+          <button
+            id="close-share-records"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="space-y-4">
+          <div class="form-group">
+            <label class="form-label">Recipient Email</label>
+            <input
+              type="email"
+              id="share-email"
+              class="form-input"
+              placeholder="Enter recipient email address"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Share Method</label>
+            <div class="share-options">
+              <div class="share-option" data-method="email">
+                <i class="fa-solid fa-envelope text-2xl mb-2"></i>
+                <div>Email</div>
+              </div>
+              <div class="share-option" data-method="whatsapp">
+                <i class="fa-brands fa-whatsapp text-2xl mb-2"></i>
+                <div>WhatsApp</div>
+              </div>
+              <div class="share-option" data-method="link">
+                <i class="fa-solid fa-link text-2xl mb-2"></i>
+                <div>Share Link</div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Records to Share</label>
+            <div class="space-y-2">
+              <label class="flex items-center">
+                <input
+                  type="checkbox"
+                  id="share-personal-info"
+                  class="mr-2"
+                  checked
+                />
+                <span>Personal Information</span>
+              </label>
+              <label class="flex items-center">
+                <input
+                  type="checkbox"
+                  id="share-medical-history"
+                  class="mr-2"
+                  checked
+                />
+                <span>Medical History</span>
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" id="share-prescriptions" class="mr-2" />
+                <span>Prescriptions</span>
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" id="share-lab-results" class="mr-2" />
+                <span>Lab Results</span>
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" id="share-immunizations" class="mr-2" />
+                <span>Immunizations</span>
+              </label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Message (Optional)</label>
+            <textarea
+              id="share-message"
+              class="form-input"
+              rows="3"
+              placeholder="Add a personal message"
+            ></textarea>
+          </div>
+          <div class="flex justify-end space-x-2">
+            <button
+              id="cancel-share-records"
+              class="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+            >
+              Cancel
+            </button>
+            <button
+              id="submit-share-records"
+              class="bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition"
+            >
+              Share Records
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Message Box for notifications -->
+    <div
+      id="message-box"
+      class="fixed bottom-4 right-4 bg-gray-700 text-white p-4 rounded-lg shadow-lg hidden message-box"
+    >
+      <p id="message-text"></p>
+    </div>
+
+    <script>
+      // Medication data
+      const medicationData = {
+        Paracetamol: {
+          name: "Paracetamol 500mg",
+          genericName: "Acetaminophen",
+          dosage: "1 tablet every 6 hours as needed for fever",
+          purpose: "Pain relief and fever reduction",
+          sideEffects:
+            "Rare at recommended doses. May cause liver damage in overdose.",
+          precautions: "Do not exceed 4g per day. Avoid alcohol.",
+          interactions: "May interact with warfarin and other blood thinners.",
+          storage: "Store at room temperature away from moisture",
+          prescribedBy: "Dr. Priya Sharma",
+          prescribedDate: "15 Oct 2023",
+          refills: 0,
+        },
+        "Vitamin D3": {
+          name: "Vitamin D3 1000IU",
+          genericName: "Cholecalciferol",
+          dosage: "1 capsule daily with food",
+          purpose: "Vitamin D supplementation",
+          sideEffects:
+            "Rare at recommended doses. May cause nausea, vomiting in high doses.",
+          precautions: "Take with food for better absorption",
+          interactions:
+            "May interact with certain diuretics and heart medications",
+          storage: "Store at room temperature",
+          prescribedBy: "Dr. Rajesh Kumar",
+          prescribedDate: "20 Aug 2023",
+          refills: 2,
+        },
+        Cetirizine: {
+          name: "Cetirizine 10mg",
+          genericName: "Cetirizine Hydrochloride",
+          dosage: "1 tablet daily for allergy symptoms",
+          purpose: "Allergy relief",
+          sideEffects: "Drowsiness, dry mouth, headache",
+          precautions: "May cause drowsiness. Avoid alcohol.",
+          interactions: "May interact with other sedatives",
+          storage: "Store at room temperature",
+          prescribedBy: "Dr. Anjali Mehta",
+          prescribedDate: "5 May 2023",
+          refills: 1,
+        },
+      };
+
+      // Lab data
+      const labData = {
+        "Complete Blood Count": {
+          testName: "Complete Blood Count (CBC)",
+          date: "15 Oct 2023",
+          results: {
+            Hemoglobin: "14.2 g/dL",
+            "White Blood Cells": "12.5 K/μL",
+            Platelets: "250 K/μL",
+            Hematocrit: "42%",
+          },
+          interpretation:
+            "Elevated white blood cells indicate possible infection. Consistent with current diagnosis of flu.",
+        },
+        "Basic Metabolic Panel": {
+          testName: "Basic Metabolic Panel",
+          date: "20 Aug 2023",
+          results: {
+            Glucose: "95 mg/dL",
+            Calcium: "9.2 mg/dL",
+            Sodium: "140 mEq/L",
+            Potassium: "4.0 mEq/L",
+          },
+          interpretation:
+            "All values within normal range. No abnormalities detected.",
+        },
+      };
+
+      // JavaScript to display the current date and time
+      function updateDateTime() {
+        const now = new Date();
+        const options = {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        };
+        const formattedDateTime = now.toLocaleDateString("en-US", options);
+        document.getElementById("date-time-display").textContent =
+          formattedDateTime;
+      }
+      updateDateTime();
+      setInterval(updateDateTime, 60000);
+
+      // Tab functionality
+      function switchTab(tabName) {
+        // Hide all tab contents
+        document.querySelectorAll(".tab-content").forEach((tab) => {
+          tab.classList.add("hidden");
+          tab.classList.remove("active");
+        });
+
+        // Remove active class from all tab buttons
+        document.querySelectorAll(".tab-btn").forEach((btn) => {
+          btn.classList.remove("tab-active");
+        });
+
+        // Show selected tab content
+        document.getElementById(tabName).classList.remove("hidden");
+        document.getElementById(tabName).classList.add("active");
+
+        // Add active class to clicked tab button
+        event.target.classList.add("tab-active");
+      }
+
+      // Modal functionality
+      function showModal(modalId) {
+        document.getElementById(modalId).classList.add("active");
+      }
+
+      function closeModal(modalId) {
+        document.getElementById(modalId).classList.remove("active");
+      }
+
+      // Function to show a custom message box
+      function showMessage(text, type = "info") {
+        const messageBox = document.getElementById("message-box");
+        const messageText = document.getElementById("message-text");
+
+        messageText.textContent = text;
+        messageBox.classList.remove(
+          "hidden",
+          "bg-red-700",
+          "bg-green-700",
+          "bg-blue-700"
+        );
+
+        if (type === "error") {
+          messageBox.classList.add("bg-red-700");
+        } else if (type === "success") {
+          messageBox.classList.add("bg-green-700");
+        } else if (type === "info") {
+          messageBox.classList.add("bg-blue-700");
+        } else {
+          messageBox.classList.add("bg-gray-700");
+        }
+
+        setTimeout(() => {
+          messageBox.classList.add("hidden");
+        }, 4000);
+      }
+
+      // Function to download health records as PDF
+      function downloadHealthRecords() {
+        showMessage("Preparing your health records for download...", "info");
+
+        // Get patient data
+        const patientName = document.getElementById("patient-name").textContent;
+        const studentId = document.getElementById("student-id").textContent;
+        const dob = document.getElementById("patient-dob").textContent;
+        const bloodGroup = document.getElementById("patient-blood").textContent;
+        const lastCheckup = document.getElementById("last-checkup").textContent;
+        const primaryDoctor =
+          document.getElementById("primary-doctor").textContent;
+        const healthScore = document.getElementById("health-score").textContent;
+
+        // Create a more comprehensive health record
+        const content = `
+PATIENT HEALTH RECORDS
+======================
+
+PERSONAL INFORMATION:
+--------------------
+Name: ${patientName}
+Student ID: ${studentId}
+Date of Birth: ${dob}
+Blood Group: ${bloodGroup}
+Emergency Contact: +91 7006775560
+
+HEALTH OVERVIEW:
+----------------
+Last Checkup: ${lastCheckup}
+Primary Doctor: ${primaryDoctor}
+Health Score: ${healthScore}
+Chronic Conditions: None
+Insurance: Student Health Plan
+
+VITAL SIGNS:
+------------
+Heart Rate: 72 BPM (Normal)
+Blood Pressure: 120/80 mmHg (Normal)
+Temperature: 37.8°C (Elevated)
+Oxygen Level: 98% (Normal)
+Respiratory Rate: 16 breaths/min
+Blood Glucose: 95 mg/dL
+BMI: 22.5 kg/m²
+Weight: 68 kg
+
+MEDICAL HISTORY:
+----------------
+1. Fever & Respiratory Infection (15 Oct 2023)
+   - Doctor: Dr. Priya Sharma
+   - Symptoms: High fever, cough, body aches
+   - Treatment: Antipyretics and rest
+
+2. Annual Health Checkup (20 Aug 2023)
+   - Doctor: Dr. Rajesh Kumar
+   - Results: All vitals within normal range
+
+3. Allergic Reaction (5 May 2023)
+   - Doctor: Dr. Anjali Mehta
+   - Treatment: Antihistamines
+
+CURRENT MEDICATIONS:
+--------------------
+1. Paracetamol 500mg
+   - Dosage: 1 tablet every 6 hours as needed
+   - Prescribed: 15 Oct 2023
+
+2. Vitamin D3 1000IU
+   - Dosage: 1 capsule daily with food
+   - Prescribed: 20 Aug 2023
+
+3. Cetirizine 10mg
+   - Dosage: 1 tablet daily for allergy symptoms
+   - Prescribed: 5 May 2023
+
+ALLERGIES:
+----------
+1. Penicillin - Severe allergic reaction
+2. Dust Mites - Causes respiratory issues
+
+IMMUNIZATIONS:
+--------------
+1. COVID-19 Vaccine - Complete (Last dose: 15 Jan 2023)
+2. Influenza Vaccine - Current (Date: 10 Sep 2023)
+3. Tetanus Booster - Up to date (Last dose: 15 Mar 2021)
+
+LAB RESULTS:
+------------
+1. Complete Blood Count (15 Oct 2023)
+   - Hemoglobin: 14.2 g/dL
+   - White Blood Cells: 12.5 K/μL
+   - Platelets: 250 K/μL
+   - Hematocrit: 42%
+
+2. Basic Metabolic Panel (20 Aug 2023)
+   - Glucose: 95 mg/dL
+   - Calcium: 9.2 mg/dL
+   - Sodium: 140 mEq/L
+   - Potassium: 4.0 mEq/L
+
+Generated on: ${new Date().toLocaleDateString()}
+        `;
+
+        // Create a Blob with the content
+        const blob = new Blob([content], { type: "text/plain" });
+        const url = URL.createObjectURL(blob);
+
+        // Create a temporary link to trigger download
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `Health_Records_${patientName.replace(/\s+/g, "_")}_${
+          new Date().toISOString().split("T")[0]
+        }.txt`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        showMessage("Health records downloaded successfully!", "success");
+      }
+
+      // Function to share health records
+      function shareHealthRecords() {
+        showModal("share-records-modal");
+      }
+
+      // Function to download lab results as PDF
+      function downloadLabPDF(testName) {
+        showMessage(`Generating PDF for ${testName}...`, "info");
+
+        const lab = labData[testName];
+        if (!lab) {
+          showMessage("Lab data not found", "error");
+          return;
+        }
+
+        // Create PDF content
+        const content = `
+LABORATORY REPORT
+=================
+
+Patient: ${document.getElementById("patient-name").textContent}
+Student ID: ${document.getElementById("student-id").textContent}
+Date of Birth: ${document.getElementById("patient-dob").textContent}
+Blood Group: ${document.getElementById("patient-blood").textContent}
+
+TEST INFORMATION:
+-----------------
+Test Name: ${lab.testName}
+Date: ${lab.date}
+
+RESULTS:
+--------
+${Object.entries(lab.results)
+  .map(([key, value]) => `${key}: ${value}`)
+  .join("\n")}
+
+INTERPRETATION:
+---------------
+${lab.interpretation}
+
+Generated on: ${new Date().toLocaleDateString()}
+        `;
+
+        // Create a Blob with the content
+        const blob = new Blob([content], { type: "text/plain" });
+        const url = URL.createObjectURL(blob);
+
+        // Create a temporary link to trigger download
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `Lab_Report_${testName.replace(/\s+/g, "_")}_${
+          new Date().toISOString().split("T")[0]
+        }.txt`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        showMessage(`PDF for ${testName} downloaded successfully!`, "success");
+      }
+
+      // Function to share lab results
+      function shareLabResults(testName) {
+        showMessage(`Sharing options for ${testName} would open here`, "info");
+        // In a real application, this would integrate with sharing APIs
+      }
+
+      // Function to show medication details
+      function showMedicationDetails(medicationName) {
+        const medication = medicationData[medicationName];
+        if (!medication) {
+          showMessage("Medication details not found", "error");
+          return;
+        }
+
+        document.getElementById("medication-details-title").textContent =
+          medication.name;
+
+        const content = `
+          <div class="space-y-3">
+            <div class="flex justify-between">
+              <span class="text-gray-400">Generic Name:</span>
+              <span class="text-white">${medication.genericName}</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-400">Dosage:</span>
+              <span class="text-white">${medication.dosage}</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-400">Purpose:</span>
+              <span class="text-white">${medication.purpose}</span>
+            </div>
+            <div>
+              <span class="text-gray-400">Side Effects:</span>
+              <p class="text-white mt-1">${medication.sideEffects}</p>
+            </div>
+            <div>
+              <span class="text-gray-400">Precautions:</span>
+              <p class="text-white mt-1">${medication.precautions}</p>
+            </div>
+            <div>
+              <span class="text-gray-400">Drug Interactions:</span>
+              <p class="text-white mt-1">${medication.interactions}</p>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-400">Storage:</span>
+              <span class="text-white">${medication.storage}</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-400">Prescribed By:</span>
+              <span class="text-white">${medication.prescribedBy}</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-400">Prescribed Date:</span>
+              <span class="text-white">${medication.prescribedDate}</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-400">Refills Remaining:</span>
+              <span class="text-white">${medication.refills}</span>
+            </div>
+          </div>
+        `;
+
+        document.getElementById("medication-details-content").innerHTML =
+          content;
+        showModal("medication-details-modal");
+      }
+
+      // Function to show medication reminder form
+      function showMedicationReminder(medicationName) {
+        const medication = medicationData[medicationName];
+        if (!medication) {
+          showMessage("Medication details not found", "error");
+          return;
+        }
+
+        document.getElementById(
+          "medication-reminder-title"
+        ).textContent = `Set Reminder for ${medication.name}`;
+        document.getElementById("reminder-medication").value = medication.name;
+        document.getElementById("reminder-dosage").value = medication.dosage;
+
+        showModal("medication-reminder-modal");
+      }
+
+      // Add new allergy
+      function addAllergy(name, severity, reaction, date, notes) {
+        const allergiesList = document.getElementById("allergies-list");
+        const allergyClass =
+          severity === "severe"
+            ? "allergy-critical"
+            : severity === "moderate"
+            ? "allergy-moderate"
+            : "allergy-mild";
+
+        const allergyHtml = `
+          <div class="${allergyClass} text-white rounded-lg p-3">
+            <div class="flex justify-between items-start">
+              <div>
+                <div class="font-semibold">${name}</div>
+                <div class="text-sm opacity-90">${reaction}</div>
+                ${
+                  date
+                    ? `<div class="text-xs opacity-70 mt-1">First observed: ${date}</div>`
+                    : ""
+                }
+                ${
+                  notes
+                    ? `<div class="text-xs opacity-70 mt-1">${notes}</div>`
+                    : ""
+                }
+              </div>
+              <button class="delete-allergy-btn text-white opacity-70 hover:opacity-100" data-allergy="${name}">
+                <i class="fa-solid fa-times"></i>
+              </button>
+            </div>
+          </div>
+        `;
+
+        // Remove "No Chronic Conditions" if it exists
+        const noConditions = allergiesList.querySelector(".bg-gray-700");
+        if (noConditions) {
+          noConditions.remove();
+        }
+
+        allergiesList.insertAdjacentHTML("afterbegin", allergyHtml);
+
+        // Update allergies count
+        const allergiesCount = document.getElementById("allergies-count");
+        allergiesCount.textContent = parseInt(allergiesCount.textContent) + 1;
+
+        showMessage(`Allergy "${name}" added successfully`, "success");
+      }
+
+      // Add new vital reading
+      function addVitalReading(type, value, datetime, notes) {
+        const vitalElement = document.getElementById(type);
+        if (vitalElement) {
+          vitalElement.textContent = value;
+
+          // Update status based on value
+          const parentCard = vitalElement.closest(".vital-card");
+          const statusElement = parentCard.querySelector(".text-xs:last-child");
+
+          // Simple logic to determine status (in a real app, this would be more complex)
+          let status = "Normal";
+          let statusClass = "text-green-300";
+
+          if (type === "heart-rate") {
+            const hr = parseInt(value);
+            if (hr < 60 || hr > 100) {
+              status = hr < 60 ? "Low" : "High";
+              statusClass = "text-yellow-300";
+            }
+          } else if (type === "temperature") {
+            const temp = parseFloat(value);
+            if (temp > 37.5) {
+              status = "Elevated";
+              statusClass = "text-yellow-300";
+            } else if (temp > 38.0) {
+              status = "High";
+              statusClass = "text-red-300";
+            }
+          } else if (type === "blood-pressure") {
+            const [systolic, diastolic] = value.split("/").map(Number);
+            if (systolic > 140 || diastolic > 90) {
+              status = "High";
+              statusClass = "text-yellow-300";
+            } else if (systolic < 90 || diastolic < 60) {
+              status = "Low";
+              statusClass = "text-yellow-300";
+            }
+          }
+
+          if (statusElement) {
+            statusElement.textContent = status;
+            statusElement.className = `text-xs mt-1 ${statusClass} font-semibold`;
+          }
+
+          showMessage(
+            `Vital reading for ${type.replace("-", " ")} added successfully`,
+            "success"
+          );
+        }
+      }
+
+      // Add new medical record
+      function addMedicalRecord(
+        date,
+        doctor,
+        diagnosis,
+        symptoms,
+        treatment,
+        notes
+      ) {
+        const medicalHistory = document.getElementById("medical-history");
+        const timeline = medicalHistory.querySelector(".space-y-6");
+
+        const recordHtml = `
+          <div class="timeline-item record-normal bg-gray-700 rounded-lg p-4">
+            <div class="flex justify-between items-start mb-2">
+              <div class="font-semibold text-white">${diagnosis}</div>
+              <div class="text-sm text-gray-400">${new Date(
+                date
+              ).toLocaleDateString()}</div>
+            </div>
+            <div class="text-sm text-gray-300 mb-2">
+              <span class="font-medium">Doctor:</span> ${doctor}
+            </div>
+            <div class="text-sm text-gray-300 mb-2">
+              <span class="font-medium">Symptoms:</span> ${symptoms}
+            </div>
+            ${
+              treatment
+                ? `<div class="text-sm text-gray-300 mb-2">
+              <span class="font-medium">Treatment:</span> ${treatment}
+            </div>`
+                : ""
+            }
+            ${
+              notes
+                ? `<div class="text-sm text-gray-300">
+              <span class="font-medium">Notes:</span> ${notes}
+            </div>`
+                : ""
+            }
+            <div class="mt-2 flex space-x-2">
+              <span class="bg-blue-600 text-white text-xs px-2 py-1 rounded">New Record</span>
+            </div>
+          </div>
+        `;
+
+        timeline.insertAdjacentHTML("afterbegin", recordHtml);
+
+        // Update visits count
+        const visitsCount = document.getElementById("total-visits");
+        visitsCount.textContent = parseInt(visitsCount.textContent) + 1;
+
+        showMessage("Medical record added successfully", "success");
+      }
+
+      // Initialize the application
+      function init() {
+        // Set up tab click events
+        document.querySelectorAll(".tab-btn").forEach((btn) => {
+          btn.addEventListener("click", function () {
+            switchTab(this.dataset.tab);
+          });
+        });
+
+        // Download Records Button - REAL DOWNLOAD
+        document
+          .getElementById("download-records-btn")
+          .addEventListener("click", downloadHealthRecords);
+
+        // Share Records Button - REAL SHARE
+        document
+          .getElementById("share-records-btn")
+          .addEventListener("click", shareHealthRecords);
+
+        // Request Medical Report Button
+        document
+          .getElementById("request-report-btn")
+          .addEventListener("click", function () {
+            showModal("request-report-modal");
+          });
+
+        // Close Request Report Modal
+        document
+          .getElementById("close-request-report")
+          .addEventListener("click", function () {
+            closeModal("request-report-modal");
+          });
+
+        document
+          .getElementById("cancel-request-report")
+          .addEventListener("click", function () {
+            closeModal("request-report-modal");
+          });
+
+        // Submit Report Request
+        document
+          .getElementById("submit-report-request")
+          .addEventListener("click", function () {
+            const reportType = document.getElementById("report-type").value;
+            const reportPeriod = document.getElementById("report-period").value;
+            const reportPurpose =
+              document.getElementById("report-purpose").value;
+
+            if (!reportType || !reportPeriod || !reportPurpose) {
+              showMessage("Please fill in all required fields", "error");
+              return;
+            }
+
+            showMessage(
+              `Medical report request for ${reportType} submitted successfully`,
+              "success"
+            );
+            closeModal("request-report-modal");
+
+            // Reset form
+            document.getElementById("report-type").value = "";
+            document.getElementById("report-period").value = "";
+            document.getElementById("report-purpose").value = "";
+            document.getElementById("report-notes").value = "";
+          });
+
+        // Edit Profile Button
+        document
+          .getElementById("edit-profile-btn")
+          .addEventListener("click", function () {
+            showModal("edit-profile-modal");
+          });
+
+        // Close Edit Profile Modal
+        document
+          .getElementById("close-edit-profile")
+          .addEventListener("click", function () {
+            closeModal("edit-profile-modal");
+          });
+
+        document
+          .getElementById("cancel-edit-profile")
+          .addEventListener("click", function () {
+            closeModal("edit-profile-modal");
+          });
+
+        // Save Profile
+        document
+          .getElementById("save-profile")
+          .addEventListener("click", function () {
+            // Update profile information
+            const firstName = document.getElementById("edit-first-name").value;
+            const lastName = document.getElementById("edit-last-name").value;
+            document.getElementById(
+              "patient-name"
+            ).textContent = `${firstName} ${lastName}`;
+            document.getElementById("patient-dob").textContent = new Date(
+              document.getElementById("edit-patient-dob").value
+            ).toLocaleDateString();
+            document.getElementById("patient-blood").textContent =
+              document.getElementById("edit-patient-blood").value;
+            document.getElementById("emergency-contact").textContent =
+              document.getElementById("edit-emergency-contact").value;
+            document.getElementById("primary-doctor").textContent =
+              document.getElementById("edit-primary-doctor").value;
+            document.getElementById("insurance").textContent =
+              document.getElementById("edit-insurance").value;
+
+            closeModal("edit-profile-modal");
+            showMessage("Profile updated successfully", "success");
+          });
+
+        // Add Vital Reading Button
+        document
+          .getElementById("add-vital-btn")
+          .addEventListener("click", function () {
+            showModal("add-vital-modal");
+          });
+
+        // Close Add Vital Modal
+        document
+          .getElementById("close-add-vital")
+          .addEventListener("click", function () {
+            closeModal("add-vital-modal");
+          });
+
+        document
+          .getElementById("cancel-add-vital")
+          .addEventListener("click", function () {
+            closeModal("add-vital-modal");
+          });
+
+        // Save Vital Reading
+        document
+          .getElementById("save-vital")
+          .addEventListener("click", function () {
+            const type = document.getElementById("vital-type").value;
+            const value = document.getElementById("vital-value").value;
+            const datetime = document.getElementById("vital-datetime").value;
+            const notes = document.getElementById("vital-notes").value;
+
+            if (!value) {
+              showMessage(
+                "Please enter a value for the vital reading",
+                "error"
+              );
+              return;
+            }
+
+            addVitalReading(type, value, datetime, notes);
+            closeModal("add-vital-modal");
+
+            // Reset form
+            document.getElementById("vital-value").value = "";
+            document.getElementById("vital-datetime").value = "";
+            document.getElementById("vital-notes").value = "";
+          });
+
+        // Add Allergy Button
+        document
+          .getElementById("add-allergy-btn")
+          .addEventListener("click", function () {
+            showModal("add-allergy-modal");
+          });
+
+        // Close Add Allergy Modal
+        document
+          .getElementById("close-add-allergy")
+          .addEventListener("click", function () {
+            closeModal("add-allergy-modal");
+          });
+
+        document
+          .getElementById("cancel-add-allergy")
+          .addEventListener("click", function () {
+            closeModal("add-allergy-modal");
+          });
+
+        // Save Allergy
+        document
+          .getElementById("save-allergy")
+          .addEventListener("click", function () {
+            const name = document.getElementById("allergy-name").value;
+            const severity = document.getElementById("allergy-severity").value;
+            const reaction = document.getElementById("allergy-reaction").value;
+            const date = document.getElementById("allergy-date").value;
+            const notes = document.getElementById("allergy-notes").value;
+
+            if (!name || !reaction) {
+              showMessage("Please fill in all required fields", "error");
+              return;
+            }
+
+            addAllergy(name, severity, reaction, date, notes);
+            closeModal("add-allergy-modal");
+
+            // Reset form
+            document.getElementById("allergy-name").value = "";
+            document.getElementById("allergy-reaction").value = "";
+            document.getElementById("allergy-date").value = "";
+            document.getElementById("allergy-notes").value = "";
+          });
+
+        // Add Medical Record Button
+        document
+          .getElementById("add-medical-record-btn")
+          .addEventListener("click", function () {
+            showModal("add-medical-record-modal");
+          });
+
+        // Close Add Medical Record Modal
+        document
+          .getElementById("close-add-medical-record")
+          .addEventListener("click", function () {
+            closeModal("add-medical-record-modal");
+          });
+
+        document
+          .getElementById("cancel-add-medical-record")
+          .addEventListener("click", function () {
+            closeModal("add-medical-record-modal");
+          });
+
+        // Save Medical Record
+        document
+          .getElementById("save-medical-record")
+          .addEventListener("click", function () {
+            const date = document.getElementById("record-date").value;
+            const doctor = document.getElementById("record-doctor").value;
+            const diagnosis = document.getElementById("record-diagnosis").value;
+            const symptoms = document.getElementById("record-symptoms").value;
+            const treatment = document.getElementById("record-treatment").value;
+            const notes = document.getElementById("record-notes").value;
+
+            if (!date || !doctor || !diagnosis || !symptoms) {
+              showMessage("Please fill in all required fields", "error");
+              return;
+            }
+
+            addMedicalRecord(
+              date,
+              doctor,
+              diagnosis,
+              symptoms,
+              treatment,
+              notes
+            );
+            closeModal("add-medical-record-modal");
+
+            // Reset form
+            document.getElementById("record-date").value = "";
+            document.getElementById("record-doctor").value = "";
+            document.getElementById("record-diagnosis").value = "";
+            document.getElementById("record-symptoms").value = "";
+            document.getElementById("record-treatment").value = "";
+            document.getElementById("record-notes").value = "";
+          });
+
+        // Request Refill Button
+        document
+          .getElementById("request-refill-btn")
+          .addEventListener("click", function () {
+            showModal("request-refill-modal");
+          });
+
+        // Close Request Refill Modal
+        document
+          .getElementById("close-request-refill")
+          .addEventListener("click", function () {
+            closeModal("request-refill-modal");
+          });
+
+        document
+          .getElementById("cancel-request-refill")
+          .addEventListener("click", function () {
+            closeModal("request-refill-modal");
+          });
+
+        // Submit Refill Request
+        document
+          .getElementById("submit-refill-request")
+          .addEventListener("click", function () {
+            const medication =
+              document.getElementById("refill-medication").value;
+            const quantity = document.getElementById("refill-quantity").value;
+            const urgency = document.getElementById("refill-urgency").value;
+
+            if (!medication || !quantity) {
+              showMessage("Please fill in all required fields", "error");
+              return;
+            }
+
+            showMessage(
+              `Refill request for ${medication} submitted successfully`,
+              "success"
+            );
+            closeModal("request-refill-modal");
+
+            // Reset form
+            document.getElementById("refill-medication").value = "";
+            document.getElementById("refill-quantity").value = "";
+            document.getElementById("refill-urgency").value = "routine";
+            document.getElementById("refill-pharmacy").value = "";
+            document.getElementById("refill-notes").value = "";
+          });
+
+        // Request Lab Test Button
+        document
+          .getElementById("request-lab-btn")
+          .addEventListener("click", function () {
+            showModal("request-lab-modal");
+          });
+
+        // Close Request Lab Modal
+        document
+          .getElementById("close-request-lab")
+          .addEventListener("click", function () {
+            closeModal("request-lab-modal");
+          });
+
+        document
+          .getElementById("cancel-request-lab")
+          .addEventListener("click", function () {
+            closeModal("request-lab-modal");
+          });
+
+        // Submit Lab Request
+        document
+          .getElementById("submit-lab-request")
+          .addEventListener("click", function () {
+            const testType = document.getElementById("lab-test-type").value;
+            const specificTest =
+              document.getElementById("lab-specific-test").value;
+            const reason = document.getElementById("lab-reason").value;
+
+            if (!testType || !specificTest || !reason) {
+              showMessage("Please fill in all required fields", "error");
+              return;
+            }
+
+            showMessage(
+              `Lab test request for ${specificTest} submitted successfully`,
+              "success"
+            );
+            closeModal("request-lab-modal");
+
+            // Reset form
+            document.getElementById("lab-test-type").value = "";
+            document.getElementById("lab-specific-test").value = "";
+            document.getElementById("lab-reason").value = "";
+            document.getElementById("lab-symptoms").value = "";
+            document.getElementById("lab-preferred-date").value = "";
+            document.getElementById("lab-notes").value = "";
+          });
+
+        // Schedule Vaccine Button
+        document
+          .getElementById("schedule-vaccine-btn")
+          .addEventListener("click", function () {
+            showModal("schedule-vaccine-modal");
+          });
+
+        // Close Schedule Vaccine Modal
+        document
+          .getElementById("close-schedule-vaccine")
+          .addEventListener("click", function () {
+            closeModal("schedule-vaccine-modal");
+          });
+
+        document
+          .getElementById("cancel-schedule-vaccine")
+          .addEventListener("click", function () {
+            closeModal("schedule-vaccine-modal");
+          });
+
+        // Submit Vaccine Request
+        document
+          .getElementById("submit-vaccine-request")
+          .addEventListener("click", function () {
+            const vaccineType = document.getElementById("vaccine-type").value;
+            const vaccineDate = document.getElementById("vaccine-date").value;
+            const vaccineTime = document.getElementById("vaccine-time").value;
+            const vaccineReason =
+              document.getElementById("vaccine-reason").value;
+
+            if (
+              !vaccineType ||
+              !vaccineDate ||
+              !vaccineTime ||
+              !vaccineReason
+            ) {
+              showMessage("Please fill in all required fields", "error");
+              return;
+            }
+
+            showMessage(
+              `Vaccine appointment for ${vaccineType} scheduled successfully`,
+              "success"
+            );
+            closeModal("schedule-vaccine-modal");
+
+            // Reset form
+            document.getElementById("vaccine-type").value = "";
+            document.getElementById("vaccine-date").value = "";
+            document.getElementById("vaccine-time").value = "";
+            document.getElementById("vaccine-reason").value = "";
+            document.getElementById("vaccine-notes").value = "";
+          });
+
+        // Upload Documents Button
+        document
+          .getElementById("upload-documents-btn")
+          .addEventListener("click", function () {
+            showModal("upload-documents-modal");
+          });
+
+        // Close Upload Documents Modal
+        document
+          .getElementById("close-upload-documents")
+          .addEventListener("click", function () {
+            closeModal("upload-documents-modal");
+          });
+
+        document
+          .getElementById("cancel-upload-documents")
+          .addEventListener("click", function () {
+            closeModal("upload-documents-modal");
+          });
+
+        // Submit Document Upload
+        document
+          .getElementById("submit-document-upload")
+          .addEventListener("click", function () {
+            const documentType = document.getElementById("document-type").value;
+            const fileInput = document.getElementById("document-file");
+
+            if (!documentType || !fileInput.files.length) {
+              showMessage("Please select a document type and file", "error");
+              return;
+            }
+
+            // In a real app, you would upload the file to a server
+            // For this demo, we'll just show a success message
+            const fileName = fileInput.files[0].name;
+            showMessage(
+              `Document "${fileName}" uploaded successfully`,
+              "success"
+            );
+            closeModal("upload-documents-modal");
+
+            // Reset form
+            document.getElementById("document-type").value = "";
+            document.getElementById("document-date").value = "";
+            document.getElementById("document-description").value = "";
+            document.getElementById("document-file").value = "";
+            document.getElementById("document-notes").value = "";
+          });
+
+        // File upload display
+        document
+          .getElementById("document-file")
+          .addEventListener("change", function () {
+            const fileName = this.files[0]
+              ? this.files[0].name
+              : "No file chosen";
+            const uploadArea = this.parentElement;
+            uploadArea.querySelector("p").textContent = `Selected: ${fileName}`;
+          });
+
+        // Medication Details
+        document.addEventListener("click", function (e) {
+          if (
+            e.target.classList.contains("medication-action-btn") ||
+            e.target.parentElement.classList.contains("medication-action-btn")
+          ) {
+            const btn = e.target.classList.contains("medication-action-btn")
+              ? e.target
+              : e.target.parentElement;
+            const medication = btn.dataset.medication;
+            const action = btn.dataset.action;
+
+            if (action === "info") {
+              showMedicationDetails(medication);
+            } else if (action === "reminder") {
+              showMedicationReminder(medication);
+            }
+          }
+        });
+
+        // Close Medication Details Modal
+        document
+          .getElementById("close-medication-details")
+          .addEventListener("click", function () {
+            closeModal("medication-details-modal");
+          });
+
+        document
+          .getElementById("close-medication-details-btn")
+          .addEventListener("click", function () {
+            closeModal("medication-details-modal");
+          });
+
+        // Close Medication Reminder Modal
+        document
+          .getElementById("close-medication-reminder")
+          .addEventListener("click", function () {
+            closeModal("medication-reminder-modal");
+          });
+
+        document
+          .getElementById("cancel-medication-reminder")
+          .addEventListener("click", function () {
+            closeModal("medication-reminder-modal");
+          });
+
+        // Save Medication Reminder
+        document
+          .getElementById("save-medication-reminder")
+          .addEventListener("click", function () {
+            const medication = document.getElementById(
+              "reminder-medication"
+            ).value;
+            const frequency =
+              document.getElementById("reminder-frequency").value;
+            const time = document.getElementById("reminder-time").value;
+            const startDate = document.getElementById(
+              "reminder-start-date"
+            ).value;
+
+            if (!frequency || !time || !startDate) {
+              showMessage("Please fill in all required fields", "error");
+              return;
+            }
+
+            showMessage(
+              `Reminder for ${medication} set successfully`,
+              "success"
+            );
+            closeModal("medication-reminder-modal");
+
+            // Reset form
+            document.getElementById("reminder-frequency").value = "";
+            document.getElementById("reminder-time").value = "";
+            document.getElementById("reminder-start-date").value = "";
+            document.getElementById("reminder-end-date").value = "";
+            document.getElementById("reminder-notes").value = "";
+          });
+
+        // Lab Download Buttons
+        document.addEventListener("click", function (e) {
+          if (
+            e.target.classList.contains("lab-download-btn") ||
+            e.target.parentElement.classList.contains("lab-download-btn")
+          ) {
+            const btn = e.target.classList.contains("lab-download-btn")
+              ? e.target
+              : e.target.parentElement;
+            const testName = btn.dataset.test;
+            downloadLabPDF(testName);
+          }
+        });
+
+        // Lab Share Buttons
+        document.addEventListener("click", function (e) {
+          if (
+            e.target.classList.contains("lab-share-btn") ||
+            e.target.parentElement.classList.contains("lab-share-btn")
+          ) {
+            const btn = e.target.classList.contains("lab-share-btn")
+              ? e.target
+              : e.target.parentElement;
+            const testName = btn.dataset.test;
+            shareLabResults(testName);
+          }
+        });
+
+        // Share Records Modal
+        document
+          .getElementById("close-share-records")
+          .addEventListener("click", function () {
+            closeModal("share-records-modal");
+          });
+
+        document
+          .getElementById("cancel-share-records")
+          .addEventListener("click", function () {
+            closeModal("share-records-modal");
+          });
+
+        // Share Options
+        document.querySelectorAll(".share-option").forEach((option) => {
+          option.addEventListener("click", function () {
+            document.querySelectorAll(".share-option").forEach((opt) => {
+              opt.style.background = "#4b5563";
+            });
+            this.style.background = "#3b82f6";
+          });
+        });
+
+        // Submit Share Records
+        document
+          .getElementById("submit-share-records")
+          .addEventListener("click", function () {
+            const email = document.getElementById("share-email").value;
+            const selectedMethod = document.querySelector(
+              ".share-option[style*='background: rgb(59, 130, 246)']"
+            );
+            const method = selectedMethod
+              ? selectedMethod.dataset.method
+              : "email";
+
+            if (!email && method === "email") {
+              showMessage("Please enter an email address", "error");
+              return;
+            }
+
+            showMessage(
+              `Health records shared via ${method} successfully`,
+              "success"
+            );
+            closeModal("share-records-modal");
+
+            // Reset form
+            document.getElementById("share-email").value = "";
+            document.querySelectorAll(".share-option").forEach((opt) => {
+              opt.style.background = "#4b5563";
+            });
+            document.getElementById("share-message").value = "";
+          });
+
+        // Delete Allergy (event delegation)
+        document.addEventListener("click", function (e) {
+          if (
+            e.target.classList.contains("delete-allergy-btn") ||
+            e.target.parentElement.classList.contains("delete-allergy-btn")
+          ) {
+            const btn = e.target.classList.contains("delete-allergy-btn")
+              ? e.target
+              : e.target.parentElement;
+            const allergyName = btn.dataset.allergy;
+
+            if (
+              confirm(
+                `Are you sure you want to remove the allergy "${allergyName}"?`
+              )
+            ) {
+              const allergyElement = btn.closest(
+                ".allergy-critical, .allergy-moderate, .allergy-mild"
+              );
+              allergyElement.remove();
+
+              // Update allergies count
+              const allergiesCount = document.getElementById("allergies-count");
+              allergiesCount.textContent =
+                parseInt(allergiesCount.textContent) - 1;
+
+              showMessage(
+                `Allergy "${allergyName}" removed successfully`,
+                "success"
+              );
+            }
+          }
+        });
+
+        // Other Action Buttons
+        document
+          .getElementById("emergency-access-btn")
+          .addEventListener("click", function () {
+            showMessage(
+              "Emergency access activated. Medical staff can now view your records.",
+              "info"
+            );
+          });
+
+        document
+          .getElementById("qr-code-btn")
+          .addEventListener("click", function () {
+            showMessage("Your health ID QR code is displayed", "info");
+          });
+
+        // Quick Actions Buttons
+        document
+          .getElementById("prescription-refill-btn")
+          .addEventListener("click", function () {
+            showModal("request-refill-modal");
+          });
+
+        document
+          .getElementById("schedule-followup-btn")
+          .addEventListener("click", function () {
+            showMessage("Redirecting to appointment scheduling...", "info");
+          });
+      }
+
+      // Initialize when DOM is loaded
+      document.addEventListener("DOMContentLoaded", init);
+    </script>
+    <script src="auth_guard.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

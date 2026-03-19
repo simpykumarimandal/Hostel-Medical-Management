@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HMS | Emergency Ambulance Services</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style> @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"); body { font-family: "Inter", sans-serif; color: #d1d5db; } .active-nav-link { background-color: #374151; color: white; } .bg-card { background-color: #374151; } .message-box { animation: slideIn 0.5s forwards; } @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } } .fade-in { animation: fadeIn 0.5s ease-in; } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } } .ambulance-available { border-left: 4px solid #10b981; } .ambulance-busy { border-left: 4px solid #ef4444; } .auto-available { border-left: 4px solid #f59e0b; } .status-pulse { animation: pulse 2s infinite; } @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } } .emergency-flash { animation: emergencyFlash 1s infinite; } @keyframes emergencyFlash { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } } .gradient-border { background: linear-gradient(135deg, #3b82f6, #8b5cf6); padding: 2px; border-radius: 12px; } .gradient-border > div { background: #374151; border-radius: 10px; padding: 1.5rem; } </style> <style> .sidebar { transition: transform 0.25s ease-in-out; } .sidebar-collapsed .sidebar { transform: translateX(-110%); } .main-content { transition: margin-left 0.25s ease-in-out; } .sidebar-collapsed .main-content { margin-left: 0 !important; } @media (max-width: 768px) { .sidebar { transform: translateX(-110%); } .sidebar-open .sidebar { transform: translateX(0); } } </style></head>
+  <body class="bg-gray-900 flex flex-col md:flex-row min-h-screen">
+
+    <!-- Sidebar -->
+    <aside
+      class="sidebar w-full md:w-64 bg-gray-950 text-white p-6 flex flex-col items-center md:items-start space-y-8 shadow-2xl">
+      <div class="flex items-center space-x-2 mb-4">
+        <i class="fas fa-hospital text-xl text-blue-400"></i>
+        <h1 class="text-xl font-bold">HMS</h1>
+        <span class="text-sm text-gray-400 ml-2">Student Mode</span>
+      </div>
+      <nav class="w-full">
+  <ul class="space-y-2">
+    <li>
+      <a href="demo.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-chart-line mr-3"></i>
+        <span class="font-medium">Dashboard</span>
+      </a>
+    </li>
+    <li>
+      <a href="ambulance.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-truck-medical mr-3"></i>
+        <span class="font-medium">Ambulance</span>
+      </a>
+    </li>
+    <li>
+      <a href="doctors.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-user-doctor mr-3"></i>
+        <span class="font-medium">Doctors</span>
+      </a>
+    </li>
+    <li>
+      <a href="medicine_order.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-pills mr-3"></i>
+        <span class="font-medium">Pharmacy</span>
+      </a>
+    </li>
+    <li>
+      <a href="medicine_reminder.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bell mr-3"></i>
+        <span class="font-medium">Medicine Reminder</span>
+      </a>
+    </li>
+    <li>
+      <a href="symptoms_checker.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-stethoscope mr-3"></i>
+        <span class="font-medium">Symptoms Checker</span>
+      </a>
+    </li>
+    <li>
+      <a href="lab_tests.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-vial-circle-check mr-3"></i>
+        <span class="font-medium">Lab Tests</span>
+      </a>
+    </li>
+    <li>
+      <a href="emergency_requests.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-hand-holding-medical mr-3"></i>
+        <span class="font-medium">Emergency Requests</span>
+      </a>
+    </li>
+    <li>
+      <a href="sos.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-sos mr-3"></i>
+        <span class="font-medium">SOS</span>
+      </a>
+    </li>
+    <li>
+      <a href="electronic_health_records.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-file-medical mr-3"></i>
+        <span class="font-medium">Health Records</span>
+      </a>
+    </li>
+    <li>
+      <a href="health_insurance.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-shield-heart mr-3"></i>
+        <span class="font-medium">Health Insurance</span>
+      </a>
+    </li>
+    <li>
+      <a href="reports_and_analytics.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-chart-pie mr-3"></i>
+        <span class="font-medium">Reports & Analytics</span>
+      </a>
+    </li>
+    <li>
+      <a href="restocking.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-box-open mr-3"></i>
+        <span class="font-medium">Inventory</span>
+      </a>
+    </li>
+    <li>
+      <a href="studentrequest.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-cash-register mr-3"></i>
+        <span class="font-medium">Student Requests</span>
+      </a>
+    </li>
+    <li>
+      <a href="student_transport.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bus mr-3"></i>
+        <span class="font-medium">Student Transport</span>
+      </a>
+    </li>
+    <li>
+      <a href="transport_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-route mr-3"></i>
+        <span class="font-medium">Transport Management</span>
+      </a>
+    </li>
+    <li>
+      <a href="room_management.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bed mr-3"></i>
+        <span class="font-medium">Room Management</span>
+      </a>
+    </li>
+    <li>
+      <a href="room_sanitation.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-spray-can-sparkles mr-3"></i>
+        <span class="font-medium">Room Sanitation</span>
+      </a>
+    </li>
+    <li>
+      <a href="mess_menu.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-utensils mr-3"></i>
+        <span class="font-medium">Mess Menu</span>
+      </a>
+    </li>
+    <li>
+      <a href="mess_food_order_service.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bowl-food mr-3"></i>
+        <span class="font-medium">Mess Food Order</span>
+      </a>
+    </li>
+    <li>
+      <a href="laundry_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-shirt mr-3"></i>
+        <span class="font-medium">Laundry</span>
+      </a>
+    </li>
+    <li>
+      <a href="leave_and_outing.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-door-open mr-3"></i>
+        <span class="font-medium">Leave & Outing</span>
+      </a>
+    </li>
+    <li>
+      <a href="vit_bhopal_community.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-users mr-3"></i>
+        <span class="font-medium">VIT Community</span>
+      </a>
+    </li>
+    <li>
+      <a href="parent_notification.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-comments mr-3"></i>
+        <span class="font-medium">Parent Notification</span>
+      </a>
+    </li>
+    <li>
+      <a href="payment_gateway.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-credit-card mr-3"></i>
+        <span class="font-medium">Payment Gateway</span>
+      </a>
+    </li>
+    <li>
+      <a href="complaint_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-circle-exclamation mr-3"></i>
+        <span class="font-medium">Complaints</span>
+      </a>
+    </li>
+    <li>
+      <a href="exam_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-clipboard-list mr-3"></i>
+        <span class="font-medium">Exam Management</span>
+      </a>
+    </li>
+    <li>
+      <a href="local_hospital_network.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-hospital mr-3"></i>
+        <span class="font-medium">Local Hospitals</span>
+      </a>
+    </li>
+    <li>
+      <a href="medical_camps.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-hand-holding-heart mr-3"></i>
+        <span class="font-medium">Medical Camps</span>
+      </a>
+    </li>
+    <li>
+      <a href="virtual_consultation.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-video mr-3"></i>
+        <span class="font-medium">Virtual Consultation</span>
+      </a>
+    </li>
+    <li>
+      <a href="wearables.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-watch-fitness mr-3"></i>
+        <span class="font-medium">Wearables</span>
+      </a>
+    </li>
+    <li>
+      <a href="biometric.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-fingerprint mr-3"></i>
+        <span class="font-medium">Biometric</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+      <div class="mt-auto w-full">
+        <a href="/index.html" data-logout="true"
+          class="flex items-center justify-center w-full px-4 py-3 rounded-lg bg-red-600 hover:bg-red-700 transition-colors duration-200"
+        >
+          <i class="fa-solid fa-right-from-bracket mr-2"></i>
+          <span class="font-semibold">Log Out</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content flex-1 p-8 overflow-y-auto bg-gray-800">
+      <!-- Top Header -->
+      <header
+        class="flex items-center justify-between text-sm text-gray-400 mb-8"
+      >
+        <div id="date-time-display"></div>
+        <div class="flex items-center space-x-6">
+          <div class="relative">
+            <i
+              class="fa-solid fa-bell text-xl hover:text-white transition duration-200"
+            ></i>
+            <span
+              id="notification-badge"
+              class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center"
+              >3</span
+            >
+          </div>
+          <div class="flex items-center space-x-2">
+            <i class="fa-solid fa-user-circle text-xl"></i>
+            <span>Student Mode</span>
+          </div>
+          <div class="flex items-center space-x-2 cursor-pointer">
+            <i class="fa-solid fa-globe text-xl"></i>
+            <span>English</span>
+            <i class="fa-solid fa-chevron-down text-xs"></i>
+          </div>
+        </div>
+      </header>
+
+      <!-- Page Title & Actions -->
+      <div class="flex justify-between items-center mb-8">
+        <div>
+          <h2 class="text-3xl font-bold text-white mb-1">
+            Emergency Ambulance Services
+          </h2>
+          <p class="text-gray-400">
+            Real-time ambulance tracking and emergency transport booking
+          </p>
+        </div>
+        <div class="flex space-x-3">
+          <button
+            id="emergency-sos-btn"
+            class="bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center emergency-flash"
+          >
+            <i class="fa-solid fa-sos mr-2"></i>
+            SOS Emergency
+          </button>
+          <button
+            id="refresh-ambulance-btn"
+            class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center"
+          >
+            <i class="fa-solid fa-rotate mr-2"></i>
+            Refresh Status
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick Stats -->
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
+        <!-- Available Ambulances -->
+        <div class="gradient-border">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-2xl font-bold text-white" id="available-count">
+                0
+              </div>
+              <div class="text-sm text-blue-300">Available Ambulances</div>
+            </div>
+            <i class="fa-solid fa-truck-medical text-blue-400 text-2xl"></i>
+          </div>
+        </div>
+
+        <!-- Busy Ambulances -->
+        <div class="gradient-border">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-2xl font-bold text-white" id="busy-count">0</div>
+              <div class="text-sm text-red-300">Active Missions</div>
+            </div>
+            <i class="fa-solid fa-clock text-red-400 text-2xl"></i>
+          </div>
+        </div>
+
+        <!-- Response Time -->
+        <div class="gradient-border">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-2xl font-bold text-white" id="avg-response">
+                0 min
+              </div>
+              <div class="text-sm text-green-300">Avg Response Time</div>
+            </div>
+            <i class="fa-solid fa-gauge-high text-green-400 text-2xl"></i>
+          </div>
+        </div>
+
+        <!-- Nearby Autos -->
+        <div class="gradient-border">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-2xl font-bold text-white" id="auto-count">0</div>
+              <div class="text-sm text-yellow-300">Available Autos</div>
+            </div>
+            <i class="fa-solid fa-car text-yellow-400 text-2xl"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Content Grid -->
+      <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-6">
+        <!-- Ambulance Availability -->
+        <div class="xl:col-span-2">
+          <div class="bg-card rounded-xl shadow-lg p-6">
+            <h3 class="text-xl font-bold text-white mb-4">
+              Available Ambulances
+            </h3>
+            <div
+              id="available-ambulances"
+              class="grid grid-cols-1 md:grid-cols-2 gap-4"
+            >
+              <!-- Ambulances will be populated here -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Emergency Booking -->
+        <div>
+          <div class="bg-card rounded-xl shadow-lg p-6">
+            <h3 class="text-xl font-bold text-white mb-4">
+              Emergency Transport Request
+            </h3>
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-400 mb-2"
+                  >Your Location</label
+                >
+                <div class="relative">
+                  <input
+                    type="text"
+                    id="patient-location"
+                    class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="Select your location"
+                    required
+                  />
+                  <button class="absolute right-3 top-3 text-blue-400">
+                    <i class="fa-solid fa-location-crosshairs"></i>
+                  </button>
+                </div>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-400 mb-2"
+                  >Emergency Type</label
+                >
+                <select
+                  id="emergency-type"
+                  class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-blue-500 focus:border-blue-500"
+                  required
+                >
+                  <option value="">Select Emergency Type</option>
+                  <option value="medical">Medical Emergency</option>
+                  <option value="accident">Accident/Injury</option>
+                  <option value="critical">Critical Condition</option>
+                  <option value="other">Other Emergency</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-400 mb-2"
+                  >Priority Level</label
+                >
+                <div class="flex space-x-2">
+                  <button
+                    class="priority-btn flex-1 bg-gray-600 hover:bg-gray-700 text-white py-2 rounded-lg transition"
+                    data-priority="low"
+                  >
+                    Low
+                  </button>
+                  <button
+                    class="priority-btn flex-1 bg-yellow-600 hover:bg-yellow-700 text-white py-2 rounded-lg transition"
+                    data-priority="medium"
+                  >
+                    Medium
+                  </button>
+                  <button
+                    class="priority-btn flex-1 bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg transition"
+                    data-priority="high"
+                  >
+                    High
+                  </button>
+                </div>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-400 mb-2"
+                  >Additional Details</label
+                >
+                <textarea
+                  id="emergency-details"
+                  rows="3"
+                  class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="Describe the emergency situation, symptoms, etc."
+                ></textarea>
+              </div>
+              <button
+                id="book-ambulance-btn"
+                class="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center justify-center"
+              >
+                <i class="fa-solid fa-truck-medical mr-2"></i>
+                Request Emergency Transport
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Additional Sections -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Nearby Auto Drivers -->
+        <div class="bg-card rounded-xl shadow-lg p-6">
+          <h3 class="text-xl font-bold text-white mb-4">
+            Alternative Transport Options
+          </h3>
+          <div id="nearby-autos" class="space-y-3">
+            <!-- Auto drivers will be populated here -->
+          </div>
+        </div>
+
+        <!-- Emergency Contacts -->
+        <div class="bg-card rounded-xl shadow-lg p-6">
+          <h3 class="text-xl font-bold text-white mb-4">Emergency Contacts</h3>
+          <div class="space-y-3">
+            <div
+              class="flex items-center justify-between p-3 bg-gray-700 rounded-lg hover:bg-gray-600 transition cursor-pointer"
+            >
+              <div class="flex items-center">
+                <div
+                  class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center mr-3"
+                >
+                  <i class="fa-solid fa-shield-halved text-white"></i>
+                </div>
+                <div>
+                  <div class="font-medium text-white">Campus Security</div>
+                  <div class="text-sm text-gray-300">24/7 Emergency Line</div>
+                </div>
+              </div>
+              <div class="text-blue-400 font-semibold">+91-9876543201</div>
+            </div>
+            <div
+              class="flex items-center justify-between p-3 bg-gray-700 rounded-lg hover:bg-gray-600 transition cursor-pointer"
+            >
+              <div class="flex items-center">
+                <div
+                  class="w-10 h-10 rounded-full bg-green-600 flex items-center justify-center mr-3"
+                >
+                  <i class="fa-solid fa-house-medical text-white"></i>
+                </div>
+                <div>
+                  <div class="font-medium text-white">Medical Center</div>
+                  <div class="text-sm text-gray-300">Primary Contact</div>
+                </div>
+              </div>
+              <div class="text-blue-400 font-semibold">+91-9876543202</div>
+            </div>
+            <div
+              class="flex items-center justify-between p-3 bg-gray-700 rounded-lg hover:bg-gray-600 transition cursor-pointer"
+            >
+              <div class="flex items-center">
+                <div
+                  class="w-10 h-10 rounded-full bg-purple-600 flex items-center justify-center mr-3"
+                >
+                  <i class="fa-solid fa-user-tie text-white"></i>
+                </div>
+                <div>
+                  <div class="font-medium text-white">Hostel Warden</div>
+                  <div class="text-sm text-gray-300">Emergency Contact</div>
+                </div>
+              </div>
+              <div class="text-blue-400 font-semibold">+91-9876543203</div>
+            </div>
+            <div
+              class="flex items-center justify-between p-3 bg-gray-700 rounded-lg hover:bg-gray-600 transition cursor-pointer"
+            >
+              <div class="flex items-center">
+                <div
+                  class="w-10 h-10 rounded-full bg-red-600 flex items-center justify-center mr-3"
+                >
+                  <i class="fa-solid fa-truck-medical text-white"></i>
+                </div>
+                <div>
+                  <div class="font-medium text-white">Ambulance Control</div>
+                  <div class="text-sm text-gray-300">Dispatch Center</div>
+                </div>
+              </div>
+              <div class="text-blue-400 font-semibold">+91-9876543204</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Ambulance Booking Modal -->
+    <div
+      id="ambulance-modal"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden"
+    >
+      <div class="bg-gray-800 rounded-xl p-6 w-full max-w-md">
+        <h3 class="text-xl font-bold text-white mb-4">
+          Confirm Ambulance Request
+        </h3>
+        <div id="ambulance-modal-content">
+          <!-- Modal content will be populated here -->
+        </div>
+        <div class="flex justify-end mt-4 space-x-2">
+          <button
+            id="cancel-booking"
+            class="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition duration-200"
+          >
+            Cancel
+          </button>
+          <button
+            id="confirm-booking"
+            class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-200"
+          >
+            Confirm Request
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Auto Booking Modal -->
+    <div
+      id="auto-modal"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden"
+    >
+      <div class="bg-gray-800 rounded-xl p-6 w-full max-w-md">
+        <h3 class="text-xl font-bold text-white mb-4">
+          Request Auto Transport
+        </h3>
+        <div id="auto-modal-content">
+          <!-- Modal content will be populated here -->
+        </div>
+        <div class="flex justify-end mt-4 space-x-2">
+          <button
+            id="cancel-auto"
+            class="bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition duration-200"
+          >
+            Cancel
+          </button>
+          <button
+            id="confirm-auto"
+            class="bg-yellow-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-yellow-700 transition duration-200"
+          >
+            Confirm Request
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Message Box for notifications -->
+    <div
+      id="message-box"
+      class="fixed bottom-4 right-4 bg-gray-700 text-white p-4 rounded-lg shadow-lg hidden message-box"
+    >
+      <p id="message-text"></p>
+    </div>
+
+    <script>
+      // JavaScript to display the current date and time
+      function updateDateTime() {
+        const now = new Date();
+        const options = {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+        };
+        const formattedDateTime = now.toLocaleDateString("en-US", options);
+        document.getElementById("date-time-display").textContent =
+          formattedDateTime;
+      }
+      updateDateTime();
+      setInterval(updateDateTime, 1000);
+
+      // Enhanced Ambulance database
+      const ambulanceDatabase = [
+        {
+          id: 1,
+          number: "AMB-001",
+          driver: "Rajesh Kumar",
+          contact: "+91-9876543210",
+          status: "available",
+          location: "Main Gate",
+          eta: "5 min",
+          type: "Advanced Life Support",
+        },
+        {
+          id: 2,
+          number: "AMB-002",
+          driver: "Suresh Patel",
+          contact: "+91-9876543211",
+          status: "available",
+          location: "Hostel Block A",
+          eta: "3 min",
+          type: "Basic Life Support",
+        },
+        {
+          id: 3,
+          number: "AMB-003",
+          driver: "Amit Sharma",
+          contact: "+91-9876543212",
+          status: "busy",
+          location: "On Call - City Hospital",
+          eta: "N/A",
+          type: "Critical Care",
+        },
+        {
+          id: 4,
+          number: "AMB-004",
+          driver: "Vikram Singh",
+          contact: "+91-9876543213",
+          status: "available",
+          location: "Medical Center",
+          eta: "2 min",
+          type: "Basic Life Support",
+        },
+      ];
+
+      // Enhanced Auto drivers database
+      const autoDriversDatabase = [
+        {
+          id: 1,
+          name: "Ramesh",
+          contact: "+91-9876543220",
+          location: "North Gate",
+          eta: "7 min",
+          status: "available",
+          rating: "4.8",
+        },
+        {
+          id: 2,
+          name: "Suresh",
+          contact: "+91-9876543221",
+          location: "South Gate",
+          eta: "10 min",
+          status: "available",
+          rating: "4.5",
+        },
+        {
+          id: 3,
+          name: "Mahesh",
+          contact: "+91-9876543222",
+          location: "East Gate",
+          eta: "5 min",
+          status: "available",
+          rating: "4.9",
+        },
+        {
+          id: 4,
+          name: "Ganesh",
+          contact: "+91-9876543223",
+          location: "West Gate",
+          eta: "8 min",
+          status: "available",
+          rating: "4.7",
+        },
+      ];
+
+      // DOM Elements
+      const messageBox = document.getElementById("message-box");
+      const messageText = document.getElementById("message-text");
+
+      // Function to show a custom message box
+      function showMessage(text, type = "info") {
+        messageText.textContent = text;
+        messageBox.classList.remove(
+          "hidden",
+          "bg-red-700",
+          "bg-green-700",
+          "bg-blue-700"
+        );
+        if (type === "error") {
+          messageBox.classList.add("bg-red-700");
+        } else if (type === "success") {
+          messageBox.classList.add("bg-green-700");
+        } else if (type === "info") {
+          messageBox.classList.add("bg-blue-700");
+        } else {
+          messageBox.classList.add("bg-gray-700");
+        }
+        setTimeout(() => {
+          messageBox.classList.add("hidden");
+        }, 4000);
+      }
+
+      // Function to update statistics
+      function updateStatistics() {
+        const availableAmbulances = ambulanceDatabase.filter(
+          (ambulance) => ambulance.status === "available"
+        ).length;
+        const busyAmbulances = ambulanceDatabase.filter(
+          (ambulance) => ambulance.status === "busy"
+        ).length;
+        const availableAutos = autoDriversDatabase.filter(
+          (auto) => auto.status === "available"
+        ).length;
+
+        // Calculate average response time
+        const availableAmbulancesData = ambulanceDatabase.filter(
+          (ambulance) => ambulance.status === "available"
+        );
+        const totalETA = availableAmbulancesData.reduce((sum, ambulance) => {
+          const etaMinutes = parseInt(ambulance.eta);
+          return sum + (isNaN(etaMinutes) ? 0 : etaMinutes);
+        }, 0);
+        const avgResponse =
+          availableAmbulancesData.length > 0
+            ? Math.round(totalETA / availableAmbulancesData.length)
+            : 0;
+
+        document.getElementById("available-count").textContent =
+          availableAmbulances;
+        document.getElementById("busy-count").textContent = busyAmbulances;
+        document.getElementById("auto-count").textContent = availableAutos;
+        document.getElementById(
+          "avg-response"
+        ).textContent = `${avgResponse} min`;
+      }
+
+      // Function to populate ambulance availability
+      function populateAmbulanceAvailability() {
+        const container = document.getElementById("available-ambulances");
+        const availableAmbulances = ambulanceDatabase.filter(
+          (ambulance) => ambulance.status === "available"
+        );
+
+        if (availableAmbulances.length === 0) {
+          container.innerHTML = `
+            <div class="col-span-2 text-center py-8 text-gray-500">
+              <i class="fa-solid fa-truck-medical text-4xl mb-3"></i>
+              <p class="text-lg">No ambulances available at the moment</p>
+              <p class="text-sm mt-2">All ambulances are currently on active missions</p>
+              <button class="mt-4 bg-yellow-600 hover:bg-yellow-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200">
+                <i class="fa-solid fa-car mr-2"></i>
+                Request Auto Instead
+              </button>
+            </div>
+          `;
+          return;
+        }
+
+        container.innerHTML = availableAmbulances
+          .map(
+            (ambulance) => `
+            <div class="ambulance-available bg-gray-700 rounded-lg p-4 hover:bg-gray-600 transition duration-200">
+              <div class="flex justify-between items-start mb-3">
+                <div>
+                  <div class="font-semibold text-white text-lg">${ambulance.number}</div>
+                  <div class="text-sm text-gray-400">${ambulance.type}</div>
+                </div>
+                <div class="text-right">
+                  <span class="px-2 py-1 text-xs rounded-full bg-green-600 text-white">
+                    Available
+                  </span>
+                  <div class="text-xs text-gray-400 mt-1">ETA: ${ambulance.eta}</div>
+                </div>
+              </div>
+              <div class="text-sm space-y-2">
+                <div class="flex justify-between">
+                  <span class="text-gray-400">Driver:</span>
+                  <span class="text-white">${ambulance.driver}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-400">Contact:</span>
+                  <span class="text-blue-400">${ambulance.contact}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-400">Location:</span>
+                  <span class="text-white">${ambulance.location}</span>
+                </div>
+              </div>
+              <button
+                class="book-ambulance-btn w-full mt-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200 flex items-center justify-center"
+                data-id="${ambulance.id}"
+              >
+                <i class="fa-solid fa-truck-medical mr-2"></i>
+                Book This Ambulance
+              </button>
+            </div>
+          `
+          )
+          .join("");
+      }
+
+      // Function to populate nearby autos
+      function populateNearbyAutos() {
+        const container = document.getElementById("nearby-autos");
+        const availableAutos = autoDriversDatabase.filter(
+          (auto) => auto.status === "available"
+        );
+
+        if (availableAutos.length === 0) {
+          container.innerHTML = `
+            <div class="text-center py-4 text-gray-500">
+              <i class="fa-solid fa-car text-3xl mb-2"></i>
+              <p>No auto drivers available at the moment</p>
+            </div>
+          `;
+          return;
+        }
+
+        container.innerHTML = availableAutos
+          .map(
+            (auto) => `
+            <div class="auto-available bg-gray-700 rounded-lg p-4 hover:bg-gray-600 transition duration-200">
+              <div class="flex justify-between items-start mb-2">
+                <div class="font-semibold text-white">${auto.name}</div>
+                <div class="text-right">
+                  <span class="px-2 py-1 text-xs rounded-full bg-yellow-600 text-white">
+                    Available
+                  </span>
+                  <div class="text-xs text-gray-400 mt-1">ETA: ${auto.eta}</div>
+                </div>
+              </div>
+              <div class="text-sm space-y-1">
+                <div class="flex justify-between">
+                  <span class="text-gray-400">Contact:</span>
+                  <span class="text-blue-400">${auto.contact}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-400">Location:</span>
+                  <span class="text-white">${auto.location}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-400">Rating:</span>
+                  <span class="text-yellow-400">${auto.rating} ★</span>
+                </div>
+              </div>
+              <button
+                class="request-auto-btn w-full mt-3 bg-yellow-600 hover:bg-yellow-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200 flex items-center justify-center"
+                data-id="${auto.id}"
+              >
+                <i class="fa-solid fa-car mr-2"></i>
+                Request This Auto
+              </button>
+            </div>
+          `
+          )
+          .join("");
+      }
+
+      // Function to show ambulance booking modal
+      function showAmbulanceBookingModal(ambulanceId) {
+        const ambulance = ambulanceDatabase.find((a) => a.id === ambulanceId);
+        const modalContent = document.getElementById("ambulance-modal-content");
+        const location = document.getElementById("patient-location").value;
+        const emergencyType = document.getElementById("emergency-type").value;
+        const details = document.getElementById("emergency-details").value;
+
+        modalContent.innerHTML = `
+          <div class="space-y-4">
+            <div class="bg-gray-700 rounded-lg p-4">
+              <div class="font-semibold text-white mb-2">Ambulance Details</div>
+              <div class="text-sm space-y-2">
+                <div class="flex justify-between">
+                  <span class="text-gray-400">Ambulance:</span>
+                  <span class="text-white">${ambulance.number}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-400">Driver:</span>
+                  <span class="text-white">${ambulance.driver}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-400">Type:</span>
+                  <span class="text-white">${ambulance.type}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-400">Contact:</span>
+                  <span class="text-blue-400">${ambulance.contact}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-400">ETA:</span>
+                  <span class="text-white">${ambulance.eta}</span>
+                </div>
+              </div>
+            </div>
+            <div class="bg-gray-700 rounded-lg p-4">
+              <div class="font-semibold text-white mb-2">Emergency Details</div>
+              <div class="text-sm space-y-2">
+                <div class="flex justify-between">
+                  <span class="text-gray-400">Location:</span>
+                  <span class="text-white">${location || "Not specified"}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-400">Emergency Type:</span>
+                  <span class="text-white">${
+                    emergencyType || "Not specified"
+                  }</span>
+                </div>
+              </div>
+            </div>
+            <div class="text-sm text-yellow-400 bg-yellow-900/30 p-3 rounded-lg">
+              <i class="fa-solid fa-exclamation-triangle mr-2"></i>
+              Please confirm that this is a genuine emergency before booking.
+            </div>
+          </div>
+        `;
+
+        document.getElementById("ambulance-modal").classList.remove("hidden");
+      }
+
+      // Function to show auto booking modal
+      function showAutoBookingModal(autoId) {
+        const auto = autoDriversDatabase.find((a) => a.id === autoId);
+        const modalContent = document.getElementById("auto-modal-content");
+        const location = document.getElementById("patient-location").value;
+        const emergencyType = document.getElementById("emergency-type").value;
+
+        modalContent.innerHTML = `
+          <div class="space-y-4">
+            <div class="bg-gray-700 rounded-lg p-4">
+              <div class="font-semibold text-white mb-2">Auto Driver Details</div>
+              <div class="text-sm space-y-2">
+                <div class="flex justify-between">
+                  <span class="text-gray-400">Driver:</span>
+                  <span class="text-white">${auto.name}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-400">Contact:</span>
+                  <span class="text-blue-400">${auto.contact}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-400">Rating:</span>
+                  <span class="text-yellow-400">${auto.rating} ★</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-400">Location:</span>
+                  <span class="text-white">${auto.location}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-400">ETA:</span>
+                  <span class="text-white">${auto.eta}</span>
+                </div>
+              </div>
+            </div>
+            <div class="bg-gray-700 rounded-lg p-4">
+              <div class="font-semibold text-white mb-2">Request Details</div>
+              <div class="text-sm space-y-2">
+                <div class="flex justify-between">
+                  <span class="text-gray-400">Pickup Location:</span>
+                  <span class="text-white">${location || "Not specified"}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-400">Service Type:</span>
+                  <span class="text-white">${
+                    emergencyType || "Not specified"
+                  }</span>
+                </div>
+              </div>
+            </div>
+            <div class="text-sm text-yellow-400 bg-yellow-900/30 p-3 rounded-lg">
+              <i class="fa-solid fa-exclamation-triangle mr-2"></i>
+              Note: Auto drivers are not equipped for medical emergencies. Use only if ambulances are unavailable.
+            </div>
+          </div>
+        `;
+
+        document.getElementById("auto-modal").classList.remove("hidden");
+      }
+
+      // Function to book ambulance
+      function bookAmbulance() {
+        const location = document.getElementById("patient-location").value;
+        const emergencyType = document.getElementById("emergency-type").value;
+        const details = document.getElementById("emergency-details").value;
+
+        if (!location || !emergencyType) {
+          showMessage("Please fill in all required fields", "error");
+          return;
+        }
+
+        // Find available ambulance
+        const availableAmbulance = ambulanceDatabase.find(
+          (ambulance) => ambulance.status === "available"
+        );
+
+        if (availableAmbulance) {
+          // Update ambulance status
+          availableAmbulance.status = "busy";
+
+          showMessage(
+            `Ambulance ${availableAmbulance.number} has been dispatched to ${location}. Driver ${availableAmbulance.driver} will contact you shortly.`,
+            "success"
+          );
+
+          // Update UI
+          updateStatistics();
+          populateAmbulanceAvailability();
+        } else {
+          showMessage(
+            "No ambulances available. Please request an auto driver instead.",
+            "error"
+          );
+        }
+
+        // Close modal
+        document.getElementById("ambulance-modal").classList.add("hidden");
+      }
+
+      // Function to request auto
+      function requestAuto() {
+        const location = document.getElementById("patient-location").value;
+        const emergencyType = document.getElementById("emergency-type").value;
+        const details = document.getElementById("emergency-details").value;
+
+        if (!location || !emergencyType) {
+          showMessage("Please fill in all required fields", "error");
+          return;
+        }
+
+        // Find available auto
+        const availableAuto = autoDriversDatabase.find(
+          (auto) => auto.status === "available"
+        );
+
+        if (availableAuto) {
+          // Update auto status
+          availableAuto.status = "busy";
+
+          showMessage(
+            `Auto driver ${availableAuto.name} has been requested to ${location}. They will contact you at ${availableAuto.contact}.`,
+            "success"
+          );
+
+          // Update UI
+          updateStatistics();
+          populateNearbyAutos();
+        } else {
+          showMessage("No auto drivers available at the moment", "error");
+        }
+
+        // Close modal
+        document.getElementById("auto-modal").classList.add("hidden");
+      }
+
+      // Initialize the application
+      function init() {
+        updateStatistics();
+        populateAmbulanceAvailability();
+        populateNearbyAutos();
+
+        // Set up priority buttons
+        document.querySelectorAll(".priority-btn").forEach((btn) => {
+          btn.addEventListener("click", function () {
+            document.querySelectorAll(".priority-btn").forEach((b) => {
+              b.classList.remove("bg-blue-600", "bg-red-600", "bg-yellow-600");
+              b.classList.add("bg-gray-600");
+            });
+            this.classList.remove("bg-gray-600");
+            if (this.dataset.priority === "low") {
+              this.classList.add("bg-blue-600");
+            } else if (this.dataset.priority === "medium") {
+              this.classList.add("bg-yellow-600");
+            } else {
+              this.classList.add("bg-red-600");
+            }
+          });
+        });
+      }
+
+      // Event Listeners
+      document.addEventListener("DOMContentLoaded", function () {
+        init();
+
+        // Refresh ambulance status
+        document
+          .getElementById("refresh-ambulance-btn")
+          .addEventListener("click", function () {
+            // Simulate status changes
+            ambulanceDatabase.forEach((ambulance) => {
+              if (ambulance.status === "busy" && Math.random() > 0.7) {
+                ambulance.status = "available";
+              }
+            });
+
+            autoDriversDatabase.forEach((auto) => {
+              if (auto.status === "busy" && Math.random() > 0.6) {
+                auto.status = "available";
+              }
+            });
+
+            updateStatistics();
+            populateAmbulanceAvailability();
+            populateNearbyAutos();
+            showMessage("Emergency services status updated", "info");
+          });
+
+        // SOS Emergency button
+        document
+          .getElementById("emergency-sos-btn")
+          .addEventListener("click", function () {
+            showMessage(
+              "SOS Emergency alert sent to campus security and medical center!",
+              "error"
+            );
+            // Auto-fill form with emergency priority
+            document.getElementById("emergency-type").value = "critical";
+            document
+              .querySelector('.priority-btn[data-priority="high"]')
+              .click();
+
+            // Auto-book the first available ambulance
+            const availableAmbulance = ambulanceDatabase.find(
+              (ambulance) => ambulance.status === "available"
+            );
+
+            if (availableAmbulance) {
+              setTimeout(() => {
+                showAmbulanceBookingModal(availableAmbulance.id);
+              }, 1000);
+            }
+          });
+
+        // Book ambulance button
+        document
+          .getElementById("book-ambulance-btn")
+          .addEventListener("click", function () {
+            const availableAmbulances = ambulanceDatabase.filter(
+              (ambulance) => ambulance.status === "available"
+            );
+
+            if (availableAmbulances.length === 0) {
+              showMessage(
+                "No ambulances available. Please request an auto driver instead.",
+                "error"
+              );
+              return;
+            }
+
+            // Show booking modal for first available ambulance
+            showAmbulanceBookingModal(availableAmbulances[0].id);
+          });
+
+        // Ambulance booking buttons
+        document.addEventListener("click", function (e) {
+          if (e.target.classList.contains("book-ambulance-btn")) {
+            const ambulanceId = parseInt(e.target.dataset.id);
+            showAmbulanceBookingModal(ambulanceId);
+          }
+
+          if (e.target.classList.contains("request-auto-btn")) {
+            const autoId = parseInt(e.target.dataset.id);
+            showAutoBookingModal(autoId);
+          }
+        });
+
+        // Confirm ambulance booking
+        document
+          .getElementById("confirm-booking")
+          .addEventListener("click", bookAmbulance);
+
+        // Confirm auto request
+        document
+          .getElementById("confirm-auto")
+          .addEventListener("click", requestAuto);
+
+        // Cancel booking
+        document
+          .getElementById("cancel-booking")
+          .addEventListener("click", function () {
+            document.getElementById("ambulance-modal").classList.add("hidden");
+          });
+
+        // Cancel auto request
+        document
+          .getElementById("cancel-auto")
+          .addEventListener("click", function () {
+            document.getElementById("auto-modal").classList.add("hidden");
+          });
+      });
+    </script>
+    <script src="auth_guard.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

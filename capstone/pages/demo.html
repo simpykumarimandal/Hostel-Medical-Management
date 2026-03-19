@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VIT Bhopal | HMS Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap");
+      body {
+        font-family: "Plus Jakarta Sans", sans-serif;
+        scroll-behavior: smooth;
+      }
+      .feature-card:hover {
+        transform: translateY(-5px);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      /* Custom scrollbar for better aesthetics */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 10px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
+      }
+    </style>
+  </head>
+  <body class="bg-[#f3f4f6] text-slate-900">
+    <div class="min-h-screen">
+      <main class="main-content flex-1 p-4 md:p-8">
+        <header
+          class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4"
+        >
+          <div>
+            <h2 class="text-3xl font-bold text-slate-900 tracking-tight">
+              Main Dashboard
+            </h2>
+            <p class="text-slate-500">VIT Bhopal University Medical Services</p>
+          </div>
+          <div class="flex items-center gap-4">
+            <a
+              href="sos.html"
+              class="bg-red-600 text-white px-6 py-3 rounded-2xl font-bold shadow-lg shadow-red-200 animate-pulse hover:bg-red-700 transition"
+            >
+              <i class="fa-solid fa-circle-exclamation mr-2"></i> SOS EMERGENCY
+            </a>
+            <a
+              href="/index.html"
+              data-logout="true"
+              class="bg-slate-900 text-white px-5 py-3 rounded-2xl font-semibold hover:bg-slate-800 transition"
+            >
+              <i class="fa-solid fa-right-from-bracket mr-2"></i> Log Out
+            </a>
+          </div>
+        </header>
+
+        <div class="space-y-12">
+          <section>
+            <h3
+              class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-4"
+            >
+              Urgent Services
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <a
+                href="symptoms_checker.html"
+                class="feature-card bg-white p-6 rounded-3xl shadow-sm border border-slate-200 block"
+              >
+                <div
+                  class="w-12 h-12 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mb-4"
+                >
+                  <i class="fa-solid fa-stethoscope text-xl"></i>
+                </div>
+                <h4 class="font-bold">Symptom Checker</h4>
+                <p class="text-xs text-slate-500 mt-1">AI-based diagnosis</p>
+              </a>
+              <a
+                href="lab_tests.html"
+                class="feature-card bg-white p-6 rounded-3xl shadow-sm border border-slate-200 block"
+              >
+                <div
+                  class="w-12 h-12 bg-teal-100 text-teal-600 rounded-2xl flex items-center justify-center mb-4"
+                >
+                  <i class="fa-solid fa-vial-circle-check text-xl"></i>
+                </div>
+                <h4 class="font-bold">Lab Tests</h4>
+                <p class="text-xs text-slate-500 mt-1">Book & view results</p>
+              </a>
+              <a
+                href="emergency_requests.html"
+                class="feature-card bg-white p-6 rounded-3xl shadow-sm border border-slate-200 block"
+              >
+                <div
+                  class="w-12 h-12 bg-orange-100 text-orange-600 rounded-2xl flex items-center justify-center mb-4"
+                >
+                  <i class="fa-solid fa-hand-holding-medical text-xl"></i>
+                </div>
+                <h4 class="font-bold">E-Requests</h4>
+                <p class="text-xs text-slate-500 mt-1">Immediate requests</p>
+              </a>
+              <a
+                href="medicine_reminder.html"
+                class="feature-card bg-white p-6 rounded-3xl shadow-sm border border-slate-200 block"
+              >
+                <div
+                  class="w-12 h-12 bg-purple-100 text-purple-600 rounded-2xl flex items-center justify-center mb-4"
+                >
+                  <i class="fa-solid fa-bell text-xl"></i>
+                </div>
+                <h4 class="font-bold">Reminders</h4>
+                <p class="text-xs text-slate-500 mt-1">Medication schedule</p>
+              </a>
+            </div>
+          </section>
+
+          <section>
+            <h3
+              class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-4"
+            >
+              Hostel & Infrastructure
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div
+                class="bg-slate-900 rounded-[2rem] p-8 text-white relative overflow-hidden group"
+              >
+                <i
+                  class="fa-solid fa-hotel absolute -right-6 -bottom-6 text-9xl opacity-10 group-hover:scale-110 transition-transform"
+                ></i>
+                <h4 class="text-xl font-bold mb-4">Hostel Health</h4>
+                <div class="space-y-3 relative z-10">
+                  <a
+                    href="room_sanitation.html"
+                    class="flex items-center justify-between bg-white/10 p-3 rounded-xl hover:bg-white/20 transition"
+                  >
+                    <span class="text-sm">Room Sanitation</span>
+                    <i class="fa-solid fa-chevron-right text-xs"></i>
+                  </a>
+                  <a
+                    href="room_management.html"
+                    class="flex items-center justify-between bg-white/10 p-3 rounded-xl hover:bg-white/20 transition"
+                  >
+                    <span class="text-sm">Room Management</span>
+                    <i class="fa-solid fa-chevron-right text-xs"></i>
+                  </a>
+                  <a
+                    href="mess_food_order_service.html"
+                    class="flex items-center justify-between bg-white/10 p-3 rounded-xl hover:bg-white/20 transition"
+                  >
+                    <span class="text-sm">Sick Meal Order</span>
+                    <i class="fa-solid fa-chevron-right text-xs"></i>
+                  </a>
+                </div>
+              </div>
+
+              <div
+                class="bg-white rounded-[2rem] p-8 border border-slate-200 shadow-sm"
+              >
+                <h4 class="text-xl font-bold mb-4 text-slate-800">
+                  Transport & Ops
+                </h4>
+                <div class="space-y-3">
+                  <a
+                    href="student_transport.html"
+                    class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl hover:bg-blue-50 transition border border-transparent hover:border-blue-100"
+                  >
+                    <i class="fa-solid fa-bus text-blue-500"></i>
+                    <span class="text-sm font-semibold">Medical Transport</span>
+                  </a>
+                  <a
+                    href="restocking.html"
+                    class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl hover:bg-orange-50 transition border border-transparent hover:border-orange-100"
+                  >
+                    <i class="fa-solid fa-box-open text-orange-500"></i>
+                    <span class="text-sm font-semibold">Inventory Restock</span>
+                  </a>
+                </div>
+              </div>
+
+              <div
+                class="bg-blue-600 rounded-[2rem] p-8 text-white shadow-xl shadow-blue-100"
+              >
+                <h4 class="text-xl font-bold mb-4">Analytics & Reports</h4>
+                <p class="text-blue-100 text-xs mb-6">
+                  Track your health trends and download official reports for
+                  administration.
+                </p>
+                <a
+                  href="reports_and_analytics.html"
+                  class="inline-block bg-white text-blue-600 px-6 py-2 rounded-xl font-bold text-sm hover:bg-blue-50 transition"
+                  >Open Portal</a
+                >
+              </div>
+            </div>
+          </section>
+
+          <section class="pt-8 border-t border-slate-200">
+            <div
+              class="flex flex-col md:flex-row justify-between items-end mb-6 gap-4"
+            >
+              <div>
+                <h3
+                  class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-2"
+                >
+                  Service Directory
+                </h3>
+                <h4 class="text-2xl font-bold text-slate-800">
+                  Explore All Modules
+                </h4>
+              </div>
+              <div class="w-full md:w-80 relative">
+                <i
+                  class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                ></i>
+                <input
+                  type="text"
+                  id="pageSearch"
+                  placeholder="Search pages..."
+                  class="w-full pl-11 pr-4 py-3 bg-white rounded-2xl border border-slate-200 focus:ring-2 focus:ring-blue-500 outline-none transition shadow-sm"
+                />
+              </div>
+            </div>
+
+            <div
+              id="allPagesGrid"
+              class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+            ></div>
+
+            <div id="noResults" class="hidden text-center py-20">
+              <i
+                class="fa-solid fa-face-frown text-4xl text-slate-300 mb-4"
+              ></i>
+              <p class="text-slate-500">No matching services found.</p>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      const allPages = [
+        "ambulance.html",
+        "biometric.html",
+        "complaint_management_system.html",
+        "dashboard.html",
+        "demo.html",
+        "doctors.html",
+        "electronic_health_records.html",
+        "emergency_requests.html",
+        "exam_management_system.html",
+        "health_insurance.html",
+        "lab_tests.html",
+        "laundry_management_system.html",
+        "leave_and_outing.html",
+        "local_hospital_network.html",
+        "medical_camps.html",
+        "medicine_order.html",
+        "medicine_reminder.html",
+        "mess_food_order_service.html",
+        "mess_menu.html",
+        "parent_notification.html",
+        "payment_gateway.html",
+        "reports_and_analytics.html",
+        "restocking.html",
+        "room_management.html",
+        <!-- "room_sanitation.html", -->
+        "sos.html",
+        "student_transport.html",
+        "studentrequest.html",
+        "symptoms_checker.html",
+        "transport_management_system.html",
+        "virtual_consultation.html",
+        "vit_bhopal_community.html",
+        "wearables.html",
+      ];
+
+      const allPagesGrid = document.getElementById("allPagesGrid");
+      const searchInput = document.getElementById("pageSearch");
+      const noResults = document.getElementById("noResults");
+
+      // CLEAN TITLE FUNCTION: "lab_tests.html" -> "Lab Tests"
+      const formatTitle = (file) => {
+        return file
+          .replace(".html", "")
+          .split("_")
+          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(" ");
+      };
+
+      // RENDER CARDS
+      const renderPages = () => {
+        allPages.forEach((file) => {
+          const cleanName = file.replace(".html", "");
+          const card = document.createElement("a");
+          card.href = file;
+          card.className =
+            "page-card feature-card bg-white p-5 rounded-3xl shadow-sm border border-slate-200 block hover:border-blue-400 transition";
+          card.innerHTML = `
+            <div class="flex items-center justify-between gap-3">
+              <div>
+                <h4 class="font-bold text-slate-800">${formatTitle(file)}</h4>
+                <p class="text-[10px] uppercase tracking-wider text-slate-400 mt-1 font-bold">/${cleanName}</p>
+              </div>
+              <div class="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-300 group-hover:text-blue-500 transition">
+                <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+              </div>
+            </div>
+          `;
+          allPagesGrid.appendChild(card);
+        });
+      };
+
+      // SEARCH LOGIC
+      searchInput.addEventListener("input", (e) => {
+        const term = e.target.value.toLowerCase();
+        const cards = document.querySelectorAll(".page-card");
+        let hasMatch = false;
+
+        cards.forEach((card) => {
+          const title = card.querySelector("h4").textContent.toLowerCase();
+          const subtitle = card.querySelector("p").textContent.toLowerCase();
+
+          if (title.includes(term) || subtitle.includes(term)) {
+            card.style.display = "block";
+            hasMatch = true;
+          } else {
+            card.style.display = "none";
+          }
+        });
+
+        noResults.classList.toggle("hidden", hasMatch);
+      });
+
+      // Initialize
+      renderPages();
+    </script>
+    <script src="auth_guard.js"></script>
+  </body>
+</html>

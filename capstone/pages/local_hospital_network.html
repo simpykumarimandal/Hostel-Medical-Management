@@ -1,0 +1,1579 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HMS | Local Hospital Network</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style> @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"); body { font-family: "Inter", sans-serif; color: #d1d5db; } .active-nav-link { background-color: #374151; color: white; } .bg-card { background-color: #374151; } .message-box { animation: slideIn 0.5s forwards; } @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } } .fade-in { animation: fadeIn 0.5s ease-in; } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } } .gradient-border { background: linear-gradient(135deg, #3b82f6, #8b5cf6); padding: 2px; border-radius: 12px; } .gradient-border > div { background: #374151; border-radius: 10px; padding: 1.5rem; } .hospital-card { transition: all 0.3s ease; } .hospital-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.3); } .emergency-badge { background: linear-gradient(135deg, #ef4444, #dc2626); animation: pulse 2s infinite; } @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } } .specialty-badge { background: rgba(59, 130, 246, 0.2); border: 1px solid #3b82f6; } .tab-active { background: #3b82f6; color: white; } .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); z-index: 1000; align-items: center; justify-content: center; } .modal.active { display: flex; } .modal-content { background: #1f2937; border-radius: 12px; padding: 2rem; max-width: 800px; width: 90%; max-height: 90vh; overflow-y: auto; } .form-group { margin-bottom: 1.5rem; } .form-label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: #d1d5db; } .form-input { width: 100%; background-color: #4b5563; border: 1px solid #6b7280; border-radius: 0.5rem; padding: 0.75rem 1rem; color: white; transition: all 0.3s ease; } .form-input:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3); } .hospital-tier-1 { border-left: 4px solid #ef4444; } .hospital-tier-2 { border-left: 4px solid #f59e0b; } .hospital-tier-3 { border-left: 4px solid #10b981; } .distance-badge { background: linear-gradient(135deg, #8b5cf6, #7c3aed); } .availability-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 5px; } .availability-high { background-color: #10b981; } .availability-medium { background-color: #f59e0b; } .availability-low { background-color: #ef4444; } .map-container { border-radius: 0.75rem; height: 300px; overflow: hidden; } .status-indicator { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 6px; } .feature-card { background: linear-gradient(135deg, #1e40af, #3730a3); border-radius: 0.75rem; padding: 1.5rem; color: white; transition: all 0.3s ease; } .feature-card:hover { transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3); } </style> <style> .sidebar { transition: transform 0.25s ease-in-out; } .sidebar-collapsed .sidebar { transform: translateX(-110%); } .main-content { transition: margin-left 0.25s ease-in-out; } .sidebar-collapsed .main-content { margin-left: 0 !important; } @media (max-width: 768px) { .sidebar { transform: translateX(-110%); } .sidebar-open .sidebar { transform: translateX(0); } } </style></head>
+  <body class="bg-gray-900 flex flex-col md:flex-row min-h-screen">
+
+    <!-- Sidebar -->
+    <aside
+      class="sidebar w-full md:w-64 bg-gray-950 text-white p-6 flex flex-col items-center md:items-start space-y-8 shadow-2xl">
+      <div class="flex items-center space-x-2 mb-4">
+        <i class="fas fa-hospital text-xl text-blue-400"></i>
+        <h1 class="text-xl font-bold">HMS</h1>
+        <span class="text-sm text-gray-400 ml-2">Student Mode</span>
+      </div>
+      <nav class="w-full">
+  <ul class="space-y-2">
+    <li>
+      <a href="demo.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-chart-line mr-3"></i>
+        <span class="font-medium">Dashboard</span>
+      </a>
+    </li>
+    <li>
+      <a href="ambulance.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-truck-medical mr-3"></i>
+        <span class="font-medium">Ambulance</span>
+      </a>
+    </li>
+    <li>
+      <a href="doctors.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-user-doctor mr-3"></i>
+        <span class="font-medium">Doctors</span>
+      </a>
+    </li>
+    <li>
+      <a href="medicine_order.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-pills mr-3"></i>
+        <span class="font-medium">Pharmacy</span>
+      </a>
+    </li>
+    <li>
+      <a href="medicine_reminder.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bell mr-3"></i>
+        <span class="font-medium">Medicine Reminder</span>
+      </a>
+    </li>
+    <li>
+      <a href="symptoms_checker.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-stethoscope mr-3"></i>
+        <span class="font-medium">Symptoms Checker</span>
+      </a>
+    </li>
+    <li>
+      <a href="lab_tests.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-vial-circle-check mr-3"></i>
+        <span class="font-medium">Lab Tests</span>
+      </a>
+    </li>
+    <li>
+      <a href="emergency_requests.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-hand-holding-medical mr-3"></i>
+        <span class="font-medium">Emergency Requests</span>
+      </a>
+    </li>
+    <li>
+      <a href="sos.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-sos mr-3"></i>
+        <span class="font-medium">SOS</span>
+      </a>
+    </li>
+    <li>
+      <a href="electronic_health_records.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-file-medical mr-3"></i>
+        <span class="font-medium">Health Records</span>
+      </a>
+    </li>
+    <li>
+      <a href="health_insurance.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-shield-heart mr-3"></i>
+        <span class="font-medium">Health Insurance</span>
+      </a>
+    </li>
+    <li>
+      <a href="reports_and_analytics.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-chart-pie mr-3"></i>
+        <span class="font-medium">Reports & Analytics</span>
+      </a>
+    </li>
+    <li>
+      <a href="restocking.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-box-open mr-3"></i>
+        <span class="font-medium">Inventory</span>
+      </a>
+    </li>
+    <li>
+      <a href="studentrequest.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-cash-register mr-3"></i>
+        <span class="font-medium">Student Requests</span>
+      </a>
+    </li>
+    <li>
+      <a href="student_transport.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bus mr-3"></i>
+        <span class="font-medium">Student Transport</span>
+      </a>
+    </li>
+    <li>
+      <a href="transport_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-route mr-3"></i>
+        <span class="font-medium">Transport Management</span>
+      </a>
+    </li>
+    <li>
+      <a href="room_management.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bed mr-3"></i>
+        <span class="font-medium">Room Management</span>
+      </a>
+    </li>
+    <li>
+      <a href="room_sanitation.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-spray-can-sparkles mr-3"></i>
+        <span class="font-medium">Room Sanitation</span>
+      </a>
+    </li>
+    <li>
+      <a href="mess_menu.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-utensils mr-3"></i>
+        <span class="font-medium">Mess Menu</span>
+      </a>
+    </li>
+    <li>
+      <a href="mess_food_order_service.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bowl-food mr-3"></i>
+        <span class="font-medium">Mess Food Order</span>
+      </a>
+    </li>
+    <li>
+      <a href="laundry_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-shirt mr-3"></i>
+        <span class="font-medium">Laundry</span>
+      </a>
+    </li>
+    <li>
+      <a href="leave_and_outing.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-door-open mr-3"></i>
+        <span class="font-medium">Leave & Outing</span>
+      </a>
+    </li>
+    <li>
+      <a href="vit_bhopal_community.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-users mr-3"></i>
+        <span class="font-medium">VIT Community</span>
+      </a>
+    </li>
+    <li>
+      <a href="parent_notification.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-comments mr-3"></i>
+        <span class="font-medium">Parent Notification</span>
+      </a>
+    </li>
+    <li>
+      <a href="payment_gateway.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-credit-card mr-3"></i>
+        <span class="font-medium">Payment Gateway</span>
+      </a>
+    </li>
+    <li>
+      <a href="complaint_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-circle-exclamation mr-3"></i>
+        <span class="font-medium">Complaints</span>
+      </a>
+    </li>
+    <li>
+      <a href="exam_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-clipboard-list mr-3"></i>
+        <span class="font-medium">Exam Management</span>
+      </a>
+    </li>
+    <li>
+      <a href="local_hospital_network.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-hospital mr-3"></i>
+        <span class="font-medium">Local Hospitals</span>
+      </a>
+    </li>
+    <li>
+      <a href="medical_camps.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-hand-holding-heart mr-3"></i>
+        <span class="font-medium">Medical Camps</span>
+      </a>
+    </li>
+    <li>
+      <a href="virtual_consultation.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-video mr-3"></i>
+        <span class="font-medium">Virtual Consultation</span>
+      </a>
+    </li>
+    <li>
+      <a href="wearables.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-watch-fitness mr-3"></i>
+        <span class="font-medium">Wearables</span>
+      </a>
+    </li>
+    <li>
+      <a href="biometric.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-fingerprint mr-3"></i>
+        <span class="font-medium">Biometric</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+      <div class="mt-auto w-full">
+        <a href="/index.html" data-logout="true"
+          class="flex items-center justify-center w-full px-4 py-3 rounded-lg bg-red-600 hover:bg-red-700 transition-colors duration-200"
+        >
+          <i class="fa-solid fa-right-from-bracket mr-2"></i>
+          <span class="font-semibold">Log Out</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content flex-1 p-8 overflow-y-auto bg-gray-800">
+      <!-- Top Header -->
+      <header
+        class="flex items-center justify-between text-sm text-gray-400 mb-8"
+      >
+        <div id="date-time-display"></div>
+        <div class="flex items-center space-x-6">
+          <div class="relative">
+            <i
+              class="fa-solid fa-bell text-xl hover:text-white transition duration-200"
+            ></i>
+            <span
+              id="notification-badge"
+              class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center"
+              >2</span
+            >
+          </div>
+          <div class="flex items-center space-x-2">
+            <i class="fa-solid fa-user-circle text-xl"></i>
+            <span>Student Mode</span>
+          </div>
+          <div class="flex items-center space-x-2 cursor-pointer">
+            <i class="fa-solid fa-globe text-xl"></i>
+            <span>English</span>
+            <i class="fa-solid fa-chevron-down text-xs"></i>
+          </div>
+        </div>
+      </header>
+
+      <!-- Page Title & Actions -->
+      <div class="flex justify-between items-center mb-8">
+        <div>
+          <h2 class="text-3xl font-bold text-white mb-1">
+            Local Hospital Network
+          </h2>
+          <p class="text-gray-400">
+            Emergency contacts, specialized services, and real-time availability
+            of hospitals near VIT Bhopal University
+          </p>
+        </div>
+        <div class="flex space-x-3">
+          <button
+            id="emergency-call-btn"
+            class="bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center"
+          >
+            <i class="fa-solid fa-phone mr-2"></i>
+            Emergency Call
+          </button>
+          <button
+            id="nearest-hospital-btn"
+            class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center"
+          >
+            <i class="fa-solid fa-location-crosshairs mr-2"></i>
+            Find Nearest
+          </button>
+          <button
+            id="download-contacts-btn"
+            class="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center"
+          >
+            <i class="fa-solid fa-download mr-2"></i>
+            Download Contacts
+          </button>
+        </div>
+      </div>
+
+      <!-- University Location Banner -->
+      <div class="gradient-border mb-6">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center">
+            <div class="bg-blue-600 rounded-full p-3 mr-4">
+              <i class="fa-solid fa-university text-white text-xl"></i>
+            </div>
+            <div>
+              <div class="font-bold text-white text-lg">
+                VIT Bhopal University
+              </div>
+              <div class="text-blue-300">
+                Kothri Kalan, Sehore, Madhya Pradesh - 466114
+              </div>
+              <div class="text-sm text-gray-400 mt-1">
+                Reference point for all distance calculations
+              </div>
+            </div>
+          </div>
+          <div class="text-right">
+            <div class="text-white font-semibold">Campus Emergency</div>
+            <div class="text-red-400 font-bold text-xl">07562-123456</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Emergency Alert Banner -->
+      <div
+        class="emergency-badge text-white rounded-xl p-4 mb-6 flex items-center justify-between"
+      >
+        <div class="flex items-center">
+          <i class="fa-solid fa-triangle-exclamation text-2xl mr-3"></i>
+          <div>
+            <div class="font-bold text-lg">
+              Emergency Services Available 24/7
+            </div>
+            <div class="text-sm opacity-90">
+              All listed hospitals provide emergency care round the clock
+            </div>
+          </div>
+        </div>
+        <button
+          id="call-108-btn"
+          class="bg-white text-red-600 font-semibold py-2 px-4 rounded-lg hover:bg-gray-100 transition"
+        >
+          <i class="fa-solid fa-phone mr-2"></i>Call 108
+        </button>
+      </div>
+
+      <!-- Quick Stats -->
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
+        <!-- Total Hospitals -->
+        <div class="gradient-border">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-2xl font-bold text-white" id="total-hospitals">
+                28
+              </div>
+              <div class="text-sm text-blue-300">Network Hospitals</div>
+            </div>
+            <i class="fa-solid fa-hospital text-blue-400 text-2xl"></i>
+          </div>
+        </div>
+
+        <!-- Emergency Centers -->
+        <div class="gradient-border">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-2xl font-bold text-white" id="emergency-centers">
+                22
+              </div>
+              <div class="text-sm text-green-300">24/7 Emergency</div>
+            </div>
+            <i class="fa-solid fa-truck-medical text-green-400 text-2xl"></i>
+          </div>
+        </div>
+
+        <!-- Specialized Centers -->
+        <div class="gradient-border">
+          <div class="flex items-center justify-between">
+            <div>
+              <div
+                class="text-2xl font-bold text-white"
+                id="specialized-centers"
+              >
+                15
+              </div>
+              <div class="text-sm text-yellow-300">Specialty Centers</div>
+            </div>
+            <i class="fa-solid fa-heart-pulse text-yellow-400 text-2xl"></i>
+          </div>
+        </div>
+
+        <!-- Ambulance Services -->
+        <div class="gradient-border">
+          <div class="flex items-center justify-between">
+            <div>
+              <div
+                class="text-2xl font-bold text-white"
+                id="ambulance-services"
+              >
+                18
+              </div>
+              <div class="text-sm text-purple-300">Ambulance Ready</div>
+            </div>
+            <i class="fa-solid fa-ambulance text-purple-400 text-2xl"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Enhanced Features Section -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="feature-card">
+          <div class="flex items-center mb-3">
+            <i class="fa-solid fa-shield-heart text-2xl mr-3"></i>
+            <h3 class="font-bold text-lg">Emergency Protocol</h3>
+          </div>
+          <p class="text-sm opacity-90">
+            Step-by-step emergency response guide for students and staff
+          </p>
+        </div>
+        <div
+          class="feature-card"
+          style="background: linear-gradient(135deg, #059669, #047857)"
+        >
+          <div class="flex items-center mb-3">
+            <i class="fa-solid fa-clock text-2xl mr-3"></i>
+            <h3 class="font-bold text-lg">Live Wait Times</h3>
+          </div>
+          <p class="text-sm opacity-90">
+            Real-time emergency room wait times and bed availability
+          </p>
+        </div>
+        <div
+          class="feature-card"
+          style="background: linear-gradient(135deg, #7c3aed, #6d28d9)"
+        >
+          <div class="flex items-center mb-3">
+            <i class="fa-solid fa-user-group text-2xl mr-3"></i>
+            <h3 class="font-bold text-lg">Student Support</h3>
+          </div>
+          <p class="text-sm opacity-90">
+            24/7 student support and hostel warden coordination
+          </p>
+        </div>
+      </div>
+
+      <!-- City Filter Tabs -->
+      <div class="bg-card rounded-xl shadow-lg p-6 mb-6">
+        <div class="flex flex-wrap gap-2 mb-6">
+          <button
+            class="city-filter-btn py-2 px-4 font-semibold text-gray-400 hover:text-white bg-gray-700 rounded-lg tab-active"
+            data-city="all"
+          >
+            All Cities
+          </button>
+          <button
+            class="city-filter-btn py-2 px-4 font-semibold text-gray-400 hover:text-white bg-gray-700 rounded-lg"
+            data-city="bhopal"
+          >
+            Bhopal
+          </button>
+          <button
+            class="city-filter-btn py-2 px-4 font-semibold text-gray-400 hover:text-white bg-gray-700 rounded-lg"
+            data-city="indore"
+          >
+            Indore
+          </button>
+          <button
+            class="city-filter-btn py-2 px-4 font-semibold text-gray-400 hover:text-white bg-gray-700 rounded-lg"
+            data-city="sehore"
+          >
+            Sehore
+          </button>
+          <button
+            class="city-filter-btn py-2 px-4 font-semibold text-gray-400 hover:text-white bg-gray-700 rounded-lg"
+            data-city="ashta"
+          >
+            Ashta
+          </button>
+        </div>
+
+        <!-- Search and Filters -->
+        <div class="flex flex-col md:flex-row gap-4 mb-6">
+          <div class="flex-1">
+            <div class="relative">
+              <i
+                class="fa-solid fa-search absolute left-3 top-3 text-gray-400"
+              ></i>
+              <input
+                type="text"
+                id="hospital-search"
+                class="w-full bg-gray-700 border border-gray-600 rounded-lg pl-10 pr-4 py-3 text-white focus:ring-blue-500 focus:border-blue-500"
+                placeholder="Search hospitals, specialties, or areas..."
+              />
+            </div>
+          </div>
+          <div class="flex gap-2">
+            <select
+              id="specialty-filter"
+              class="bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-blue-500 focus:border-blue-500"
+            >
+              <option value="all">All Specialties</option>
+              <option value="cardiology">Cardiology</option>
+              <option value="neurology">Neurology</option>
+              <option value="orthopedics">Orthopedics</option>
+              <option value="pediatrics">Pediatrics</option>
+              <option value="emergency">Emergency Care</option>
+            </select>
+            <select
+              id="tier-filter"
+              class="bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-blue-500 focus:border-blue-500"
+            >
+              <option value="all">All Tiers</option>
+              <option value="tier1">Tier 1 (Multi-specialty)</option>
+              <option value="tier2">Tier 2 (Specialty)</option>
+              <option value="tier3">Tier 3 (General)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Hospitals Grid -->
+        <div
+          class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6"
+          id="hospitals-container"
+        >
+          <!-- Hospitals will be populated here -->
+        </div>
+      </div>
+
+      <!-- Emergency Services Section -->
+      <div class="bg-card rounded-xl shadow-lg p-6 mb-6">
+        <h3 class="text-xl font-bold text-white mb-6">
+          Emergency Services & Helplines
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div
+            class="bg-red-600 rounded-lg p-4 text-center text-white cursor-pointer hover:bg-red-700 transition"
+            onclick="callEmergency('108')"
+          >
+            <i class="fa-solid fa-ambulance text-2xl mb-2"></i>
+            <div class="font-bold">Ambulance</div>
+            <div class="text-lg font-semibold">108</div>
+            <div class="text-sm opacity-90">24/7 Emergency</div>
+          </div>
+          <div
+            class="bg-orange-600 rounded-lg p-4 text-center text-white cursor-pointer hover:bg-orange-700 transition"
+            onclick="callEmergency('100')"
+          >
+            <i class="fa-solid fa-truck-medical text-2xl mb-2"></i>
+            <div class="font-bold">Police</div>
+            <div class="text-lg font-semibold">100</div>
+            <div class="text-sm opacity-90">Emergency</div>
+          </div>
+          <div
+            class="bg-blue-600 rounded-lg p-4 text-center text-white cursor-pointer hover:bg-blue-700 transition"
+            onclick="callEmergency('101')"
+          >
+            <i class="fa-solid fa-fire-extinguisher text-2xl mb-2"></i>
+            <div class="font-bold">Fire Brigade</div>
+            <div class="text-lg font-semibold">101</div>
+            <div class="text-sm opacity-90">Emergency</div>
+          </div>
+          <div
+            class="bg-green-600 rounded-lg p-4 text-center text-white cursor-pointer hover:bg-green-700 transition"
+            onclick="callEmergency('1091')"
+          >
+            <i class="fa-solid fa-heart text-2xl mb-2"></i>
+            <div class="font-bold">Women Helpline</div>
+            <div class="text-lg font-semibold">1091</div>
+            <div class="text-sm opacity-90">24/7 Support</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Map & Additional Features Section -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <!-- Interactive Map -->
+        <div class="bg-card rounded-xl shadow-lg p-6">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="text-xl font-bold text-white">Nearest Hospitals Map</h3>
+            <div class="flex items-center text-sm text-green-400">
+              <span class="status-indicator availability-high"></span>
+              Live Location Active
+            </div>
+          </div>
+          <div class="map-container bg-gray-900 mb-4">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3662.834174323919!2d77.37318917507155!3d23.35335547894859!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x397c681c9d6b7b5d%3A0x5e5e3e6e7e9b9b9b!2sVIT%20Bhopal%20University!5e0!3m2!1sen!2sin!4v1697545600000"
+              width="100%"
+              height="300"
+              style="border: 0"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+            >
+            </iframe>
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <button
+              id="get-directions-btn"
+              class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200 flex items-center justify-center"
+            >
+              <i class="fa-solid fa-directions mr-2"></i>Get Directions
+            </button>
+            <button
+              id="share-location-btn"
+              class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200 flex items-center justify-center"
+            >
+              <i class="fa-solid fa-share-alt mr-2"></i>Share Location
+            </button>
+          </div>
+        </div>
+
+        <!-- Quick Reference Guide -->
+        <div class="bg-card rounded-xl shadow-lg p-6">
+          <h3 class="text-xl font-bold text-white mb-4">
+            VIT Bhopal Emergency Protocol
+          </h3>
+          <div class="space-y-4">
+            <div class="flex items-start p-3 bg-gray-700 rounded-lg">
+              <div class="bg-red-600 rounded-full p-2 mr-3">
+                <i class="fa-solid fa-1 text-white text-sm"></i>
+              </div>
+              <div>
+                <div class="font-medium text-white">Immediate Action</div>
+                <div class="text-sm text-gray-400">
+                  Call campus emergency (07562-123456) and 108 simultaneously
+                </div>
+              </div>
+            </div>
+            <div class="flex items-start p-3 bg-gray-700 rounded-lg">
+              <div class="bg-orange-600 rounded-full p-2 mr-3">
+                <i class="fa-solid fa-2 text-white text-sm"></i>
+              </div>
+              <div>
+                <div class="font-medium text-white">Inform Authorities</div>
+                <div class="text-sm text-gray-400">
+                  Notify hostel warden and campus security immediately
+                </div>
+              </div>
+            </div>
+            <div class="flex items-start p-3 bg-gray-700 rounded-lg">
+              <div class="bg-yellow-600 rounded-full p-2 mr-3">
+                <i class="fa-solid fa-3 text-white text-sm"></i>
+              </div>
+              <div>
+                <div class="font-medium text-white">Document Preparation</div>
+                <div class="text-sm text-gray-400">
+                  Carry student ID, health insurance, and emergency contact
+                  details
+                </div>
+              </div>
+            </div>
+            <div class="flex items-start p-3 bg-gray-700 rounded-lg">
+              <div class="bg-green-600 rounded-full p-2 mr-3">
+                <i class="fa-solid fa-4 text-white text-sm"></i>
+              </div>
+              <div>
+                <div class="font-medium text-white">Transport Arrangement</div>
+                <div class="text-sm text-gray-400">
+                  Use campus ambulance or arrange transport through warden
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Hospital Details Modal -->
+    <div id="hospital-details-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white" id="modal-hospital-name">
+            Hospital Details
+          </h3>
+          <button
+            id="close-hospital-details"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div id="hospital-details-content">
+          <!-- Hospital details will be populated here -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Emergency Call Modal -->
+    <div id="emergency-call-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">Emergency Call</h3>
+          <button
+            id="close-emergency-call"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="text-center">
+          <i class="fa-solid fa-phone text-4xl text-red-500 mb-4"></i>
+          <h4 class="text-lg font-bold text-white mb-2">
+            Emergency Contact Numbers
+          </h4>
+          <div class="space-y-3 mb-6">
+            <div
+              class="bg-red-600 rounded-lg p-3 text-white cursor-pointer hover:bg-red-700 transition"
+              onclick="callEmergency('108')"
+            >
+              <div class="font-semibold">Ambulance Emergency</div>
+              <div class="text-xl font-bold">108</div>
+            </div>
+            <div
+              class="bg-blue-600 rounded-lg p-3 text-white cursor-pointer hover:bg-blue-700 transition"
+              onclick="callEmergency('100')"
+            >
+              <div class="font-semibold">Police Control Room</div>
+              <div class="text-xl font-bold">100</div>
+            </div>
+            <div
+              class="bg-orange-600 rounded-lg p-3 text-white cursor-pointer hover:bg-orange-700 transition"
+              onclick="callEmergency('101')"
+            >
+              <div class="font-semibold">Fire Department</div>
+              <div class="text-xl font-bold">101</div>
+            </div>
+          </div>
+          <div class="flex space-x-2">
+            <button
+              onclick="callEmergency('108')"
+              class="flex-1 bg-red-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-red-700 transition"
+            >
+              <i class="fa-solid fa-phone mr-2"></i>Call 108
+            </button>
+            <button
+              class="flex-1 bg-gray-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-gray-700 transition"
+              onclick="closeModal('emergency-call-modal')"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Share Location Modal -->
+    <div id="share-location-modal" class="modal">
+      <div class="modal-content">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">Share Location</h3>
+          <button
+            id="close-share-location"
+            class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-600 transition"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="space-y-4">
+          <div class="form-group">
+            <label class="form-label">Share With</label>
+            <select id="share-contact" class="form-select">
+              <option value="">Select Contact</option>
+              <option value="hostel-warden">Hostel Warden</option>
+              <option value="campus-security">Campus Security</option>
+              <option value="parents">Parents</option>
+              <option value="friends">Friends</option>
+              <option value="custom">Custom Contact</option>
+            </select>
+          </div>
+          <div
+            class="form-group"
+            id="custom-contact-group"
+            style="display: none"
+          >
+            <label class="form-label">Custom Contact Number</label>
+            <input
+              type="text"
+              id="custom-contact"
+              class="form-input"
+              placeholder="Enter phone number"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Message (Optional)</label>
+            <textarea
+              id="share-message"
+              class="form-input"
+              rows="3"
+              placeholder="Add a custom message"
+            >
+I need emergency assistance. Here is my current location near VIT Bhopal University.</textarea
+            >
+          </div>
+          <div class="flex space-x-2">
+            <button
+              id="confirm-share"
+              class="flex-1 bg-green-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-green-700 transition"
+            >
+              <i class="fa-solid fa-share-alt mr-2"></i>Share Location
+            </button>
+            <button
+              class="flex-1 bg-gray-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-gray-700 transition"
+              onclick="closeModal('share-location-modal')"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Message Box for notifications -->
+    <div
+      id="message-box"
+      class="fixed bottom-4 right-4 bg-gray-700 text-white p-4 rounded-lg shadow-lg hidden message-box"
+    >
+      <p id="message-text"></p>
+    </div>
+
+    <script>
+      // Hospital Database with distances from VIT Bhopal
+      const hospitalsDatabase = [
+        // Bhopal Hospitals
+        {
+          id: 1,
+          name: "AIIMS Bhopal",
+          city: "bhopal",
+          tier: "tier1",
+          address: "Saket Nagar, Bhopal, Madhya Pradesh 462020",
+          phone: "0755-2675100",
+          emergency: "0755-2675200",
+          specialties: [
+            "Cardiology",
+            "Neurology",
+            "Orthopedics",
+            "Emergency",
+            "Pediatrics",
+            "Surgery",
+          ],
+          availability: "high",
+          distance: "45.2 km",
+          beds: 750,
+          icuBeds: 120,
+          ambulance: true,
+          timings: "24/7",
+          website: "https://aiimsbhopal.edu.in",
+          coordinates: "23.2278,77.4013",
+        },
+        {
+          id: 2,
+          name: "Bansal Hospital",
+          city: "bhopal",
+          tier: "tier1",
+          address: "MP Nagar, Zone II, Bhopal, Madhya Pradesh 462011",
+          phone: "0755-4086090",
+          emergency: "0755-4086111",
+          specialties: [
+            "Cardiology",
+            "Neurology",
+            "Oncology",
+            "Emergency",
+            "Orthopedics",
+          ],
+          availability: "medium",
+          distance: "42.7 km",
+          beds: 350,
+          icuBeds: 45,
+          ambulance: true,
+          timings: "24/7",
+          website: "https://bansalhospital.com",
+          coordinates: "23.2356,77.4321",
+        },
+        {
+          id: 3,
+          name: "Chirayu Medical College & Hospital",
+          city: "bhopal",
+          tier: "tier1",
+          address: "Bairagarh, Bhopal, Madhya Pradesh 462030",
+          phone: "0755-2749101",
+          emergency: "0755-2749111",
+          specialties: [
+            "General Medicine",
+            "Surgery",
+            "Pediatrics",
+            "Emergency",
+            "Gynecology",
+          ],
+          availability: "high",
+          distance: "48.3 km",
+          beds: 800,
+          icuBeds: 100,
+          ambulance: true,
+          timings: "24/7",
+          coordinates: "23.2456,77.3567",
+        },
+
+        // Indore Hospitals
+        {
+          id: 4,
+          name: "CHL Hospitals",
+          city: "indore",
+          tier: "tier1",
+          address: "Agrasen Square, Indore, Madhya Pradesh 452001",
+          phone: "0731-4077444",
+          emergency: "0731-4077555",
+          specialties: [
+            "Cardiology",
+            "Neurology",
+            "Oncology",
+            "Emergency",
+            "Transplant",
+          ],
+          availability: "medium",
+          distance: "156 km",
+          beds: 400,
+          icuBeds: 60,
+          ambulance: true,
+          timings: "24/7",
+          website: "https://chlhospital.com",
+          coordinates: "22.7196,75.8577",
+        },
+        {
+          id: 5,
+          name: "Bombay Hospital",
+          city: "indore",
+          tier: "tier1",
+          address: "Sukhliya, Indore, Madhya Pradesh 452010",
+          phone: "0731-2546871",
+          emergency: "0731-2546872",
+          specialties: [
+            "Cardiology",
+            "Neurology",
+            "Orthopedics",
+            "Emergency",
+            "Pediatrics",
+          ],
+          availability: "high",
+          distance: "158 km",
+          beds: 350,
+          icuBeds: 50,
+          ambulance: true,
+          timings: "24/7",
+          coordinates: "22.7256,75.8654",
+        },
+
+        // Sehore Hospitals
+        {
+          id: 6,
+          name: "District Hospital Sehore",
+          city: "sehore",
+          tier: "tier3",
+          address: "Hospital Road, Sehore, Madhya Pradesh 466001",
+          phone: "07562-222333",
+          emergency: "07562-222444",
+          specialties: [
+            "General Medicine",
+            "Emergency",
+            "Pediatrics",
+            "Gynecology",
+          ],
+          availability: "low",
+          distance: "12.5 km",
+          beds: 150,
+          icuBeds: 15,
+          ambulance: true,
+          timings: "24/7",
+          coordinates: "23.2000,77.0833",
+        },
+        {
+          id: 7,
+          name: "Shri Krishna Hospital",
+          city: "sehore",
+          tier: "tier3",
+          address: "Bus Stand Road, Sehore, Madhya Pradesh 466001",
+          phone: "07562-223344",
+          emergency: "07562-223355",
+          specialties: ["General Medicine", "Emergency"],
+          availability: "low",
+          distance: "13.2 km",
+          beds: 50,
+          icuBeds: 5,
+          ambulance: false,
+          timings: "24/7",
+          coordinates: "23.2056,77.0789",
+        },
+
+        // Ashta Hospitals
+        {
+          id: 8,
+          name: "Community Health Center Ashta",
+          city: "ashta",
+          tier: "tier3",
+          address: "Hospital Road, Ashta, Madhya Pradesh 466116",
+          phone: "07563-252222",
+          emergency: "07563-252223",
+          specialties: ["General Medicine", "Emergency", "Basic Surgery"],
+          availability: "low",
+          distance: "28.8 km",
+          beds: 30,
+          icuBeds: 2,
+          ambulance: true,
+          timings: "24/7",
+          coordinates: "23.0176,76.7221",
+        },
+      ];
+
+      // VIT Bhopal Coordinates - Corrected
+      const VIT_BHOPAL_COORDINATES = "23.077529169355444, 76.85133890361766";
+
+      // JavaScript to display the current date and time
+      function updateDateTime() {
+        const now = new Date();
+        const options = {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        };
+        const formattedDateTime = now.toLocaleDateString("en-US", options);
+        document.getElementById("date-time-display").textContent =
+          formattedDateTime;
+      }
+      updateDateTime();
+      setInterval(updateDateTime, 60000);
+
+      // Modal functionality
+      function showModal(modalId) {
+        document.getElementById(modalId).classList.add("active");
+      }
+
+      function closeModal(modalId) {
+        document.getElementById(modalId).classList.remove("active");
+      }
+
+      // Function to show a custom message box
+      function showMessage(text, type = "info") {
+        const messageBox = document.getElementById("message-box");
+        const messageText = document.getElementById("message-text");
+
+        messageText.textContent = text;
+        messageBox.classList.remove(
+          "hidden",
+          "bg-red-700",
+          "bg-green-700",
+          "bg-blue-700"
+        );
+
+        if (type === "error") {
+          messageBox.classList.add("bg-red-700");
+        } else if (type === "success") {
+          messageBox.classList.add("bg-green-700");
+        } else if (type === "info") {
+          messageBox.classList.add("bg-blue-700");
+        } else {
+          messageBox.classList.add("bg-gray-700");
+        }
+
+        setTimeout(() => {
+          messageBox.classList.add("hidden");
+        }, 4000);
+      }
+
+      // Function to call emergency numbers
+      function callEmergency(number) {
+        showMessage(`Calling emergency number ${number}...`, "info");
+        // In a real app, this would use tel: protocol
+        // window.location.href = `tel:${number}`;
+
+        // Simulate call success
+        setTimeout(() => {
+          showMessage(`Connected to emergency service ${number}`, "success");
+        }, 2000);
+      }
+
+      // Function to populate hospitals
+      function populateHospitals(
+        city = "all",
+        specialty = "all",
+        tier = "all",
+        search = ""
+      ) {
+        const container = document.getElementById("hospitals-container");
+
+        let filteredHospitals = hospitalsDatabase.filter((hospital) => {
+          const cityMatch = city === "all" || hospital.city === city;
+          const specialtyMatch =
+            specialty === "all" || hospital.specialties.includes(specialty);
+          const tierMatch = tier === "all" || hospital.tier === tier;
+          const searchMatch =
+            search === "" ||
+            hospital.name.toLowerCase().includes(search.toLowerCase()) ||
+            hospital.address.toLowerCase().includes(search.toLowerCase()) ||
+            hospital.specialties.some((s) =>
+              s.toLowerCase().includes(search.toLowerCase())
+            );
+
+          return cityMatch && specialtyMatch && tierMatch && searchMatch;
+        });
+
+        // Sort by distance from VIT Bhopal
+        filteredHospitals.sort(
+          (a, b) => parseFloat(a.distance) - parseFloat(b.distance)
+        );
+
+        if (filteredHospitals.length === 0) {
+          container.innerHTML = `
+            <div class="col-span-3 text-center py-12 text-gray-500">
+              <i class="fa-solid fa-hospital text-4xl mb-3"></i>
+              <p class="text-lg">No hospitals found matching your criteria</p>
+              <p class="text-sm mt-2">Try adjusting your filters or search terms</p>
+            </div>
+          `;
+          return;
+        }
+
+        container.innerHTML = filteredHospitals
+          .map((hospital) => {
+            const tierClass =
+              hospital.tier === "tier1"
+                ? "hospital-tier-1"
+                : hospital.tier === "tier2"
+                ? "hospital-tier-2"
+                : "hospital-tier-3";
+
+            const availabilityDot =
+              hospital.availability === "high"
+                ? "availability-high"
+                : hospital.availability === "medium"
+                ? "availability-medium"
+                : "availability-low";
+
+            const availabilityText =
+              hospital.availability === "high"
+                ? "High Availability"
+                : hospital.availability === "medium"
+                ? "Moderate Availability"
+                : "Limited Availability";
+
+            return `
+            <div class="hospital-card bg-gray-700 rounded-xl p-6 ${tierClass}">
+              <div class="flex justify-between items-start mb-4">
+                <h4 class="font-bold text-white text-lg">${hospital.name}</h4>
+                <div class="text-right">
+                  <span class="distance-badge text-white text-xs px-2 py-1 rounded-full block mb-1">${
+                    hospital.distance
+                  }</span>
+                  <span class="text-xs text-gray-400">from VIT Bhopal</span>
+                </div>
+              </div>
+              
+              <div class="flex items-center mb-3">
+                <span class="availability-dot ${availabilityDot}"></span>
+                <span class="text-sm ${
+                  hospital.availability === "high"
+                    ? "text-green-400"
+                    : hospital.availability === "medium"
+                    ? "text-yellow-400"
+                    : "text-red-400"
+                }">
+                  ${availabilityText}
+                </span>
+              </div>
+              
+              <div class="text-sm text-gray-300 mb-3">
+                <i class="fa-solid fa-location-dot text-blue-400 mr-2"></i>
+                ${hospital.address}
+              </div>
+              
+              <div class="flex flex-wrap gap-1 mb-4">
+                ${hospital.specialties
+                  .slice(0, 3)
+                  .map(
+                    (spec) =>
+                      `<span class="specialty-badge text-blue-400 text-xs px-2 py-1 rounded">${spec}</span>`
+                  )
+                  .join("")}
+                ${
+                  hospital.specialties.length > 3
+                    ? `<span class="specialty-badge text-blue-400 text-xs px-2 py-1 rounded">+${
+                        hospital.specialties.length - 3
+                      } more</span>`
+                    : ""
+                }
+              </div>
+              
+              <div class="grid grid-cols-2 gap-2 text-sm mb-4">
+                <div class="text-gray-400">Beds:</div>
+                <div class="text-white font-medium">${hospital.beds}</div>
+                <div class="text-gray-400">ICU Beds:</div>
+                <div class="text-white font-medium">${hospital.icuBeds}</div>
+                <div class="text-gray-400">Ambulance:</div>
+                <div class="text-white font-medium">${
+                  hospital.ambulance ? "Available" : "Not Available"
+                }</div>
+              </div>
+              
+              <div class="flex space-x-2">
+                <button class="view-details-btn flex-1 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold py-2 px-3 rounded-lg transition duration-200" data-id="${
+                  hospital.id
+                }">
+                  <i class="fa-solid fa-info-circle mr-1"></i>Details
+                </button>
+                <button class="call-btn bg-green-600 hover:bg-green-700 text-white text-sm font-semibold py-2 px-3 rounded-lg transition duration-200" data-phone="${
+                  hospital.emergency
+                }">
+                  <i class="fa-solid fa-phone mr-1"></i>Call
+                </button>
+              </div>
+            </div>
+          `;
+          })
+          .join("");
+      }
+
+      // Function to show hospital details
+      function showHospitalDetails(hospitalId) {
+        const hospital = hospitalsDatabase.find((h) => h.id === hospitalId);
+        if (!hospital) return;
+
+        const modalContent = document.getElementById(
+          "hospital-details-content"
+        );
+        const modalTitle = document.getElementById("modal-hospital-name");
+
+        modalTitle.textContent = hospital.name;
+
+        modalContent.innerHTML = `
+          <div class="space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <h4 class="font-bold text-white mb-3">Contact Information</h4>
+                <div class="space-y-2">
+                  <div class="flex justify-between">
+                    <span class="text-gray-400">Main Phone:</span>
+                    <span class="text-white font-medium">${
+                      hospital.phone
+                    }</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-gray-400">Emergency:</span>
+                    <span class="text-red-400 font-bold">${
+                      hospital.emergency
+                    }</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-gray-400">Distance from VIT:</span>
+                    <span class="text-white font-medium">${
+                      hospital.distance
+                    }</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-gray-400">Address:</span>
+                    <span class="text-white text-right">${
+                      hospital.address
+                    }</span>
+                  </div>
+                  ${
+                    hospital.website
+                      ? `
+                  <div class="flex justify-between">
+                    <span class="text-gray-400">Website:</span>
+                    <a href="${hospital.website}" class="text-blue-400 hover:text-blue-300" target="_blank" rel="noopener noreferrer">Visit Website</a>
+                  </div>
+                  `
+                      : ""
+                  }
+                </div>
+              </div>
+              
+              <div>
+                <h4 class="font-bold text-white mb-3">Facility Details</h4>
+                <div class="space-y-2">
+                  <div class="flex justify-between">
+                    <span class="text-gray-400">Total Beds:</span>
+                    <span class="text-white font-medium">${hospital.beds}</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-gray-400">ICU Beds:</span>
+                    <span class="text-white font-medium">${
+                      hospital.icuBeds
+                    }</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-gray-400">Ambulance:</span>
+                    <span class="text-white font-medium">${
+                      hospital.ambulance ? "Available" : "Not Available"
+                    }</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-gray-400">Operating Hours:</span>
+                    <span class="text-white font-medium">${
+                      hospital.timings
+                    }</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div>
+              <h4 class="font-bold text-white mb-3">Specialties & Services</h4>
+              <div class="flex flex-wrap gap-2">
+                ${hospital.specialties
+                  .map(
+                    (spec) =>
+                      `<span class="specialty-badge text-blue-400 text-sm px-3 py-1 rounded-lg">${spec}</span>`
+                  )
+                  .join("")}
+              </div>
+            </div>
+            
+            <div class="bg-yellow-900/30 border border-yellow-700 rounded-lg p-4">
+              <div class="flex items-start">
+                <i class="fa-solid fa-lightbulb text-yellow-400 mt-1 mr-3"></i>
+                <div>
+                  <div class="font-semibold text-yellow-400">VIT Bhopal Emergency Protocol</div>
+                  <div class="text-sm text-yellow-300 mt-1">
+                    • Contact hostel warden immediately: 07562-123456<br>
+                    • Use campus ambulance service if available<br>
+                    • Carry student ID and insurance documents<br>
+                    • Share your location with emergency contacts
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="flex space-x-2">
+              <button class="flex-1 bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-200" onclick="callEmergency('${
+                hospital.emergency
+              }')">
+                <i class="fa-solid fa-phone mr-2"></i>Call Emergency
+              </button>
+              <button class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-200" onclick="getDirections('${
+                hospital.coordinates
+              }')">
+                <i class="fa-solid fa-directions mr-2"></i>Get Directions
+              </button>
+            </div>
+          </div>
+        `;
+
+        showModal("hospital-details-modal");
+      }
+
+      // Function to get directions - Fixed to use VIT Bhopal coordinates
+      function getDirections(destinationCoords) {
+        const url = `https://www.google.com/maps/dir/${VIT_BHOPAL_COORDINATES}/${destinationCoords}`;
+        window.open(url, "_blank");
+        showMessage("Opening directions in Google Maps...", "info");
+      }
+
+      // Function to download contacts
+      function downloadContacts() {
+        const contacts = hospitalsDatabase
+          .map(
+            (hospital) =>
+              `${hospital.name}\nPhone: ${hospital.phone}\nEmergency: ${hospital.emergency}\nAddress: ${hospital.address}\nDistance from VIT: ${hospital.distance}\n\n`
+          )
+          .join("");
+
+        const blob = new Blob([contacts], { type: "text/plain" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "VIT_Bhopal_Hospital_Contacts.txt";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        showMessage("Hospital contacts downloaded successfully!", "success");
+      }
+
+      // Initialize the application
+      function init() {
+        // Populate hospitals on load
+        populateHospitals();
+
+        // City filter buttons
+        document.querySelectorAll(".city-filter-btn").forEach((btn) => {
+          btn.addEventListener("click", function () {
+            document
+              .querySelectorAll(".city-filter-btn")
+              .forEach((b) => b.classList.remove("tab-active"));
+            this.classList.add("tab-active");
+            populateHospitals(this.dataset.city);
+          });
+        });
+
+        // Specialty filter
+        document
+          .getElementById("specialty-filter")
+          .addEventListener("change", function () {
+            const city = document.querySelector(".city-filter-btn.tab-active")
+              .dataset.city;
+            populateHospitals(city, this.value);
+          });
+
+        // Tier filter
+        document
+          .getElementById("tier-filter")
+          .addEventListener("change", function () {
+            const city = document.querySelector(".city-filter-btn.tab-active")
+              .dataset.city;
+            const specialty = document.getElementById("specialty-filter").value;
+            populateHospitals(city, specialty, this.value);
+          });
+
+        // Search functionality
+        document
+          .getElementById("hospital-search")
+          .addEventListener("input", function () {
+            const city = document.querySelector(".city-filter-btn.tab-active")
+              .dataset.city;
+            const specialty = document.getElementById("specialty-filter").value;
+            const tier = document.getElementById("tier-filter").value;
+            populateHospitals(city, specialty, tier, this.value);
+          });
+
+        // Emergency call button
+        document
+          .getElementById("emergency-call-btn")
+          .addEventListener("click", function () {
+            showModal("emergency-call-modal");
+          });
+
+        // Call 108 button
+        document
+          .getElementById("call-108-btn")
+          .addEventListener("click", function () {
+            callEmergency("108");
+          });
+
+        // Close emergency modal
+        document
+          .getElementById("close-emergency-call")
+          .addEventListener("click", function () {
+            closeModal("emergency-call-modal");
+          });
+
+        // Download contacts button
+        document
+          .getElementById("download-contacts-btn")
+          .addEventListener("click", downloadContacts);
+
+        // Find nearest hospital button
+        document
+          .getElementById("nearest-hospital-btn")
+          .addEventListener("click", function () {
+            // Sort by distance and show the nearest
+            const nearest = [...hospitalsDatabase].sort(
+              (a, b) => parseFloat(a.distance) - parseFloat(b.distance)
+            )[0];
+            showHospitalDetails(nearest.id);
+            showMessage(
+              `Showing nearest hospital: ${nearest.name} (${nearest.distance} from VIT)`,
+              "info"
+            );
+          });
+
+        // Get directions button
+        document
+          .getElementById("get-directions-btn")
+          .addEventListener("click", function () {
+            const nearest = [...hospitalsDatabase].sort(
+              (a, b) => parseFloat(a.distance) - parseFloat(b.distance)
+            )[0];
+            getDirections(nearest.coordinates);
+          });
+
+        // Share location button
+        document
+          .getElementById("share-location-btn")
+          .addEventListener("click", function () {
+            showModal("share-location-modal");
+          });
+
+        // Share contact selection
+        document
+          .getElementById("share-contact")
+          .addEventListener("change", function () {
+            const customGroup = document.getElementById("custom-contact-group");
+            if (this.value === "custom") {
+              customGroup.style.display = "block";
+            } else {
+              customGroup.style.display = "none";
+            }
+          });
+
+        // Confirm share location
+        document
+          .getElementById("confirm-share")
+          .addEventListener("click", function () {
+            const contact = document.getElementById("share-contact").value;
+            const customContact =
+              document.getElementById("custom-contact").value;
+            const message = document.getElementById("share-message").value;
+
+            if (!contact) {
+              showMessage("Please select who to share with", "error");
+              return;
+            }
+
+            if (contact === "custom" && !customContact) {
+              showMessage("Please enter a custom contact number", "error");
+              return;
+            }
+
+            const shareWith = contact === "custom" ? customContact : contact;
+            showMessage(
+              `Location shared successfully with ${shareWith}`,
+              "success"
+            );
+            closeModal("share-location-modal");
+          });
+
+        // Close share location modal
+        document
+          .getElementById("close-share-location")
+          .addEventListener("click", function () {
+            closeModal("share-location-modal");
+          });
+
+        // Event delegation for hospital cards
+        document.addEventListener("click", function (e) {
+          // View details button
+          if (
+            e.target.classList.contains("view-details-btn") ||
+            e.target.parentElement.classList.contains("view-details-btn")
+          ) {
+            const btn = e.target.classList.contains("view-details-btn")
+              ? e.target
+              : e.target.parentElement;
+            const hospitalId = parseInt(btn.dataset.id);
+            showHospitalDetails(hospitalId);
+          }
+
+          // Call button
+          if (
+            e.target.classList.contains("call-btn") ||
+            e.target.parentElement.classList.contains("call-btn")
+          ) {
+            const btn = e.target.classList.contains("call-btn")
+              ? e.target
+              : e.target.parentElement;
+            const phoneNumber = btn.dataset.phone;
+            callEmergency(phoneNumber);
+          }
+        });
+
+        // Close hospital details modal
+        document
+          .getElementById("close-hospital-details")
+          .addEventListener("click", function () {
+            closeModal("hospital-details-modal");
+          });
+      }
+
+      // Initialize when DOM is loaded
+      document.addEventListener("DOMContentLoaded", init);
+    </script>
+    <script src="auth_guard.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

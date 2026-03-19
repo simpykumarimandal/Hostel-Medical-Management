@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HMS | Student SOS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style> @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"); body { font-family: "Inter", sans-serif; color: #d1d5db; /* gray-300 */ } .active-nav-link { background-color: #374151; /* gray-700 */ color: white; } .bg-card { background-color: #374151; /* gray-700 */ } .message-box { animation: slideIn 0.5s forwards; } @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } } .sos-button { animation: pulse 2s infinite; } @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } } </style> <style> .sidebar { transition: transform 0.25s ease-in-out; } .sidebar-collapsed .sidebar { transform: translateX(-110%); } .main-content { transition: margin-left 0.25s ease-in-out; } .sidebar-collapsed .main-content { margin-left: 0 !important; } @media (max-width: 768px) { .sidebar { transform: translateX(-110%); } .sidebar-open .sidebar { transform: translateX(0); } } </style></head>
+  <body class="bg-gray-900 flex flex-col md:flex-row min-h-screen">
+
+    <!-- Sidebar -->
+    <aside
+      class="sidebar w-full md:w-64 bg-gray-950 text-white p-6 flex flex-col items-center md:items-start space-y-8 shadow-2xl">
+      <div class="flex items-center space-x-2 mb-4">
+        <i class="fas fa-hospital text-xl text-blue-400"></i>
+        <h1 class="text-xl font-bold">HMS</h1>
+        <span class="text-sm text-gray-400 ml-2">Student Mode</span>
+      </div>
+      <nav class="w-full">
+  <ul class="space-y-2">
+    <li>
+      <a href="demo.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-chart-line mr-3"></i>
+        <span class="font-medium">Dashboard</span>
+      </a>
+    </li>
+    <li>
+      <a href="ambulance.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-truck-medical mr-3"></i>
+        <span class="font-medium">Ambulance</span>
+      </a>
+    </li>
+    <li>
+      <a href="doctors.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-user-doctor mr-3"></i>
+        <span class="font-medium">Doctors</span>
+      </a>
+    </li>
+    <li>
+      <a href="medicine_order.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-pills mr-3"></i>
+        <span class="font-medium">Pharmacy</span>
+      </a>
+    </li>
+    <li>
+      <a href="medicine_reminder.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bell mr-3"></i>
+        <span class="font-medium">Medicine Reminder</span>
+      </a>
+    </li>
+    <li>
+      <a href="symptoms_checker.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-stethoscope mr-3"></i>
+        <span class="font-medium">Symptoms Checker</span>
+      </a>
+    </li>
+    <li>
+      <a href="lab_tests.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-vial-circle-check mr-3"></i>
+        <span class="font-medium">Lab Tests</span>
+      </a>
+    </li>
+    <li>
+      <a href="emergency_requests.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-hand-holding-medical mr-3"></i>
+        <span class="font-medium">Emergency Requests</span>
+      </a>
+    </li>
+    <li>
+      <a href="sos.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-sos mr-3"></i>
+        <span class="font-medium">SOS</span>
+      </a>
+    </li>
+    <li>
+      <a href="electronic_health_records.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-file-medical mr-3"></i>
+        <span class="font-medium">Health Records</span>
+      </a>
+    </li>
+    <li>
+      <a href="health_insurance.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-shield-heart mr-3"></i>
+        <span class="font-medium">Health Insurance</span>
+      </a>
+    </li>
+    <li>
+      <a href="reports_and_analytics.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-chart-pie mr-3"></i>
+        <span class="font-medium">Reports & Analytics</span>
+      </a>
+    </li>
+    <li>
+      <a href="restocking.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-box-open mr-3"></i>
+        <span class="font-medium">Inventory</span>
+      </a>
+    </li>
+    <li>
+      <a href="studentrequest.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-cash-register mr-3"></i>
+        <span class="font-medium">Student Requests</span>
+      </a>
+    </li>
+    <li>
+      <a href="student_transport.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bus mr-3"></i>
+        <span class="font-medium">Student Transport</span>
+      </a>
+    </li>
+    <li>
+      <a href="transport_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-route mr-3"></i>
+        <span class="font-medium">Transport Management</span>
+      </a>
+    </li>
+    <li>
+      <a href="room_management.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bed mr-3"></i>
+        <span class="font-medium">Room Management</span>
+      </a>
+    </li>
+    <li>
+      <a href="room_sanitation.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-spray-can-sparkles mr-3"></i>
+        <span class="font-medium">Room Sanitation</span>
+      </a>
+    </li>
+    <li>
+      <a href="mess_menu.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-utensils mr-3"></i>
+        <span class="font-medium">Mess Menu</span>
+      </a>
+    </li>
+    <li>
+      <a href="mess_food_order_service.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bowl-food mr-3"></i>
+        <span class="font-medium">Mess Food Order</span>
+      </a>
+    </li>
+    <li>
+      <a href="laundry_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-shirt mr-3"></i>
+        <span class="font-medium">Laundry</span>
+      </a>
+    </li>
+    <li>
+      <a href="leave_and_outing.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-door-open mr-3"></i>
+        <span class="font-medium">Leave & Outing</span>
+      </a>
+    </li>
+    <li>
+      <a href="vit_bhopal_community.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-users mr-3"></i>
+        <span class="font-medium">VIT Community</span>
+      </a>
+    </li>
+    <li>
+      <a href="parent_notification.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-comments mr-3"></i>
+        <span class="font-medium">Parent Notification</span>
+      </a>
+    </li>
+    <li>
+      <a href="payment_gateway.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-credit-card mr-3"></i>
+        <span class="font-medium">Payment Gateway</span>
+      </a>
+    </li>
+    <li>
+      <a href="complaint_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-circle-exclamation mr-3"></i>
+        <span class="font-medium">Complaints</span>
+      </a>
+    </li>
+    <li>
+      <a href="exam_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-clipboard-list mr-3"></i>
+        <span class="font-medium">Exam Management</span>
+      </a>
+    </li>
+    <li>
+      <a href="local_hospital_network.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-hospital mr-3"></i>
+        <span class="font-medium">Local Hospitals</span>
+      </a>
+    </li>
+    <li>
+      <a href="medical_camps.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-hand-holding-heart mr-3"></i>
+        <span class="font-medium">Medical Camps</span>
+      </a>
+    </li>
+    <li>
+      <a href="virtual_consultation.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-video mr-3"></i>
+        <span class="font-medium">Virtual Consultation</span>
+      </a>
+    </li>
+    <li>
+      <a href="wearables.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-watch-fitness mr-3"></i>
+        <span class="font-medium">Wearables</span>
+      </a>
+    </li>
+    <li>
+      <a href="biometric.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-fingerprint mr-3"></i>
+        <span class="font-medium">Biometric</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+      <div class="mt-auto w-full">
+        <a href="/index.html" data-logout="true"
+          class="flex items-center justify-center w-full px-4 py-3 rounded-lg bg-red-600 hover:bg-red-700 transition-colors duration-200"
+        >
+          <i class="fa-solid fa-right-from-bracket mr-2"></i>
+          <span class="font-semibold">Log Out</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content flex-1 p-8 overflow-y-auto bg-gray-800">
+      <!-- Top Header -->
+      <header
+        class="flex items-center justify-between text-sm text-gray-400 mb-8"
+      >
+        <div id="date-time-display"></div>
+        <div class="flex items-center space-x-6">
+          <i
+            class="fa-solid fa-bell text-xl hover:text-white transition duration-200"
+          ></i>
+          <div class="flex items-center space-x-2">
+            <i class="fa-solid fa-user-circle text-xl"></i>
+            <span>Student Mode</span>
+          </div>
+          <div class="flex items-center space-x-2 cursor-pointer">
+            <i class="fa-solid fa-globe text-xl"></i>
+            <span>English</span>
+            <i class="fa-solid fa-chevron-down text-xs"></i>
+          </div>
+        </div>
+      </header>
+
+      <!-- Page Title & Actions -->
+      <h2 class="text-3xl font-bold text-white mb-1">Student SOS Emergency</h2>
+      <p class="text-gray-400 mb-8">
+        Request immediate medical assistance in case of emergency.
+      </p>
+
+      <!-- Emergency Alert and History Sections -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Emergency Alert Section -->
+        <div class="bg-card rounded-xl shadow-lg p-6 h-fit">
+          <h3 class="text-xl font-bold text-white mb-4">Emergency Alert</h3>
+          <div class="space-y-6">
+            <div class="bg-red-900/30 border border-red-700 rounded-lg p-4">
+              <div class="flex items-center mb-2">
+                <i
+                  class="fa-solid fa-triangle-exclamation text-red-500 mr-2"
+                ></i>
+                <span class="font-semibold text-red-300">Important Notice</span>
+              </div>
+              <p class="text-sm text-gray-300">
+                Use this SOS feature only in case of genuine medical
+                emergencies. False alerts may result in disciplinary action.
+              </p>
+            </div>
+
+            <div>
+              <label
+                for="emergency-type"
+                class="block text-sm font-medium text-gray-400"
+                >Type of Emergency</label
+              >
+              <select
+                id="emergency-type"
+                name="emergency-type"
+                class="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-lg p-2 text-white focus:ring-blue-500 focus:border-blue-500"
+                required
+              >
+                <option value="" disabled selected>
+                  Select emergency type
+                </option>
+                <option value="accident">Accident/Injury</option>
+                <option value="severe-pain">Severe Pain</option>
+                <option value="breathing">Breathing Difficulty</option>
+                <option value="allergic-reaction">
+                  Severe Allergic Reaction
+                </option>
+                <option value="unconscious">Unconsciousness</option>
+                <option value="other">Other Medical Emergency</option>
+              </select>
+            </div>
+
+            <div>
+              <label
+                for="location"
+                class="block text-sm font-medium text-gray-400"
+                >Your Current Location</label
+              >
+              <input
+                type="text"
+                id="location"
+                name="location"
+                class="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-lg p-2 text-white focus:ring-blue-500 focus:border-blue-500"
+                placeholder="e.g., Dormitory B, Room 205"
+                required
+              />
+            </div>
+
+            <div>
+              <label
+                for="description"
+                class="block text-sm font-medium text-gray-400"
+                >Emergency Description</label
+              >
+              <textarea
+                id="description"
+                name="description"
+                rows="3"
+                class="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-lg p-2 text-white focus:ring-blue-500 focus:border-blue-500"
+                placeholder="Please describe the emergency situation..."
+                required
+              ></textarea>
+            </div>
+
+            <div class="flex justify-center mt-6">
+              <button
+                id="sos-button"
+                type="button"
+                class="sos-button bg-red-600 hover:bg-red-700 text-white font-bold py-4 px-8 rounded-full text-lg transition duration-200 shadow-lg flex items-center justify-center"
+              >
+                <i class="fa-solid fa-sos mr-3 text-xl"></i>
+                SEND SOS ALERT
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Emergency History Section -->
+        <div class="bg-card rounded-xl shadow-lg p-6">
+          <h3 class="text-xl font-bold text-white mb-4">Emergency History</h3>
+          <div id="emergency-history-list" class="space-y-4">
+            <!-- Emergency history items will be injected here by JavaScript -->
+            <p id="empty-history-message" class="text-gray-500 text-center">
+              No emergency requests in history.
+            </p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Message Box for notifications -->
+    <div
+      id="message-box"
+      class="fixed bottom-4 right-4 bg-gray-700 text-white p-4 rounded-lg shadow-lg hidden message-box"
+    >
+      <p id="message-text"></p>
+    </div>
+
+    <script>
+      // JavaScript to display the current date and time
+      function updateDateTime() {
+        const now = new Date();
+        const options = {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        };
+        const formattedDate = now.toLocaleDateString("en-US", options);
+        document.getElementById("date-time-display").textContent =
+          formattedDate;
+      }
+      updateDateTime();
+      setInterval(updateDateTime, 60000);
+
+      // Mock data for emergency requests
+      let emergencies = [];
+
+      const sosButton = document.getElementById("sos-button");
+      const historyList = document.getElementById("emergency-history-list");
+      const emptyHistoryMessage = document.getElementById(
+        "empty-history-message"
+      );
+      const messageBox = document.getElementById("message-box");
+      const messageText = document.getElementById("message-text");
+
+      // Function to show a custom message box
+      function showMessage(text, type = "info") {
+        messageText.textContent = text;
+        messageBox.classList.remove("hidden", "bg-red-700", "bg-green-700");
+        if (type === "error") {
+          messageBox.classList.add("bg-red-700");
+        } else if (type === "success") {
+          messageBox.classList.add("bg-green-700");
+        } else {
+          messageBox.classList.add("bg-gray-700");
+        }
+        setTimeout(() => {
+          messageBox.classList.add("hidden");
+        }, 5000);
+      }
+
+      // Function to render the emergency history
+      function renderHistory() {
+        if (emergencies.length === 0) {
+          emptyHistoryMessage.classList.remove("hidden");
+          historyList.innerHTML = "";
+        } else {
+          emptyHistoryMessage.classList.add("hidden");
+          historyList.innerHTML = emergencies
+            .map(
+              (emergency) => `
+                    <div class="py-3 px-4 rounded-lg bg-gray-700 border border-gray-600">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-lg font-medium text-white">${
+                              emergency.type
+                            }</span>
+                            <span class="px-3 py-1 text-xs font-semibold rounded-full ${getStatusClass(
+                              emergency.status
+                            )}">
+                                ${emergency.status}
+                            </span>
+                        </div>
+                        <div class="text-sm text-gray-400 mb-1">
+                            <i class="fa-solid fa-location-dot mr-1"></i>
+                            ${emergency.location}
+                        </div>
+                        <div class="text-sm text-gray-400">
+                            ${emergency.description}
+                        </div>
+                        <div class="text-xs text-gray-500 mt-2">
+                            ${emergency.timestamp}
+                        </div>
+                    </div>
+                `
+            )
+            .join("");
+        }
+      }
+
+      // Helper function for status styling
+      function getStatusClass(status) {
+        switch (status) {
+          case "Pending":
+            return "bg-yellow-600 text-white";
+          case "Responded":
+            return "bg-green-600 text-white";
+          case "Cancelled":
+            return "bg-red-600 text-white";
+          default:
+            return "bg-gray-500 text-white";
+        }
+      }
+
+      // Handle SOS button click
+      sosButton.addEventListener("click", (e) => {
+        e.preventDefault();
+        const emergencyType = document.getElementById("emergency-type").value;
+        const location = document.getElementById("location").value;
+        const description = document.getElementById("description").value;
+
+        if (!emergencyType || !location || !description) {
+          showMessage("Please fill all required fields!", "error");
+          return;
+        }
+
+        // Confirm before sending SOS
+        if (
+          confirm(
+            "Are you sure you want to send an SOS emergency alert? This will notify medical staff immediately."
+          )
+        ) {
+          const now = new Date();
+          const timestamp = now.toLocaleString();
+
+          const newEmergency = {
+            id: Date.now(),
+            type: emergencyType,
+            location: location,
+            description: description,
+            status: "Pending",
+            timestamp: timestamp,
+          };
+
+          emergencies.unshift(newEmergency); // Add to the beginning of the list
+          renderHistory();
+
+          // Reset form
+          document.getElementById("emergency-type").value = "";
+          document.getElementById("location").value = "";
+          document.getElementById("description").value = "";
+
+          showMessage(
+            "SOS Emergency Alert sent successfully! Help is on the way.",
+            "success"
+          );
+
+          // Simulate status update after some time
+          setTimeout(() => {
+            const index = emergencies.findIndex(
+              (e) => e.id === newEmergency.id
+            );
+            if (index !== -1) {
+              emergencies[index].status = "Responded";
+              renderHistory();
+              showMessage(
+                "Medical team has been dispatched to your location.",
+                "success"
+              );
+            }
+          }, 5000);
+        }
+      });
+
+      // Initial render
+      document.addEventListener("DOMContentLoaded", renderHistory);
+    </script>
+    <script src="auth_guard.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

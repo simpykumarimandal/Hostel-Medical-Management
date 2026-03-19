@@ -1,0 +1,3199 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VIT Bhopal | Hostel Leave & Outing Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+
+      :root {
+        --primary: #3b82f6;
+        --secondary: #1e293b;
+        --accent: #f59e0b;
+        --success: #10b981;
+        --danger: #ef4444;
+        --warning: #f59e0b;
+        --dark: #0f172a;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #0f172a;
+        color: #e2e8f0;
+      }
+
+      .glass-card {
+        background: rgba(30, 41, 59, 0.7);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+      }
+
+      .status-badge {
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+      }
+
+      .status-pending {
+        background-color: #fef3c7;
+        color: #92400e;
+      }
+      .status-approved {
+        background-color: #d1fae5;
+        color: #065f46;
+      }
+      .status-rejected {
+        background-color: #fee2e2;
+        color: #991b1b;
+      }
+      .status-expired {
+        background-color: #e5e7eb;
+        color: #374151;
+      }
+      .status-active {
+        background-color: #dbeafe;
+        color: #1e40af;
+      }
+
+      .tab-button {
+        padding: 12px 24px;
+        background: #1e293b;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-weight: 500;
+      }
+
+      .tab-button.active {
+        background: #3b82f6;
+        color: white;
+      }
+
+      .tab-panel {
+        display: none;
+      }
+
+      .tab-panel.active {
+        display: block;
+      }
+
+      .request-card {
+        background: #1e293b;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 16px;
+        transition: all 0.3s;
+        border-left: 4px solid transparent;
+      }
+
+      .request-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      }
+
+      .request-card.urgent {
+        border-left-color: #ef4444;
+      }
+
+      .request-card.pending {
+        border-left-color: #f59e0b;
+      }
+
+      .request-card.approved {
+        border-left-color: #10b981;
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 2000;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .modal.show {
+        display: flex;
+      }
+
+      .modal-content {
+        background: #1e293b;
+        border-radius: 12px;
+        padding: 24px;
+        width: 90%;
+        max-width: 600px;
+        box-shadow: 0 20px 25px rgba(0, 0, 0, 0.3);
+        max-height: 90vh;
+        overflow-y: auto;
+      }
+
+      .notification-dot {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        width: 12px;
+        height: 12px;
+        background: #ef4444;
+        border-radius: 50%;
+      }
+
+      .user-type-selector {
+        display: flex;
+        background: #1e293b;
+        border-radius: 12px;
+        padding: 4px;
+        margin-bottom: 24px;
+      }
+
+      .user-type-btn {
+        flex: 1;
+        padding: 12px 16px;
+        text-align: center;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .user-type-btn.active {
+        background: #3b82f6;
+        color: white;
+      }
+
+      .stats-card {
+        background: linear-gradient(135deg, #3b82f6, #1e40af);
+        border-radius: 12px;
+        padding: 20px;
+        color: white;
+      }
+
+      .student-profile {
+        background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+        border-radius: 12px;
+        padding: 20px;
+        color: white;
+      }
+
+      .outing-pass {
+        background: linear-gradient(135deg, #10b981, #047857);
+        border-radius: 12px;
+        padding: 20px;
+        color: white;
+      }
+
+      .time-selector {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .time-input {
+        width: 70px;
+        padding: 8px;
+        border-radius: 6px;
+        background: #1e293b;
+        border: 1px solid #334155;
+        color: white;
+        text-align: center;
+      }
+
+      .ampm-selector {
+        display: flex;
+        gap: 5px;
+      }
+
+      .ampm-btn {
+        padding: 8px 12px;
+        border-radius: 6px;
+        background: #334155;
+        color: white;
+        cursor: pointer;
+        border: none;
+      }
+
+      .ampm-btn.active {
+        background: #3b82f6;
+      }
+
+      .message-box {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: #10b981;
+        color: white;
+        padding: 15px 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        z-index: 1000;
+        display: none;
+      }
+
+      .message-box.show {
+        display: block;
+        animation: slideIn 0.5s forwards;
+      }
+
+      @keyframes slideIn {
+        from {
+          transform: translateX(100%);
+        }
+        to {
+          transform: translateX(0);
+        }
+      }
+
+      .progress-bar {
+        height: 8px;
+        background: #334155;
+        border-radius: 4px;
+        overflow: hidden;
+        margin-top: 8px;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: #10b981;
+        border-radius: 4px;
+        transition: width 0.5s ease;
+      }
+
+      .approval-flow {
+        display: flex;
+        justify-content: space-between;
+        margin: 20px 0;
+        position: relative;
+      }
+
+      .approval-flow::before {
+        content: "";
+        position: absolute;
+        top: 20px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #334155;
+        z-index: 1;
+      }
+
+      .approval-step {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        z-index: 2;
+      }
+
+      .step-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #334155;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 8px;
+      }
+
+      .step-icon.active {
+        background: #3b82f6;
+      }
+
+      .step-icon.completed {
+        background: #10b981;
+      }
+
+      .step-icon.rejected {
+        background: #ef4444;
+      }
+
+      .quick-template {
+        background: #1e293b;
+        border-radius: 12px;
+        padding: 20px;
+        cursor: pointer;
+        transition: all 0.3s;
+        border: 2px solid transparent;
+      }
+
+      .quick-template:hover {
+        transform: translateY(-5px);
+        border-color: #3b82f6;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      }
+
+      #qr-code-container {
+        display: flex;
+        justify-content: center;
+        margin: 20px 0;
+      }
+
+      #campus-map {
+        width: 100%;
+        height: 400px;
+        border-radius: 8px;
+        overflow: hidden;
+      }
+    </style>
+  </head>
+  <body class="min-h-screen">
+    <!-- Header -->
+    <header class="bg-slate-800 text-white p-4 shadow-lg">
+      <div class="container mx-auto flex justify-between items-center">
+        <div class="flex items-center space-x-3">
+          <i class="fas fa-home text-2xl text-amber-400"></i>
+          <div>
+            <h1 class="text-2xl font-bold">VIT Bhopal Hostel Management</h1>
+            <p class="text-sm text-slate-400" id="user-role-display">
+              Student Portal
+            </p>
+          </div>
+        </div>
+        <div class="flex items-center space-x-6">
+          <div class="relative">
+            <i
+              class="fa-solid fa-bell text-xl hover:text-white transition duration-200 cursor-pointer"
+              id="notification-icon"
+            ></i>
+            <span class="notification-dot"></span>
+          </div>
+          <div class="flex items-center space-x-2">
+            <i class="fa-solid fa-user-circle text-xl"></i>
+            <span id="user-name">Piyush Wali(22BHI10111)</span>
+          </div>
+          <div
+            class="flex items-center space-x-2 cursor-pointer"
+            id="logout-btn"
+          >
+            <i class="fa-solid fa-right-from-bracket text-xl"></i>
+            <span>Logout</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- User Type Selector -->
+    <div class="container mx-auto p-6">
+      <div class="user-type-selector">
+        <div class="user-type-btn active" data-user-type="student">
+          <i class="fas fa-user-graduate mr-2"></i> Student Portal
+        </div>
+        <div class="user-type-btn" data-user-type="warden">
+          <i class="fas fa-user-shield mr-2"></i> Warden Portal
+        </div>
+        <div class="user-type-btn" data-user-type="supervisor">
+          <i class="fas fa-user-tie mr-2"></i> Supervisor Portal
+        </div>
+      </div>
+
+      <!-- Student Portal -->
+      <div id="student-portal" class="user-portal active">
+        <!-- Student Profile & Quick Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div class="student-profile">
+            <div class="flex items-center mb-4">
+              <div
+                class="w-16 h-16 bg-white rounded-full flex items-center justify-center mr-4"
+              >
+                <i class="fas fa-user-graduate text-purple-600 text-2xl"></i>
+              </div>
+              <div>
+                <h3 class="font-bold text-lg">Piyush Wali</h3>
+                <p class="text-sm opacity-90">22BHI10111 Boys Hostel Block 1</p>
+                <p class="text-sm opacity-90">Room - A 723</p>
+              </div>
+            </div>
+            <div class="flex justify-between text-center">
+              <div>
+                <div class="text-xl font-bold">4.2</div>
+                <div class="text-xs opacity-90">Rating</div>
+              </div>
+              <div>
+                <div class="text-xl font-bold">12</div>
+                <div class="text-xs opacity-90">Outings</div>
+              </div>
+              <div>
+                <div class="text-xl font-bold">95%</div>
+                <div class="text-xs opacity-90">On Time</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="glass-card p-5">
+            <div class="flex justify-between items-center">
+              <div>
+                <div class="text-2xl font-bold" id="student-pending">2</div>
+                <div class="text-sm opacity-90">Pending Requests</div>
+              </div>
+              <i
+                class="fa-solid fa-clock text-blue-400 text-2xl opacity-80"
+              ></i>
+            </div>
+          </div>
+
+          <div class="outing-pass">
+            <div class="flex justify-between items-center">
+              <div>
+                <div class="text-2xl font-bold" id="student-active">1</div>
+                <div class="text-sm opacity-90">Active Outing Pass</div>
+              </div>
+              <i class="fa-solid fa-ticket text-white text-2xl opacity-80"></i>
+            </div>
+            <button
+              class="mt-4 bg-white text-green-700 font-semibold py-2 px-4 rounded-lg hover:bg-green-50 transition w-full"
+              id="show-qr-code"
+            >
+              <i class="fas fa-qrcode mr-2"></i>Show QR Code
+            </button>
+          </div>
+        </div>
+
+        <!-- Student Tabs -->
+        <div class="flex flex-wrap gap-4 mb-6 bg-slate-800 p-3 rounded-xl">
+          <div class="tab-button active" data-tab="new-request">
+            New Request
+          </div>
+          <div class="tab-button" data-tab="my-requests">My Requests</div>
+          <div class="tab-button" data-tab="outing-history">Outing History</div>
+          <div class="tab-button" data-tab="student-guide">Campus Guide</div>
+        </div>
+
+        <!-- Student Tab Content -->
+        <div id="student-tab-content">
+          <!-- New Request Tab -->
+          <div class="tab-panel active" id="new-request-panel">
+            <div class="glass-card p-6 mb-6">
+              <h3 class="text-xl font-bold text-white mb-6">
+                New Leave/Outing Request
+              </h3>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label class="block text-slate-300 mb-2 font-medium"
+                    >Request Type</label
+                  >
+                  <div class="flex space-x-4 mb-4">
+                    <label class="flex items-center">
+                      <input
+                        type="radio"
+                        name="request-type"
+                        value="outing"
+                        class="mr-2"
+                        checked
+                      />
+                      <span class="text-slate-300">Outing (Hours)</span>
+                    </label>
+                    <label class="flex items-center">
+                      <input
+                        type="radio"
+                        name="request-type"
+                        value="leave"
+                        class="mr-2"
+                      />
+                      <span class="text-slate-300">Leave (Days)</span>
+                    </label>
+                    <label class="flex items-center">
+                      <input
+                        type="radio"
+                        name="request-type"
+                        value="emergency"
+                        class="mr-2"
+                      />
+                      <span class="text-slate-300">Emergency</span>
+                    </label>
+                  </div>
+
+                  <div class="form-group mb-4">
+                    <label class="block text-slate-300 mb-2 font-medium"
+                      >Purpose</label
+                    >
+                    <select
+                      class="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      id="purpose-select"
+                    >
+                      <option value="">Select Purpose</option>
+                      <option value="medical">Medical Appointment</option>
+                      <option value="hometown">Hometown Visit</option>
+                      <option value="personal">Personal Work</option>
+                      <option value="family">Family Function</option>
+                      <option value="shopping">Shopping</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group mb-4">
+                    <label class="block text-slate-300 mb-2 font-medium"
+                      >Description</label
+                    >
+                    <textarea
+                      class="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      rows="3"
+                      placeholder="Provide details about your outing/leave..."
+                      id="description-text"
+                    ></textarea>
+                  </div>
+                </div>
+
+                <div>
+                  <div class="form-group mb-4">
+                    <label class="block text-slate-300 mb-2 font-medium"
+                      >Departure Date & Time</label
+                    >
+                    <div class="flex flex-col space-y-2">
+                      <input
+                        type="date"
+                        class="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        id="departure-date"
+                      />
+                      <div class="time-selector">
+                        <input
+                          type="number"
+                          min="1"
+                          max="12"
+                          value="10"
+                          class="time-input"
+                          id="departure-hour"
+                        />
+                        <span class="text-white">:</span>
+                        <input
+                          type="number"
+                          min="0"
+                          max="59"
+                          value="0"
+                          class="time-input"
+                          id="departure-minute"
+                        />
+                        <div class="ampm-selector">
+                          <button
+                            type="button"
+                            class="ampm-btn active"
+                            data-time="AM"
+                          >
+                            AM
+                          </button>
+                          <button type="button" class="ampm-btn" data-time="PM">
+                            PM
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group mb-4">
+                    <label class="block text-slate-300 mb-2 font-medium"
+                      >Return Date & Time</label
+                    >
+                    <div class="flex flex-col space-y-2">
+                      <input
+                        type="date"
+                        class="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        id="return-date"
+                      />
+                      <div class="time-selector">
+                        <input
+                          type="number"
+                          min="1"
+                          max="12"
+                          value="2"
+                          class="time-input"
+                          id="return-hour"
+                        />
+                        <span class="text-white">:</span>
+                        <input
+                          type="number"
+                          min="0"
+                          max="59"
+                          value="0"
+                          class="time-input"
+                          id="return-minute"
+                        />
+                        <div class="ampm-selector">
+                          <button type="button" class="ampm-btn" data-time="AM">
+                            AM
+                          </button>
+                          <button
+                            type="button"
+                            class="ampm-btn active"
+                            data-time="PM"
+                          >
+                            PM
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group mb-4">
+                    <label class="block text-slate-300 mb-2 font-medium"
+                      >Destination</label
+                    >
+                    <input
+                      type="text"
+                      class="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="Where are you going?"
+                      id="destination-input"
+                    />
+                  </div>
+
+                  <div class="form-group mb-4">
+                    <label class="block text-slate-300 mb-2 font-medium"
+                      >Emergency Contact</label
+                    >
+                    <input
+                      type="text"
+                      class="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="Parent/Guardian phone number"
+                      id="emergency-contact"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-6 flex justify-end space-x-3">
+                <button
+                  class="bg-slate-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-slate-700 transition"
+                  id="save-draft"
+                >
+                  Save Draft
+                </button>
+                <button
+                  class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition"
+                  id="submit-request"
+                >
+                  <i class="fas fa-paper-plane mr-2"></i>Submit Request
+                </button>
+              </div>
+            </div>
+
+            <!-- Quick Request Templates -->
+            <div class="glass-card p-6">
+              <h3 class="text-xl font-bold text-white mb-4">
+                Quick Request Templates
+              </h3>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="quick-template" data-template="medical">
+                  <div class="flex items-center mb-2">
+                    <i class="fas fa-briefcase-medical text-blue-400 mr-2"></i>
+                    <h4 class="font-semibold text-white">
+                      Medical Appointment
+                    </h4>
+                  </div>
+                  <p class="text-sm text-slate-400">
+                    Pre-filled for doctor visits
+                  </p>
+                </div>
+                <div class="quick-template" data-template="shopping">
+                  <div class="flex items-center mb-2">
+                    <i class="fas fa-shopping-cart text-green-400 mr-2"></i>
+                    <h4 class="font-semibold text-white">Shopping</h4>
+                  </div>
+                  <p class="text-sm text-slate-400">
+                    Quick outing for essentials
+                  </p>
+                </div>
+                <div class="quick-template" data-template="weekend">
+                  <div class="flex items-center mb-2">
+                    <i class="fas fa-home text-amber-400 mr-2"></i>
+                    <h4 class="font-semibold text-white">Weekend Leave</h4>
+                  </div>
+                  <p class="text-sm text-slate-400">
+                    Pre-filled for weekend trips
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- My Requests Tab -->
+          <div class="tab-panel" id="my-requests-panel">
+            <div class="glass-card p-6 mb-6">
+              <h3 class="text-xl font-bold text-white mb-6">My Requests</h3>
+
+              <div class="flex space-x-4 mb-6">
+                <button
+                  class="filter-btn bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition"
+                  data-filter="all"
+                >
+                  All Requests
+                </button>
+                <button
+                  class="filter-btn bg-slate-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-slate-600 transition"
+                  data-filter="pending"
+                >
+                  Pending
+                </button>
+                <button
+                  class="filter-btn bg-slate-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-slate-600 transition"
+                  data-filter="approved"
+                >
+                  Approved
+                </button>
+                <button
+                  class="filter-btn bg-slate-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-slate-600 transition"
+                  data-filter="rejected"
+                >
+                  Rejected
+                </button>
+              </div>
+
+              <div id="student-requests-container">
+                <!-- Student requests will be populated by JavaScript -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Outing History Tab -->
+          <div class="tab-panel" id="outing-history-panel">
+            <div class="glass-card p-6">
+              <h3 class="text-xl font-bold text-white mb-6">Outing History</h3>
+
+              <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left text-slate-400">
+                  <thead class="text-xs uppercase bg-slate-700 text-slate-400">
+                    <tr>
+                      <th class="px-4 py-3">Date</th>
+                      <th class="px-4 py-3">Type</th>
+                      <th class="px-4 py-3">Destination</th>
+                      <th class="px-4 py-3">Departure</th>
+                      <th class="px-4 py-3">Return</th>
+                      <th class="px-4 py-3">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="outing-history-table">
+                    <!-- Outing history will be populated by JavaScript -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Campus Guide Tab -->
+          <div class="tab-panel" id="student-guide-panel">
+            <div class="glass-card p-6">
+              <h3 class="text-xl font-bold text-white mb-6">
+                Campus Guide & Policies
+              </h3>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <h4 class="text-lg font-semibold text-white mb-4">
+                    Outing Policies
+                  </h4>
+                  <ul class="space-y-3 text-slate-300">
+                    <li class="flex items-start">
+                      <i class="fas fa-check text-green-400 mr-2 mt-1"></i>
+                      <span>Maximum outing duration: 8 hours</span>
+                    </li>
+                    <li class="flex items-start">
+                      <i class="fas fa-check text-green-400 mr-2 mt-1"></i>
+                      <span>Curfew time: 10:00 PM for all students</span>
+                    </li>
+                    <li class="flex items-start">
+                      <i class="fas fa-check text-green-400 mr-2 mt-1"></i>
+                      <span>Weekend leaves require 24-hour advance notice</span>
+                    </li>
+                    <li class="flex items-start">
+                      <i class="fas fa-check text-green-400 mr-2 mt-1"></i>
+                      <span>Emergency outings processed within 30 minutes</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h4 class="text-lg font-semibold text-white mb-4">
+                    Important Contacts
+                  </h4>
+                  <div class="space-y-3 text-slate-300">
+                    <div class="flex justify-between items-center">
+                      <span>Boys Block 1 Warden</span>
+                      <span class="font-semibold">Dr. Narottam Das Patel</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                      <span>Warden Contact</span>
+                      <span class="font-semibold">07562-654322</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                      <span>Emergency Helpline</span>
+                      <span class="font-semibold">07562-654399</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                      <span>Security Control Room</span>
+                      <span class="font-semibold">07562-654300</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-6">
+                <h4 class="text-lg font-semibold text-white mb-4">
+                  Campus Map & Locations
+                </h4>
+                <div class="bg-slate-700 rounded-lg p-4">
+                  <div id="campus-map">
+                    <img
+                      src="https://vitbhopal.ac.in/wp-content/uploads/2021/06/VIT-Bhopal-University-Campus-Map.jpg"
+                      alt="VIT Bhopal Campus Map"
+                      loading="lazy"
+                      class="w-full h-auto rounded-lg"
+                    />
+                  </div>
+                  <div class="mt-4 flex justify-center">
+                    <button
+                      class="mt-3 bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition"
+                      id="view-campus-map"
+                    >
+                      View Interactive Campus Map
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Warden Portal -->
+      <div id="warden-portal" class="user-portal">
+        <!-- Warden Profile & Quick Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          <div
+            class="student-profile"
+            style="background: linear-gradient(135deg, #8b5cf6, #7c3aed)"
+          >
+            <div class="flex items-center mb-4">
+              <div
+                class="w-16 h-16 bg-white rounded-full flex items-center justify-center mr-4"
+              >
+                <i class="fas fa-user-shield text-purple-600 text-2xl"></i>
+              </div>
+              <div>
+                <h3 class="font-bold text-lg">Dr. Narottam Das Patel</h3>
+                <p class="text-sm opacity-90">Warden Boys Hostel Block 1</p>
+                <p class="text-sm opacity-90">Contact: 07562-654322</p>
+              </div>
+            </div>
+            <div class="flex justify-between text-center">
+              <div>
+                <div class="text-xl font-bold">98%</div>
+                <div class="text-xs opacity-90">Approval Rate</div>
+              </div>
+              <div>
+                <div class="text-xl font-bold">2.4</div>
+                <div class="text-xs opacity-90">Avg. Response (hrs)</div>
+              </div>
+              <div>
+                <div class="text-xl font-bold">92%</div>
+                <div class="text-xs opacity-90">Emergency Response</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="stats-card">
+            <div class="flex justify-between items-center">
+              <div>
+                <div class="text-2xl font-bold" id="warden-pending">12</div>
+                <div class="text-sm opacity-90">Pending Requests</div>
+              </div>
+              <i class="fa-solid fa-clock text-white text-2xl opacity-80"></i>
+            </div>
+          </div>
+
+          <div
+            class="stats-card"
+            style="background: linear-gradient(135deg, #10b981, #047857)"
+          >
+            <div class="flex justify-between items-center">
+              <div>
+                <div class="text-2xl font-bold" id="warden-approved">24</div>
+                <div class="text-sm opacity-90">Approved Today</div>
+              </div>
+              <i
+                class="fa-solid fa-check-circle text-white text-2xl opacity-80"
+              ></i>
+            </div>
+          </div>
+
+          <div
+            class="stats-card"
+            style="background: linear-gradient(135deg, #ef4444, #dc2626)"
+          >
+            <div class="flex justify-between items-center">
+              <div>
+                <div class="text-2xl font-bold" id="warden-emergency">3</div>
+                <div class="text-sm opacity-90">Emergency Cases</div>
+              </div>
+              <i
+                class="fa-solid fa-triangle-exclamation text-white text-2xl opacity-80"
+              ></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Warden Tabs -->
+        <div class="flex flex-wrap gap-4 mb-6 bg-slate-800 p-3 rounded-xl">
+          <div class="tab-button active" data-tab="warden-pending">
+            Pending Requests
+          </div>
+          <div class="tab-button" data-tab="warden-approved">
+            Approved Requests
+          </div>
+          <div class="tab-button" data-tab="warden-ward-management">
+            Ward Management
+          </div>
+          <div class="tab-button" data-tab="warden-analytics">Analytics</div>
+          <div class="tab-button" data-tab="warden-settings">Settings</div>
+        </div>
+
+        <!-- Warden Tab Content -->
+        <div id="warden-tab-content">
+          <!-- Pending Requests Tab -->
+          <div class="tab-panel active" id="warden-pending-panel">
+            <div class="glass-card p-6 mb-6">
+              <div
+                class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6"
+              >
+                <h3 class="text-xl font-bold text-white mb-2 md:mb-0">
+                  Pending Requests - Boys Hostel Block 1
+                </h3>
+                <div class="flex items-center text-sm text-green-400">
+                  <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                  Last Updated: <span id="warden-last-updated">Just now</span>
+                </div>
+              </div>
+
+              <!-- Filter Options -->
+              <div class="flex flex-wrap gap-4 mb-6">
+                <select
+                  class="bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  id="warden-type-filter"
+                >
+                  <option value="all">All Request Types</option>
+                  <option value="outing">Outing</option>
+                  <option value="leave">Leave</option>
+                  <option value="emergency">Emergency</option>
+                </select>
+
+                <select
+                  class="bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  id="warden-time-filter"
+                >
+                  <option value="all">All Time</option>
+                  <option value="today">Today</option>
+                  <option value="week">This Week</option>
+                  <option value="month">This Month</option>
+                </select>
+
+                <button
+                  class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition flex items-center"
+                  id="warden-export"
+                >
+                  <i class="fa-solid fa-download mr-2"></i>Export
+                </button>
+              </div>
+
+              <!-- Pending Requests List -->
+              <div id="warden-pending-requests-container">
+                <!-- Warden pending requests will be populated by JavaScript -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Approved Requests Tab -->
+          <div class="tab-panel" id="warden-approved-panel">
+            <div class="glass-card p-6">
+              <h3 class="text-xl font-bold text-white mb-6">
+                Approved Requests
+              </h3>
+
+              <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left text-slate-400">
+                  <thead class="text-xs uppercase bg-slate-700 text-slate-400">
+                    <tr>
+                      <th class="px-4 py-3">Student</th>
+                      <th class="px-4 py-3">Type</th>
+                      <th class="px-4 py-3">Departure</th>
+                      <th class="px-4 py-3">Return</th>
+                      <th class="px-4 py-3">Status</th>
+                      <th class="px-4 py-3">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="warden-approved-table">
+                    <!-- Warden approved requests will be populated by JavaScript -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Ward Management Tab -->
+          <div class="tab-panel" id="warden-ward-management-panel">
+            <div class="glass-card p-6">
+              <h3 class="text-xl font-bold text-white mb-6">
+                Ward Management - Boys Hostel Block 1
+              </h3>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div
+                  class="bg-slate-700 rounded-xl p-5 text-white cursor-pointer hover:bg-slate-600 transition"
+                  data-floor="1"
+                >
+                  <div class="flex justify-between items-start mb-3">
+                    <h4 class="font-bold text-lg">Floor 1</h4>
+                    <span
+                      class="bg-white text-purple-700 text-xs font-bold px-2 py-1 rounded-full"
+                      >Capacity: 40</span
+                    >
+                  </div>
+                  <p class="text-sm opacity-90">Rooms: G1-101 to G1-140</p>
+                  <div class="mt-2 text-sm flex items-center">
+                    <span class="text-amber-300">Pending: 2</span>
+                  </div>
+                </div>
+
+                <div
+                  class="bg-slate-700 rounded-xl p-5 text-white cursor-pointer hover:bg-slate-600 transition"
+                  data-floor="2"
+                >
+                  <div class="flex justify-between items-start mb-3">
+                    <h4 class="font-bold text-lg">Floor 2</h4>
+                    <span
+                      class="bg-white text-purple-700 text-xs font-bold px-2 py-1 rounded-full"
+                      >Capacity: 40</span
+                    >
+                  </div>
+                  <p class="text-sm opacity-90">Rooms: G1-201 to G1-240</p>
+                  <div class="mt-2 text-sm flex items-center">
+                    <span class="text-amber-300">Pending: 3</span>
+                  </div>
+                </div>
+
+                <div
+                  class="bg-slate-700 rounded-xl p-5 text-white cursor-pointer hover:bg-slate-600 transition"
+                  data-floor="3"
+                >
+                  <div class="flex justify-between items-start mb-3">
+                    <h4 class="font-bold text-lg">Floor 3</h4>
+                    <span
+                      class="bg-white text-purple-700 text-xs font-bold px-2 py-1 rounded-full"
+                      >Capacity: 40</span
+                    >
+                  </div>
+                  <p class="text-sm opacity-90">Rooms: G1-301 to G1-340</p>
+                  <div class="mt-2 text-sm flex items-center">
+                    <span class="text-amber-300">Pending: 1</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Warden Analytics Tab -->
+          <div class="tab-panel" id="warden-analytics-panel">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="glass-card p-6">
+                <h3 class="text-xl font-bold text-white mb-4">
+                  Request Statistics
+                </h3>
+                <canvas id="wardenRequestChart" height="250"></canvas>
+              </div>
+
+              <div class="glass-card p-6">
+                <h3 class="text-xl font-bold text-white mb-4">
+                  Approval Analytics
+                </h3>
+                <div class="space-y-4">
+                  <div>
+                    <div class="flex justify-between mb-1">
+                      <span class="text-slate-300">Approval Rate</span>
+                      <span class="text-slate-300">78%</span>
+                    </div>
+                    <div class="progress-bar">
+                      <div class="progress-fill" style="width: 78%"></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="flex justify-between mb-1">
+                      <span class="text-slate-300">Avg. Response Time</span>
+                      <span class="text-slate-300">2.4 hrs</span>
+                    </div>
+                    <div class="progress-bar">
+                      <div class="progress-fill" style="width: 65%"></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="flex justify-between mb-1">
+                      <span class="text-slate-300">Emergency Response</span>
+                      <span class="text-slate-300">92%</span>
+                    </div>
+                    <div class="progress-bar">
+                      <div class="progress-fill" style="width: 92%"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Warden Settings Tab -->
+          <div class="tab-panel" id="warden-settings-panel">
+            <div class="glass-card p-6">
+              <h3 class="text-xl font-bold text-white mb-6">Warden Settings</h3>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <h4 class="text-lg font-semibold text-white mb-4">
+                    Approval Settings
+                  </h4>
+
+                  <div class="space-y-4">
+                    <div class="form-group">
+                      <label class="block text-slate-300 mb-2 font-medium"
+                        >Auto-Approval Time</label
+                      >
+                      <select
+                        class="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        id="auto-approval-time"
+                      >
+                        <option value="2">2 Hours</option>
+                        <option value="4" selected>4 Hours</option>
+                        <option value="6">6 Hours</option>
+                        <option value="8">8 Hours</option>
+                      </select>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="block text-slate-300 mb-2 font-medium"
+                        >Max Outing Duration</label
+                      >
+                      <select
+                        class="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        id="max-outing-duration"
+                      >
+                        <option value="6">6 Hours</option>
+                        <option value="8" selected>8 Hours</option>
+                        <option value="12">12 Hours</option>
+                        <option value="24">24 Hours</option>
+                      </select>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="block text-slate-300 mb-2 font-medium"
+                        >Emergency Response Time</label
+                      >
+                      <select
+                        class="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        id="emergency-response-time"
+                      >
+                        <option value="15">15 Minutes</option>
+                        <option value="30" selected>30 Minutes</option>
+                        <option value="45">45 Minutes</option>
+                        <option value="60">60 Minutes</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <h4 class="text-lg font-semibold text-white mb-4">
+                    Notification Settings
+                  </h4>
+
+                  <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                      <span class="text-slate-300">Email Notifications</span>
+                      <label
+                        class="relative inline-flex items-center cursor-pointer"
+                      >
+                        <input type="checkbox" class="sr-only peer" checked />
+                        <div
+                          class="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"
+                        ></div>
+                      </label>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                      <span class="text-slate-300">SMS Notifications</span>
+                      <label
+                        class="relative inline-flex items-center cursor-pointer"
+                      >
+                        <input type="checkbox" class="sr-only peer" />
+                        <div
+                          class="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"
+                        ></div>
+                      </label>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                      <span class="text-slate-300">Push Notifications</span>
+                      <label
+                        class="relative inline-flex items-center cursor-pointer"
+                      >
+                        <input type="checkbox" class="sr-only peer" checked />
+                        <div
+                          class="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"
+                        ></div>
+                      </label>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                      <span class="text-slate-300">Emergency Alerts</span>
+                      <label
+                        class="relative inline-flex items-center cursor-pointer"
+                      >
+                        <input type="checkbox" class="sr-only peer" checked />
+                        <div
+                          class="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"
+                        ></div>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-6 flex justify-end">
+                <button
+                  class="bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition"
+                  id="save-warden-settings"
+                >
+                  Save Settings
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Supervisor Portal -->
+      <div id="supervisor-portal" class="user-portal">
+        <!-- Supervisor Profile & Quick Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          <div
+            class="student-profile"
+            style="background: linear-gradient(135deg, #8b5cf6, #7c3aed)"
+          >
+            <div class="flex items-center mb-4">
+              <div
+                class="w-16 h-16 bg-white rounded-full flex items-center justify-center mr-4"
+              >
+                <i class="fas fa-user-tie text-purple-600 text-2xl"></i>
+              </div>
+              <div>
+                <h3 class="font-bold text-lg">Mr. Satish</h3>
+                <p class="text-sm opacity-90">Hostel Supervisor</p>
+                <p class="text-sm opacity-90">Contact: 07562-654300</p>
+              </div>
+            </div>
+            <div class="flex justify-between text-center">
+              <div>
+                <div class="text-xl font-bold">6</div>
+                <div class="text-xs opacity-90">Wards</div>
+              </div>
+              <div>
+                <div class="text-xl font-bold">42</div>
+                <div class="text-xs opacity-90">Approvals</div>
+              </div>
+              <div>
+                <div class="text-xl font-bold">3</div>
+                <div class="text-xs opacity-90">Escalated</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="stats-card">
+            <div class="flex justify-between items-center">
+              <div>
+                <div class="text-2xl font-bold" id="supervisor-pending">8</div>
+                <div class="text-sm opacity-90">Pending Approvals</div>
+              </div>
+              <i class="fa-solid fa-clock text-white text-2xl opacity-80"></i>
+            </div>
+          </div>
+
+          <div
+            class="stats-card"
+            style="background: linear-gradient(135deg, #10b981, #047857)"
+          >
+            <div class="flex justify-between items-center">
+              <div>
+                <div class="text-2xl font-bold" id="supervisor-approved">
+                  42
+                </div>
+                <div class="text-sm opacity-90">Approved This Week</div>
+              </div>
+              <i
+                class="fa-solid fa-check-circle text-white text-2xl opacity-80"
+              ></i>
+            </div>
+          </div>
+
+          <div
+            class="stats-card"
+            style="background: linear-gradient(135deg, #f59e0b, #d97706)"
+          >
+            <div class="flex justify-between items-center">
+              <div>
+                <div class="text-2xl font-bold" id="supervisor-escalated">
+                  3
+                </div>
+                <div class="text-sm opacity-90">Escalated Cases</div>
+              </div>
+              <i
+                class="fa-solid fa-exclamation-triangle text-white text-2xl opacity-80"
+              ></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Supervisor Tabs -->
+        <div class="flex flex-wrap gap-4 mb-6 bg-slate-800 p-3 rounded-xl">
+          <div class="tab-button active" data-tab="supervisor-pending">
+            Pending Approvals
+          </div>
+          <div class="tab-button" data-tab="supervisor-wards">
+            Ward Management
+          </div>
+          <div class="tab-button" data-tab="supervisor-reports">Reports</div>
+          <div class="tab-button" data-tab="supervisor-settings">Settings</div>
+        </div>
+
+        <!-- Supervisor Tab Content -->
+        <div id="supervisor-tab-content">
+          <!-- Pending Approvals Tab -->
+          <div class="tab-panel active" id="supervisor-pending-panel">
+            <div class="glass-card p-6">
+              <h3 class="text-xl font-bold text-white mb-6">
+                Pending Supervisor Approvals
+              </h3>
+
+              <div id="supervisor-pending-container">
+                <!-- Supervisor pending approvals will be populated by JavaScript -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Ward Management Tab -->
+          <div class="tab-panel" id="supervisor-wards-panel">
+            <div class="glass-card p-6">
+              <h3 class="text-xl font-bold text-white mb-6">Ward Management</h3>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div
+                  class="bg-slate-700 rounded-xl p-5 text-white cursor-pointer hover:bg-slate-600 transition"
+                  data-ward="boys-block-1"
+                >
+                  <div class="flex justify-between items-start mb-3">
+                    <h4 class="font-bold text-lg">Boys Hostel Block 1</h4>
+                    <span
+                      class="bg-white text-purple-700 text-xs font-bold px-2 py-1 rounded-full"
+                      >Capacity: 200</span
+                    >
+                  </div>
+                  <p class="text-sm opacity-90">
+                    Warden: Dr. Narottam Das Patel
+                  </p>
+                  <div class="mt-2 text-sm flex items-center">
+                    <span class="text-amber-300">Pending: 5</span>
+                  </div>
+                </div>
+
+                <div
+                  class="bg-slate-700 rounded-xl p-5 text-white cursor-pointer hover:bg-slate-600 transition"
+                  data-ward="girls-block-2"
+                >
+                  <div class="flex justify-between items-start mb-3">
+                    <h4 class="font-bold text-lg">Girls Block 2</h4>
+                    <span
+                      class="bg-white text-purple-700 text-xs font-bold px-2 py-1 rounded-full"
+                      >Capacity: 200</span
+                    >
+                  </div>
+                  <p class="text-sm opacity-90">Warden: Dr. Neha Joshi</p>
+                  <div class="mt-2 text-sm flex items-center">
+                    <span class="text-amber-300">Pending: 3</span>
+                  </div>
+                </div>
+
+                <div
+                  class="bg-slate-700 rounded-xl p-5 text-white cursor-pointer hover:bg-slate-600 transition"
+                  data-ward="boys-block-2"
+                >
+                  <div class="flex justify-between items-start mb-3">
+                    <h4 class="font-bold text-lg">Boys Block 2</h4>
+                    <span
+                      class="bg-white text-green-700 text-xs font-bold px-2 py-1 rounded-full"
+                      >Capacity: 240</span
+                    >
+                  </div>
+                  <p class="text-sm opacity-90">
+                    Warden: Dr. Prashant Kumar Pandey
+                  </p>
+                  <div class="mt-2 text-sm flex items-center">
+                    <span class="text-amber-300">Pending: 4</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Reports Tab -->
+          <div class="tab-panel" id="supervisor-reports-panel">
+            <div class="glass-card p-6">
+              <h3 class="text-xl font-bold text-white mb-6">
+                Supervisor Reports
+              </h3>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div>
+                  <label class="block text-slate-300 mb-2 font-medium"
+                    >Report Type</label
+                  >
+                  <select
+                    class="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    id="report-type"
+                  >
+                    <option value="approval">Approval Report</option>
+                    <option value="utilization">Utilization Report</option>
+                    <option value="compliance">Compliance Report</option>
+                    <option value="emergency">Emergency Report</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label class="block text-slate-300 mb-2 font-medium"
+                    >Time Period</label
+                  >
+                  <select
+                    class="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    id="report-period"
+                  >
+                    <option value="week">This Week</option>
+                    <option value="month">This Month</option>
+                    <option value="quarter">This Quarter</option>
+                    <option value="year">This Year</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="flex space-x-3">
+                <button
+                  class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition flex items-center"
+                  id="generate-report"
+                >
+                  <i class="fas fa-download mr-2"></i> Generate Report
+                </button>
+                <button
+                  class="bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition flex items-center"
+                  id="view-analytics"
+                >
+                  <i class="fas fa-chart-bar mr-2"></i> View Analytics
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Supervisor Settings Tab -->
+          <div class="tab-panel" id="supervisor-settings-panel">
+            <div class="glass-card p-6">
+              <h3 class="text-xl font-bold text-white mb-6">
+                Supervisor Settings
+              </h3>
+
+              <div class="space-y-6">
+                <div>
+                  <h4 class="text-lg font-semibold text-white mb-4">
+                    Approval Workflow
+                  </h4>
+
+                  <div class="approval-flow">
+                    <div class="approval-step">
+                      <div class="step-icon completed">
+                        <i class="fas fa-user-check text-white"></i>
+                      </div>
+                      <span class="text-sm text-slate-300">Student</span>
+                    </div>
+                    <div class="approval-step">
+                      <div class="step-icon completed">
+                        <i class="fas fa-user-shield text-white"></i>
+                      </div>
+                      <span class="text-sm text-slate-300">Warden</span>
+                    </div>
+                    <div class="approval-step">
+                      <div class="step-icon active">
+                        <i class="fas fa-user-tie text-white"></i>
+                      </div>
+                      <span class="text-sm text-slate-300">Supervisor</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <h4 class="text-lg font-semibold text-white mb-4">
+                    Escalation Rules
+                  </h4>
+
+                  <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                      <span class="text-slate-300">Auto-escalate after</span>
+                      <select
+                        class="bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        id="auto-escalate-time"
+                      >
+                        <option value="4">4 Hours</option>
+                        <option value="6" selected>6 Hours</option>
+                        <option value="8">8 Hours</option>
+                        <option value="12">12 Hours</option>
+                      </select>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                      <span class="text-slate-300"
+                        >Emergency auto-approval</span
+                      >
+                      <label
+                        class="relative inline-flex items-center cursor-pointer"
+                      >
+                        <input
+                          type="checkbox"
+                          class="sr-only peer"
+                          checked
+                          id="emergency-auto-approval"
+                        />
+                        <div
+                          class="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"
+                        ></div>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="flex justify-end">
+                  <button
+                    class="bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition"
+                    id="save-supervisor-settings"
+                  >
+                    Save Settings
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Message Box -->
+    <div id="message-box" class="message-box">
+      <p id="message-text"></p>
+    </div>
+
+    <!-- Request Details Modal -->
+    <div class="modal" id="request-modal">
+      <div class="modal-content">
+        <div class="modal-header flex justify-between items-center mb-4">
+          <h3 class="text-xl font-bold text-white">Request Details</h3>
+          <button
+            class="modal-close text-2xl text-slate-400 hover:text-white"
+            id="close-request-modal"
+          >
+            &times;
+          </button>
+        </div>
+        <div id="request-modal-content">
+          <!-- Request details will be populated by JavaScript -->
+        </div>
+      </div>
+    </div>
+
+    <!-- QR Code Modal -->
+    <div class="modal" id="qr-modal">
+      <div class="modal-content">
+        <div class="modal-header flex justify-between items-center mb-4">
+          <h3 class="text-xl font-bold text-white">QR Code</h3>
+          <button
+            class="modal-close text-2xl text-slate-400 hover:text-white"
+            id="close-qr-modal"
+          >
+            &times;
+          </button>
+        </div>
+        <div id="qr-code-container">
+          <!-- QR code will be generated here -->
+        </div>
+        <div class="mt-4 text-center">
+          <p class="text-slate-300">Show this QR code at the hostel gate</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Campus Map Modal -->
+    <div class="modal" id="campus-map-modal">
+      <div class="modal-content" style="max-width: 800px">
+        <div class="modal-header flex justify-between items-center mb-4">
+          <h3 class="text-xl font-bold text-white">VIT Bhopal Campus Map</h3>
+          <button
+            class="modal-close text-2xl text-slate-400 hover:text-white"
+            id="close-campus-map-modal"
+          >
+            &times;
+          </button>
+        </div>
+        <div id="campus-map-modal-content">
+          <div class="bg-slate-700 rounded-lg p-4">
+            <img
+              src="https://vitbhopal.ac.in/wp-content/uploads/2021/06/VIT-Bhopal-University-Campus-Map.jpg"
+              alt="VIT Bhopal Campus Map"
+              loading="lazy"
+              class="w-full h-auto rounded-lg"
+            />
+          </div>
+          <div class="mt-4 text-center">
+            <p class="text-slate-300">
+              Interactive campus map with hostel locations highlighted
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Sample data for demonstration
+      const sampleData = {
+        studentRequests: [
+          {
+            id: "REQ001",
+            studentId: "22BHI10111",
+            studentName: "Piyush Wali",
+            roomNo: "A 723",
+            type: "outing",
+            purpose: "Medical appointment",
+            description: "Regular dental checkup at City Dental Clinic",
+            departure: "2025-09-24T10:00:00",
+            return: "2025-09-24T14:00:00",
+            status: "pending",
+            submitted: "2025-09-23T20:15:00",
+            destination: "City Dental Clinic, Bhopal",
+            emergencyContact: "9876543210",
+          },
+          {
+            id: "REQ002",
+            studentId: "22BHI10111",
+            studentName: "Piyush Wali",
+            roomNo: "G1-201",
+            type: "leave",
+            purpose: "Hometown Visit",
+            description: "Visiting family for weekend",
+            departure: "2025-09-25T08:00:00",
+            return: "2025-09-28T18:00:00",
+            status: "approved",
+            submitted: "2025-09-23T18:30:00",
+            destination: "Home, Indore",
+            emergencyContact: "9876543210",
+            approvedBy: "Dr. Narottam Das Patel",
+            approvedAt: "2025-09-23T21:30:00",
+            qrCode: "QR12345",
+          },
+          {
+            id: "REQ003",
+            studentId: "22BHI10111",
+            studentName: "Piyush Wali",
+            roomNo: "G1-201",
+            type: "outing",
+            purpose: "Shopping",
+            description: "Buying essentials and groceries",
+            departure: "2025-09-20T14:00:00",
+            return: "2025-09-20T18:00:00",
+            status: "rejected",
+            submitted: "2025-09-19T22:30:00",
+            destination: "DB City Mall, Bhopal",
+            emergencyContact: "9876543210",
+            rejectedBy: "Dr. Narottam Das Patel",
+            rejectedAt: "2025-09-20T09:15:00",
+            reason: "Exceeds weekly outing limit",
+          },
+        ],
+        wardenPendingRequests: [
+          {
+            id: "REQ004",
+            studentId: "22BHI10110",
+            studentName: "Rohan Singh",
+            roomNo: "G1-105",
+            type: "outing", // Changed from "leave" to "outing"
+            purpose: "Hometown Visit",
+            description: "Attending cousin's wedding",
+            departure: "2025-09-25T08:00:00",
+            return: "2025-09-25T18:00:00", // Changed from multi-day to same day
+            status: "pending",
+            submitted: "2025-09-23T18:30:00",
+            emergency: false,
+            parentContact: "9876543211",
+          },
+          {
+            id: "REQ005",
+            studentId: "22BHI10100",
+            studentName: "Ankur Jha",
+            roomNo: "A 103",
+            type: "emergency",
+            purpose: "Medical emergency",
+            description: "Sudden fever, need to visit hospital",
+            departure: "2025-09-24T08:00:00",
+            return: "2025-09-24T12:00:00",
+            status: "pending",
+            submitted: "2025-09-24T07:15:00",
+            emergency: true,
+            parentContact: "9876543212",
+          },
+        ],
+        supervisorPendingRequests: [
+          {
+            id: "REQ006",
+            studentId: "22BHI10110",
+            studentName: "Rohan Singh",
+            roomNo: "B-201",
+            type: "outing", // Changed from "outing" to "emergency" to differentiate
+            purpose: "Emergency Hospital Visit",
+            description: "Family emergency - need to go to hospital",
+            departure: "2025-09-24T14:00:00",
+            return: "2025-09-24T18:00:00",
+            status: "pending",
+            submitted: "2025-09-23T22:30:00",
+            emergency: true, // Changed to true
+            parentContact: "9876543213",
+            wardenApproval: "approved",
+            wardenApprovedAt: "2025-09-24T08:30:00",
+          },
+        ],
+      };
+
+      // Template data for quick requests
+      const quickTemplates = {
+        medical: {
+          purpose: "Medical Appointment",
+          description: "Regular medical checkup at the hospital",
+          destination: "City Hospital, Bhopal",
+        },
+        shopping: {
+          purpose: "Shopping",
+          description: "Buying daily essentials and groceries",
+          destination: "Local Market, Bhopal",
+        },
+        weekend: {
+          purpose: "Hometown Visit",
+          description: "Visiting family for the weekend",
+          destination: "Home Town",
+        },
+      };
+
+      // Current state
+      let currentUserType = "student";
+      let currentTab = "new-request";
+      let currentFilter = "all";
+
+      // Function to convert 24-hour time to 12-hour format with AM/PM
+      function formatTimeTo12Hour(dateTimeString) {
+        const date = new Date(dateTimeString);
+        let hours = date.getHours();
+        let minutes = date.getMinutes();
+        const ampm = hours >= 12 ? "PM" : "AM";
+        hours = hours % 12;
+        hours = hours ? hours : 12; // the hour '0' should be '12'
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        return hours + ":" + minutes + " " + ampm;
+      }
+
+      // Function to format date with time in 12-hour format
+      function formatDateTime(dateTimeString) {
+        const date = new Date(dateTimeString);
+        const options = { year: "numeric", month: "short", day: "numeric" };
+        return (
+          date.toLocaleDateString("en-US", options) +
+          " " +
+          formatTimeTo12Hour(dateTimeString)
+        );
+      }
+
+      // Function to show a custom message box
+      function showMessage(text, type = "info") {
+        const messageBox = document.getElementById("message-box");
+        const messageText = document.getElementById("message-text");
+
+        messageText.textContent = text;
+        messageBox.classList.remove(
+          "show",
+          "bg-red-500",
+          "bg-green-500",
+          "bg-blue-500"
+        );
+
+        if (type === "error") {
+          messageBox.classList.add("bg-red-500");
+        } else if (type === "success") {
+          messageBox.classList.add("bg-green-500");
+        } else if (type === "info") {
+          messageBox.classList.add("bg-blue-500");
+        } else {
+          messageBox.classList.add("bg-slate-700");
+        }
+
+        messageBox.classList.add("show");
+
+        setTimeout(() => {
+          messageBox.classList.remove("show");
+        }, 4000);
+      }
+
+      // Function to generate QR code
+      function generateQRCode(text, containerId) {
+        const container = document.getElementById(containerId);
+        container.innerHTML = ""; // Clear previous QR code
+
+        QRCode.toCanvas(container, text, function (error) {
+          if (error) console.error(error);
+        });
+      }
+
+      // Function to show QR code modal
+      function showQRCodeModal(requestId) {
+        const request = sampleData.studentRequests.find(
+          (req) => req.id === requestId
+        );
+        if (!request) return;
+
+        const qrText = `Student: ${request.studentName}\nID: ${
+          request.studentId
+        }\nPurpose: ${request.purpose}\nDeparture: ${formatDateTime(
+          request.departure
+        )}\nReturn: ${formatDateTime(request.return)}`;
+
+        generateQRCode(qrText, "qr-code-container");
+        document.getElementById("qr-modal").classList.add("show");
+      }
+
+      // Function to show campus map modal
+      function showCampusMapModal() {
+        document.getElementById("campus-map-modal").classList.add("show");
+      }
+
+      // Function to switch user type
+      function switchUserType(userType) {
+        // Update active user type button
+        document.querySelectorAll(".user-type-btn").forEach((btn) => {
+          btn.classList.remove("active");
+          if (btn.dataset.userType === userType) {
+            btn.classList.add("active");
+          }
+        });
+
+        // Show corresponding portal
+        document.querySelectorAll(".user-portal").forEach((portal) => {
+          portal.classList.remove("active");
+          if (portal.id === `${userType}-portal`) {
+            portal.classList.add("active");
+          }
+        });
+
+        // Update user role display
+        let roleDisplay = "";
+        let userName = "";
+        switch (userType) {
+          case "student":
+            roleDisplay = "Student Portal";
+            userName = "Piyush Wali(22BHI10111)";
+            break;
+          case "warden":
+            roleDisplay = "Warden Portal - Boys Hostel Block 1";
+            userName = "Dr. Narottam Das Patel";
+            break;
+          case "supervisor":
+            roleDisplay = "Supervisor Portal";
+            userName = "Mr. Satish";
+            break;
+        }
+
+        document.getElementById("user-role-display").textContent = roleDisplay;
+        document.getElementById("user-name").textContent = userName;
+
+        currentUserType = userType;
+
+        // Reset to first tab of the new user type
+        switchTab(getFirstTabForUserType(userType));
+
+        // Render appropriate content
+        renderUserSpecificContent();
+      }
+
+      // Function to get first tab for user type
+      function getFirstTabForUserType(userType) {
+        switch (userType) {
+          case "student":
+            return "new-request";
+          case "warden":
+            return "warden-pending";
+          case "supervisor":
+            return "supervisor-pending";
+          default:
+            return "new-request";
+        }
+      }
+
+      // Function to switch tabs
+      function switchTab(tabId) {
+        // Update active tab button
+        const tabContainer = document
+          .getElementById(`${currentUserType}-portal`)
+          .querySelector(".flex.flex-wrap");
+        tabContainer.querySelectorAll(".tab-button").forEach((btn) => {
+          btn.classList.remove("active");
+          if (btn.dataset.tab === tabId) {
+            btn.classList.add("active");
+          }
+        });
+
+        // Show corresponding tab panel
+        const tabContentId = `${currentUserType}-tab-content`;
+        document
+          .getElementById(tabContentId)
+          .querySelectorAll(".tab-panel")
+          .forEach((panel) => {
+            panel.classList.remove("active");
+            if (panel.id === `${tabId}-panel`) {
+              panel.classList.add("active");
+            }
+          });
+
+        currentTab = tabId;
+
+        // Render tab-specific content
+        renderTabSpecificContent();
+      }
+
+      // Function to apply quick template
+      function applyQuickTemplate(templateName) {
+        const template = quickTemplates[templateName];
+        if (!template) return;
+
+        document.getElementById("purpose-select").value = template.purpose
+          .toLowerCase()
+          .replace(" ", "-");
+        document.getElementById("description-text").value =
+          template.description;
+        document.getElementById("destination-input").value =
+          template.destination;
+
+        // Set default times
+        const now = new Date();
+        const departure = new Date(now.getTime() + 60 * 60 * 1000); // 1 hour from now
+        const returnTime = new Date(departure.getTime() + 4 * 60 * 60 * 1000); // 4 hours later
+
+        // Set default time in 12-hour format
+        document.getElementById("departure-hour").value =
+          departure.getHours() % 12 || 12;
+        document.getElementById("departure-minute").value = "00";
+        document
+          .querySelectorAll("#departure-time .ampm-btn")
+          .forEach((btn) => {
+            btn.classList.remove("active");
+            if (
+              btn.dataset.time === (departure.getHours() >= 12 ? "PM" : "AM")
+            ) {
+              btn.classList.add("active");
+            }
+          });
+
+        document.getElementById("return-hour").value =
+          returnTime.getHours() % 12 || 12;
+        document.getElementById("return-minute").value = "00";
+        document.querySelectorAll("#return-time .ampm-btn").forEach((btn) => {
+          btn.classList.remove("active");
+          if (
+            btn.dataset.time === (returnTime.getHours() >= 12 ? "PM" : "AM")
+          ) {
+            btn.classList.add("active");
+          }
+        });
+
+        showMessage(
+          `${template.purpose} template applied successfully`,
+          "success"
+        );
+      }
+
+      // Function to render user-specific content
+      function renderUserSpecificContent() {
+        // Render student content
+        if (currentUserType === "student") {
+          renderStudentRequests();
+          renderOutingHistory();
+        }
+
+        // Render warden content
+        if (currentUserType === "warden") {
+          renderWardenPendingRequests();
+          renderWardenApprovedTable();
+          initializeWardenCharts();
+        }
+
+        // Render supervisor content
+        if (currentUserType === "supervisor") {
+          renderSupervisorPendingRequests();
+        }
+      }
+
+      // Function to render tab-specific content
+      function renderTabSpecificContent() {
+        // Add any tab-specific rendering logic here
+      }
+
+      // Function to render student requests
+      function renderStudentRequests() {
+        const container = document.getElementById("student-requests-container");
+        let requests = sampleData.studentRequests;
+
+        // Apply filter if needed
+        if (currentFilter !== "all") {
+          requests = requests.filter((req) => req.status === currentFilter);
+        }
+
+        if (requests.length === 0) {
+          container.innerHTML = `
+                    <div class="text-center py-8">
+                        <i class="fas fa-inbox text-4xl text-slate-500 mb-4"></i>
+                        <p class="text-slate-400">No ${
+                          currentFilter === "all" ? "" : currentFilter
+                        } requests found</p>
+                    </div>
+                `;
+          return;
+        }
+
+        let requestsHTML = "";
+
+        requests.forEach((request) => {
+          const isEmergency = request.type === "emergency";
+          const requestType = request.type;
+          const submittedTime = formatDateTime(request.submitted);
+
+          let typeBadge = "";
+          let statusBadge = "";
+
+          if (requestType === "outing") {
+            typeBadge = `<span class="status-badge status-pending">Outing</span>`;
+          } else if (requestType === "leave") {
+            typeBadge = `<span class="status-badge" style="background-color: #dbeafe; color: #1e40af;">Leave</span>`;
+          } else if (requestType === "emergency") {
+            typeBadge = `<span class="status-badge" style="background-color: #fecaca; color: #dc2626;">Emergency</span>`;
+          }
+
+          if (request.status === "pending") {
+            statusBadge = `<span class="status-badge status-pending">Pending</span>`;
+          } else if (request.status === "approved") {
+            statusBadge = `<span class="status-badge status-approved">Approved</span>`;
+          } else if (request.status === "rejected") {
+            statusBadge = `<span class="status-badge status-rejected">Rejected</span>`;
+          }
+
+          requestsHTML += `
+                    <div class="request-card ${
+                      isEmergency ? "urgent" : request.status
+                    }">
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
+                            <div class="mb-4 md:mb-0">
+                                <div class="flex items-center mb-2">
+                                    <h4 class="font-bold text-white text-lg">${
+                                      request.purpose
+                                    }</h4>
+                                    ${
+                                      isEmergency
+                                        ? '<i class="fas fa-triangle-exclamation text-red-500 ml-2"></i>'
+                                        : ""
+                                    }
+                                </div>
+                                <div class="text-sm text-slate-400 mb-2">
+                                    <span class="mr-4">${typeBadge}</span>
+                                    <span>${statusBadge}</span>
+                                </div>
+                                <div class="text-sm text-slate-300 mb-2">
+                                    ${request.description}
+                                </div>
+                                <div class="text-sm text-slate-300">
+                                    <strong>Time:</strong> ${formatDateTime(
+                                      request.departure
+                                    )} - ${formatDateTime(request.return)}
+                                </div>
+                            </div>
+                            <div class="flex flex-col items-end">
+                                <div class="text-xs text-slate-400 mt-2">Submitted: ${submittedTime}</div>
+                                <div class="flex space-x-2 mt-3">
+                                    <button class="view-request bg-blue-600 text-white text-sm font-semibold py-1 px-3 rounded hover:bg-blue-700 transition" data-id="${
+                                      request.id
+                                    }">
+                                        <i class="fas fa-eye mr-1"></i> View
+                                    </button>
+                                    ${
+                                      request.status === "pending"
+                                        ? `
+                                    <button class="cancel-request bg-red-600 text-white text-sm font-semibold py-1 px-3 rounded hover:bg-red-700 transition" data-id="${request.id}">
+                                        <i class="fas fa-times mr-1"></i> Cancel
+                                    </button>
+                                    `
+                                        : ""
+                                    }
+                                    ${
+                                      request.status === "approved"
+                                        ? `
+                                    <button class="qr-code-btn bg-green-600 text-white text-sm font-semibold py-1 px-3 rounded hover:bg-green-700 transition" data-id="${request.id}">
+                                        <i class="fas fa-qrcode mr-1"></i> QR Code
+                                    </button>
+                                    `
+                                        : ""
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+        });
+
+        container.innerHTML = requestsHTML;
+
+        // Add event listeners
+        document.querySelectorAll(".view-request").forEach((button) => {
+          button.addEventListener("click", function () {
+            const requestId = this.dataset.id;
+            viewRequestDetails(requestId);
+          });
+        });
+
+        document.querySelectorAll(".cancel-request").forEach((button) => {
+          button.addEventListener("click", function () {
+            const requestId = this.dataset.id;
+            cancelRequest(requestId);
+          });
+        });
+
+        document.querySelectorAll(".qr-code-btn").forEach((button) => {
+          button.addEventListener("click", function () {
+            const requestId = this.dataset.id;
+            showQRCodeModal(requestId);
+          });
+        });
+      }
+
+      // Function to render outing history
+      function renderOutingHistory() {
+        const container = document.getElementById("outing-history-table");
+        const requests = sampleData.studentRequests;
+
+        if (requests.length === 0) {
+          container.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="px-4 py-3 text-center text-slate-400">No outing history found</td>
+                    </tr>
+                `;
+          return;
+        }
+
+        let historyHTML = "";
+
+        requests.forEach((request) => {
+          let statusBadge = "";
+
+          if (request.status === "pending") {
+            statusBadge = `<span class="status-badge status-pending">Pending</span>`;
+          } else if (request.status === "approved") {
+            statusBadge = `<span class="status-badge status-approved">Approved</span>`;
+          } else if (request.status === "rejected") {
+            statusBadge = `<span class="status-badge status-rejected">Rejected</span>`;
+          }
+
+          historyHTML += `
+                    <tr class="border-b border-slate-700 hover:bg-slate-700">
+                        <td class="px-4 py-3">${new Date(
+                          request.submitted
+                        ).toLocaleDateString()}</td>
+                        <td class="px-4 py-3">${
+                          request.type.charAt(0).toUpperCase() +
+                          request.type.slice(1)
+                        }</td>
+                        <td class="px-4 py-3">${
+                          request.destination || "N/A"
+                        }</td>
+                        <td class="px-4 py-3">${formatDateTime(
+                          request.departure
+                        )}</td>
+                        <td class="px-4 py-3">${formatDateTime(
+                          request.return
+                        )}</td>
+                        <td class="px-4 py-3">${statusBadge}</td>
+                    </tr>
+                `;
+        });
+
+        container.innerHTML = historyHTML;
+      }
+
+      // Function to render warden pending requests
+      function renderWardenPendingRequests() {
+        const container = document.getElementById(
+          "warden-pending-requests-container"
+        );
+        // Filter out leave requests - only show outing and emergency requests
+        const requests = sampleData.wardenPendingRequests.filter(
+          (req) => req.type !== "leave"
+        );
+
+        if (requests.length === 0) {
+          container.innerHTML = `
+                    <div class="text-center py-8">
+                        <i class="fas fa-inbox text-4xl text-slate-500 mb-4"></i>
+                        <p class="text-slate-400">No pending requests</p>
+                    </div>
+                `;
+          return;
+        }
+
+        let requestsHTML = "";
+
+        requests.forEach((request) => {
+          const isEmergency = request.emergency;
+          const requestType = request.type;
+          const submittedTime = formatDateTime(request.submitted);
+
+          let typeBadge = "";
+          if (requestType === "outing") {
+            typeBadge = `<span class="status-badge status-pending">Outing</span>`;
+          } else if (requestType === "leave") {
+            typeBadge = `<span class="status-badge" style="background-color: #dbeafe; color: #1e40af;">Leave</span>`;
+          } else if (requestType === "emergency") {
+            typeBadge = `<span class="status-badge" style="background-color: #fecaca; color: #dc2626;">Emergency</span>`;
+          }
+
+          requestsHTML += `
+                    <div class="request-card ${
+                      isEmergency ? "urgent" : "pending"
+                    }">
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
+                            <div class="mb-4 md:mb-0">
+                                <div class="flex items-center mb-2">
+                                    <h4 class="font-bold text-white text-lg">${
+                                      request.studentName
+                                    }</h4>
+                                    ${
+                                      isEmergency
+                                        ? '<i class="fas fa-triangle-exclamation text-red-500 ml-2"></i>'
+                                        : ""
+                                    }
+                                </div>
+                                <div class="text-sm text-slate-400 mb-2">
+                                    <span class="mr-4">ID: ${
+                                      request.studentId
+                                    }</span>
+                                    <span>Room: ${request.roomNo}</span>
+                                </div>
+                                <div class="text-sm text-slate-300 mb-2">
+                                    <strong>Purpose:</strong> ${request.purpose}
+                                </div>
+                                <div class="text-sm text-slate-300 mb-2">
+                                    ${request.description}
+                                </div>
+                                <div class="text-sm text-slate-300">
+                                    <strong>Time:</strong> ${formatDateTime(
+                                      request.departure
+                                    )} - ${formatDateTime(request.return)}
+                                </div>
+                            </div>
+                            <div class="flex flex-col items-end">
+                                ${typeBadge}
+                                <div class="text-xs text-slate-400 mt-2">Submitted: ${submittedTime}</div>
+                                <div class="flex space-x-2 mt-3">
+                                    <button class="view-request bg-blue-600 text-white text-sm font-semibold py-1 px-3 rounded hover:bg-blue-700 transition" data-id="${
+                                      request.id
+                                    }">
+                                        <i class="fas fa-eye mr-1"></i> View
+                                    </button>
+                                    <button class="approve-request bg-green-600 text-white text-sm font-semibold py-1 px-3 rounded hover:bg-green-700 transition" data-id="${
+                                      request.id
+                                    }">
+                                        <i class="fas fa-check mr-1"></i> Approve
+                                    </button>
+                                    <button class="reject-request bg-red-600 text-white text-sm font-semibold py-1 px-3 rounded hover:bg-red-700 transition" data-id="${
+                                      request.id
+                                    }">
+                                        <i class="fas fa-times mr-1"></i> Reject
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+        });
+
+        container.innerHTML = requestsHTML;
+
+        // Add event listeners
+        document.querySelectorAll(".view-request").forEach((button) => {
+          button.addEventListener("click", function () {
+            const requestId = this.dataset.id;
+            viewRequestDetails(requestId);
+          });
+        });
+
+        document.querySelectorAll(".approve-request").forEach((button) => {
+          button.addEventListener("click", function () {
+            const requestId = this.dataset.id;
+            approveRequest(requestId);
+          });
+        });
+
+        document.querySelectorAll(".reject-request").forEach((button) => {
+          button.addEventListener("click", function () {
+            const requestId = this.dataset.id;
+            rejectRequest(requestId);
+          });
+        });
+      }
+
+      // Function to render warden approved table
+      function renderWardenApprovedTable() {
+        const container = document.getElementById("warden-approved-table");
+        // Filter out leave requests - only show outing and emergency requests
+        const requests = sampleData.studentRequests.filter(
+          (req) => req.status === "approved" && req.type !== "leave"
+        );
+
+        if (requests.length === 0) {
+          container.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="px-4 py-3 text-center text-slate-400">No approved requests</td>
+                    </tr>
+                `;
+          return;
+        }
+
+        let tableHTML = "";
+
+        requests.forEach((request) => {
+          let typeBadge = "";
+          if (request.type === "outing") {
+            typeBadge = `<span class="status-badge status-approved">Outing</span>`;
+          } else if (request.type === "leave") {
+            typeBadge = `<span class="status-badge" style="background-color: #d1fae5; color: #065f46;">Leave</span>`;
+          }
+
+          tableHTML += `
+                    <tr class="border-b border-slate-700 hover:bg-slate-700">
+                        <td class="px-4 py-3">
+                            <div class="font-medium text-white">${
+                              request.studentName
+                            }</div>
+                            <div class="text-xs text-slate-400">${
+                              request.studentId
+                            } | ${request.roomNo}</div>
+                        </td>
+                        <td class="px-4 py-3">${typeBadge}</td>
+                        <td class="px-4 py-3">${formatDateTime(
+                          request.departure
+                        )}</td>
+                        <td class="px-4 py-3">${formatDateTime(
+                          request.return
+                        )}</td>
+                        <td class="px-4 py-3">
+                            <span class="status-badge status-active">Active</span>
+                        </td>
+                        <td class="px-4 py-3">
+                            <button class="view-request bg-blue-600 text-white text-sm font-semibold py-1 px-3 rounded hover:bg-blue-700 transition" data-id="${
+                              request.id
+                            }">
+                                <i class="fas fa-eye mr-1"></i> View
+                            </button>
+                        </td>
+                    </tr>
+                `;
+        });
+
+        container.innerHTML = tableHTML;
+
+        // Add event listeners
+        document.querySelectorAll(".view-request").forEach((button) => {
+          button.addEventListener("click", function () {
+            const requestId = this.dataset.id;
+            viewRequestDetails(requestId);
+          });
+        });
+      }
+
+      // Function to render supervisor pending requests
+      function renderSupervisorPendingRequests() {
+        const container = document.getElementById(
+          "supervisor-pending-container"
+        );
+        // Filter out leave requests - only show outing and emergency requests
+        const requests = sampleData.supervisorPendingRequests.filter(
+          (req) => req.type !== "leave"
+        );
+
+        if (requests.length === 0) {
+          container.innerHTML = `
+                    <div class="text-center py-8">
+                        <i class="fas fa-inbox text-4xl text-slate-500 mb-4"></i>
+                        <p class="text-slate-400">No pending approvals</p>
+                    </div>
+                `;
+          return;
+        }
+
+        let requestsHTML = "";
+
+        requests.forEach((request) => {
+          const isEmergency = request.emergency;
+          const requestType = request.type;
+          const submittedTime = formatDateTime(request.submitted);
+          const wardenApprovedTime = formatDateTime(request.wardenApprovedAt);
+
+          let typeBadge = "";
+          if (requestType === "outing") {
+            typeBadge = `<span class="status-badge status-pending">Outing</span>`;
+          } else if (requestType === "leave") {
+            typeBadge = `<span class="status-badge" style="background-color: #dbeafe; color: #1e40af;">Leave</span>`;
+          } else if (requestType === "emergency") {
+            typeBadge = `<span class="status-badge" style="background-color: #fecaca; color: #dc2626;">Emergency</span>`;
+          }
+
+          requestsHTML += `
+                    <div class="request-card pending">
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
+                            <div class="mb-4 md:mb-0">
+                                <div class="flex items-center mb-2">
+                                    <h4 class="font-bold text-white text-lg">${
+                                      request.studentName
+                                    }</h4>
+                                    ${
+                                      isEmergency
+                                        ? '<i class="fas fa-triangle-exclamation text-red-500 ml-2"></i>'
+                                        : ""
+                                    }
+                                </div>
+                                <div class="text-sm text-slate-400 mb-2">
+                                    <span class="mr-4">ID: ${
+                                      request.studentId
+                                    }</span>
+                                    <span>Room: ${request.roomNo}</span>
+                                </div>
+                                <div class="text-sm text-slate-300 mb-2">
+                                    <strong>Purpose:</strong> ${request.purpose}
+                                </div>
+                                <div class="text-sm text-slate-300 mb-2">
+                                    ${request.description}
+                                </div>
+                                <div class="text-sm text-slate-300">
+                                    <strong>Time:</strong> ${formatDateTime(
+                                      request.departure
+                                    )} - ${formatDateTime(request.return)}
+                                </div>
+                                <div class="text-sm text-slate-300 mt-2">
+                                    <strong>Warden Approval:</strong> ${
+                                      request.wardenApproval
+                                    } on ${wardenApprovedTime}
+                                </div>
+                            </div>
+                            <div class="flex flex-col items-end">
+                                ${typeBadge}
+                                <div class="text-xs text-slate-400 mt-2">Submitted: ${submittedTime}</div>
+                                <div class="flex space-x-2 mt-3">
+                                    <button class="view-request bg-blue-600 text-white text-sm font-semibold py-1 px-3 rounded hover:bg-blue-700 transition" data-id="${
+                                      request.id
+                                    }">
+                                        <i class="fas fa-eye mr-1"></i> View
+                                    </button>
+                                    <button class="approve-request bg-green-600 text-white text-sm font-semibold py-1 px-3 rounded hover:bg-green-700 transition" data-id="${
+                                      request.id
+                                    }">
+                                        <i class="fas fa-check mr-1"></i> Approve
+                                    </button>
+                                    <button class="reject-request bg-red-600 text-white text-sm font-semibold py-1 px-3 rounded hover:bg-red-700 transition" data-id="${
+                                      request.id
+                                    }">
+                                        <i class="fas fa-times mr-1"></i> Reject
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+        });
+
+        container.innerHTML = requestsHTML;
+
+        // Add event listeners
+        document.querySelectorAll(".view-request").forEach((button) => {
+          button.addEventListener("click", function () {
+            const requestId = this.dataset.id;
+            viewRequestDetails(requestId);
+          });
+        });
+
+        document.querySelectorAll(".approve-request").forEach((button) => {
+          button.addEventListener("click", function () {
+            const requestId = this.dataset.id;
+            approveRequest(requestId);
+          });
+        });
+
+        document.querySelectorAll(".reject-request").forEach((button) => {
+          button.addEventListener("click", function () {
+            const requestId = this.dataset.id;
+            rejectRequest(requestId);
+          });
+        });
+      }
+
+      // Function to view request details
+      function viewRequestDetails(requestId) {
+        // Find the request in all data sources
+        let request = null;
+
+        // Check student requests
+        request = sampleData.studentRequests.find(
+          (req) => req.id === requestId
+        );
+
+        // Check warden requests
+        if (!request) {
+          request = sampleData.wardenPendingRequests.find(
+            (req) => req.id === requestId
+          );
+        }
+
+        // Check supervisor requests
+        if (!request) {
+          request = sampleData.supervisorPendingRequests.find(
+            (req) => req.id === requestId
+          );
+        }
+
+        if (!request) {
+          showMessage("Request not found", "error");
+          return;
+        }
+
+        const modalContent = document.getElementById("request-modal-content");
+        const isPending = request.status === "pending";
+        const isApproved = request.status === "approved";
+        const isRejected = request.status === "rejected";
+
+        let approvalTimeline = "";
+        if (isPending) {
+          approvalTimeline = `
+                    <div class="mt-6">
+                        <h4 class="font-bold text-white mb-3">Approval Workflow</h4>
+                        <div class="timeline">
+                            <div class="timeline-item pending">
+                                <div class="text-sm text-slate-300">Submitted by student</div>
+                                <div class="text-xs text-slate-400">${formatDateTime(
+                                  request.submitted
+                                )}</div>
+                            </div>
+                            ${
+                              request.wardenApproval
+                                ? `
+                            <div class="timeline-item approved">
+                                <div class="text-sm text-slate-300">Approved by Warden</div>
+                                <div class="text-xs text-slate-400">${formatDateTime(
+                                  request.wardenApprovedAt
+                                )}</div>
+                            </div>
+                            `
+                                : `
+                            <div class="timeline-item">
+                                <div class="text-sm text-slate-300">Warden Approval</div>
+                                <div class="text-xs text-slate-400">Pending</div>
+                            </div>
+                            `
+                            }
+                            <div class="timeline-item">
+                                <div class="text-sm text-slate-300">Supervisor Approval</div>
+                                <div class="text-xs text-slate-400">Pending</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+        } else if (isApproved) {
+          approvalTimeline = `
+                    <div class="mt-6">
+                        <h4 class="font-bold text-white mb-3">Approval Workflow</h4>
+                        <div class="timeline">
+                            <div class="timeline-item approved">
+                                <div class="text-sm text-slate-300">Submitted by student</div>
+                                <div class="text-xs text-slate-400">${formatDateTime(
+                                  request.submitted
+                                )}</div>
+                            </div>
+                            <div class="timeline-item approved">
+                                <div class="text-sm text-slate-300">Approved by ${
+                                  request.approvedBy
+                                }</div>
+                                <div class="text-xs text-slate-400">${formatDateTime(
+                                  request.approvedAt
+                                )}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+        } else if (isRejected) {
+          approvalTimeline = `
+                    <div class="mt-6">
+                        <h4 class="font-bold text-white mb-3">Approval Workflow</h4>
+                        <div class="timeline">
+                            <div class="timeline-item rejected">
+                                <div class="text-sm text-slate-300">Submitted by student</div>
+                                <div class="text-xs text-slate-400">${formatDateTime(
+                                  request.submitted
+                                )}</div>
+                            </div>
+                            <div class="timeline-item rejected">
+                                <div class="text-sm text-slate-300">Rejected by ${
+                                  request.rejectedBy
+                                }</div>
+                                <div class="text-xs text-slate-400">${formatDateTime(
+                                  request.rejectedAt
+                                )}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+        }
+
+        let actionButtons = "";
+        if (
+          isPending &&
+          (currentUserType === "warden" || currentUserType === "supervisor")
+        ) {
+          actionButtons = `
+                    <div class="flex space-x-3 mt-6">
+                        <button class="approve-request bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition flex-1" data-id="${request.id}">
+                            <i class="fas fa-check mr-2"></i>Approve Request
+                        </button>
+                        <button class="reject-request bg-red-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-red-700 transition flex-1" data-id="${request.id}">
+                            <i class="fas fa-times mr-2"></i>Reject Request
+                        </button>
+                    </div>
+                `;
+        }
+
+        modalContent.innerHTML = `
+                <div class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-slate-400 text-sm font-medium mb-1">Student Name</label>
+                            <p class="text-white">${request.studentName}</p>
+                        </div>
+                        <div>
+                            <label class="block text-slate-400 text-sm font-medium mb-1">Student ID</label>
+                            <p class="text-white">${request.studentId}</p>
+                        </div>
+                        <div>
+                            <label class="block text-slate-400 text-sm font-medium mb-1">Room Number</label>
+                            <p class="text-white">${request.roomNo}</p>
+                        </div>
+                        <div>
+                            <label class="block text-slate-400 text-sm font-medium mb-1">Request Type</label>
+                            <p class="text-white">${
+                              request.type.charAt(0).toUpperCase() +
+                              request.type.slice(1)
+                            }</p>
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-slate-400 text-sm font-medium mb-1">Purpose</label>
+                            <p class="text-white">${request.purpose}</p>
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-slate-400 text-sm font-medium mb-1">Description</label>
+                            <p class="text-white">${request.description}</p>
+                        </div>
+                        <div>
+                            <label class="block text-slate-400 text-sm font-medium mb-1">Departure Time</label>
+                            <p class="text-white">${formatDateTime(
+                              request.departure
+                            )}</p>
+                        </div>
+                        <div>
+                            <label class="block text-slate-400 text-sm font-medium mb-1">Return Time</label>
+                            <p class="text-white">${formatDateTime(
+                              request.return
+                            )}</p>
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-slate-400 text-sm font-medium mb-1">Destination</label>
+                            <p class="text-white">${
+                              request.destination || "N/A"
+                            }</p>
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-slate-400 text-sm font-medium mb-1">Emergency Contact</label>
+                            <p class="text-white">${
+                              request.emergencyContact || request.parentContact
+                            }</p>
+                        </div>
+                        ${
+                          request.reason
+                            ? `
+                        <div class="md:col-span-2">
+                            <label class="block text-slate-400 text-sm font-medium mb-1">Reason for Rejection</label>
+                            <p class="text-white">${request.reason}</p>
+                        </div>
+                        `
+                            : ""
+                        }
+                    </div>
+                    ${approvalTimeline}
+                    ${actionButtons}
+                </div>
+            `;
+
+        // Add event listeners to action buttons
+        if (
+          isPending &&
+          (currentUserType === "warden" || currentUserType === "supervisor")
+        ) {
+          document
+            .querySelector(".approve-request")
+            .addEventListener("click", function () {
+              approveRequest(requestId);
+              document.getElementById("request-modal").classList.remove("show");
+            });
+
+          document
+            .querySelector(".reject-request")
+            .addEventListener("click", function () {
+              rejectRequest(requestId);
+              document.getElementById("request-modal").classList.remove("show");
+            });
+        }
+
+        document.getElementById("request-modal").classList.add("show");
+      }
+
+      // Function to approve a request
+      function approveRequest(requestId) {
+        // In a real application, this would make an API call
+        showMessage(`Request ${requestId} approved successfully`, "success");
+
+        // Update UI
+        setTimeout(() => {
+          if (currentUserType === "student") {
+            renderStudentRequests();
+          } else if (currentUserType === "warden") {
+            renderWardenPendingRequests();
+            document.getElementById("warden-pending").textContent =
+              parseInt(document.getElementById("warden-pending").textContent) -
+              1;
+            document.getElementById("warden-approved").textContent =
+              parseInt(document.getElementById("warden-approved").textContent) +
+              1;
+          } else if (currentUserType === "supervisor") {
+            renderSupervisorPendingRequests();
+            document.getElementById("supervisor-pending").textContent =
+              parseInt(
+                document.getElementById("supervisor-pending").textContent
+              ) - 1;
+            document.getElementById("supervisor-approved").textContent =
+              parseInt(
+                document.getElementById("supervisor-approved").textContent
+              ) + 1;
+          }
+        }, 500);
+      }
+
+      // Function to reject a request
+      function rejectRequest(requestId) {
+        // In a real application, this would make an API call
+        showMessage(`Request ${requestId} rejected`, "info");
+
+        // Update UI
+        setTimeout(() => {
+          if (currentUserType === "student") {
+            renderStudentRequests();
+          } else if (currentUserType === "warden") {
+            renderWardenPendingRequests();
+            document.getElementById("warden-pending").textContent =
+              parseInt(document.getElementById("warden-pending").textContent) -
+              1;
+          } else if (currentUserType === "supervisor") {
+            renderSupervisorPendingRequests();
+            document.getElementById("supervisor-pending").textContent =
+              parseInt(
+                document.getElementById("supervisor-pending").textContent
+              ) - 1;
+          }
+        }, 500);
+      }
+
+      // Function to cancel a request
+      function cancelRequest(requestId) {
+        // In a real application, this would make an API call
+        showMessage(`Request ${requestId} cancelled`, "info");
+
+        // Update UI
+        setTimeout(() => {
+          renderStudentRequests();
+          document.getElementById("student-pending").textContent =
+            parseInt(document.getElementById("student-pending").textContent) -
+            1;
+        }, 500);
+      }
+
+      // Function to initialize warden charts
+      function initializeWardenCharts() {
+        // Warden Request Chart
+        const requestCtx = document.getElementById("wardenRequestChart");
+        if (requestCtx) {
+          new Chart(requestCtx, {
+            type: "line",
+            data: {
+              labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+              datasets: [
+                {
+                  label: "Requests",
+                  data: [12, 19, 8, 15, 12, 10, 7],
+                  backgroundColor: "rgba(59, 130, 246, 0.1)",
+                  borderColor: "rgba(59, 130, 246, 1)",
+                  borderWidth: 2,
+                  tension: 0.3,
+                  fill: true,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  ticks: {
+                    color: "#94a3b8",
+                  },
+                  grid: {
+                    color: "rgba(148, 163, 184, 0.1)",
+                  },
+                },
+                x: {
+                  ticks: {
+                    color: "#94a3b8",
+                  },
+                  grid: {
+                    color: "rgba(148, 163, 184, 0.1)",
+                  },
+                },
+              },
+              plugins: {
+                legend: {
+                  labels: {
+                    color: "#94a3b8",
+                  },
+                },
+              },
+            },
+          });
+        }
+      }
+
+      // Initialize the application
+      function init() {
+        // Set current date for warden last updated
+        const now = new Date();
+        const options = {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        };
+        if (document.getElementById("warden-last-updated")) {
+          document.getElementById("warden-last-updated").textContent =
+            now.toLocaleDateString("en-US", options);
+        }
+
+        // Render initial content
+        renderUserSpecificContent();
+
+        // User type selection
+        document.querySelectorAll(".user-type-btn").forEach((btn) => {
+          btn.addEventListener("click", function () {
+            const userType = this.dataset.userType;
+            switchUserType(userType);
+          });
+        });
+
+        // Tab navigation
+        document.querySelectorAll(".tab-button").forEach((button) => {
+          button.addEventListener("click", function () {
+            const tabId = this.dataset.tab;
+            switchTab(tabId);
+          });
+        });
+
+        // Quick template buttons
+        document.querySelectorAll(".quick-template").forEach((template) => {
+          template.addEventListener("click", function () {
+            const templateName = this.dataset.template;
+            applyQuickTemplate(templateName);
+          });
+        });
+
+        // AM/PM button functionality
+        document.querySelectorAll(".ampm-btn").forEach((btn) => {
+          btn.addEventListener("click", function () {
+            const parent = this.closest(".time-selector");
+            parent
+              .querySelectorAll(".ampm-btn")
+              .forEach((b) => b.classList.remove("active"));
+            this.classList.add("active");
+          });
+        });
+
+        // Filter buttons for student requests
+        document.querySelectorAll(".filter-btn").forEach((button) => {
+          button.addEventListener("click", function () {
+            // Update active filter button
+            document.querySelectorAll(".filter-btn").forEach((btn) => {
+              btn.classList.remove("bg-blue-600");
+              btn.classList.add("bg-slate-700");
+            });
+            this.classList.remove("bg-slate-700");
+            this.classList.add("bg-blue-600");
+
+            currentFilter = this.dataset.filter;
+            renderStudentRequests();
+          });
+        });
+
+        // Close request modal
+        document
+          .getElementById("close-request-modal")
+          .addEventListener("click", function () {
+            document.getElementById("request-modal").classList.remove("show");
+          });
+
+        // Close QR modal
+        document
+          .getElementById("close-qr-modal")
+          .addEventListener("click", function () {
+            document.getElementById("qr-modal").classList.remove("show");
+          });
+
+        // Close campus map modal
+        document
+          .getElementById("close-campus-map-modal")
+          .addEventListener("click", function () {
+            document
+              .getElementById("campus-map-modal")
+              .classList.remove("show");
+          });
+
+        // Submit request button
+        document
+          .getElementById("submit-request")
+          .addEventListener("click", function () {
+            // Basic validation
+            const purpose = document.getElementById("purpose-select").value;
+            const description =
+              document.getElementById("description-text").value;
+            const departureDate =
+              document.getElementById("departure-date").value;
+            const returnDate = document.getElementById("return-date").value;
+
+            if (!purpose || !description || !departureDate || !returnDate) {
+              showMessage("Please fill all required fields", "error");
+              return;
+            }
+
+            // Get time values
+            const departureHour =
+              document.getElementById("departure-hour").value;
+            const departureMinute =
+              document.getElementById("departure-minute").value;
+            const departureAmPm = document.querySelector(
+              "#departure-time .ampm-btn.active"
+            ).dataset.time;
+
+            const returnHour = document.getElementById("return-hour").value;
+            const returnMinute = document.getElementById("return-minute").value;
+            const returnAmPm = document.querySelector(
+              "#return-time .ampm-btn.active"
+            ).dataset.time;
+
+            showMessage(
+              `Leave/Outing request submitted successfully for ${departureDate} at ${departureHour}:${departureMinute} ${departureAmPm}`,
+              "success"
+            );
+
+            // Reset form
+            document.getElementById("purpose-select").value = "";
+            document.getElementById("description-text").value = "";
+            document.getElementById("departure-date").value = "";
+            document.getElementById("return-date").value = "";
+            document.getElementById("departure-hour").value = "10";
+            document.getElementById("departure-minute").value = "00";
+            document.getElementById("return-hour").value = "2";
+            document.getElementById("return-minute").value = "00";
+            document.getElementById("destination-input").value = "";
+            document.getElementById("emergency-contact").value = "";
+          });
+
+        // Save draft button
+        document
+          .getElementById("save-draft")
+          .addEventListener("click", function () {
+            showMessage("Request saved as draft", "info");
+          });
+
+        // Show QR code button
+        document
+          .getElementById("show-qr-code")
+          .addEventListener("click", function () {
+            const approvedRequest = sampleData.studentRequests.find(
+              (req) => req.status === "approved"
+            );
+            if (approvedRequest) {
+              showQRCodeModal(approvedRequest.id);
+            } else {
+              showMessage("No approved outing pass available", "error");
+            }
+          });
+
+        // View campus map button
+        document
+          .getElementById("view-campus-map")
+          .addEventListener("click", function () {
+            showCampusMapModal();
+          });
+
+        // Logout button
+        document
+          .getElementById("logout-btn")
+          .addEventListener("click", function () {
+            showMessage("Logged out successfully", "info");
+          });
+
+        // Notification icon
+        document
+          .getElementById("notification-icon")
+          .addEventListener("click", function () {
+            showMessage("Notifications panel opened", "info");
+          });
+
+        // Warden export button
+        if (document.getElementById("warden-export")) {
+          document
+            .getElementById("warden-export")
+            .addEventListener("click", function () {
+              showMessage("Data exported successfully", "success");
+            });
+        }
+
+        // Warden floor management
+        document.querySelectorAll("[data-floor]").forEach((floor) => {
+          floor.addEventListener("click", function () {
+            const floorNumber = this.dataset.floor;
+            showMessage(`Floor ${floorNumber} details opened`, "info");
+          });
+        });
+
+        // Warden save settings button
+        if (document.getElementById("save-warden-settings")) {
+          document
+            .getElementById("save-warden-settings")
+            .addEventListener("click", function () {
+              const autoApprovalTime =
+                document.getElementById("auto-approval-time").value;
+              const maxOutingDuration = document.getElementById(
+                "max-outing-duration"
+              ).value;
+              const emergencyResponseTime = document.getElementById(
+                "emergency-response-time"
+              ).value;
+
+              showMessage(
+                `Warden settings saved: Auto-approval after ${autoApprovalTime} hours, Max outing ${maxOutingDuration} hours, Emergency response ${emergencyResponseTime} minutes`,
+                "success"
+              );
+            });
+        }
+
+        // Supervisor ward management
+        document.querySelectorAll("[data-ward]").forEach((ward) => {
+          ward.addEventListener("click", function () {
+            const wardName = this.dataset.ward;
+            showMessage(
+              `${wardName.replace("-", " ").toUpperCase()} details opened`,
+              "info"
+            );
+          });
+        });
+
+        // Supervisor generate report button
+        if (document.getElementById("generate-report")) {
+          document
+            .getElementById("generate-report")
+            .addEventListener("click", function () {
+              const reportType = document.getElementById("report-type").value;
+              const reportPeriod =
+                document.getElementById("report-period").value;
+
+              showMessage(
+                `${
+                  reportType.charAt(0).toUpperCase() + reportType.slice(1)
+                } report generated for ${reportPeriod}`,
+                "success"
+              );
+            });
+        }
+
+        // Supervisor view analytics button
+        if (document.getElementById("view-analytics")) {
+          document
+            .getElementById("view-analytics")
+            .addEventListener("click", function () {
+              showMessage("Analytics dashboard opened", "info");
+            });
+        }
+
+        // Supervisor save settings button
+        if (document.getElementById("save-supervisor-settings")) {
+          document
+            .getElementById("save-supervisor-settings")
+            .addEventListener("click", function () {
+              const autoEscalateTime =
+                document.getElementById("auto-escalate-time").value;
+              const emergencyAutoApproval = document.getElementById(
+                "emergency-auto-approval"
+              ).checked;
+
+              showMessage(
+                `Supervisor settings saved: Auto-escalate after ${autoEscalateTime} hours, Emergency auto-approval ${
+                  emergencyAutoApproval ? "enabled" : "disabled"
+                }`,
+                "success"
+              );
+            });
+        }
+      }
+
+      // Initialize when DOM is loaded
+      document.addEventListener("DOMContentLoaded", init);
+    </script>
+    <script src="auth_guard.js"></script>
+</body>
+</html>
+

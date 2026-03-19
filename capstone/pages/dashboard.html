@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VIT HMS Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap");
+      :root {
+        --card-bg: rgba(15, 23, 42, 0.85);
+        --card-border: rgba(148, 163, 184, 0.2);
+      }
+      body {
+        font-family: "Space Grotesk", sans-serif;
+        background: radial-gradient(
+            circle at 20% 20%,
+            rgba(56, 189, 248, 0.15),
+            transparent 35%
+          ),
+          radial-gradient(
+            circle at 80% 0%,
+            rgba(167, 139, 250, 0.2),
+            transparent 40%
+          ),
+          #0b1120;
+      }
+      .glass {
+        background: var(--card-bg);
+        border: 1px solid var(--card-border);
+        backdrop-filter: blur(12px);
+      }
+      .page-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 20px 40px rgba(15, 23, 42, 0.4);
+      }
+    </style>
+  </head>
+  <body class="min-h-screen text-slate-100">
+    <header class="max-w-6xl mx-auto px-6 pt-10 pb-8">
+      <div class="flex items-center gap-3 mb-4">
+        <div
+          class="w-12 h-12 rounded-2xl bg-cyan-500/20 text-cyan-300 flex items-center justify-center"
+        >
+          <i class="fa-solid fa-hospital"></i>
+        </div>
+        <div>
+          <p class="text-sm uppercase tracking-[0.3em] text-slate-400">
+            VIT Bhopal
+          </p>
+          <h1 class="text-3xl md:text-4xl font-bold text-white">
+            HMS Master Dashboard
+          </h1>
+        </div>
+      </div>
+      <p class="text-slate-300 max-w-3xl">
+        All modules are consolidated here. Search, then open any page in a new
+        tab or the same window.
+      </p>
+      <div class="mt-6 flex flex-col sm:flex-row gap-3">
+        <div class="flex-1 glass rounded-2xl px-4 py-3 flex items-center gap-3">
+          <i class="fa-solid fa-magnifying-glass text-slate-400"></i>
+          <label class="sr-only" for="searchInput">Search pages</label>
+          <input
+            id="searchInput"
+            type="text"
+            placeholder="Search pages (e.g., ambulance, reports, exam)"
+            aria-label="Search pages"
+            class="w-full bg-transparent outline-none text-slate-100 placeholder:text-slate-500"
+          />
+        </div>
+        <div
+          class="glass rounded-2xl px-4 py-3 flex items-center gap-2 text-sm text-slate-300"
+        >
+          <i class="fa-solid fa-layer-group text-cyan-300"></i>
+          <span id="pageCount">0</span>
+          <span>pages available</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 pb-16">
+      <div
+        id="pagesGrid"
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
+      ></div>
+    </main>
+
+    <script>
+      const pages = [
+        "ambulance.html",
+        "biometric.html",
+        "complaint_management_system.html",
+        "dashboard.html",
+        "demo.html",
+        "doctors.html",
+        "electronic_health_records.html",
+        "emergency_requests.html",
+        "exam_management_system.html",
+        "health_insurance.html",
+        "lab_tests.html",
+        "laundry_management_system.html",
+        "leave_and_outing.html",
+        "local_hospital_network.html",
+        "medical_camps.html",
+        "medicine_order.html",
+        "medicine_reminder.html",
+        "mess_food_order_service.html",
+        "mess_menu.html",
+        "parent_notification.html",
+        "payment_gateway.html",
+        "reports_and_analytics.html",
+        "restocking.html",
+        "room_management.html",
+        "room_sanitation.html",
+        "sos.html",
+        "student_transport.html",
+        "studentrequest.html",
+        "symptoms_checker.html",
+        "transport_management_system.html",
+        "virtual_consultation.html",
+        "vit_bhopal_community.html",
+        "wearables.html",
+      ];
+
+      const grid = document.getElementById("pagesGrid");
+      const searchInput = document.getElementById("searchInput");
+      const pageCount = document.getElementById("pageCount");
+
+      const formatTitle = (file) =>
+        file.replace(".html", "").replace(/\b\w/g, (c) => c.toUpperCase());
+
+      const renderPages = (filter = "") => {
+        const normalized = filter.trim().toLowerCase();
+        const visible = pages.filter((file) =>
+          file.toLowerCase().includes(normalized)
+        );
+
+        grid.innerHTML = "";
+        visible.forEach((file) => {
+          const card = document.createElement("a");
+          card.href = file;
+          card.className =
+            "page-card glass rounded-2xl p-5 transition-all duration-200 flex flex-col gap-4";
+          card.innerHTML = `
+            <div class="flex items-start justify-between gap-3">
+              <div>
+                <h3 class="text-lg font-semibold text-white">${formatTitle(
+                  file
+                )}</h3>
+                <p class="text-xs text-slate-400 mt-1">/${file}</p>
+              </div>
+              <span class="text-xs px-2 py-1 rounded-full bg-cyan-500/20 text-cyan-200">
+                Open
+              </span>
+            </div>
+            <div class="text-sm text-slate-300">
+              Launch the module and review its workflow.
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+
+        pageCount.textContent = visible.length.toString();
+      };
+
+      searchInput.addEventListener("input", (event) => {
+        renderPages(event.target.value);
+      });
+
+      renderPages();
+    </script>
+    <script src="auth_guard.js"></script>
+</body>
+</html>
+
+

@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HMS | Emergency Requests</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style> @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"); body { font-family: "Inter", sans-serif; color: #d1d5db; /* gray-300 */ } .active-nav-link { background-color: #374151; /* gray-700 */ color: white; } .bg-card { background-color: #374151; /* gray-700 */ } .message-box { animation: slideIn 0.5s forwards; } @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } } .tab-button { background-color: #1f2937; /* gray-800 */ color: #9ca3af; /* gray-400 */ transition: all 0.3s ease; } .tab-button.active { background-color: #374151; /* gray-700 */ color: white; border-bottom: 2px solid #3b82f6; /* blue-500 */ } .status-badge { padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; } .status-pending { background-color: rgba(245, 158, 11, 0.2); color: #f59e0b; } .status-approved { background-color: rgba(16, 185, 129, 0.2); color: #10b981; } .status-rejected { background-color: rgba(239, 68, 68, 0.2); color: #ef4444; } </style> <style> .sidebar { transition: transform 0.25s ease-in-out; } .sidebar-collapsed .sidebar { transform: translateX(-110%); } .main-content { transition: margin-left 0.25s ease-in-out; } .sidebar-collapsed .main-content { margin-left: 0 !important; } @media (max-width: 768px) { .sidebar { transform: translateX(-110%); } .sidebar-open .sidebar { transform: translateX(0); } } </style></head>
+  <body class="bg-gray-900 flex flex-col md:flex-row min-h-screen">
+
+    <!-- Sidebar -->
+    <aside
+      class="sidebar w-full md:w-64 bg-gray-950 text-white p-6 flex flex-col items-center md:items-start space-y-8 shadow-2xl">
+      <div class="flex items-center space-x-2 mb-4">
+        <i class="fas fa-hospital text-xl text-blue-400"></i>
+        <h1 class="text-xl font-bold">HMS</h1>
+        <span class="text-sm text-gray-400 ml-2">Student Mode</span>
+      </div>
+      <nav class="w-full">
+  <ul class="space-y-2">
+    <li>
+      <a href="demo.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-chart-line mr-3"></i>
+        <span class="font-medium">Dashboard</span>
+      </a>
+    </li>
+    <li>
+      <a href="ambulance.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-truck-medical mr-3"></i>
+        <span class="font-medium">Ambulance</span>
+      </a>
+    </li>
+    <li>
+      <a href="doctors.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-user-doctor mr-3"></i>
+        <span class="font-medium">Doctors</span>
+      </a>
+    </li>
+    <li>
+      <a href="medicine_order.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-pills mr-3"></i>
+        <span class="font-medium">Pharmacy</span>
+      </a>
+    </li>
+    <li>
+      <a href="medicine_reminder.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bell mr-3"></i>
+        <span class="font-medium">Medicine Reminder</span>
+      </a>
+    </li>
+    <li>
+      <a href="symptoms_checker.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-stethoscope mr-3"></i>
+        <span class="font-medium">Symptoms Checker</span>
+      </a>
+    </li>
+    <li>
+      <a href="lab_tests.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-vial-circle-check mr-3"></i>
+        <span class="font-medium">Lab Tests</span>
+      </a>
+    </li>
+    <li>
+      <a href="emergency_requests.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-hand-holding-medical mr-3"></i>
+        <span class="font-medium">Emergency Requests</span>
+      </a>
+    </li>
+    <li>
+      <a href="sos.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-sos mr-3"></i>
+        <span class="font-medium">SOS</span>
+      </a>
+    </li>
+    <li>
+      <a href="electronic_health_records.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-file-medical mr-3"></i>
+        <span class="font-medium">Health Records</span>
+      </a>
+    </li>
+    <li>
+      <a href="health_insurance.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-shield-heart mr-3"></i>
+        <span class="font-medium">Health Insurance</span>
+      </a>
+    </li>
+    <li>
+      <a href="reports_and_analytics.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-chart-pie mr-3"></i>
+        <span class="font-medium">Reports & Analytics</span>
+      </a>
+    </li>
+    <li>
+      <a href="restocking.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-box-open mr-3"></i>
+        <span class="font-medium">Inventory</span>
+      </a>
+    </li>
+    <li>
+      <a href="studentrequest.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-cash-register mr-3"></i>
+        <span class="font-medium">Student Requests</span>
+      </a>
+    </li>
+    <li>
+      <a href="student_transport.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bus mr-3"></i>
+        <span class="font-medium">Student Transport</span>
+      </a>
+    </li>
+    <li>
+      <a href="transport_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-route mr-3"></i>
+        <span class="font-medium">Transport Management</span>
+      </a>
+    </li>
+    <li>
+      <a href="room_management.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bed mr-3"></i>
+        <span class="font-medium">Room Management</span>
+      </a>
+    </li>
+    <li>
+      <a href="room_sanitation.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-spray-can-sparkles mr-3"></i>
+        <span class="font-medium">Room Sanitation</span>
+      </a>
+    </li>
+    <li>
+      <a href="mess_menu.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-utensils mr-3"></i>
+        <span class="font-medium">Mess Menu</span>
+      </a>
+    </li>
+    <li>
+      <a href="mess_food_order_service.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bowl-food mr-3"></i>
+        <span class="font-medium">Mess Food Order</span>
+      </a>
+    </li>
+    <li>
+      <a href="laundry_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-shirt mr-3"></i>
+        <span class="font-medium">Laundry</span>
+      </a>
+    </li>
+    <li>
+      <a href="leave_and_outing.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-door-open mr-3"></i>
+        <span class="font-medium">Leave & Outing</span>
+      </a>
+    </li>
+    <li>
+      <a href="vit_bhopal_community.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-users mr-3"></i>
+        <span class="font-medium">VIT Community</span>
+      </a>
+    </li>
+    <li>
+      <a href="parent_notification.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-comments mr-3"></i>
+        <span class="font-medium">Parent Notification</span>
+      </a>
+    </li>
+    <li>
+      <a href="payment_gateway.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-credit-card mr-3"></i>
+        <span class="font-medium">Payment Gateway</span>
+      </a>
+    </li>
+    <li>
+      <a href="complaint_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-circle-exclamation mr-3"></i>
+        <span class="font-medium">Complaints</span>
+      </a>
+    </li>
+    <li>
+      <a href="exam_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-clipboard-list mr-3"></i>
+        <span class="font-medium">Exam Management</span>
+      </a>
+    </li>
+    <li>
+      <a href="local_hospital_network.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-hospital mr-3"></i>
+        <span class="font-medium">Local Hospitals</span>
+      </a>
+    </li>
+    <li>
+      <a href="medical_camps.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-hand-holding-heart mr-3"></i>
+        <span class="font-medium">Medical Camps</span>
+      </a>
+    </li>
+    <li>
+      <a href="virtual_consultation.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-video mr-3"></i>
+        <span class="font-medium">Virtual Consultation</span>
+      </a>
+    </li>
+    <li>
+      <a href="wearables.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-watch-fitness mr-3"></i>
+        <span class="font-medium">Wearables</span>
+      </a>
+    </li>
+    <li>
+      <a href="biometric.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-fingerprint mr-3"></i>
+        <span class="font-medium">Biometric</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+      <div class="mt-auto w-full">
+        <a href="/index.html" data-logout="true"
+          class="flex items-center justify-center w-full px-4 py-3 rounded-lg bg-red-600 hover:bg-red-700 transition-colors duration-200"
+        >
+          <i class="fa-solid fa-right-from-bracket mr-2"></i>
+          <span class="font-semibold">Log Out</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content flex-1 p-8 overflow-y-auto bg-gray-800">
+      <!-- Top Header -->
+      <header
+        class="flex items-center justify-between text-sm text-gray-400 mb-8"
+      >
+        <div id="date-time-display"></div>
+        <div class="flex items-center space-x-6">
+          <i
+            class="fa-solid fa-bell text-xl hover:text-white transition duration-200"
+          ></i>
+          <div class="flex items-center space-x-2">
+            <i class="fa-solid fa-user-circle text-xl"></i>
+            <span>Student Mode</span>
+          </div>
+          <div class="flex items-center space-x-2 cursor-pointer">
+            <i class="fa-solid fa-globe text-xl"></i>
+            <span>English</span>
+            <i class="fa-solid fa-chevron-down text-xs"></i>
+          </div>
+        </div>
+      </header>
+
+      <!-- Page Title & Actions -->
+      <h2 class="text-3xl font-bold text-white mb-1">Emergency Requests</h2>
+      <p class="text-gray-400 mb-8">
+        Submit emergency leave or outing requests for urgent situations.
+      </p>
+
+      <!-- Tabs Navigation -->
+      <div class="flex space-x-1 mb-6">
+        <button
+          class="tab-button active py-3 px-6 rounded-t-lg"
+          data-tab="leave"
+        >
+          <i class="fa-solid fa-calendar-times mr-2"></i>
+          Emergency Leave
+        </button>
+        <button class="tab-button py-3 px-6 rounded-t-lg" data-tab="outing">
+          <i class="fa-solid fa-walking mr-2"></i>
+          Emergency Outing
+        </button>
+        <button class="tab-button py-3 px-6 rounded-t-lg" data-tab="history">
+          <i class="fa-solid fa-history mr-2"></i>
+          Request History
+        </button>
+      </div>
+
+      <!-- Tab Contents -->
+      <div class="bg-card rounded-xl shadow-lg p-6">
+        <!-- Emergency Leave Tab -->
+        <div id="leave-tab" class="tab-content active">
+          <h3 class="text-xl font-bold text-white mb-4">
+            Emergency Leave Request
+          </h3>
+          <form id="leave-request-form" class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label
+                  for="leave-type"
+                  class="block text-sm font-medium text-gray-400"
+                  >Leave Type</label
+                >
+                <select
+                  id="leave-type"
+                  name="leave-type"
+                  class="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-lg p-2 text-white focus:ring-blue-500 focus:border-blue-500"
+                  required
+                >
+                  <option value="">Select Leave Type</option>
+                  <option value="medical">Medical Emergency</option>
+                  <option value="family">Family Emergency</option>
+                  <option value="personal">Personal Emergency</option>
+                  <option value="other">Other Urgent Matter</option>
+                </select>
+              </div>
+              <div>
+                <label
+                  for="leave-duration"
+                  class="block text-sm font-medium text-gray-400"
+                  >Duration</label
+                >
+                <select
+                  id="leave-duration"
+                  name="leave-duration"
+                  class="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-lg p-2 text-white focus:ring-blue-500 focus:border-blue-500"
+                  required
+                >
+                  <option value="">Select Duration</option>
+                  <option value="1">1 Day</option>
+                  <option value="2">2 Days</option>
+                  <option value="3">3 Days</option>
+                  <option value="5">5 Days</option>
+                  <option value="7">1 Week</option>
+                  <option value="14">2 Weeks</option>
+                  <option value="custom">Custom Duration</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label
+                  for="leave-from"
+                  class="block text-sm font-medium text-gray-400"
+                  >From Date</label
+                >
+                <input
+                  type="date"
+                  id="leave-from"
+                  name="leave-from"
+                  class="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-lg p-2 text-white focus:ring-blue-500 focus:border-blue-500"
+                  required
+                />
+              </div>
+              <div>
+                <label
+                  for="leave-to"
+                  class="block text-sm font-medium text-gray-400"
+                  >To Date</label
+                >
+                <input
+                  type="date"
+                  id="leave-to"
+                  name="leave-to"
+                  class="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-lg p-2 text-white focus:ring-blue-500 focus:border-blue-500"
+                  required
+                />
+              </div>
+            </div>
+
+            <div>
+              <label
+                for="leave-reason"
+                class="block text-sm font-medium text-gray-400"
+                >Emergency Reason</label
+              >
+              <textarea
+                id="leave-reason"
+                name="leave-reason"
+                rows="3"
+                class="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-lg p-2 text-white focus:ring-blue-500 focus:border-blue-500"
+                placeholder="Please provide detailed information about your emergency situation..."
+                required
+              ></textarea>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-400 mb-2"
+                >Supporting Documents (Optional)</label
+              >
+              <div class="flex items-center justify-center w-full">
+                <label
+                  for="leave-documents"
+                  class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-600 border-dashed rounded-lg cursor-pointer bg-gray-700 hover:bg-gray-600"
+                >
+                  <div
+                    class="flex flex-col items-center justify-center pt-5 pb-6"
+                  >
+                    <i
+                      class="fa-solid fa-cloud-upload-alt text-gray-400 text-2xl mb-2"
+                    ></i>
+                    <p class="mb-2 text-sm text-gray-400">
+                      <span class="font-semibold">Click to upload</span> or drag
+                      and drop
+                    </p>
+                    <p class="text-xs text-gray-400">
+                      PDF, JPG, PNG (MAX. 5MB each)
+                    </p>
+                  </div>
+                  <input
+                    id="leave-documents"
+                    type="file"
+                    class="hidden"
+                    multiple
+                  />
+                </label>
+              </div>
+              <p class="text-xs text-gray-500 mt-1">
+                Upload medical certificates, doctor's notes, or other relevant
+                documents
+              </p>
+            </div>
+
+            <div class="flex justify-end pt-4">
+              <button
+                type="submit"
+                class="bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg hover:bg-blue-700 transition duration-200 shadow-md flex items-center justify-center"
+              >
+                <i class="fa-solid fa-paper-plane mr-2"></i>
+                Submit Leave Request
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Emergency Outing Tab -->
+        <div id="outing-tab" class="tab-content hidden">
+          <h3 class="text-xl font-bold text-white mb-4">
+            Emergency Outing Request
+          </h3>
+          <form id="outing-request-form" class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label
+                  for="outing-type"
+                  class="block text-sm font-medium text-gray-400"
+                  >Outing Type</label
+                >
+                <select
+                  id="outing-type"
+                  name="outing-type"
+                  class="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-lg p-2 text-white focus:ring-blue-500 focus:border-blue-500"
+                  required
+                >
+                  <option value="">Select Outing Type</option>
+                  <option value="medical">Medical Emergency</option>
+                  <option value="family">Family Emergency</option>
+                  <option value="personal">Personal Urgent Work</option>
+                  <option value="other">Other Emergency</option>
+                </select>
+              </div>
+              <div>
+                <label
+                  for="outing-duration"
+                  class="block text-sm font-medium text-gray-400"
+                  >Duration</label
+                >
+                <select
+                  id="outing-duration"
+                  name="outing-duration"
+                  class="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-lg p-2 text-white focus:ring-blue-500 focus:border-blue-500"
+                  required
+                >
+                  <option value="">Select Duration</option>
+                  <option value="2">2 Hours</option>
+                  <option value="4">4 Hours</option>
+                  <option value="6">6 Hours</option>
+                  <option value="8">8 Hours</option>
+                  <option value="12">12 Hours</option>
+                  <option value="custom">Custom Duration</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label
+                  for="outing-from"
+                  class="block text-sm font-medium text-gray-400"
+                  >Departure Time</label
+                >
+                <input
+                  type="datetime-local"
+                  id="outing-from"
+                  name="outing-from"
+                  class="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-lg p-2 text-white focus:ring-blue-500 focus:border-blue-500"
+                  required
+                />
+              </div>
+              <div>
+                <label
+                  for="outing-to"
+                  class="block text-sm font-medium text-gray-400"
+                  >Expected Return</label
+                >
+                <input
+                  type="datetime-local"
+                  id="outing-to"
+                  name="outing-to"
+                  class="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-lg p-2 text-white focus:ring-blue-500 focus:border-blue-500"
+                  required
+                />
+              </div>
+            </div>
+
+            <div>
+              <label
+                for="outing-destination"
+                class="block text-sm font-medium text-gray-400"
+                >Destination</label
+              >
+              <input
+                type="text"
+                id="outing-destination"
+                name="outing-destination"
+                class="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-lg p-2 text-white focus:ring-blue-500 focus:border-blue-500"
+                placeholder="Where are you going?"
+                required
+              />
+            </div>
+
+            <div>
+              <label
+                for="outing-reason"
+                class="block text-sm font-medium text-gray-400"
+                >Emergency Reason</label
+              >
+              <textarea
+                id="outing-reason"
+                name="outing-reason"
+                rows="3"
+                class="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-lg p-2 text-white focus:ring-blue-500 focus:border-blue-500"
+                placeholder="Please provide detailed information about your emergency outing..."
+                required
+              ></textarea>
+            </div>
+
+            <div>
+              <label
+                for="outing-contact"
+                class="block text-sm font-medium text-gray-400"
+                >Emergency Contact During Outing</label
+              >
+              <input
+                type="text"
+                id="outing-contact"
+                name="outing-contact"
+                class="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-lg p-2 text-white focus:ring-blue-500 focus:border-blue-500"
+                placeholder="Phone number of person to contact"
+                required
+              />
+              <p class="text-xs text-gray-500 mt-1">
+                This should be a reliable contact who can be reached during your
+                outing
+              </p>
+            </div>
+
+            <div class="flex justify-end pt-4">
+              <button
+                type="submit"
+                class="bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg hover:bg-blue-700 transition duration-200 shadow-md flex items-center justify-center"
+              >
+                <i class="fa-solid fa-paper-plane mr-2"></i>
+                Submit Outing Request
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Request History Tab -->
+        <div id="history-tab" class="tab-content hidden">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="text-xl font-bold text-white">Request History</h3>
+            <div class="flex space-x-2">
+              <select
+                class="bg-gray-700 border border-gray-600 rounded-lg p-2 text-white text-sm"
+              >
+                <option>All Types</option>
+                <option>Leave Requests</option>
+                <option>Outing Requests</option>
+              </select>
+              <select
+                class="bg-gray-700 border border-gray-600 rounded-lg p-2 text-white text-sm"
+              >
+                <option>All Status</option>
+                <option>Approved</option>
+                <option>Pending</option>
+                <option>Rejected</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="request-history-list" class="space-y-4">
+            <!-- Request history items will be injected here by JavaScript -->
+            <p
+              id="empty-history-message"
+              class="text-gray-500 text-center py-8"
+            >
+              You haven't submitted any emergency requests yet.
+            </p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Message Box for notifications -->
+    <div
+      id="message-box"
+      class="fixed bottom-4 right-4 bg-gray-700 text-white p-4 rounded-lg shadow-lg hidden message-box"
+    >
+      <p id="message-text"></p>
+    </div>
+
+    <script>
+      // JavaScript to display the current date and time
+      function updateDateTime() {
+        const now = new Date();
+        const options = {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        };
+        const formattedDate = now.toLocaleDateString("en-US", options);
+        document.getElementById("date-time-display").textContent =
+          formattedDate;
+      }
+      updateDateTime();
+      setInterval(updateDateTime, 60000);
+
+      // Mock data for requests
+      let requests = [
+        {
+          id: 1,
+          type: "Leave",
+          reason: "Medical Emergency - Severe fever and doctor consultation",
+          date: "2023-10-15",
+          status: "Approved",
+          duration: "3 days",
+          submitted: "2023-10-14",
+        },
+        {
+          id: 2,
+          type: "Outing",
+          reason: "Family Emergency - Father hospitalized, need to visit",
+          date: "2023-10-12",
+          status: "Approved",
+          duration: "6 hours",
+          submitted: "2023-10-12",
+        },
+        {
+          id: 3,
+          type: "Leave",
+          reason: "Personal Emergency - Urgent family matter",
+          date: "2023-10-10",
+          status: "Pending",
+          duration: "2 days",
+          submitted: "2023-10-10",
+        },
+      ];
+
+      // DOM Elements
+      const tabButtons = document.querySelectorAll(".tab-button");
+      const tabContents = document.querySelectorAll(".tab-content");
+      const leaveRequestForm = document.getElementById("leave-request-form");
+      const outingRequestForm = document.getElementById("outing-request-form");
+      const historyList = document.getElementById("request-history-list");
+      const emptyHistoryMessage = document.getElementById(
+        "empty-history-message"
+      );
+      const messageBox = document.getElementById("message-box");
+      const messageText = document.getElementById("message-text");
+
+      // Function to show a custom message box
+      function showMessage(text, type = "info") {
+        messageText.textContent = text;
+        messageBox.classList.remove("hidden", "bg-red-700", "bg-green-700");
+        if (type === "error") {
+          messageBox.classList.add("bg-red-700");
+        } else if (type === "success") {
+          messageBox.classList.add("bg-green-700");
+        } else {
+          messageBox.classList.add("bg-gray-700");
+        }
+        setTimeout(() => {
+          messageBox.classList.add("hidden");
+        }, 3000);
+      }
+
+      // Function to render the request history
+      function renderHistory() {
+        if (requests.length === 0) {
+          emptyHistoryMessage.classList.remove("hidden");
+          historyList.innerHTML = "";
+        } else {
+          emptyHistoryMessage.classList.add("hidden");
+          historyList.innerHTML = requests
+            .map(
+              (req) => `
+                    <div class="flex justify-between items-start py-3 px-4 rounded-lg bg-gray-700 border border-gray-600">
+                        <div class="flex-1">
+                            <div class="flex items-center mb-2">
+                                <i class="fas ${
+                                  req.type === "Leave"
+                                    ? "fa-calendar-times"
+                                    : "fa-walking"
+                                } ${
+                req.type === "Leave" ? "text-red-400" : "text-blue-400"
+              } mr-2"></i>
+                                <span class="text-lg font-medium text-white">${
+                                  req.type
+                                } Request</span>
+                            </div>
+                            <div class="text-sm text-gray-400 mb-1">${
+                              req.reason
+                            }</div>
+                            <div class="flex flex-wrap gap-4 text-xs text-gray-500">
+                                <div class="flex items-center">
+                                    <i class="fas fa-calendar-day mr-1"></i>
+                                    <span>Requested: ${req.date}</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-clock mr-1"></i>
+                                    <span>Duration: ${req.duration}</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-paper-plane mr-1"></i>
+                                    <span>Submitted: ${req.submitted}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <span class="status-badge ${getStatusClass(
+                          req.status
+                        )} ml-4">
+                            ${req.status}
+                        </span>
+                    </div>
+                `
+            )
+            .join("");
+        }
+      }
+
+      // Helper function for status styling
+      function getStatusClass(status) {
+        switch (status) {
+          case "Pending":
+            return "status-pending";
+          case "Approved":
+            return "status-approved";
+          case "Rejected":
+            return "status-rejected";
+          default:
+            return "bg-gray-500 text-white";
+        }
+      }
+
+      // Handle tab switching
+      tabButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const tabId = button.getAttribute("data-tab");
+
+          // Update active tab button
+          tabButtons.forEach((btn) => btn.classList.remove("active"));
+          button.classList.add("active");
+
+          // Show active tab content
+          tabContents.forEach((content) => content.classList.add("hidden"));
+          document.getElementById(`${tabId}-tab`).classList.remove("hidden");
+        });
+      });
+
+      // Handle leave form submission
+      leaveRequestForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const leaveType = document.getElementById("leave-type").value;
+        const leaveDuration = document.getElementById("leave-duration").value;
+        const leaveFrom = document.getElementById("leave-from").value;
+        const leaveTo = document.getElementById("leave-to").value;
+        const leaveReason = document.getElementById("leave-reason").value;
+
+        const newRequest = {
+          id: Date.now(),
+          type: "Leave",
+          reason: leaveReason,
+          date: `${leaveFrom} to ${leaveTo}`,
+          status: "Pending",
+          duration: `${leaveDuration} ${
+            leaveDuration === "1" ? "day" : "days"
+          }`,
+          submitted: new Date().toISOString().split("T")[0],
+        };
+
+        requests.unshift(newRequest);
+        renderHistory();
+        leaveRequestForm.reset();
+        showMessage("Leave request submitted successfully!", "success");
+
+        // Switch to history tab
+        tabButtons.forEach((btn) => btn.classList.remove("active"));
+        document.querySelector('[data-tab="history"]').classList.add("active");
+        tabContents.forEach((content) => content.classList.add("hidden"));
+        document.getElementById("history-tab").classList.remove("hidden");
+      });
+
+      // Handle outing form submission
+      outingRequestForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const outingType = document.getElementById("outing-type").value;
+        const outingDuration = document.getElementById("outing-duration").value;
+        const outingFrom = document.getElementById("outing-from").value;
+        const outingTo = document.getElementById("outing-to").value;
+        const outingDestination =
+          document.getElementById("outing-destination").value;
+        const outingReason = document.getElementById("outing-reason").value;
+        const outingContact = document.getElementById("outing-contact").value;
+
+        const newRequest = {
+          id: Date.now(),
+          type: "Outing",
+          reason: `${outingReason} (Destination: ${outingDestination})`,
+          date: new Date(outingFrom).toLocaleDateString(),
+          status: "Pending",
+          duration: `${outingDuration} hours`,
+          submitted: new Date().toISOString().split("T")[0],
+        };
+
+        requests.unshift(newRequest);
+        renderHistory();
+        outingRequestForm.reset();
+        showMessage("Outing request submitted successfully!", "success");
+
+        // Switch to history tab
+        tabButtons.forEach((btn) => btn.classList.remove("active"));
+        document.querySelector('[data-tab="history"]').classList.add("active");
+        tabContents.forEach((content) => content.classList.add("hidden"));
+        document.getElementById("history-tab").classList.remove("hidden");
+      });
+
+      // Set default dates for forms
+      function setDefaultDates() {
+        const today = new Date();
+        const tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+
+        // Format dates for input fields
+        const formatDate = (date) => {
+          return date.toISOString().split("T")[0];
+        };
+
+        const formatDateTime = (date) => {
+          return date.toISOString().slice(0, 16);
+        };
+
+        // Set default dates for leave form
+        document.getElementById("leave-from").value = formatDate(today);
+        document.getElementById("leave-to").value = formatDate(tomorrow);
+
+        // Set default dates for outing form
+        const now = new Date();
+        const returnTime = new Date(now);
+        returnTime.setHours(returnTime.getHours() + 4);
+
+        document.getElementById("outing-from").value = formatDateTime(now);
+        document.getElementById("outing-to").value = formatDateTime(returnTime);
+      }
+
+      // Initial render
+      document.addEventListener("DOMContentLoaded", () => {
+        renderHistory();
+        setDefaultDates();
+      });
+    </script>
+    <script src="auth_guard.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

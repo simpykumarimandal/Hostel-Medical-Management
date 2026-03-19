@@ -1,0 +1,1956 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HMS | Diagnostic Laboratory</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+
+      :root {
+        --primary: #2563eb;
+        --secondary: #4f46e5;
+        --success: #059669;
+        --warning: #d97706;
+        --danger: #dc2626;
+        --dark: #111827;
+        --darker: #0a0f1c;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Inter", sans-serif;
+      }
+
+      body {
+        background: linear-gradient(135deg, var(--darker) 0%, #1a202c 100%);
+        color: #e5e7eb;
+        min-height: 100vh;
+      }
+
+      .glass-card {
+        background: rgba(30, 41, 59, 0.7);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        transition: all 0.3s ease;
+      }
+
+      .glass-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+        border-color: rgba(37, 99, 235, 0.3);
+      }
+
+      .gradient-bg {
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+      }
+
+      .gradient-text {
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        -webkit-background-clip: text;
+        -moz-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        -moz-text-fill-color: transparent;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        color: white;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+      }
+
+      .sidebar-item {
+        transition: all 0.3s ease;
+        border-left: 3px solid transparent;
+      }
+
+      .sidebar-item:hover {
+        background: rgba(37, 99, 235, 0.05);
+        border-left-color: var(--primary);
+      }
+
+      .sidebar-item.active {
+        background: rgba(37, 99, 235, 0.1);
+        border-left-color: var(--primary);
+      }
+
+      .fade-in {
+        animation: fadeIn 0.6s ease-in;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .notification {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        padding: 1.25rem 1.75rem;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        z-index: 1000;
+        animation: slideIn 0.5s forwards;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .notification.success {
+        background: rgba(5, 150, 105, 0.9);
+        color: white;
+      }
+
+      .notification.error {
+        background: rgba(220, 38, 38, 0.9);
+        color: white;
+      }
+
+      .notification.info {
+        background: rgba(37, 99, 235, 0.9);
+        color: white;
+      }
+
+      @keyframes slideIn {
+        from {
+          transform: translateX(100%);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+
+      .form-group {
+        margin-bottom: 1.75rem;
+      }
+
+      .form-label {
+        display: block;
+        margin-bottom: 0.75rem;
+        font-weight: 600;
+        color: #e5e7eb;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .form-input {
+        width: 100%;
+        background: rgba(30, 41, 59, 0.8);
+        border: 1px solid #374151;
+        border-radius: 10px;
+        padding: 1rem 1.25rem;
+        color: white;
+        transition: all 0.3s ease;
+        font-size: 0.95rem;
+      }
+
+      .form-input:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+        background: rgba(30, 41, 59, 0.9);
+      }
+
+      .form-select {
+        width: 100%;
+        background: rgba(30, 41, 59, 0.8);
+        border: 1px solid #374151;
+        border-radius: 10px;
+        padding: 1rem 1.25rem;
+        color: white;
+        transition: all 0.3s ease;
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%239ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+        background-position: right 1rem center;
+        background-repeat: no-repeat;
+        background-size: 1.25em 1.25em;
+      }
+
+      .form-select:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+        background: rgba(30, 41, 59, 0.9);
+      }
+
+      .search-box {
+        position: relative;
+      }
+
+      .search-box input {
+        padding-right: 3.5rem;
+        background: rgba(30, 41, 59, 0.8);
+        border: 1px solid #374151;
+        border-radius: 12px;
+        padding: 1rem 1.5rem;
+        color: white;
+        transition: all 0.3s ease;
+      }
+
+      .search-box input:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+      }
+
+      .search-box i {
+        position: absolute;
+        right: 1.5rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #9ca3af;
+      }
+
+      .status-badge {
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+      }
+
+      .status-pending {
+        background: rgba(217, 119, 6, 0.2);
+        color: #d97706;
+        border: 1px solid rgba(217, 119, 6, 0.3);
+      }
+
+      .status-completed {
+        background: rgba(5, 150, 105, 0.2);
+        color: #059669;
+        border: 1px solid rgba(5, 150, 105, 0.3);
+      }
+
+      .status-processing {
+        background: rgba(37, 99, 235, 0.2);
+        color: #2563eb;
+        border: 1px solid rgba(37, 99, 235, 0.3);
+      }
+
+      .lab-card {
+        border-left: 4px solid var(--primary);
+        transition: all 0.4s ease;
+        cursor: pointer;
+      }
+
+      .lab-card:hover {
+        transform: translateX(5px);
+        border-left-color: var(--secondary);
+      }
+
+      .test-item {
+        border-bottom: 1px solid rgba(55, 65, 81, 0.5);
+        padding: 1rem 0;
+      }
+
+      .test-item:last-child {
+        border-bottom: none;
+      }
+
+      .result-indicator {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        display: inline-block;
+        margin-right: 10px;
+      }
+
+      .result-normal {
+        background: var(--success);
+      }
+
+      .result-abnormal {
+        background: var(--danger);
+      }
+
+      .result-borderline {
+        background: var(--warning);
+      }
+
+      .trend-up {
+        color: var(--danger);
+      }
+
+      .trend-down {
+        color: var(--success);
+      }
+
+      .trend-stable {
+        color: var(--primary);
+      }
+
+      .progress-bar {
+        background: rgba(30, 41, 59, 0.8);
+        border-radius: 10px;
+        overflow: hidden;
+        height: 8px;
+      }
+
+      .progress-fill {
+        height: 100%;
+        border-radius: 10px;
+        transition: width 1s ease-in-out;
+      }
+
+      .stat-card {
+        position: relative;
+        overflow: hidden;
+      }
+
+      .stat-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, var(--primary), var(--secondary));
+      }
+    </style>
+  </head>
+  <body class="min-h-screen bg-gray-900">
+    
+
+    <!-- Main Content -->
+    <main class="p-8 min-h-screen">
+      <!-- Top Header -->
+      <header class="flex items-center justify-between mb-10">
+        <div>
+          <div
+            id="date-time-display"
+            class="text-gray-400 text-sm font-medium mb-2"
+          >
+            Monday, October 16, 2025, 10:30:45 AM
+          </div>
+          <h1 class="text-4xl font-bold text-white">Diagnostic Laboratory</h1>
+          <p class="text-gray-400 mt-2 text-lg">
+            Advanced laboratory management and diagnostic analytics platform
+          </p>
+        </div>
+        <div class="flex items-center space-x-6">
+          <div class="relative">
+            <div
+              class="w-12 h-12 rounded-xl bg-gray-800 flex items-center justify-center cursor-pointer hover:bg-gray-750 transition-all duration-300"
+            >
+              <i
+                class="fa-solid fa-bell text-xl text-gray-400 hover:text-white"
+              ></i>
+            </div>
+            <span
+              class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center font-bold shadow-lg"
+              >3</span
+            >
+          </div>
+          <div
+            class="flex items-center space-x-4 bg-gray-800 rounded-2xl p-3 pr-6"
+          >
+            <div
+              class="w-12 h-12 rounded-xl gradient-bg flex items-center justify-center"
+            >
+              <i class="fas fa-user-graduate text-white"></i>
+            </div>
+            <div>
+              <div class="font-semibold text-white">Student Portal</div>
+              <div class="text-sm text-gray-400">Active Session</div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Enhanced Quick Stats -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
+        <div class="glass-card stat-card p-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <div
+                class="text-3xl font-bold text-white mb-2"
+                id="pending-tests"
+              >
+                2
+              </div>
+              <div class="text-blue-300 font-semibold">Pending Tests</div>
+              <div class="text-sm text-gray-400 mt-1">Awaiting results</div>
+            </div>
+            <div
+              class="w-14 h-14 rounded-xl bg-blue-500 bg-opacity-20 flex items-center justify-center"
+            >
+              <i class="fas fa-clock text-blue-400 text-2xl"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card stat-card p-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <div
+                class="text-3xl font-bold text-white mb-2"
+                id="completed-tests"
+              >
+                8
+              </div>
+              <div class="text-green-300 font-semibold">Completed Tests</div>
+              <div class="text-sm text-gray-400 mt-1">Results available</div>
+            </div>
+            <div
+              class="w-14 h-14 rounded-xl bg-green-500 bg-opacity-20 flex items-center justify-center"
+            >
+              <i class="fas fa-check-circle text-green-400 text-2xl"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card stat-card p-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <div
+                class="text-3xl font-bold text-white mb-2"
+                id="critical-results"
+              >
+                1
+              </div>
+              <div class="text-red-300 font-semibold">Critical Results</div>
+              <div class="text-sm text-gray-400 mt-1">Requires attention</div>
+            </div>
+            <div
+              class="w-14 h-14 rounded-xl bg-red-500 bg-opacity-20 flex items-center justify-center"
+            >
+              <i class="fas fa-exclamation-triangle text-red-400 text-2xl"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card stat-card p-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <div
+                class="text-3xl font-bold text-white mb-2"
+                id="connected-labs"
+              >
+                5
+              </div>
+              <div class="text-purple-300 font-semibold">Partner Labs</div>
+              <div class="text-sm text-gray-400 mt-1">Network connected</div>
+            </div>
+            <div
+              class="w-14 h-14 rounded-xl bg-purple-500 bg-opacity-20 flex items-center justify-center"
+            >
+              <i class="fas fa-hospital text-purple-400 text-2xl"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Content Grid -->
+      <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+        <!-- Lab Tests & Results -->
+        <div class="xl:col-span-2">
+          <div class="glass-card p-8 mb-8">
+            <div class="flex justify-between items-center mb-8">
+              <h2 class="text-2xl font-bold text-white">
+                Laboratory Test Management
+              </h2>
+              <div class="flex space-x-4">
+                <div class="search-box">
+                  <input
+                    type="text"
+                    id="test-search"
+                    placeholder="Search tests, labs, or results..."
+                    class="w-80"
+                  />
+                  <i class="fas fa-search"></i>
+                </div>
+                <button
+                  id="book-test-btn"
+                  class="btn-primary font-semibold py-3 px-6 rounded-xl flex items-center"
+                >
+                  <i class="fa-solid fa-plus mr-3"></i>
+                  Book New Test
+                </button>
+              </div>
+            </div>
+
+            <!-- Enhanced Filter System -->
+            <div class="flex flex-wrap gap-3 mb-8">
+              <button
+                class="filter-btn bg-blue-500 text-white px-5 py-2.5 rounded-xl transition-all duration-300 hover:bg-blue-600 active"
+                data-filter="all"
+              >
+                <i class="fas fa-vial mr-2"></i>All Tests
+              </button>
+              <button
+                class="filter-btn bg-gray-700 text-gray-300 px-5 py-2.5 rounded-xl transition-all duration-300 hover:bg-gray-600 hover:text-white"
+                data-filter="pending"
+              >
+                <i class="fas fa-clock mr-2"></i>Pending
+              </button>
+              <button
+                class="filter-btn bg-gray-700 text-gray-300 px-5 py-2.5 rounded-xl transition-all duration-300 hover:bg-gray-600 hover:text-white"
+                data-filter="completed"
+              >
+                <i class="fas fa-check-circle mr-2"></i>Completed
+              </button>
+              <button
+                class="filter-btn bg-gray-700 text-gray-300 px-5 py-2.5 rounded-xl transition-all duration-300 hover:bg-gray-600 hover:text-white"
+                data-filter="abnormal"
+              >
+                <i class="fas fa-exclamation-triangle mr-2"></i>Abnormal
+              </button>
+            </div>
+
+            <div id="tests-list" class="space-y-4">
+              <!-- Tests will be populated here -->
+            </div>
+          </div>
+
+          <!-- Advanced Analytics Section -->
+          <div class="glass-card p-8">
+            <h3 class="text-2xl font-bold text-white mb-6">
+              Health Analytics & Trends
+            </h3>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div class="space-y-6">
+                <div>
+                  <div class="flex justify-between items-center mb-4">
+                    <div class="font-semibold text-white">
+                      Blood Glucose Trends
+                    </div>
+                    <div class="flex items-center">
+                      <i class="fas fa-arrow-up trend-up mr-2"></i>
+                      <span class="text-sm trend-up font-semibold"
+                        >+5.2% from last month</span
+                      >
+                    </div>
+                  </div>
+                  <div class="progress-bar">
+                    <div
+                      class="progress-fill bg-yellow-400"
+                      style="width: 85%"
+                    ></div>
+                  </div>
+                  <div
+                    class="flex justify-between text-sm text-gray-400 mt-2 font-medium"
+                  >
+                    <span>70 mg/dL</span>
+                    <span class="text-yellow-400">Current: 95 mg/dL</span>
+                    <span>126 mg/dL</span>
+                  </div>
+                </div>
+
+                <div>
+                  <div class="flex justify-between items-center mb-4">
+                    <div class="font-semibold text-white">
+                      Cholesterol Levels
+                    </div>
+                    <div class="flex items-center">
+                      <i class="fas fa-arrow-down trend-down mr-2"></i>
+                      <span class="text-sm trend-down font-semibold"
+                        >-12.8% improvement</span
+                      >
+                    </div>
+                  </div>
+                  <div class="progress-bar">
+                    <div
+                      class="progress-fill bg-green-400"
+                      style="width: 65%"
+                    ></div>
+                  </div>
+                  <div
+                    class="flex justify-between text-sm text-gray-400 mt-2 font-medium"
+                  >
+                    <span>100 mg/dL</span>
+                    <span class="text-green-400">Current: 165 mg/dL</span>
+                    <span>200 mg/dL</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-gray-800 rounded-2xl p-6">
+                <h4 class="font-bold text-white mb-4">Health Insights</h4>
+                <div class="space-y-4">
+                  <div class="flex items-start">
+                    <div
+                      class="w-8 h-8 rounded-lg bg-blue-500 bg-opacity-20 flex items-center justify-center mr-3 mt-1"
+                    >
+                      <i class="fas fa-heartbeat text-blue-400"></i>
+                    </div>
+                    <div>
+                      <div class="font-semibold text-white">
+                        Cardiovascular Health
+                      </div>
+                      <div class="text-sm text-gray-400">
+                        All parameters within optimal range
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex items-start">
+                    <div
+                      class="w-8 h-8 rounded-lg bg-yellow-500 bg-opacity-20 flex items-center justify-center mr-3 mt-1"
+                    >
+                      <i class="fas fa-bone text-yellow-400"></i>
+                    </div>
+                    <div>
+                      <div class="font-semibold text-white">
+                        Vitamin D Levels
+                      </div>
+                      <div class="text-sm text-gray-400">
+                        Slightly below recommended levels
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex items-start">
+                    <div
+                      class="w-8 h-8 rounded-lg bg-green-500 bg-opacity-20 flex items-center justify-center mr-3 mt-1"
+                    >
+                      <i class="fas fa-lungs text-green-400"></i>
+                    </div>
+                    <div>
+                      <div class="font-semibold text-white">
+                        Respiratory Function
+                      </div>
+                      <div class="text-sm text-gray-400">
+                        Excellent lung capacity and function
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Enhanced Sidebar - Connected Labs & Advanced Features -->
+        <div class="space-y-8">
+          <!-- Connected Labs with Enhanced Design -->
+          <div class="glass-card p-6">
+            <div class="flex items-center justify-between mb-6">
+              <h3 class="text-xl font-bold text-white">Partner Laboratories</h3>
+              <div
+                class="w-8 h-8 rounded-lg bg-blue-500 bg-opacity-20 flex items-center justify-center"
+              >
+                <i class="fas fa-network-wired text-blue-400"></i>
+              </div>
+            </div>
+            <div class="space-y-4">
+              <div class="lab-card glass-card p-5">
+                <div class="flex items-start justify-between mb-3">
+                  <div>
+                    <h4 class="font-bold text-white text-lg">
+                      Campus Health Laboratory
+                    </h4>
+                    <p class="text-sm text-gray-400">
+                      Main Building, Ground Floor
+                    </p>
+                  </div>
+                  <span class="status-badge status-completed">Available</span>
+                </div>
+                <div class="flex items-center text-sm text-gray-300 mb-2">
+                  <i class="fas fa-phone mr-3 text-blue-400"></i>
+                  <span>+1 (555) 123-4567</span>
+                </div>
+                <div class="flex items-center text-sm text-gray-300">
+                  <i class="fas fa-clock mr-3 text-green-400"></i>
+                  <span>8:00 AM - 8:00 PM • Free for Students</span>
+                </div>
+              </div>
+
+              <div class="lab-card glass-card p-5">
+                <div class="flex items-start justify-between mb-3">
+                  <div>
+                    <h4 class="font-bold text-white text-lg">
+                      Metro Diagnostic Center
+                    </h4>
+                    <p class="text-sm text-gray-400">2.5 km • 24/7 Service</p>
+                  </div>
+                  <span class="status-badge status-completed">24/7</span>
+                </div>
+                <div class="flex items-center text-sm text-gray-300 mb-2">
+                  <i class="fas fa-phone mr-3 text-blue-400"></i>
+                  <span>+1 (555) 987-6543</span>
+                </div>
+                <div class="flex items-center text-sm text-gray-300">
+                  <i class="fas fa-shield-alt mr-3 text-purple-400"></i>
+                  <span>NABL Accredited • Free Pickup</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Test Recommendations -->
+          <div class="glass-card p-6">
+            <h3 class="text-xl font-bold text-white mb-4">Recommended Tests</h3>
+            <div class="space-y-3">
+              <div
+                class="flex items-center justify-between p-3 bg-gray-800 rounded-xl"
+              >
+                <div class="flex items-center">
+                  <div
+                    class="w-10 h-10 rounded-lg bg-blue-500 bg-opacity-20 flex items-center justify-center mr-3"
+                  >
+                    <i class="fas fa-vial text-blue-400"></i>
+                  </div>
+                  <div>
+                    <div class="font-medium text-white">
+                      Complete Blood Count
+                    </div>
+                    <div class="text-xs text-gray-400">
+                      Routine health check
+                    </div>
+                  </div>
+                </div>
+                <button
+                  class="recommend-test-btn text-blue-400 hover:text-blue-300 text-sm font-semibold"
+                  data-test="Complete Blood Count (CBC)"
+                >
+                  Book
+                </button>
+              </div>
+              <div
+                class="flex items-center justify-between p-3 bg-gray-800 rounded-xl"
+              >
+                <div class="flex items-center">
+                  <div
+                    class="w-10 h-10 rounded-lg bg-green-500 bg-opacity-20 flex items-center justify-center mr-3"
+                  >
+                    <i class="fas fa-heart text-green-400"></i>
+                  </div>
+                  <div>
+                    <div class="font-medium text-white">Lipid Profile</div>
+                    <div class="text-xs text-gray-400">
+                      Cardiac health screening
+                    </div>
+                  </div>
+                </div>
+                <button
+                  class="recommend-test-btn text-blue-400 hover:text-blue-300 text-sm font-semibold"
+                  data-test="Lipid Profile"
+                >
+                  Book
+                </button>
+              </div>
+              <div
+                class="flex items-center justify-between p-3 bg-gray-800 rounded-xl"
+              >
+                <div class="flex items-center">
+                  <div
+                    class="w-10 h-10 rounded-lg bg-yellow-500 bg-opacity-20 flex items-center justify-center mr-3"
+                  >
+                    <i class="fas fa-bone text-yellow-400"></i>
+                  </div>
+                  <div>
+                    <div class="font-medium text-white">Vitamin D Level</div>
+                    <div class="text-xs text-gray-400">
+                      Based on your history
+                    </div>
+                  </div>
+                </div>
+                <button
+                  class="recommend-test-btn text-blue-400 hover:text-blue-300 text-sm font-semibold"
+                  data-test="Vitamin D Test"
+                >
+                  Book
+                </button>
+              </div>
+              <div
+                class="flex items-center justify-between p-3 bg-gray-800 rounded-xl"
+              >
+                <div class="flex items-center">
+                  <div
+                    class="w-10 h-10 rounded-lg bg-purple-500 bg-opacity-20 flex items-center justify-center mr-3"
+                  >
+                    <i class="fas fa-brain text-purple-400"></i>
+                  </div>
+                  <div>
+                    <div class="font-medium text-white">
+                      Thyroid Function Test
+                    </div>
+                    <div class="text-xs text-gray-400">Metabolic health</div>
+                  </div>
+                </div>
+                <button
+                  class="recommend-test-btn text-blue-400 hover:text-blue-300 text-sm font-semibold"
+                  data-test="Thyroid Function Test"
+                >
+                  Book
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Actions -->
+          <div class="glass-card p-6">
+            <h3 class="text-xl font-bold text-white mb-4">Quick Actions</h3>
+            <div class="grid grid-cols-2 gap-4">
+              <button
+                class="quick-action-btn bg-gray-800 rounded-2xl p-4 text-center cursor-pointer transition-all duration-300 hover:bg-gray-750"
+              >
+                <div
+                  class="w-12 h-12 rounded-xl gradient-bg flex items-center justify-center mx-auto mb-3"
+                >
+                  <i class="fas fa-download text-white"></i>
+                </div>
+                <div class="font-semibold text-white text-sm">
+                  Export Reports
+                </div>
+              </button>
+              <button
+                class="quick-action-btn bg-gray-800 rounded-2xl p-4 text-center cursor-pointer transition-all duration-300 hover:bg-gray-750"
+              >
+                <div
+                  class="w-12 h-12 rounded-xl gradient-bg flex items-center justify-center mx-auto mb-3"
+                >
+                  <i class="fas fa-share-alt text-white"></i>
+                </div>
+                <div class="font-semibold text-white text-sm">
+                  Share Results
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Book Test Modal -->
+    <div
+      id="book-test-modal"
+      class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 hidden"
+    >
+      <div
+        class="glass-card rounded-2xl p-8 w-full max-w-4xl max-h-[90vh] overflow-y-auto border border-gray-700"
+      >
+        <div class="flex justify-between items-center mb-8">
+          <h3 class="text-2xl font-bold text-white">
+            Schedule Laboratory Test
+          </h3>
+          <button
+            id="close-book-test-modal"
+            class="text-gray-400 hover:text-white transition-colors duration-300"
+          >
+            <i class="fas fa-times text-2xl"></i>
+          </button>
+        </div>
+
+        <div class="space-y-8">
+          <!-- Student Information -->
+          <div class="glass-card p-6">
+            <h4 class="font-bold text-white text-lg mb-6">
+              Student Information
+            </h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="form-group">
+                <label for="student-name" class="form-label">Full Name</label>
+                <input
+                  type="text"
+                  id="student-name"
+                  class="form-input"
+                  placeholder="Enter your full name"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="registration-number" class="form-label"
+                  >Registration Number</label
+                >
+                <input
+                  type="text"
+                  id="registration-number"
+                  class="form-input"
+                  placeholder="Enter your registration number"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="room-number" class="form-label">Room Number</label>
+                <input
+                  type="text"
+                  id="room-number"
+                  class="form-input"
+                  placeholder="Enter your room number"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="block" class="form-label">Block/Hostel</label>
+                <input
+                  type="text"
+                  id="block"
+                  class="form-input"
+                  placeholder="Enter your block or hostel name"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="phone-number" class="form-label"
+                  >Phone Number</label
+                >
+                <input
+                  type="tel"
+                  id="phone-number"
+                  class="form-input"
+                  placeholder="Enter your phone number"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="email" class="form-label">Email Address</label>
+                <input
+                  type="email"
+                  id="email"
+                  class="form-input"
+                  placeholder="Enter your email address"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Test Selection -->
+          <div class="glass-card p-6">
+            <h4 class="font-bold text-white text-lg mb-6">
+              Select Diagnostic Tests
+            </h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <div class="form-group">
+                <label for="test-category" class="form-label"
+                  >Test Category</label
+                >
+                <select id="test-category" class="form-select">
+                  <option value="">Select Category</option>
+                  <option value="blood">Blood Tests</option>
+                  <option value="urine">Urine Analysis</option>
+                  <option value="imaging">Diagnostic Imaging</option>
+                  <option value="cardiac">Cardiac Profile</option>
+                  <option value="hormonal">Hormonal Tests</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="specific-test" class="form-label"
+                  >Specific Test</label
+                >
+                <select id="specific-test" class="form-select">
+                  <option value="">Select Test</option>
+                </select>
+              </div>
+            </div>
+
+            <div id="selected-tests" class="space-y-4 mb-6">
+              <!-- Selected tests will appear here -->
+            </div>
+
+            <button
+              id="add-another-test"
+              class="btn-primary font-semibold py-3 px-6 rounded-xl transition-all duration-300"
+            >
+              <i class="fas fa-plus mr-3"></i>Add Another Test
+            </button>
+          </div>
+
+          <!-- Sample Collection Options -->
+          <div class="glass-card p-6">
+            <h4 class="font-bold text-white text-lg mb-6">
+              Sample Collection Preference
+            </h4>
+            <div class="space-y-4">
+              <div
+                class="flex items-center p-5 bg-gray-800 rounded-2xl cursor-pointer collection-option"
+                data-collection="room"
+              >
+                <input
+                  type="radio"
+                  name="collection"
+                  id="room-collection"
+                  class="mr-4 w-5 h-5 text-blue-500"
+                  checked
+                />
+                <div class="flex-1">
+                  <div class="font-bold text-white text-lg">
+                    Room Collection
+                  </div>
+                  <div class="text-gray-400 mt-1">
+                    Our technician will collect samples from your room
+                  </div>
+                </div>
+                <div class="text-green-400 font-bold">FREE</div>
+              </div>
+
+              <div
+                class="flex items-center p-5 bg-gray-800 rounded-2xl cursor-pointer collection-option"
+                data-collection="hostel"
+              >
+                <input
+                  type="radio"
+                  name="collection"
+                  id="hostel-collection"
+                  class="mr-4 w-5 h-5 text-blue-500"
+                />
+                <div class="flex-1">
+                  <div class="font-bold text-white text-lg">
+                    Hostel Health Center
+                  </div>
+                  <div class="text-gray-400 mt-1">
+                    Visit your hostel health center for sample collection
+                  </div>
+                </div>
+                <div class="text-green-400 font-bold">FREE</div>
+              </div>
+
+              <div
+                class="flex items-center p-5 bg-gray-800 rounded-2xl cursor-pointer collection-option"
+                data-collection="lab"
+              >
+                <input
+                  type="radio"
+                  name="collection"
+                  id="lab-collection"
+                  class="mr-4 w-5 h-5 text-blue-500"
+                />
+                <div class="flex-1">
+                  <div class="font-bold text-white text-lg">
+                    Laboratory Visit
+                  </div>
+                  <div class="text-gray-400 mt-1">
+                    Visit the campus laboratory directly
+                  </div>
+                </div>
+                <div class="text-green-400 font-bold">FREE</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Enhanced Lab Selection -->
+          <div class="glass-card p-6">
+            <h4 class="font-bold text-white text-lg mb-6">Choose Laboratory</h4>
+            <div class="space-y-4">
+              <div
+                class="flex items-center p-5 bg-gray-800 rounded-2xl cursor-pointer lab-option"
+                data-lab="campus"
+              >
+                <input
+                  type="radio"
+                  name="lab"
+                  id="campus-lab"
+                  class="mr-4 w-5 h-5 text-blue-500"
+                  checked
+                />
+                <div class="flex-1">
+                  <div class="font-bold text-white text-lg">
+                    Campus Health Laboratory
+                  </div>
+                  <div class="text-gray-400 mt-1">
+                    Free for registered students • Same day results • Premium
+                    equipment
+                  </div>
+                </div>
+                <div class="text-green-400 font-bold text-xl">FREE</div>
+              </div>
+
+              <div
+                class="flex items-center p-5 bg-gray-800 rounded-2xl cursor-pointer lab-option"
+                data-lab="city"
+              >
+                <input
+                  type="radio"
+                  name="lab"
+                  id="city-lab"
+                  class="mr-4 w-5 h-5 text-blue-500"
+                />
+                <div class="flex-1">
+                  <div class="font-bold text-white text-lg">
+                    Metro Diagnostic Center
+                  </div>
+                  <div class="text-gray-400 mt-1">
+                    24/7 service • Free sample pickup • Advanced analytics
+                  </div>
+                </div>
+                <div class="text-white font-bold text-lg">₹60-120</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Enhanced Appointment Details -->
+          <div class="glass-card p-6">
+            <h4 class="font-bold text-white text-lg mb-6">
+              Appointment Details
+            </h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <div class="form-group">
+                <label for="appointment-date" class="form-label"
+                  >Preferred Date</label
+                >
+                <input
+                  type="date"
+                  id="appointment-date"
+                  class="form-input"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="appointment-time" class="form-label"
+                  >Preferred Time Slot</label
+                >
+                <select id="appointment-time" class="form-select" required>
+                  <option value="">Select Time</option>
+                  <option value="08:00">8:00 AM</option>
+                  <option value="09:00">9:00 AM</option>
+                  <option value="10:00">10:00 AM</option>
+                  <option value="11:00">11:00 AM</option>
+                  <option value="12:00">12:00 PM</option>
+                  <option value="13:00">1:00 PM</option>
+                  <option value="14:00">2:00 PM</option>
+                  <option value="15:00">3:00 PM</option>
+                  <option value="16:00">4:00 PM</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="special-instructions" class="form-label"
+                >Special Instructions</label
+              >
+              <textarea
+                id="special-instructions"
+                class="form-input"
+                rows="3"
+                placeholder="Any special requirements or instructions"
+              ></textarea>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="flex justify-end space-x-4">
+            <button
+              id="cancel-book-test"
+              class="bg-gray-700 text-white font-semibold py-3 px-8 rounded-xl hover:bg-gray-600 transition-all duration-300"
+            >
+              Cancel
+            </button>
+            <button
+              id="confirm-book-test"
+              class="btn-primary font-semibold py-3 px-8 rounded-xl"
+            >
+              <i class="fas fa-calendar-check mr-3"></i>Confirm Booking
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Test Results Modal -->
+    <div
+      id="test-results-modal"
+      class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 hidden"
+    >
+      <div
+        class="glass-card rounded-2xl p-8 w-full max-w-5xl max-h-[90vh] overflow-y-auto border border-gray-700"
+      >
+        <div class="flex justify-between items-center mb-8">
+          <h3 class="text-2xl font-bold text-white" id="results-modal-title">
+            Test Results
+          </h3>
+          <button
+            id="close-results-modal"
+            class="text-gray-400 hover:text-white transition-colors duration-300"
+          >
+            <i class="fas fa-times text-2xl"></i>
+          </button>
+        </div>
+
+        <div id="test-results-content">
+          <!-- Test results will be populated here -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="notification hidden">
+      <div class="flex items-center">
+        <i class="fas fa-bell mr-3"></i>
+        <p id="notification-text" class="font-semibold"></p>
+      </div>
+    </div>
+
+    <script>
+      // Enhanced sample test data with more details
+      const labTests = [
+        {
+          id: 1,
+          name: "Complete Blood Count (CBC)",
+          category: "blood",
+          date: "2025-10-15",
+          status: "completed",
+          lab: "Campus Health Laboratory",
+          results: [
+            {
+              parameter: "Hemoglobin",
+              value: "14.2 g/dL",
+              normalRange: "13.5-17.5 g/dL",
+              status: "normal",
+            },
+            {
+              parameter: "White Blood Cells",
+              value: "7,500 /μL",
+              normalRange: "4,500-11,000 /μL",
+              status: "normal",
+            },
+            {
+              parameter: "Platelets",
+              value: "285,000 /μL",
+              normalRange: "150,000-450,000 /μL",
+              status: "normal",
+            },
+          ],
+        },
+        {
+          id: 2,
+          name: "Lipid Profile",
+          category: "blood",
+          date: "2025-10-10",
+          status: "completed",
+          lab: "Metro Diagnostic Center",
+          results: [
+            {
+              parameter: "Total Cholesterol",
+              value: "185 mg/dL",
+              normalRange: "<200 mg/dL",
+              status: "normal",
+            },
+            {
+              parameter: "LDL Cholesterol",
+              value: "110 mg/dL",
+              normalRange: "<100 mg/dL",
+              status: "borderline",
+            },
+            {
+              parameter: "HDL Cholesterol",
+              value: "45 mg/dL",
+              normalRange: ">40 mg/dL",
+              status: "normal",
+            },
+            {
+              parameter: "Triglycerides",
+              value: "150 mg/dL",
+              normalRange: "<150 mg/dL",
+              status: "borderline",
+            },
+          ],
+        },
+        {
+          id: 3,
+          name: "Thyroid Function Test",
+          category: "blood",
+          date: "2025-10-18",
+          status: "pending",
+          lab: "Campus Health Laboratory",
+          results: [],
+        },
+        {
+          id: 4,
+          name: "Vitamin D Test",
+          category: "blood",
+          date: "2025-10-05",
+          status: "completed",
+          lab: "Metro Diagnostic Center",
+          results: [
+            {
+              parameter: "Vitamin D (25-OH)",
+              value: "28 ng/mL",
+              normalRange: "30-100 ng/mL",
+              status: "abnormal",
+            },
+          ],
+        },
+      ];
+
+      // Available tests for booking
+      const availableTests = {
+        blood: [
+          "Complete Blood Count (CBC)",
+          "Lipid Profile",
+          "Liver Function Test",
+          "Kidney Function Test",
+          "Thyroid Function Test",
+          "Blood Glucose",
+          "Vitamin D Level",
+          "Iron Studies",
+          "Hemoglobin A1c",
+          "Complete Metabolic Panel",
+        ],
+        urine: [
+          "Urinalysis",
+          "Urine Culture",
+          "Microalbuminuria",
+          "Urine Protein",
+          "Urine Electrolytes",
+        ],
+        imaging: [
+          "Chest X-Ray",
+          "Abdominal Ultrasound",
+          "CT Scan",
+          "MRI",
+          "ECG",
+        ],
+        cardiac: [
+          "ECG",
+          "Echocardiogram",
+          "Stress Test",
+          "Cardiac Enzymes",
+          "Holter Monitor",
+        ],
+        hormonal: [
+          "Thyroid Panel",
+          "Hormone Level Test",
+          "Testosterone Level",
+          "Cortisol Level",
+          "Growth Hormone",
+        ],
+      };
+
+      // DOM Elements
+      const testsList = document.getElementById("tests-list");
+      const bookTestBtn = document.getElementById("book-test-btn");
+      const bookTestModal = document.getElementById("book-test-modal");
+      const closeBookTestModal = document.getElementById(
+        "close-book-test-modal"
+      );
+      const cancelBookTest = document.getElementById("cancel-book-test");
+      const confirmBookTest = document.getElementById("confirm-book-test");
+      const testCategory = document.getElementById("test-category");
+      const specificTest = document.getElementById("specific-test");
+      const selectedTests = document.getElementById("selected-tests");
+      const addAnotherTest = document.getElementById("add-another-test");
+      const testResultsModal = document.getElementById("test-results-modal");
+      const closeResultsModal = document.getElementById("close-results-modal");
+      const resultsModalTitle = document.getElementById("results-modal-title");
+      const testResultsContent = document.getElementById(
+        "test-results-content"
+      );
+      const notification = document.getElementById("notification");
+      const notificationText = document.getElementById("notification-text");
+      const testSearch = document.getElementById("test-search");
+      const filterBtns = document.querySelectorAll(".filter-btn");
+      const recommendTestBtns = document.querySelectorAll(
+        ".recommend-test-btn"
+      );
+      const quickActionBtns = document.querySelectorAll(".quick-action-btn");
+      const labOptions = document.querySelectorAll(".lab-option");
+      const collectionOptions = document.querySelectorAll(".collection-option");
+
+      // Initialize the application
+      function init() {
+        updateDateTime();
+        populateTestsList();
+        setupEventListeners();
+        initializeStats();
+      }
+
+      // Update date and time with seconds
+      function updateDateTime() {
+        const now = new Date();
+        const options = {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+        };
+        const formattedDateTime = now.toLocaleDateString("en-US", options);
+        document.getElementById("date-time-display").textContent =
+          formattedDateTime;
+
+        // Update every second
+        setTimeout(updateDateTime, 1000);
+      }
+
+      // Initialize enhanced statistics
+      function initializeStats() {
+        const stats = {
+          pending: labTests.filter((t) => t.status === "pending").length,
+          completed: labTests.filter((t) => t.status === "completed").length,
+          critical: labTests.filter(
+            (t) =>
+              t.status === "completed" &&
+              t.results.some((r) => r.status === "abnormal")
+          ).length,
+        };
+
+        document.getElementById("pending-tests").textContent = stats.pending;
+        document.getElementById("completed-tests").textContent =
+          stats.completed;
+        document.getElementById("critical-results").textContent =
+          stats.critical;
+      }
+
+      // Enhanced test list population
+      function populateTestsList(filteredTests = labTests) {
+        testsList.innerHTML = "";
+
+        if (filteredTests.length === 0) {
+          testsList.innerHTML = `
+                    <div class="text-center py-12 text-gray-500">
+                        <i class="fas fa-vial text-5xl mb-4 opacity-50"></i>
+                        <p class="text-xl font-semibold mb-2">No tests found</p>
+                        <p class="text-sm">Try adjusting your search criteria or book a new test</p>
+                    </div>
+                `;
+          return;
+        }
+
+        filteredTests.forEach((test) => {
+          const testElement = document.createElement("div");
+          testElement.className = "lab-card glass-card p-6 cursor-pointer";
+          testElement.setAttribute("data-id", test.id);
+
+          const statusClass =
+            test.status === "completed"
+              ? "status-completed"
+              : test.status === "pending"
+              ? "status-pending"
+              : "status-processing";
+
+          const hasAbnormal = test.results.some(
+            (r) => r.status === "abnormal" || r.status === "borderline"
+          );
+
+          testElement.innerHTML = `
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="flex-1">
+                            <h4 class="font-bold text-white text-lg mr-3">${
+                              test.name
+                            }</h4>
+                            <p class="text-gray-400 text-sm">${test.lab}</p>
+                        </div>
+                        <span class="status-badge ${statusClass}">
+                            ${
+                              test.status.charAt(0).toUpperCase() +
+                              test.status.slice(1)
+                            }
+                        </span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <div class="text-sm text-gray-400 font-medium">
+                            <i class="far fa-calendar mr-2"></i>${new Date(
+                              test.date
+                            ).toLocaleDateString()}
+                        </div>
+                        ${
+                          test.status === "completed"
+                            ? `
+                            <div class="flex items-center">
+                                ${
+                                  hasAbnormal
+                                    ? '<i class="fas fa-exclamation-triangle text-yellow-400 mr-2"></i>'
+                                    : '<i class="fas fa-check-circle text-green-400 mr-2"></i>'
+                                }
+                                <span class="text-sm font-semibold ${
+                                  hasAbnormal
+                                    ? "text-yellow-400"
+                                    : "text-green-400"
+                                }">
+                                    ${
+                                      hasAbnormal
+                                        ? "Review Recommended"
+                                        : "All Normal"
+                                    }
+                                </span>
+                            </div>
+                        `
+                            : `
+                            <div class="flex items-center text-blue-400">
+                                <i class="fas fa-clock mr-2"></i>
+                                <span class="text-sm font-semibold">Processing</span>
+                            </div>
+                        `
+                        }
+                    </div>
+                `;
+
+          testsList.appendChild(testElement);
+        });
+      }
+
+      // Enhanced test results display
+      function showTestResults(testId) {
+        const test = labTests.find((t) => t.id === testId);
+        if (!test) return;
+
+        resultsModalTitle.textContent = `${test.name} - Results`;
+
+        let resultsHTML = `
+                <div class="glass-card p-6 mb-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <div class="text-sm text-gray-400 font-semibold uppercase tracking-wide">Test Date</div>
+                            <div class="font-bold text-white text-lg">${new Date(
+                              test.date
+                            ).toLocaleDateString()}</div>
+                        </div>
+                        <div>
+                            <div class="text-sm text-gray-400 font-semibold uppercase tracking-wide">Laboratory</div>
+                            <div class="font-bold text-white text-lg">${
+                              test.lab
+                            }</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+        if (test.status === "completed" && test.results.length > 0) {
+          resultsHTML += `
+                    <div class="glass-card p-6 mb-6">
+                        <h4 class="font-bold text-white text-xl mb-6">Test Parameters & Results</h4>
+                        <div class="space-y-6">
+                            ${test.results
+                              .map((result) => {
+                                const statusIcon =
+                                  result.status === "normal"
+                                    ? "fa-check-circle text-green-400"
+                                    : result.status === "borderline"
+                                    ? "fa-exclamation-triangle text-yellow-400"
+                                    : "fa-exclamation-circle text-red-400";
+                                return `
+                                    <div class="test-item">
+                                        <div class="flex justify-between items-start mb-4">
+                                            <div class="font-bold text-white text-lg">${
+                                              result.parameter
+                                            }</div>
+                                            <div class="flex items-center space-x-3">
+                                                <i class="fas ${statusIcon}"></i>
+                                                <span class="text-sm font-semibold ${
+                                                  result.status === "normal"
+                                                    ? "text-green-400"
+                                                    : result.status ===
+                                                      "borderline"
+                                                    ? "text-yellow-400"
+                                                    : "text-red-400"
+                                                }">
+                                                    ${
+                                                      result.status
+                                                        .charAt(0)
+                                                        .toUpperCase() +
+                                                      result.status.slice(1)
+                                                    }
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+                                            <div>
+                                                <div class="text-gray-400 font-semibold mb-1">Your Value</div>
+                                                <div class="text-white font-bold text-lg">${
+                                                  result.value
+                                                }</div>
+                                            </div>
+                                            <div>
+                                                <div class="text-gray-400 font-semibold mb-1">Normal Range</div>
+                                                <div class="text-white">${
+                                                  result.normalRange
+                                                }</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+                              })
+                              .join("")}
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-end space-x-4 mt-8">
+                        <button class="download-report-btn bg-gray-700 text-white font-semibold py-3 px-6 rounded-xl hover:bg-gray-600 transition-all duration-300">
+                            <i class="fas fa-download mr-2"></i>Download PDF Report
+                        </button>
+                        <button class="share-results-btn btn-primary font-semibold py-3 px-6 rounded-xl">
+                            <i class="fas fa-share-alt mr-2"></i>Share with Doctor
+                        </button>
+                    </div>
+                `;
+        } else {
+          resultsHTML += `
+                    <div class="text-center py-12 text-gray-500">
+                        <div class="w-20 h-20 rounded-full bg-blue-500 bg-opacity-20 flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-clock text-blue-400 text-3xl"></i>
+                        </div>
+                        <p class="text-xl font-semibold mb-2">Results Pending Analysis</p>
+                        <p class="text-sm mb-4">Your test results are being processed by our laboratory team</p>
+                    </div>
+                `;
+        }
+
+        testResultsContent.innerHTML = resultsHTML;
+        testResultsModal.classList.remove("hidden");
+
+        // Add event listeners to the new buttons
+        const downloadBtn = testResultsContent.querySelector(
+          ".download-report-btn"
+        );
+        const shareBtn = testResultsContent.querySelector(".share-results-btn");
+
+        if (downloadBtn) {
+          downloadBtn.addEventListener("click", function () {
+            showNotification(
+              "Report download started successfully!",
+              "success"
+            );
+          });
+        }
+
+        if (shareBtn) {
+          shareBtn.addEventListener("click", function () {
+            showNotification(
+              "Results shared with your healthcare provider!",
+              "success"
+            );
+          });
+        }
+      }
+
+      // Add test to selected list
+      function addTestToSelection() {
+        const category = testCategory.value;
+        const test = specificTest.value;
+
+        if (!category || !test) {
+          showNotification(
+            "Please select both category and specific test",
+            "error"
+          );
+          return;
+        }
+
+        const testElement = document.createElement("div");
+        testElement.className =
+          "flex justify-between items-center p-4 bg-gray-800 rounded-xl";
+        testElement.innerHTML = `
+                <div class="flex items-center">
+                    <div class="w-10 h-10 rounded-lg bg-blue-500 bg-opacity-20 flex items-center justify-center mr-4">
+                        <i class="fas fa-vial text-blue-400"></i>
+                    </div>
+                    <div>
+                        <div class="font-bold text-white">${test}</div>
+                        <div class="text-sm text-gray-400">${
+                          category.charAt(0).toUpperCase() + category.slice(1)
+                        } Test</div>
+                    </div>
+                </div>
+                <button class="remove-test text-red-400 hover:text-red-300 transition-colors duration-300">
+                    <i class="fas fa-times text-lg"></i>
+                </button>
+            `;
+
+        selectedTests.appendChild(testElement);
+
+        // Reset selects
+        testCategory.value = "";
+        specificTest.value = "";
+        specificTest.innerHTML = '<option value="">Select Test</option>';
+
+        // Add event listener to remove button
+        const removeBtn = testElement.querySelector(".remove-test");
+        removeBtn.addEventListener("click", function () {
+          testElement.remove();
+        });
+      }
+
+      // Populate specific tests based on category
+      function populateSpecificTests() {
+        const category = testCategory.value;
+        specificTest.innerHTML = '<option value="">Select Test</option>';
+
+        if (category && availableTests[category]) {
+          availableTests[category].forEach((test) => {
+            const option = document.createElement("option");
+            option.value = test;
+            option.textContent = test;
+            specificTest.appendChild(option);
+          });
+        }
+      }
+
+      // Enhanced notification system
+      function showNotification(message, type = "info") {
+        notificationText.textContent = message;
+        notification.className = `notification ${type}`;
+        notification.classList.remove("hidden");
+
+        setTimeout(() => {
+          notification.classList.add("hidden");
+        }, 4000);
+      }
+
+      // Enhanced event listeners setup
+      function setupEventListeners() {
+        // Update date and time every second
+        setInterval(updateDateTime, 1000);
+
+        // Book test button
+        bookTestBtn.addEventListener("click", function () {
+          bookTestModal.classList.remove("hidden");
+        });
+
+        // Modal closing
+        closeBookTestModal.addEventListener("click", function () {
+          bookTestModal.classList.add("hidden");
+        });
+
+        closeResultsModal.addEventListener("click", function () {
+          testResultsModal.classList.add("hidden");
+        });
+
+        cancelBookTest.addEventListener("click", function () {
+          bookTestModal.classList.add("hidden");
+        });
+
+        // Book test confirmation
+        confirmBookTest.addEventListener("click", function () {
+          if (selectedTests.children.length === 0) {
+            showNotification(
+              "Please select at least one diagnostic test to proceed",
+              "error"
+            );
+            return;
+          }
+
+          // Validate student information
+          const studentName = document.getElementById("student-name").value;
+          const regNumber = document.getElementById(
+            "registration-number"
+          ).value;
+          const roomNumber = document.getElementById("room-number").value;
+          const block = document.getElementById("block").value;
+          const phone = document.getElementById("phone-number").value;
+          const email = document.getElementById("email").value;
+
+          if (
+            !studentName ||
+            !regNumber ||
+            !roomNumber ||
+            !block ||
+            !phone ||
+            !email
+          ) {
+            showNotification(
+              "Please fill in all required student information fields",
+              "error"
+            );
+            return;
+          }
+
+          showNotification(
+            "Laboratory tests booked successfully! You will receive confirmation shortly.",
+            "success"
+          );
+          bookTestModal.classList.add("hidden");
+
+          // Reset form
+          selectedTests.innerHTML = "";
+          testCategory.value = "";
+          specificTest.innerHTML = '<option value="">Select Test</option>';
+          document.getElementById("student-name").value = "";
+          document.getElementById("registration-number").value = "";
+          document.getElementById("room-number").value = "";
+          document.getElementById("block").value = "";
+          document.getElementById("phone-number").value = "";
+          document.getElementById("email").value = "";
+          document.getElementById("appointment-date").value = "";
+          document.getElementById("appointment-time").value = "";
+          document.getElementById("special-instructions").value = "";
+        });
+
+        // Test category change
+        testCategory.addEventListener("change", populateSpecificTests);
+
+        // Test selection
+        specificTest.addEventListener("change", addTestToSelection);
+
+        // Add another test button
+        addAnotherTest.addEventListener("click", function () {
+          testCategory.focus();
+        });
+
+        // Test card click
+        document.addEventListener("click", function (e) {
+          if (e.target.closest(".lab-card")) {
+            const testCard = e.target.closest(".lab-card");
+            const testId = parseInt(testCard.getAttribute("data-id"));
+            showTestResults(testId);
+          }
+        });
+
+        // Search functionality
+        testSearch.addEventListener("input", function (e) {
+          const query = e.target.value.toLowerCase();
+          const filtered = labTests.filter(
+            (test) =>
+              test.name.toLowerCase().includes(query) ||
+              test.lab.toLowerCase().includes(query) ||
+              test.category.toLowerCase().includes(query)
+          );
+          populateTestsList(filtered);
+        });
+
+        // Filter buttons
+        filterBtns.forEach((btn) => {
+          btn.addEventListener("click", function () {
+            filterBtns.forEach((b) => {
+              b.classList.remove("bg-blue-500", "text-white");
+              b.classList.add("bg-gray-700", "text-gray-300");
+            });
+
+            this.classList.remove("bg-gray-700", "text-gray-300");
+            this.classList.add("bg-blue-500", "text-white");
+
+            const filter = this.getAttribute("data-filter");
+            let filtered = labTests;
+
+            if (filter !== "all") {
+              if (filter === "abnormal") {
+                filtered = labTests.filter(
+                  (test) =>
+                    test.status === "completed" &&
+                    test.results.some(
+                      (r) =>
+                        r.status === "abnormal" || r.status === "borderline"
+                    )
+                );
+              } else {
+                filtered = labTests.filter((test) => test.status === filter);
+              }
+            }
+
+            populateTestsList(filtered);
+          });
+        });
+
+        // Recommended test buttons
+        recommendTestBtns.forEach((btn) => {
+          btn.addEventListener("click", function () {
+            const testName = this.getAttribute("data-test");
+            showNotification(
+              `Added ${testName} to your test selection`,
+              "success"
+            );
+
+            // Add the test to the booking form
+            bookTestModal.classList.remove("hidden");
+
+            // Find the category for this test
+            let category = "";
+            for (const [cat, tests] of Object.entries(availableTests)) {
+              if (tests.includes(testName)) {
+                category = cat;
+                break;
+              }
+            }
+
+            if (category) {
+              testCategory.value = category;
+              populateSpecificTests();
+              specificTest.value = testName;
+              addTestToSelection();
+            }
+          });
+        });
+
+        // Quick action buttons
+        quickActionBtns.forEach((btn) => {
+          btn.addEventListener("click", function () {
+            const action = this.querySelector(".font-semibold").textContent;
+            showNotification(
+              `${action} feature activated successfully!`,
+              "info"
+            );
+          });
+        });
+
+        // Lab selection
+        labOptions.forEach((option) => {
+          option.addEventListener("click", function () {
+            const radio = this.querySelector('input[type="radio"]');
+            radio.checked = true;
+          });
+        });
+
+        // Collection selection
+        collectionOptions.forEach((option) => {
+          option.addEventListener("click", function () {
+            const radio = this.querySelector('input[type="radio"]');
+            radio.checked = true;
+          });
+        });
+
+        // Sidebar items
+        const sidebarItems = document.querySelectorAll(".sidebar-item");
+        sidebarItems.forEach((item) => {
+          item.addEventListener("click", function (e) {
+            e.preventDefault();
+            sidebarItems.forEach((i) => i.classList.remove("active"));
+            this.classList.add("active");
+            showNotification(
+              `Navigating to ${this.querySelector("span").textContent}`,
+              "info"
+            );
+          });
+        });
+
+        // Logout button
+        document
+          .querySelector(".bg-gradient-to-r.from-red-500")
+          .addEventListener("click", function (e) {
+            e.preventDefault();
+            showNotification("You have been logged out successfully", "info");
+            setTimeout(() => {
+              window.location.reload();
+            }, 2000);
+          });
+
+        // Notification bell
+        document
+          .querySelector(".fa-bell")
+          .closest(".relative")
+          .addEventListener("click", function () {
+            showNotification("You have 3 new notifications", "info");
+          });
+      }
+
+      // Initialize the application when DOM is loaded
+      document.addEventListener("DOMContentLoaded", init);
+    </script>
+    <script src="auth_guard.js"></script>
+</body>
+</html>
+0
+
+
+
+
+
+
+
+
+
+
+

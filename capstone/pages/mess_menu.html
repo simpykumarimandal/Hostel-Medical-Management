@@ -1,0 +1,2726 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VIT Bhopal | Mess & Catering Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #0f172a;
+        color: #e2e8f0;
+      }
+
+      .mess-card {
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+      }
+
+      .mess-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      }
+
+      .mess-card.active {
+        border-color: #f59e0b;
+      }
+
+      .menu-table {
+        background: #1e293b;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        border-collapse: separate;
+        border-spacing: 0;
+      }
+
+      .menu-table th {
+        background: #334155;
+        color: #fbbf24;
+        font-weight: 600;
+        padding: 16px;
+        text-align: center;
+        border-bottom: 2px solid #475569;
+      }
+
+      .menu-table td {
+        padding: 16px;
+        border-bottom: 1px solid #334155;
+        vertical-align: top;
+      }
+
+      .menu-table tr:last-child td {
+        border-bottom: none;
+      }
+
+      .meal-item {
+        margin-bottom: 8px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid #334155;
+      }
+
+      .meal-item:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+      }
+
+      .meal-type {
+        color: #fbbf24;
+        font-weight: 600;
+        margin-bottom: 8px;
+        display: block;
+        font-size: 0.9rem;
+      }
+
+      .special-item {
+        background: #fbbf24;
+        color: #1e293b;
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        font-weight: bold;
+        margin-left: 8px;
+      }
+
+      .veg-indicator {
+        color: #10b981;
+        margin-right: 5px;
+      }
+
+      .nonveg-indicator {
+        color: #ef4444;
+        margin-right: 5px;
+      }
+
+      .star-rating {
+        color: #fbbf24;
+        font-size: 1.2rem;
+      }
+
+      .star-rating .star {
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .star-rating .star:hover {
+        transform: scale(1.2);
+      }
+
+      .tab-button {
+        padding: 12px 24px;
+        background: #1e293b;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-weight: 500;
+      }
+
+      .tab-button.active {
+        background: #3b82f6;
+        color: white;
+      }
+
+      .attendance-status {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        display: inline-block;
+        margin-right: 5px;
+      }
+
+      .present {
+        background-color: #10b981;
+      }
+
+      .absent {
+        background-color: #ef4444;
+      }
+
+      .late {
+        background-color: #f59e0b;
+      }
+
+      .notification-card {
+        border-left: 4px solid #3b82f6;
+        background-color: #1e293b;
+        border-radius: 8px;
+        padding: 16px;
+        margin-bottom: 16px;
+      }
+
+      .notification-card.urgent {
+        border-left-color: #ef4444;
+      }
+
+      .notification-card.info {
+        border-left-color: #3b82f6;
+      }
+
+      .notification-card.warning {
+        border-left-color: #f59e0b;
+      }
+
+      .message-box {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: #10b981;
+        color: white;
+        padding: 15px 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        z-index: 1000;
+        display: none;
+      }
+
+      .message-box.show {
+        display: block;
+        animation: slideIn 0.5s forwards;
+      }
+
+      @keyframes slideIn {
+        from {
+          transform: translateX(100%);
+        }
+        to {
+          transform: translateX(0);
+        }
+      }
+
+      .fade-in {
+        animation: fadeIn 0.5s ease-in;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .today-highlight {
+        background: rgba(59, 130, 246, 0.1);
+        border-left: 4px solid #3b82f6;
+      }
+
+      .menu-filters {
+        background: #1e293b;
+        border-radius: 8px;
+        padding: 16px;
+        margin-bottom: 16px;
+      }
+
+      .menu-actions {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 16px;
+        flex-wrap: wrap;
+      }
+
+      .menu-actions button {
+        background: #334155;
+        color: #e2e8f0;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .menu-actions button:hover {
+        background: #475569;
+      }
+
+      .menu-actions button.active {
+        background: #3b82f6;
+        color: white;
+      }
+
+      .weekly-calendar {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 16px;
+        flex-wrap: wrap;
+      }
+
+      .calendar-day {
+        flex: 1;
+        min-width: 80px;
+        text-align: center;
+        padding: 12px 8px;
+        background: #1e293b;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .calendar-day.active {
+        background: #3b82f6;
+        color: white;
+      }
+
+      .calendar-day.today {
+        border: 2px solid #f59e0b;
+      }
+
+      .day-name {
+        font-size: 0.875rem;
+        font-weight: 600;
+      }
+
+      .day-date {
+        font-size: 1.125rem;
+        font-weight: 700;
+      }
+
+      .tab-panel {
+        display: none;
+      }
+
+      .tab-panel.active {
+        display: block;
+      }
+
+      .menu-item-list {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .menu-item-list li {
+        padding: 6px 0;
+        border-bottom: 1px solid #334155;
+      }
+
+      .menu-item-list li:last-child {
+        border-bottom: none;
+      }
+
+      .meal-column {
+        min-width: 200px;
+      }
+
+      /* New Professional Styles */
+      .analytics-card {
+        background: #1e293b;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      .analytics-chart {
+        height: 200px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        padding: 20px 0;
+      }
+
+      .chart-bar {
+        background: linear-gradient(to top, #3b82f6, #60a5fa);
+        width: 40px;
+        border-radius: 4px 4px 0 0;
+        transition: all 0.3s;
+        position: relative;
+      }
+
+      .chart-bar:hover {
+        transform: scale(1.05);
+      }
+
+      .chart-label {
+        position: absolute;
+        bottom: -25px;
+        left: 0;
+        right: 0;
+        text-align: center;
+        font-size: 0.75rem;
+        color: #94a3b8;
+      }
+
+      .chart-value {
+        position: absolute;
+        top: -25px;
+        left: 0;
+        right: 0;
+        text-align: center;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #e2e8f0;
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 2000;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .modal.show {
+        display: flex;
+      }
+
+      .modal-content {
+        background: #1e293b;
+        border-radius: 12px;
+        padding: 24px;
+        width: 90%;
+        max-width: 500px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      }
+
+      .modal-header {
+        display: flex;
+        justify-content: between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .modal-close {
+        background: none;
+        border: none;
+        color: #94a3b8;
+        font-size: 1.5rem;
+        cursor: pointer;
+      }
+
+      .modal-close:hover {
+        color: #e2e8f0;
+      }
+
+      .progress-bar {
+        height: 8px;
+        background: #334155;
+        border-radius: 4px;
+        overflow: hidden;
+        margin-top: 8px;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: #10b981;
+        border-radius: 4px;
+        transition: width 0.5s ease;
+      }
+
+      .nutrition-info {
+        background: #1e293b;
+        border-radius: 8px;
+        padding: 16px;
+        margin-top: 16px;
+      }
+
+      .nutrition-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        margin-top: 12px;
+      }
+
+      .nutrition-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        border-bottom: 1px solid #334155;
+      }
+
+      .nutrition-item:last-child {
+        border-bottom: none;
+      }
+
+      .nutrition-label {
+        color: #94a3b8;
+      }
+
+      .nutrition-value {
+        font-weight: 600;
+      }
+
+      .qr-code {
+        background: white;
+        padding: 10px;
+        border-radius: 8px;
+        display: inline-block;
+        margin-top: 10px;
+      }
+
+      .qr-placeholder {
+        width: 150px;
+        height: 150px;
+        background: #f1f5f9;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #64748b;
+        font-size: 0.75rem;
+        text-align: center;
+        margin: 0 auto;
+      }
+
+      .meal-timing {
+        display: flex;
+        justify-content: space-between;
+        background: #1e293b;
+        border-radius: 8px;
+        padding: 16px;
+        margin-bottom: 16px;
+      }
+
+      .timing-item {
+        text-align: center;
+        flex: 1;
+      }
+
+      .timing-label {
+        font-size: 0.875rem;
+        color: #94a3b8;
+        margin-bottom: 4px;
+      }
+
+      .timing-value {
+        font-weight: 600;
+        font-size: 1.125rem;
+      }
+
+      .expense-breakdown {
+        display: flex;
+        height: 200px;
+        align-items: flex-end;
+        justify-content: space-between;
+        padding: 20px 0;
+      }
+
+      .expense-bar {
+        background: linear-gradient(to top, #8b5cf6, #a78bfa);
+        width: 40px;
+        border-radius: 4px 4px 0 0;
+        transition: all 0.3s;
+        position: relative;
+      }
+
+      .expense-bar:hover {
+        transform: scale(1.05);
+      }
+
+      .expense-label {
+        position: absolute;
+        bottom: -25px;
+        left: 0;
+        right: 0;
+        text-align: center;
+        font-size: 0.75rem;
+        color: #94a3b8;
+      }
+
+      .expense-value {
+        position: absolute;
+        top: -25px;
+        left: 0;
+        right: 0;
+        text-align: center;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #e2e8f0;
+      }
+    </style>
+  </head>
+  <body class="min-h-screen">
+    <!-- Header -->
+    <header class="bg-slate-800 text-white p-4 shadow-lg">
+      <div class="container mx-auto flex justify-between items-center">
+        <div class="flex items-center space-x-3">
+          <i class="fas fa-utensils text-2xl text-amber-400"></i>
+          <div>
+            <h1 class="text-2xl font-bold">VIT Bhopal Mess Management</h1>
+            <p class="text-sm text-slate-400">
+              Boys Hostel Mess & Catering System
+            </p>
+          </div>
+        </div>
+        <div class="flex items-center space-x-6">
+          <div class="relative">
+            <i
+              class="fa-solid fa-bell text-xl hover:text-white transition duration-200 cursor-pointer"
+              id="notification-icon"
+            ></i>
+            <span
+              class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center"
+              >3</span
+            >
+          </div>
+          <div class="flex items-center space-x-2">
+            <i class="fa-solid fa-user-circle text-xl"></i>
+            <span>Student Portal</span>
+          </div>
+          <div class="flex items-center space-x-2 cursor-pointer">
+            <i class="fa-solid fa-right-from-bracket text-xl"></i>
+            <span>Logout</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto p-6">
+      <!-- University Banner -->
+      <div
+        class="bg-gradient-to-r from-blue-600 to-purple-600 p-1 rounded-xl mb-6"
+      >
+        <div class="bg-slate-800 rounded-xl p-6">
+          <div class="flex flex-col md:flex-row justify-between items-center">
+            <div class="flex items-center mb-4 md:mb-0">
+              <div class="bg-blue-600 rounded-full p-3 mr-4">
+                <i class="fa-solid fa-university text-white text-xl"></i>
+              </div>
+              <div>
+                <div class="font-bold text-white text-lg">
+                  VIT Bhopal University
+                </div>
+                <div class="text-blue-300">
+                  Kothri Kalan, Sehore, Madhya Pradesh - 466114
+                </div>
+                <div class="text-sm text-slate-400 mt-1">
+                  Mess & Catering Management Dashboard
+                </div>
+              </div>
+            </div>
+            <div class="text-center md:text-right">
+              <div class="text-white font-semibold">Mess Helpdesk</div>
+              <div class="text-blue-400 font-bold text-xl">07562-654321</div>
+              <div class="text-sm text-slate-400">
+                Mon-Sat: 8:00 AM - 6:00 PM
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Stats -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div
+          class="bg-gradient-to-r from-blue-600 to-purple-600 p-1 rounded-xl"
+        >
+          <div
+            class="bg-slate-800 rounded-xl p-6 flex items-center justify-between"
+          >
+            <div>
+              <div class="text-2xl font-bold text-white" id="active-messes">
+                4
+              </div>
+              <div class="text-sm text-blue-300">Active Messes</div>
+            </div>
+            <i class="fa-solid fa-utensils text-blue-400 text-2xl"></i>
+          </div>
+        </div>
+
+        <div
+          class="bg-gradient-to-r from-green-600 to-emerald-600 p-1 rounded-xl"
+        >
+          <div
+            class="bg-slate-800 rounded-xl p-6 flex items-center justify-between"
+          >
+            <div>
+              <div class="text-2xl font-bold text-white" id="total-students">
+                1,250
+              </div>
+              <div class="text-sm text-green-300">Registered Students</div>
+            </div>
+            <i class="fa-solid fa-users text-green-400 text-2xl"></i>
+          </div>
+        </div>
+
+        <div
+          class="bg-gradient-to-r from-amber-600 to-yellow-600 p-1 rounded-xl"
+        >
+          <div
+            class="bg-slate-800 rounded-xl p-6 flex items-center justify-between"
+          >
+            <div>
+              <div class="text-2xl font-bold text-white" id="today-meals">
+                850
+              </div>
+              <div class="text-sm text-amber-300">Today's Meals</div>
+            </div>
+            <i class="fa-solid fa-plate-wheat text-amber-400 text-2xl"></i>
+          </div>
+        </div>
+
+        <div
+          class="bg-gradient-to-r from-purple-600 to-pink-600 p-1 rounded-xl"
+        >
+          <div
+            class="bg-slate-800 rounded-xl p-6 flex items-center justify-between"
+          >
+            <div>
+              <div class="text-2xl font-bold text-white" id="pending-feedback">
+                12
+              </div>
+              <div class="text-sm text-purple-300">Pending Feedback</div>
+            </div>
+            <i class="fa-solid fa-comment text-purple-400 text-2xl"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mess Selection -->
+      <div class="bg-slate-800 rounded-xl shadow-lg p-6 mb-6">
+        <h3 class="text-xl font-bold text-white mb-4">Select Your Mess</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div
+            class="mess-card bg-gradient-to-r from-green-600 to-emerald-600 rounded-xl p-5 text-white cursor-pointer"
+            data-mess="rassence"
+          >
+            <div class="flex justify-between items-start mb-3">
+              <h4 class="font-bold text-lg">Rassence (CRCL)</h4>
+              <span
+                class="bg-white text-green-700 text-xs font-bold px-2 py-1 rounded-full"
+                >Veg & Non-Veg</span
+              >
+            </div>
+            <p class="text-sm opacity-90">Capacity: 350 students</p>
+            <div class="mt-2 text-sm flex items-center">
+              <span class="text-amber-300">★ 4.2</span>
+              <span class="ml-1">(245 reviews)</span>
+            </div>
+          </div>
+
+          <div
+            class="mess-card bg-gradient-to-r from-green-600 to-emerald-600 rounded-xl p-5 text-white cursor-pointer"
+            data-mess="mayuri"
+          >
+            <div class="flex justify-between items-start mb-3">
+              <h4 class="font-bold text-lg">Mayuri</h4>
+              <span
+                class="bg-white text-green-700 text-xs font-bold px-2 py-1 rounded-full"
+                >Veg & Non-Veg</span
+              >
+            </div>
+            <p class="text-sm opacity-90">Capacity: 300 students</p>
+            <div class="mt-2 text-sm flex items-center">
+              <span class="text-amber-300">★ 4.0</span>
+              <span class="ml-1">(198 reviews)</span>
+            </div>
+          </div>
+
+          <div
+            class="mess-card bg-gradient-to-r from-green-600 to-emerald-600 rounded-xl p-5 text-white cursor-pointer"
+            data-mess="safal"
+          >
+            <div class="flex justify-between items-start mb-3">
+              <h4 class="font-bold text-lg">Safal</h4>
+              <span
+                class="bg-white text-green-700 text-xs font-bold px-2 py-1 rounded-full"
+                >Veg & Non-Veg</span
+              >
+            </div>
+            <p class="text-sm opacity-90">Capacity: 320 students</p>
+            <div class="mt-2 text-sm flex items-center">
+              <span class="text-amber-300">★ 4.1</span>
+              <span class="ml-1">(210 reviews)</span>
+            </div>
+          </div>
+
+          <div
+            class="mess-card bg-gradient-to-r from-purple-600 to-indigo-600 rounded-xl p-5 text-white cursor-pointer active"
+            data-mess="jmb"
+          >
+            <div class="flex justify-between items-start mb-3">
+              <h4 class="font-bold text-lg">JMB Mess</h4>
+              <span
+                class="bg-white text-purple-700 text-xs font-bold px-2 py-1 rounded-full"
+                >Pure Veg & Jain</span
+              >
+            </div>
+            <p class="text-sm opacity-90">Capacity: 280 students</p>
+            <div class="mt-2 text-sm flex items-center">
+              <span class="text-amber-300">★ 4.5</span>
+              <span class="ml-1">(312 reviews)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabs Navigation -->
+      <div class="flex flex-wrap gap-4 mb-6 bg-slate-800 p-3 rounded-xl">
+        <div class="tab-button active" data-tab="menu">Weekly Menu</div>
+        <div class="tab-button" data-tab="attendance">Meal Attendance</div>
+        <div class="tab-button" data-tab="feedback">Food Feedback</div>
+        <div class="tab-button" data-tab="special">Special Requests</div>
+        <div class="tab-button" data-tab="analytics">Analytics</div>
+        <div class="tab-button" data-tab="expenses">Expense Tracking</div>
+      </div>
+
+      <!-- Tab Content -->
+      <div id="tab-content">
+        <!-- Weekly Menu Tab -->
+        <div class="tab-panel active" id="menu-panel">
+          <div class="bg-slate-800 rounded-xl shadow-lg p-6 mb-6">
+            <div
+              class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6"
+            >
+              <h3
+                class="text-xl font-bold text-white mb-2 md:mb-0"
+                id="current-mess-name"
+              >
+                JMB Mess Weekly Menu
+              </h3>
+              <div class="flex items-center text-sm text-green-400">
+                <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                Current Week:
+                <span id="current-week">24 Sep - 30 Sep 2025</span>
+              </div>
+            </div>
+
+            <!-- Meal Timings -->
+            <div class="meal-timing">
+              <div class="timing-item">
+                <div class="timing-label">Breakfast</div>
+                <div class="timing-value">7:30 - 9:30 AM</div>
+              </div>
+              <div class="timing-item">
+                <div class="timing-label">Lunch</div>
+                <div class="timing-value">12:00 - 2:00 PM</div>
+              </div>
+              <div class="timing-item">
+                <div class="timing-label">Dinner</div>
+                <div class="timing-value">7:00 - 9:00 PM</div>
+              </div>
+            </div>
+
+            <!-- Weekly Calendar -->
+            <div class="weekly-calendar">
+              <div class="calendar-day today active" data-day="monday">
+                <div class="day-name">MON</div>
+                <div class="day-date">24</div>
+              </div>
+              <div class="calendar-day" data-day="tuesday">
+                <div class="day-name">TUE</div>
+                <div class="day-date">25</div>
+              </div>
+              <div class="calendar-day" data-day="wednesday">
+                <div class="day-name">WED</div>
+                <div class="day-date">26</div>
+              </div>
+              <div class="calendar-day" data-day="thursday">
+                <div class="day-name">THU</div>
+                <div class="day-date">27</div>
+              </div>
+              <div class="calendar-day" data-day="friday">
+                <div class="day-name">FRI</div>
+                <div class="day-date">28</div>
+              </div>
+              <div class="calendar-day" data-day="saturday">
+                <div class="day-name">SAT</div>
+                <div class="day-date">29</div>
+              </div>
+              <div class="calendar-day" data-day="sunday">
+                <div class="day-name">SUN</div>
+                <div class="day-date">30</div>
+              </div>
+            </div>
+
+            <!-- Menu Actions -->
+            <div class="menu-actions">
+              <button class="active" data-filter="all">
+                <i class="fas fa-utensils"></i> All Meals
+              </button>
+              <button data-filter="breakfast">
+                <i class="fas fa-egg"></i> Breakfast
+              </button>
+              <button data-filter="lunch">
+                <i class="fas fa-utensil-spoon"></i> Lunch
+              </button>
+              <button data-filter="dinner">
+                <i class="fas fa-moon"></i> Dinner
+              </button>
+              <button id="print-menu">
+                <i class="fas fa-print"></i> Print Menu
+              </button>
+              <button id="download-menu">
+                <i class="fas fa-download"></i> Download
+              </button>
+              <button id="nutrition-info">
+                <i class="fas fa-apple-alt"></i> Nutrition Info
+              </button>
+            </div>
+
+            <!-- Menu Table -->
+            <div class="overflow-x-auto">
+              <table class="menu-table w-full">
+                <thead>
+                  <tr>
+                    <th>Day</th>
+                    <th class="meal-column">Breakfast</th>
+                    <th class="meal-column">Lunch</th>
+                    <th class="meal-column">Dinner</th>
+                  </tr>
+                </thead>
+                <tbody id="menu-table-body">
+                  <!-- Menu will be populated by JavaScript -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Meal Attendance Tab -->
+        <div class="tab-panel" id="attendance-panel">
+          <div class="bg-slate-800 rounded-xl shadow-lg p-6 mb-6">
+            <div
+              class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6"
+            >
+              <h3 class="text-xl font-bold text-white mb-2 md:mb-0">
+                Meal Attendance Tracking
+              </h3>
+              <div class="flex items-center text-sm text-green-400">
+                <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                Today: <span id="current-date">24 Sep 2025</span>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+              <div class="bg-slate-700 rounded-xl p-4 text-center">
+                <div class="text-2xl font-bold text-white">3</div>
+                <div class="text-sm text-slate-400">Meals Today</div>
+              </div>
+              <div class="bg-slate-700 rounded-xl p-4 text-center">
+                <div class="text-2xl font-bold text-green-400">2</div>
+                <div class="text-sm text-slate-400">Attended</div>
+              </div>
+              <div class="bg-slate-700 rounded-xl p-4 text-center">
+                <div class="text-2xl font-bold text-amber-400">1</div>
+                <div class="text-sm text-slate-400">Pending</div>
+              </div>
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm text-left text-slate-400">
+                <thead class="text-xs uppercase bg-slate-700 text-slate-400">
+                  <tr>
+                    <th class="px-4 py-3">Date</th>
+                    <th class="px-4 py-3">Meal</th>
+                    <th class="px-4 py-3">Status</th>
+                    <th class="px-4 py-3">Time</th>
+                    <th class="px-4 py-3">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="attendance-table-body">
+                  <!-- Attendance data will be populated by JavaScript -->
+                </tbody>
+              </table>
+            </div>
+
+            <div class="mt-6 flex justify-end">
+              <button
+                id="export-attendance"
+                class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition flex items-center"
+              >
+                <i class="fa-solid fa-download mr-2"></i>Export Attendance
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Food Feedback Tab -->
+        <div class="tab-panel" id="feedback-panel">
+          <div class="bg-slate-800 rounded-xl shadow-lg p-6 mb-6">
+            <div
+              class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6"
+            >
+              <h3 class="text-xl font-bold text-white mb-2 md:mb-0">
+                Food Quality Feedback
+              </h3>
+              <div class="flex items-center text-sm text-green-400">
+                <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                Rate today's meals
+              </div>
+            </div>
+
+            <div class="space-y-6" id="feedback-container">
+              <!-- Feedback forms will be populated by JavaScript -->
+            </div>
+
+            <div class="mt-6 flex justify-end">
+              <button
+                id="submit-feedback"
+                class="bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition flex items-center"
+              >
+                <i class="fa-solid fa-paper-plane mr-2"></i>Submit Feedback
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Special Requests Tab -->
+        <div class="tab-panel" id="special-panel">
+          <div class="bg-slate-800 rounded-xl shadow-lg p-6 mb-6">
+            <div
+              class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6"
+            >
+              <h3 class="text-xl font-bold text-white mb-2 md:mb-0">
+                Special Meal Requests
+              </h3>
+              <div class="flex items-center text-sm text-green-400">
+                <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                Submit special dietary requirements
+              </div>
+            </div>
+
+            <div class="space-y-4">
+              <div class="form-group">
+                <label class="form-label block text-slate-300 mb-2 font-medium"
+                  >Request Type</label
+                >
+                <select
+                  class="form-input w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  id="request-type"
+                >
+                  <option value="">Select Request Type</option>
+                  <option value="dietary">Dietary Restriction</option>
+                  <option value="medical">Medical Requirement</option>
+                  <option value="religious">Religious Requirement</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label block text-slate-300 mb-2 font-medium"
+                  >Description</label
+                >
+                <textarea
+                  class="form-input w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  rows="4"
+                  placeholder="Describe your special requirement in detail..."
+                  id="request-description"
+                ></textarea>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="form-group">
+                  <label
+                    class="form-label block text-slate-300 mb-2 font-medium"
+                    >Start Date</label
+                  >
+                  <input
+                    type="date"
+                    class="form-input w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    id="request-start-date"
+                  />
+                </div>
+                <div class="form-group">
+                  <label
+                    class="form-label block text-slate-300 mb-2 font-medium"
+                    >End Date</label
+                  >
+                  <input
+                    type="date"
+                    class="form-input w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    id="request-end-date"
+                  />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label block text-slate-300 mb-2 font-medium"
+                  >Meals</label
+                >
+                <div class="flex flex-wrap gap-4 mt-2">
+                  <label class="flex items-center">
+                    <input type="checkbox" class="mr-2" checked />
+                    <span class="text-slate-300">Breakfast</span>
+                  </label>
+                  <label class="flex items-center">
+                    <input type="checkbox" class="mr-2" checked />
+                    <span class="text-slate-300">Lunch</span>
+                  </label>
+                  <label class="flex items-center">
+                    <input type="checkbox" class="mr-2" checked />
+                    <span class="text-slate-300">Dinner</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-6 flex justify-end space-x-2">
+              <button
+                id="submit-request"
+                class="bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition flex items-center"
+              >
+                <i class="fa-solid fa-paper-plane mr-2"></i>Submit Request
+              </button>
+              <button
+                class="bg-slate-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-slate-700 transition"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Analytics Tab -->
+        <div class="tab-panel" id="analytics-panel">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <!-- Meal Consumption Analytics -->
+            <div class="analytics-card">
+              <h3 class="text-xl font-bold text-white mb-4">
+                Meal Consumption Analytics
+              </h3>
+              <div class="analytics-chart">
+                <div class="chart-bar" style="height: 80%">
+                  <div class="chart-value">80%</div>
+                  <div class="chart-label">Mon</div>
+                </div>
+                <div class="chart-bar" style="height: 65%">
+                  <div class="chart-value">65%</div>
+                  <div class="chart-label">Tue</div>
+                </div>
+                <div class="chart-bar" style="height: 90%">
+                  <div class="chart-value">90%</div>
+                  <div class="chart-label">Wed</div>
+                </div>
+                <div class="chart-bar" style="height: 75%">
+                  <div class="chart-value">75%</div>
+                  <div class="chart-label">Thu</div>
+                </div>
+                <div class="chart-bar" style="height: 85%">
+                  <div class="chart-value">85%</div>
+                  <div class="chart-label">Fri</div>
+                </div>
+                <div class="chart-bar" style="height: 70%">
+                  <div class="chart-value">70%</div>
+                  <div class="chart-label">Sat</div>
+                </div>
+                <div class="chart-bar" style="height: 60%">
+                  <div class="chart-value">60%</div>
+                  <div class="chart-label">Sun</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Food Preference Analytics -->
+            <div class="analytics-card">
+              <h3 class="text-xl font-bold text-white mb-4">
+                Food Preference Analytics
+              </h3>
+              <div class="space-y-4">
+                <div>
+                  <div class="flex justify-between mb-1">
+                    <span class="text-slate-300">Vegetarian</span>
+                    <span class="text-slate-300">72%</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-fill" style="width: 72%"></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex justify-between mb-1">
+                    <span class="text-slate-300">Non-Vegetarian</span>
+                    <span class="text-slate-300">28%</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-fill" style="width: 28%"></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex justify-between mb-1">
+                    <span class="text-slate-300">Jain Food</span>
+                    <span class="text-slate-300">15%</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-fill" style="width: 15%"></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex justify-between mb-1">
+                    <span class="text-slate-300">Special Diet</span>
+                    <span class="text-slate-300">8%</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-fill" style="width: 8%"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Feedback Ratings -->
+            <div class="analytics-card">
+              <h3 class="text-xl font-bold text-white mb-4">
+                Feedback Ratings
+              </h3>
+              <div class="space-y-4">
+                <div>
+                  <div class="flex justify-between mb-1">
+                    <span class="text-slate-300">Food Quality</span>
+                    <span class="text-amber-400">4.2/5</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-fill" style="width: 84%"></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex justify-between mb-1">
+                    <span class="text-slate-300">Hygiene</span>
+                    <span class="text-amber-400">4.5/5</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-fill" style="width: 90%"></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex justify-between mb-1">
+                    <span class="text-slate-300">Service</span>
+                    <span class="text-amber-400">4.0/5</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-fill" style="width: 80%"></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex justify-between mb-1">
+                    <span class="text-slate-300">Variety</span>
+                    <span class="text-amber-400">4.3/5</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-fill" style="width: 86%"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Mess Popularity -->
+            <div class="analytics-card">
+              <h3 class="text-xl font-bold text-white mb-4">Mess Popularity</h3>
+              <div class="space-y-4">
+                <div>
+                  <div class="flex justify-between mb-1">
+                    <span class="text-slate-300">JMB Mess</span>
+                    <span class="text-slate-300">312</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-fill" style="width: 35%"></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex justify-between mb-1">
+                    <span class="text-slate-300">Rassence</span>
+                    <span class="text-slate-300">245</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-fill" style="width: 27%"></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex justify-between mb-1">
+                    <span class="text-slate-300">Safal</span>
+                    <span class="text-slate-300">210</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-fill" style="width: 23%"></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex justify-between mb-1">
+                    <span class="text-slate-300">Mayuri</span>
+                    <span class="text-slate-300">198</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-fill" style="width: 22%"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Expense Tracking Tab -->
+        <div class="tab-panel" id="expenses-panel">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <!-- Monthly Expense Breakdown -->
+            <div class="analytics-card">
+              <h3 class="text-xl font-bold text-white mb-4">
+                Monthly Expense Breakdown
+              </h3>
+              <div class="expense-breakdown">
+                <div class="expense-bar" style="height: 70%">
+                  <div class="expense-value">₹70K</div>
+                  <div class="expense-label">Produce</div>
+                </div>
+                <div class="expense-bar" style="height: 45%">
+                  <div class="expense-value">₹45K</div>
+                  <div class="expense-label">Grains</div>
+                </div>
+                <div class="expense-bar" style="height: 35%">
+                  <div class="expense-value">₹35K</div>
+                  <div class="expense-label">Dairy</div>
+                </div>
+                <div class="expense-bar" style="height: 25%">
+                  <div class="expense-value">₹25K</div>
+                  <div class="expense-label">Spices</div>
+                </div>
+                <div class="expense-bar" style="height: 20%">
+                  <div class="expense-value">₹20K</div>
+                  <div class="expense-label">Utilities</div>
+                </div>
+                <div class="expense-bar" style="height: 15%">
+                  <div class="expense-value">₹15K</div>
+                  <div class="expense-label">Staff</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Expense Summary -->
+            <div class="analytics-card">
+              <h3 class="text-xl font-bold text-white mb-4">Expense Summary</h3>
+              <div class="space-y-4">
+                <div class="flex justify-between items-center">
+                  <span class="text-slate-300">Total Monthly Expense</span>
+                  <span class="text-xl font-bold text-green-400"
+                    >₹2,10,000</span
+                  >
+                </div>
+                <div class="flex justify-between items-center">
+                  <span class="text-slate-300">Per Student Cost</span>
+                  <span class="text-lg font-semibold text-amber-400">₹168</span>
+                </div>
+                <div class="flex justify-between items-center">
+                  <span class="text-slate-300">Budget Utilization</span>
+                  <span class="text-lg font-semibold text-blue-400">82%</span>
+                </div>
+                <div class="flex justify-between items-center">
+                  <span class="text-slate-300">Savings</span>
+                  <span class="text-lg font-semibold text-green-400"
+                    >₹45,000</span
+                  >
+                </div>
+              </div>
+
+              <div class="mt-6">
+                <h4 class="text-lg font-semibold text-white mb-3">
+                  Recent Expenses
+                </h4>
+                <div class="space-y-3">
+                  <div
+                    class="flex justify-between items-center border-b border-slate-700 pb-2"
+                  >
+                    <div>
+                      <div class="text-white font-medium">
+                        Vegetables Purchase
+                      </div>
+                      <div class="text-sm text-slate-400">15 Sep 2025</div>
+                    </div>
+                    <div class="text-red-400 font-semibold">₹12,500</div>
+                  </div>
+                  <div
+                    class="flex justify-between items-center border-b border-slate-700 pb-2"
+                  >
+                    <div>
+                      <div class="text-white font-medium">Rice & Grains</div>
+                      <div class="text-sm text-slate-400">12 Sep 2025</div>
+                    </div>
+                    <div class="text-red-400 font-semibold">₹8,200</div>
+                  </div>
+                  <div
+                    class="flex justify-between items-center border-b border-slate-700 pb-2"
+                  >
+                    <div>
+                      <div class="text-white font-medium">Dairy Products</div>
+                      <div class="text-sm text-slate-400">10 Sep 2025</div>
+                    </div>
+                    <div class="text-red-400 font-semibold">₹6,800</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-slate-800 rounded-xl shadow-lg p-6">
+            <h3 class="text-xl font-bold text-white mb-4">
+              Digital Payment Options
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div class="bg-slate-700 rounded-xl p-4 text-center">
+                <div class="text-2xl font-bold text-white mb-2">UPI</div>
+                <div class="text-sm text-slate-400 mb-4">Scan to Pay</div>
+                <div class="qr-placeholder">
+                  UPI QR Code<br />Scan with any UPI app
+                </div>
+              </div>
+              <div class="bg-slate-700 rounded-xl p-4 text-center">
+                <div class="text-2xl font-bold text-white mb-2">
+                  Card Payment
+                </div>
+                <div class="text-sm text-slate-400 mb-4">
+                  Debit/Credit Cards
+                </div>
+                <div
+                  class="flex justify-center space-x-4 text-3xl text-slate-400"
+                >
+                  <i class="fab fa-cc-visa"></i>
+                  <i class="fab fa-cc-mastercard"></i>
+                  <i class="fab fa-cc-amex"></i>
+                </div>
+              </div>
+              <div class="bg-slate-700 rounded-xl p-4 text-center">
+                <div class="text-2xl font-bold text-white mb-2">Wallet</div>
+                <div class="text-sm text-slate-400 mb-4">Digital Wallets</div>
+                <div
+                  class="flex justify-center space-x-4 text-3xl text-slate-400"
+                >
+                  <i class="fab fa-google-pay"></i>
+                  <i class="fab fa-amazon-pay"></i>
+                  <i class="fab fa-apple-pay"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Notifications -->
+      <div class="bg-slate-800 rounded-xl shadow-lg p-6">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-xl font-bold text-white">Mess Notifications</h3>
+          <button
+            class="text-blue-400 hover:text-blue-300 font-medium text-sm flex items-center"
+            id="view-all-notifications"
+          >
+            <i class="fa-solid fa-eye mr-1"></i> View All
+          </button>
+        </div>
+        <div class="space-y-4" id="notifications-container">
+          <div class="notification-card urgent">
+            <div class="flex justify-between items-start">
+              <div>
+                <h4 class="font-bold text-white">Special Sunday Lunch</h4>
+                <p class="text-sm text-slate-400 mt-1">
+                  This Sunday's lunch will feature special Paneer Chaman and
+                  Biryani. Don't miss it!
+                </p>
+              </div>
+              <span class="text-xs text-slate-400">2 hours ago</span>
+            </div>
+          </div>
+          <div class="notification-card info">
+            <div class="flex justify-between items-start">
+              <div>
+                <h4 class="font-bold text-white">Feedback Appreciated</h4>
+                <p class="text-sm text-slate-400 mt-1">
+                  Thank you for your feedback. We've improved the Sambhar recipe
+                  based on your suggestions.
+                </p>
+              </div>
+              <span class="text-xs text-slate-400">1 day ago</span>
+            </div>
+          </div>
+          <div class="notification-card warning">
+            <div class="flex justify-between items-start">
+              <div>
+                <h4 class="font-bold text-white">Maintenance Notice</h4>
+                <p class="text-sm text-slate-400 mt-1">
+                  JMB Mess will undergo maintenance on Saturday from 2 PM to 5
+                  PM. Lunch will be served as usual.
+                </p>
+              </div>
+              <span class="text-xs text-slate-400">2 days ago</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Message Box -->
+    <div id="message-box" class="message-box">
+      <p id="message-text"></p>
+    </div>
+
+    <!-- Nutrition Info Modal -->
+    <div class="modal" id="nutrition-modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="text-xl font-bold text-white">Nutrition Information</h3>
+          <button class="modal-close" id="close-nutrition-modal">
+            &times;
+          </button>
+        </div>
+        <div class="nutrition-info">
+          <h4 class="font-bold text-white mb-3">
+            Today's Meals Nutrition Summary
+          </h4>
+          <div class="nutrition-grid">
+            <div class="nutrition-item">
+              <span class="nutrition-label">Calories</span>
+              <span class="nutrition-value">2,150 kcal</span>
+            </div>
+            <div class="nutrition-item">
+              <span class="nutrition-label">Protein</span>
+              <span class="nutrition-value">65g</span>
+            </div>
+            <div class="nutrition-item">
+              <span class="nutrition-label">Carbs</span>
+              <span class="nutrition-value">310g</span>
+            </div>
+            <div class="nutrition-item">
+              <span class="nutrition-label">Fat</span>
+              <span class="nutrition-value">45g</span>
+            </div>
+            <div class="nutrition-item">
+              <span class="nutrition-label">Fiber</span>
+              <span class="nutrition-value">28g</span>
+            </div>
+            <div class="nutrition-item">
+              <span class="nutrition-label">Sugar</span>
+              <span class="nutrition-value">42g</span>
+            </div>
+          </div>
+          <div class="mt-4 text-sm text-slate-400">
+            <p>
+              Note: Values are approximate and may vary based on portion sizes
+              and preparation methods.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Menu Data for all messes
+      const menuData = {
+        jmb: {
+          name: "JMB Mess",
+          type: "Pure Veg & Jain",
+          days: {
+            monday: {
+              breakfast: [
+                "Steamed Idli",
+                "Vada",
+                "Sambhar",
+                "Assorted Chutney",
+                "Fruit/Banana",
+                "Bread, Butter, Jam",
+                "Milk, Tea, Coffee",
+              ],
+              lunch: [
+                "Buttermilk",
+                "Aloo Matar Jhol",
+                "Yellow Dal",
+                "Jeera Rice",
+                "Tawa Roti",
+                "Fresh Salad",
+                "Boondi Raita",
+              ],
+              dinner: [
+                "Moong Dal Halwa",
+                "Manchurian",
+                "Fresh Salad",
+                "Pickle",
+              ],
+            },
+            tuesday: {
+              breakfast: [
+                "Aloo Matar Paratha",
+                "Mint Curd",
+                "Sprouts Salad",
+                "Fruit",
+                "Bread, Butter, Jam",
+                "Milk, Tea, Coffee",
+              ],
+              lunch: [
+                "Punjabi Chole",
+                "Green Rice",
+                "Dal Tadka",
+                "Tawa Roti",
+                "Punjabi Mixed Salad",
+                "Fryums",
+                "Veg. Raita",
+                "Mango Pickle",
+              ],
+              dinner: ["Dal Fry", "Jeera Rice", "Fresh Salad", "Pickle"],
+            },
+            wednesday: {
+              breakfast: [
+                "Masala Dal with Chutney",
+                "Paratha",
+                "Chickpeas Salad",
+                "Fruit/Banana",
+                "Bread, Butter, Jam",
+                "Milk, Tea, Coffee",
+              ],
+              lunch: [
+                "Jeera Aloo",
+                "Hari Mirch Dal Tadka",
+                "Steam Rice",
+                "Tawa Roti",
+                "Fresh Salad with Onion",
+                "Fryums",
+                "Khatta Meetha Kaddu",
+                "Tadke Wala Dahi",
+              ],
+              dinner: ["Dal Yellow", "Matar Pulav", "Fresh Salad", "Pickle"],
+            },
+            thursday: {
+              breakfast: [
+                "Uttapam",
+                "Sambhar",
+                "Chutney",
+                "Fruit",
+                "Bread, Butter, Jam",
+                "Milk, Tea, Coffee",
+              ],
+              lunch: [
+                "Table Wait Chach",
+                "Gatte Ki Sabzi",
+                "Veg. Pulav",
+                "Tomato Dal",
+                "White Rice",
+                "Sada Bhindi",
+                "Chutney",
+              ],
+              dinner: ["Matar Masala", "Dal Tadka", "Pickle", "Sev Tamatar"],
+            },
+            friday: {
+              breakfast: [
+                "Shatura",
+                "Chole Masala",
+                "Dahi",
+                "Fruit",
+                "Bread, Butter, Jam",
+                "Milk, Tea, Coffee",
+              ],
+              lunch: [
+                "Aloo Gobhi Masala",
+                "Veg Pulav",
+                "Poori",
+                "Fresh Salad with Onion",
+                "Fryums",
+                "Kesar Elaichi Kheer",
+                "Achar",
+              ],
+              dinner: [
+                "Tawa Rice",
+                "Matar Tamatar Semi Gravy",
+                "Fresh Salad",
+                "Pickle",
+              ],
+            },
+            saturday: {
+              breakfast: [
+                "Masala Dosa",
+                "Sambhar",
+                "Assorted Chutney",
+                "Fruit/Banana",
+                "Bread, Butter, Jam",
+                "Milk, Tea, Coffee",
+              ],
+              lunch: [
+                "Mix Veg.",
+                "Rajma Masala",
+                "Jeera Rice",
+                "Hari Mirch Dal Tadka",
+                "Boondi Raita",
+                "Tawa Roti",
+                "Papad",
+                "Fryums",
+              ],
+              dinner: [
+                "Mix Veg Dry",
+                "Dal Fry",
+                "Jeera Rice",
+                "Fresh Salad with Onion",
+                "Pickle",
+              ],
+            },
+            sunday: {
+              breakfast: [
+                "Usal",
+                "Poha",
+                "Akki",
+                "Fruit",
+                "Bread, Butter, Jam",
+                "Milk, Tea, Coffee",
+              ],
+              lunch: [
+                "Paneer Chaman",
+                "Dal Makhani",
+                "Veg. Jalfrezi",
+                "Biryani",
+                "Tawa Roti",
+                "Salad",
+                "Fryums",
+                "Papad",
+              ],
+              dinner: ["Dal Tadka", "Jeera Rice", "Fresh Salad", "Pickle"],
+            },
+          },
+        },
+        rassence: {
+          name: "Rassence (CRCL)",
+          type: "Veg & Non-Veg",
+          days: {
+            monday: {
+              breakfast: [
+                "Steamed Idli",
+                "Vada",
+                "Sambhar",
+                "Assorted Chutney",
+                "Fruit/Banana",
+                "Bread, Butter, Jam",
+                "Milk, Tea, Coffee",
+              ],
+              lunch: [
+                "Buttermilk",
+                "Aloo Matar Jhol",
+                "Yellow Dal",
+                "Jeera Rice",
+                "Tawa Roti",
+                "Fresh Salad",
+                "Boondi Raita",
+              ],
+              dinner: [
+                "Moong Dal Halwa",
+                "Manchurian",
+                "Fresh Salad",
+                "Pickle",
+                "<span class='special-item'>Egg Curry</span>",
+              ],
+            },
+            tuesday: {
+              breakfast: [
+                "Aloo Matar Paratha",
+                "Mint Curd",
+                "Sprouts Salad",
+                "Fruit",
+                "Bread, Butter, Jam",
+                "Milk, Tea, Coffee",
+              ],
+              lunch: [
+                "Punjabi Chole",
+                "Green Rice",
+                "Dal Tadka",
+                "Tawa Roti",
+                "Punjabi Mixed Salad",
+                "Fryums",
+                "Veg. Raita",
+                "Mango Pickle",
+              ],
+              dinner: ["Dal Fry", "Jeera Rice", "Fresh Salad", "Pickle"],
+            },
+            wednesday: {
+              breakfast: [
+                "Masala Dal with Chutney",
+                "Paratha",
+                "Chickpeas Salad",
+                "Fruit/Banana",
+                "Bread, Butter, Jam",
+                "Milk, Tea, Coffee",
+              ],
+              lunch: [
+                "Jeera Aloo",
+                "Hari Mirch Dal Tadka",
+                "Steam Rice",
+                "Tawa Roti",
+                "Fresh Salad with Onion",
+                "Fryums",
+                "Khatta Meetha Kaddu",
+                "Tadke Wala Dahi",
+              ],
+              dinner: [
+                "Dal Yellow",
+                "Matar Pulav",
+                "Fresh Salad",
+                "Pickle",
+                "<span class='special-item'>Chicken Curry</span>",
+              ],
+            },
+            thursday: {
+              breakfast: [
+                "Uttapam",
+                "Sambhar",
+                "Chutney",
+                "Fruit",
+                "Bread, Butter, Jam",
+                "Milk, Tea, Coffee",
+              ],
+              lunch: [
+                "Table Wait Chach",
+                "Gatte Ki Sabzi",
+                "Veg. Pulav",
+                "Tomato Dal",
+                "White Rice",
+                "Sada Bhindi",
+                "Chutney",
+              ],
+              dinner: [
+                "Matar Masala",
+                "Dal Tadka",
+                "Pickle",
+                "Sev Tamatar",
+                "<span class='special-item'>Egg Curry</span>",
+              ],
+            },
+            friday: {
+              breakfast: [
+                "Shatura",
+                "Chole Masala",
+                "Dahi",
+                "Fruit",
+                "Bread, Butter, Jam",
+                "Milk, Tea, Coffee",
+              ],
+              lunch: [
+                "Aloo Gobhi Masala",
+                "Veg Pulav",
+                "Poori",
+                "Fresh Salad with Onion",
+                "Fryums",
+                "Kesar Elaichi Kheer",
+                "Achar",
+              ],
+              dinner: [
+                "Tawa Rice",
+                "Matar Tamatar Semi Gravy",
+                "Fresh Salad",
+                "Pickle",
+                "<span class='special-item'>Chicken Curry</span>",
+              ],
+            },
+            saturday: {
+              breakfast: [
+                "Masala Dosa",
+                "Sambhar",
+                "Assorted Chutney",
+                "Fruit/Banana",
+                "Bread, Butter, Jam",
+                "Milk, Tea, Coffee",
+              ],
+              lunch: [
+                "Mix Veg.",
+                "Rajma Masala",
+                "Jeera Rice",
+                "Hari Mirch Dal Tadka",
+                "Boondi Raita",
+                "Tawa Roti",
+                "Papad",
+                "Fryums",
+              ],
+              dinner: [
+                "Mix Veg Dry",
+                "Dal Fry",
+                "Jeera Rice",
+                "Fresh Salad with Onion",
+                "Pickle",
+              ],
+            },
+            sunday: {
+              breakfast: [
+                "Usal",
+                "Poha",
+                "Akki",
+                "Fruit",
+                "Bread, Butter, Jam",
+                "Milk, Tea, Coffee",
+              ],
+              lunch: [
+                "Paneer Chaman",
+                "Dal Makhani",
+                "Veg. Jalfrezi",
+                "<span class='special-item'>Chicken Biryani</span>",
+                "Tawa Roti",
+                "Salad",
+                "Fryums",
+                "Papad",
+              ],
+              dinner: ["Dal Tadka", "Jeera Rice", "Fresh Salad", "Pickle"],
+            },
+          },
+        },
+        mayuri: {
+          name: "Mayuri",
+          type: "Veg & Non-Veg",
+          days: {
+            monday: {
+              breakfast: [
+                "Steamed Idli",
+                "Vada",
+                "Sambhar",
+                "Assorted Chutney",
+                "Fruit/Banana",
+                "Bread, Butter, Jam",
+                "Milk, Tea, Coffee",
+              ],
+              lunch: [
+                "Buttermilk",
+                "Aloo Matar Jhol",
+                "Yellow Dal",
+                "Jeera Rice",
+                "Tawa Roti",
+                "Fresh Salad",
+                "Boondi Raita",
+              ],
+              dinner: [
+                "Moong Dal Halwa",
+                "Manchurian",
+                "Fresh Salad",
+                "Pickle",
+                "<span class='special-item'>Egg Curry</span>",
+              ],
+            },
+            tuesday: {
+              breakfast: [
+                "Aloo Matar Paratha",
+                "Mint Curd",
+                "Sprouts Salad",
+                "Fruit",
+                "Bread, Butter, Jam",
+                "Milk, Tea, Coffee",
+              ],
+              lunch: [
+                "Punjabi Chole",
+                "Green Rice",
+                "Dal Tadka",
+                "Tawa Roti",
+                "Punjabi Mixed Salad",
+                "Fryums",
+                "Veg. Raita",
+                "Mango Pickle",
+              ],
+              dinner: ["Dal Fry", "Jeera Rice", "Fresh Salad", "Pickle"],
+            },
+            wednesday: {
+              breakfast: [
+                "Masala Dal with Chutney",
+                "Paratha",
+                "Chickpeas Salad",
+                "Fruit/Banana",
+                "Bread, Butter, Jam",
+                "Milk, Tea, Coffee",
+              ],
+              lunch: [
+                "Jeera Aloo",
+                "Hari Mirch Dal Tadka",
+                "Steam Rice",
+                "Tawa Roti",
+                "Fresh Salad with Onion",
+                "Fryums",
+                "Khatta Meetha Kaddu",
+                "Tadke Wala Dahi",
+              ],
+              dinner: [
+                "Dal Yellow",
+                "Matar Pulav",
+                "Fresh Salad",
+                "Pickle",
+                "<span class='special-item'>Chicken Curry</span>",
+              ],
+            },
+            thursday: {
+              breakfast: [
+                "Uttapam",
+                "Sambhar",
+                "Chutney",
+                "Fruit",
+                "Bread, Butter, Jam",
+                "Milk, Tea, Coffee",
+              ],
+              lunch: [
+                "Table Wait Chach",
+                "Gatte Ki Sabzi",
+                "Veg. Pulav",
+                "Tomato Dal",
+                "White Rice",
+                "Sada Bhindi",
+                "Chutney",
+              ],
+              dinner: [
+                "Matar Masala",
+                "Dal Tadka",
+                "Pickle",
+                "Sev Tamatar",
+                "<span class='special-item'>Egg Curry</span>",
+              ],
+            },
+            friday: {
+              breakfast: [
+                "Shatura",
+                "Chole Masala",
+                "Dahi",
+                "Fruit",
+                "Bread, Butter, Jam",
+                "Milk, Tea, Coffee",
+              ],
+              lunch: [
+                "Aloo Gobhi Masala",
+                "Veg Pulav",
+                "Poori",
+                "Fresh Salad with Onion",
+                "Fryums",
+                "Kesar Elaichi Kheer",
+                "Achar",
+              ],
+              dinner: [
+                "Tawa Rice",
+                "Matar Tamatar Semi Gravy",
+                "Fresh Salad",
+                "Pickle",
+                "<span class='special-item'>Chicken Curry</span>",
+              ],
+            },
+            saturday: {
+              breakfast: [
+                "Masala Dosa",
+                "Sambhar",
+                "Assorted Chutney",
+                "Fruit/Banana",
+                "Bread, Butter, Jam",
+                "Milk, Tea, Coffee",
+              ],
+              lunch: [
+                "Mix Veg.",
+                "Rajma Masala",
+                "Jeera Rice",
+                "Hari Mirch Dal Tadka",
+                "Boondi Raita",
+                "Tawa Roti",
+                "Papad",
+                "Fryums",
+              ],
+              dinner: [
+                "Mix Veg Dry",
+                "Dal Fry",
+                "Jeera Rice",
+                "Fresh Salad with Onion",
+                "Pickle",
+              ],
+            },
+            sunday: {
+              breakfast: [
+                "Usal",
+                "Poha",
+                "Akki",
+                "Fruit",
+                "Bread, Butter, Jam",
+                "Milk, Tea, Coffee",
+              ],
+              lunch: [
+                "Paneer Chaman",
+                "Dal Makhani",
+                "Veg. Jalfrezi",
+                "<span class='special-item'>Chicken Biryani</span>",
+                "Tawa Roti",
+                "Salad",
+                "Fryums",
+                "Papad",
+              ],
+              dinner: ["Dal Tadka", "Jeera Rice", "Fresh Salad", "Pickle"],
+            },
+          },
+        },
+        safal: {
+          name: "Safal",
+          type: "Veg & Non-Veg",
+          days: {
+            monday: {
+              breakfast: [
+                "Steamed Idli",
+                "Vada",
+                "Sambhar",
+                "Assorted Chutney",
+                "Fruit/Banana",
+                "Bread, Butter, Jam",
+                "Milk, Tea, Coffee",
+              ],
+              lunch: [
+                "Buttermilk",
+                "Aloo Matar Jhol",
+                "Yellow Dal",
+                "Jeera Rice",
+                "Tawa Roti",
+                "Fresh Salad",
+                "Boondi Raita",
+              ],
+              dinner: [
+                "Moong Dal Halwa",
+                "Manchurian",
+                "Fresh Salad",
+                "Pickle",
+                "<span class='special-item'>Egg Curry</span>",
+              ],
+            },
+            tuesday: {
+              breakfast: [
+                "Aloo Matar Paratha",
+                "Mint Curd",
+                "Sprouts Salad",
+                "Fruit",
+                "Bread, Butter, Jam",
+                "Milk, Tea, Coffee",
+              ],
+              lunch: [
+                "Punjabi Chole",
+                "Green Rice",
+                "Dal Tadka",
+                "Tawa Roti",
+                "Punjabi Mixed Salad",
+                "Fryums",
+                "Veg. Raita",
+                "Mango Pickle",
+              ],
+              dinner: ["Dal Fry", "Jeera Rice", "Fresh Salad", "Pickle"],
+            },
+            wednesday: {
+              breakfast: [
+                "Masala Dal with Chutney",
+                "Paratha",
+                "Chickpeas Salad",
+                "Fruit/Banana",
+                "Bread, Butter, Jam",
+                "Milk, Tea, Coffee",
+              ],
+              lunch: [
+                "Jeera Aloo",
+                "Hari Mirch Dal Tadka",
+                "Steam Rice",
+                "Tawa Roti",
+                "Fresh Salad with Onion",
+                "Fryums",
+                "Khatta Meetha Kaddu",
+                "Tadke Wala Dahi",
+              ],
+              dinner: [
+                "Dal Yellow",
+                "Matar Pulav",
+                "Fresh Salad",
+                "Pickle",
+                "<span class='special-item'>Chicken Curry</span>",
+              ],
+            },
+            thursday: {
+              breakfast: [
+                "Uttapam",
+                "Sambhar",
+                "Chutney",
+                "Fruit",
+                "Bread, Butter, Jam",
+                "Milk, Tea, Coffee",
+              ],
+              lunch: [
+                "Table Wait Chach",
+                "Gatte Ki Sabzi",
+                "Veg. Pulav",
+                "Tomato Dal",
+                "White Rice",
+                "Sada Bhindi",
+                "Chutney",
+              ],
+              dinner: [
+                "Matar Masala",
+                "Dal Tadka",
+                "Pickle",
+                "Sev Tamatar",
+                "<span class='special-item'>Egg Curry</span>",
+              ],
+            },
+            friday: {
+              breakfast: [
+                "Shatura",
+                "Chole Masala",
+                "Dahi",
+                "Fruit",
+                "Bread, Butter, Jam",
+                "Milk, Tea, Coffee",
+              ],
+              lunch: [
+                "Aloo Gobhi Masala",
+                "Veg Pulav",
+                "Poori",
+                "Fresh Salad with Onion",
+                "Fryums",
+                "Kesar Elaichi Kheer",
+                "Achar",
+              ],
+              dinner: [
+                "Tawa Rice",
+                "Matar Tamatar Semi Gravy",
+                "Fresh Salad",
+                "Pickle",
+                "<span class='special-item'>Chicken Curry</span>",
+              ],
+            },
+            saturday: {
+              breakfast: [
+                "Masala Dosa",
+                "Sambhar",
+                "Assorted Chutney",
+                "Fruit/Banana",
+                "Bread, Butter, Jam",
+                "Milk, Tea, Coffee",
+              ],
+              lunch: [
+                "Mix Veg.",
+                "Rajma Masala",
+                "Jeera Rice",
+                "Hari Mirch Dal Tadka",
+                "Boondi Raita",
+                "Tawa Roti",
+                "Papad",
+                "Fryums",
+              ],
+              dinner: [
+                "Mix Veg Dry",
+                "Dal Fry",
+                "Jeera Rice",
+                "Fresh Salad with Onion",
+                "Pickle",
+              ],
+            },
+            sunday: {
+              breakfast: [
+                "Usal",
+                "Poha",
+                "Akki",
+                "Fruit",
+                "Bread, Butter, Jam",
+                "Milk, Tea, Coffee",
+              ],
+              lunch: [
+                "Paneer Chaman",
+                "Dal Makhani",
+                "Veg. Jalfrezi",
+                "<span class='special-item'>Chicken Biryani</span>",
+                "Tawa Roti",
+                "Salad",
+                "Fryums",
+                "Papad",
+              ],
+              dinner: ["Dal Tadka", "Jeera Rice", "Fresh Salad", "Pickle"],
+            },
+          },
+        },
+      };
+
+      // Attendance Data
+      const attendanceData = [
+        {
+          date: "24 Sep 2025",
+          meal: "Breakfast",
+          status: "present",
+          time: "8:15 AM",
+        },
+        {
+          date: "24 Sep 2025",
+          meal: "Lunch",
+          status: "present",
+          time: "1:05 PM",
+        },
+        { date: "24 Sep 2025", meal: "Dinner", status: "late", time: "-" },
+        { date: "23 Sep 2025", meal: "Breakfast", status: "absent", time: "-" },
+        {
+          date: "23 Sep 2025",
+          meal: "Lunch",
+          status: "present",
+          time: "12:45 PM",
+        },
+        {
+          date: "23 Sep 2025",
+          meal: "Dinner",
+          status: "present",
+          time: "7:30 PM",
+        },
+      ];
+
+      // Current state
+      let currentMess = "jmb";
+      let currentTab = "menu";
+      let currentFilter = "all";
+      let currentDay = "monday";
+
+      // Function to show a custom message box
+      function showMessage(text, type = "info") {
+        const messageBox = document.getElementById("message-box");
+        const messageText = document.getElementById("message-text");
+
+        messageText.textContent = text;
+        messageBox.classList.remove(
+          "show",
+          "bg-red-500",
+          "bg-green-500",
+          "bg-blue-500"
+        );
+
+        if (type === "error") {
+          messageBox.classList.add("bg-red-500");
+        } else if (type === "success") {
+          messageBox.classList.add("bg-green-500");
+        } else if (type === "info") {
+          messageBox.classList.add("bg-blue-500");
+        } else {
+          messageBox.classList.add("bg-slate-700");
+        }
+
+        messageBox.classList.add("show");
+
+        setTimeout(() => {
+          messageBox.classList.remove("show");
+        }, 4000);
+      }
+
+      // Function to render menu for selected mess
+      function renderMenu(messId) {
+        const menuContainer = document.getElementById("menu-table-body");
+        const mess = menuData[messId];
+
+        if (!mess) return;
+
+        document.getElementById(
+          "current-mess-name"
+        ).textContent = `${mess.name} Weekly Menu`;
+
+        const days = [
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday",
+          "sunday",
+        ];
+        const dayNames = [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday",
+        ];
+
+        let menuHTML = "";
+
+        days.forEach((day, index) => {
+          const dayData = mess.days[day];
+          const isToday = day === currentDay;
+
+          // Apply filter
+          let breakfastItems = dayData.breakfast;
+          let lunchItems = dayData.lunch;
+          let dinnerItems = dayData.dinner;
+
+          if (currentFilter === "breakfast") {
+            lunchItems = [];
+            dinnerItems = [];
+          } else if (currentFilter === "lunch") {
+            breakfastItems = [];
+            dinnerItems = [];
+          } else if (currentFilter === "dinner") {
+            breakfastItems = [];
+            lunchItems = [];
+          }
+
+          menuHTML += `
+                    <tr class="${isToday ? "today-highlight" : ""}">
+                        <td class="font-medium text-white">${
+                          dayNames[index]
+                        }</td>
+                        <td class="meal-column">
+                            <ul class="menu-item-list">
+                                ${breakfastItems
+                                  .map(
+                                    (item) => `
+                                    <li>${item}</li>
+                                `
+                                  )
+                                  .join("")}
+                            </ul>
+                        </td>
+                        <td class="meal-column">
+                            <ul class="menu-item-list">
+                                ${lunchItems
+                                  .map(
+                                    (item) => `
+                                    <li>${item}</li>
+                                `
+                                  )
+                                  .join("")}
+                            </ul>
+                        </td>
+                        <td class="meal-column">
+                            <ul class="menu-item-list">
+                                ${dinnerItems
+                                  .map(
+                                    (item) => `
+                                    <li>${item}</li>
+                                `
+                                  )
+                                  .join("")}
+                            </ul>
+                        </td>
+                    </tr>
+                `;
+        });
+
+        menuContainer.innerHTML = menuHTML;
+      }
+
+      // Function to render attendance table
+      function renderAttendance() {
+        const tableBody = document.getElementById("attendance-table-body");
+
+        let attendanceHTML = "";
+
+        attendanceData.forEach((record) => {
+          let statusHTML = "";
+          let actionHTML = "";
+
+          if (record.status === "present") {
+            statusHTML = `<span class="attendance-status present"></span>Present`;
+            actionHTML = `<button class="text-blue-400 hover:text-blue-300 font-medium text-sm update-attendance" data-date="${record.date}" data-meal="${record.meal}">
+                                    <i class="fa-solid fa-edit mr-1"></i> Update
+                                </button>`;
+          } else if (record.status === "absent") {
+            statusHTML = `<span class="attendance-status absent"></span>Absent`;
+            actionHTML = `<button class="text-blue-400 hover:text-blue-300 font-medium text-sm update-attendance" data-date="${record.date}" data-meal="${record.meal}">
+                                    <i class="fa-solid fa-edit mr-1"></i> Update
+                                </button>`;
+          } else {
+            statusHTML = `<span class="attendance-status late"></span>Not Marked`;
+            actionHTML = `<button class="text-green-400 hover:text-green-300 font-medium text-sm mark-attendance" data-date="${record.date}" data-meal="${record.meal}">
+                                    <i class="fa-solid fa-check mr-1"></i> Mark
+                                </button>`;
+          }
+
+          attendanceHTML += `
+                    <tr class="border-b border-slate-700 hover:bg-slate-700">
+                        <td class="px-4 py-3">${record.date}</td>
+                        <td class="px-4 py-3">${record.meal}</td>
+                        <td class="px-4 py-3">${statusHTML}</td>
+                        <td class="px-4 py-3">${record.time}</td>
+                        <td class="px-4 py-3">${actionHTML}</td>
+                    </tr>
+                `;
+        });
+
+        tableBody.innerHTML = attendanceHTML;
+
+        // Add event listeners to mark attendance buttons
+        document.querySelectorAll(".mark-attendance").forEach((button) => {
+          button.addEventListener("click", function () {
+            const date = this.dataset.date;
+            const meal = this.dataset.meal;
+
+            // Find and update the record
+            const record = attendanceData.find(
+              (r) => r.date === date && r.meal === meal
+            );
+            if (record) {
+              record.status = "present";
+              const now = new Date();
+              record.time = now.toLocaleTimeString("en-US", {
+                hour: "2-digit",
+                minute: "2-digit",
+              });
+
+              renderAttendance();
+              showMessage(`Marked ${meal} on ${date} as present`, "success");
+            }
+          });
+        });
+      }
+
+      // Function to render feedback forms
+      function renderFeedback() {
+        const feedbackContainer = document.getElementById("feedback-container");
+
+        const meals = [
+          {
+            name: "Breakfast",
+            date: "24 Sep 2025",
+            items: ["Steamed Idli", "Vada", "Sambhar", "Assorted Chutney"],
+          },
+          {
+            name: "Lunch",
+            date: "24 Sep 2025",
+            items: [
+              "Buttermilk",
+              "Aloo Matar Jhol",
+              "Yellow Dal",
+              "Jeera Rice",
+              "Tawa Roti",
+            ],
+          },
+          {
+            name: "Dinner",
+            date: "24 Sep 2025",
+            items: ["Moong Dal Halwa", "Manchurian", "Fresh Salad", "Pickle"],
+          },
+        ];
+
+        let feedbackHTML = "";
+
+        meals.forEach((meal) => {
+          feedbackHTML += `
+                    <div class="bg-slate-700 rounded-xl p-4">
+                        <h4 class="font-bold text-white mb-3">${meal.name} - ${
+            meal.date
+          }</h4>
+                        <div class="mb-3">
+                            <div class="text-sm text-slate-400 mb-2">${meal.items.join(
+                              ", "
+                            )}</div>
+                            <div class="star-rating" data-meal="${meal.name.toLowerCase()}">
+                                <i class="far fa-star star" data-rating="1"></i>
+                                <i class="far fa-star star" data-rating="2"></i>
+                                <i class="far fa-star star" data-rating="3"></i>
+                                <i class="far fa-star star" data-rating="4"></i>
+                                <i class="far fa-star star" data-rating="5"></i>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label block text-slate-300 mb-2 font-medium">Comments (Optional)</label>
+                            <textarea class="form-input w-full bg-slate-600 border border-slate-500 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" rows="2" placeholder="Share your feedback about ${meal.name.toLowerCase()}..."></textarea>
+                        </div>
+                    </div>
+                `;
+        });
+
+        feedbackContainer.innerHTML = feedbackHTML;
+
+        // Add event listeners to star ratings
+        document.querySelectorAll(".star-rating").forEach((rating) => {
+          const stars = rating.querySelectorAll(".star");
+          const mealType = rating.dataset.meal;
+
+          stars.forEach((star) => {
+            star.addEventListener("click", function () {
+              const ratingValue = parseInt(this.dataset.rating);
+
+              // Update stars
+              stars.forEach((s, index) => {
+                if (index < ratingValue) {
+                  s.classList.remove("far");
+                  s.classList.add("fas");
+                } else {
+                  s.classList.remove("fas");
+                  s.classList.add("far");
+                }
+              });
+
+              showMessage(
+                `Rated ${mealType} with ${ratingValue} stars`,
+                "success"
+              );
+            });
+          });
+        });
+      }
+
+      // Function to switch tabs
+      function switchTab(tabId) {
+        // Update active tab button
+        document.querySelectorAll(".tab-button").forEach((btn) => {
+          btn.classList.remove("active");
+          if (btn.dataset.tab === tabId) {
+            btn.classList.add("active");
+          }
+        });
+
+        // Show corresponding tab panel
+        document.querySelectorAll(".tab-panel").forEach((panel) => {
+          panel.classList.remove("active");
+          if (panel.id === `${tabId}-panel`) {
+            panel.classList.add("active");
+          }
+        });
+
+        currentTab = tabId;
+      }
+
+      // Initialize the application
+      function init() {
+        // Set current date
+        const now = new Date();
+        const options = { year: "numeric", month: "short", day: "numeric" };
+        document.getElementById("current-date").textContent =
+          now.toLocaleDateString("en-US", options);
+
+        // Set current week
+        const startOfWeek = new Date(now);
+        startOfWeek.setDate(now.getDate() - now.getDay() + 1); // Monday
+        const endOfWeek = new Date(startOfWeek);
+        endOfWeek.setDate(startOfWeek.getDate() + 6); // Sunday
+
+        const weekString = `${startOfWeek.getDate()} ${startOfWeek.toLocaleString(
+          "en-US",
+          { month: "short" }
+        )} - ${endOfWeek.getDate()} ${endOfWeek.toLocaleString("en-US", {
+          month: "short",
+        })} ${endOfWeek.getFullYear()}`;
+        document.getElementById("current-week").textContent = weekString;
+
+        // Render initial data
+        renderMenu(currentMess);
+        renderAttendance();
+        renderFeedback();
+
+        // Mess selection
+        document.querySelectorAll(".mess-card").forEach((card) => {
+          card.addEventListener("click", function () {
+            document
+              .querySelectorAll(".mess-card")
+              .forEach((c) => c.classList.remove("active"));
+            this.classList.add("active");
+
+            const messId = this.dataset.mess;
+            currentMess = messId;
+            const mess = menuData[messId];
+            showMessage(`Selected ${mess.name} (${mess.type})`, "info");
+
+            renderMenu(messId);
+          });
+        });
+
+        // Tab navigation
+        document.querySelectorAll(".tab-button").forEach((button) => {
+          button.addEventListener("click", function () {
+            const tabId = this.dataset.tab;
+            switchTab(tabId);
+          });
+        });
+
+        // Menu filters
+        document
+          .querySelectorAll(".menu-actions button[data-filter]")
+          .forEach((button) => {
+            button.addEventListener("click", function () {
+              document
+                .querySelectorAll(".menu-actions button[data-filter]")
+                .forEach((btn) => {
+                  btn.classList.remove("active");
+                });
+              this.classList.add("active");
+
+              currentFilter = this.dataset.filter;
+              renderMenu(currentMess);
+            });
+          });
+
+        // Calendar day selection
+        document.querySelectorAll(".calendar-day").forEach((day) => {
+          day.addEventListener("click", function () {
+            document
+              .querySelectorAll(".calendar-day")
+              .forEach((d) => d.classList.remove("active"));
+            this.classList.add("active");
+
+            currentDay = this.dataset.day;
+            renderMenu(currentMess);
+          });
+        });
+
+        // Print menu
+        document
+          .getElementById("print-menu")
+          .addEventListener("click", function () {
+            showMessage("Menu sent to printer", "success");
+          });
+
+        // Download menu
+        document
+          .getElementById("download-menu")
+          .addEventListener("click", function () {
+            showMessage("Menu downloaded successfully", "success");
+          });
+
+        // Nutrition info
+        document
+          .getElementById("nutrition-info")
+          .addEventListener("click", function () {
+            document.getElementById("nutrition-modal").classList.add("show");
+          });
+
+        // Close nutrition modal
+        document
+          .getElementById("close-nutrition-modal")
+          .addEventListener("click", function () {
+            document.getElementById("nutrition-modal").classList.remove("show");
+          });
+
+        // Export attendance
+        document
+          .getElementById("export-attendance")
+          .addEventListener("click", function () {
+            showMessage("Attendance data exported successfully!", "success");
+          });
+
+        // Submit feedback
+        document
+          .getElementById("submit-feedback")
+          .addEventListener("click", function () {
+            showMessage("Thank you for your feedback!", "success");
+          });
+
+        // Submit special request
+        document
+          .getElementById("submit-request")
+          .addEventListener("click", function () {
+            const requestType = document.getElementById("request-type").value;
+            const description = document.getElementById(
+              "request-description"
+            ).value;
+
+            if (!requestType || !description) {
+              showMessage("Please fill all required fields", "error");
+              return;
+            }
+
+            showMessage("Special request submitted successfully!", "success");
+
+            // Reset form
+            document.getElementById("request-type").value = "";
+            document.getElementById("request-description").value = "";
+            document.getElementById("request-start-date").value = "";
+            document.getElementById("request-end-date").value = "";
+          });
+
+        // View all notifications
+        document
+          .getElementById("view-all-notifications")
+          .addEventListener("click", function () {
+            showMessage("Showing all notifications", "info");
+          });
+
+        // Notification icon
+        document
+          .getElementById("notification-icon")
+          .addEventListener("click", function () {
+            showMessage("Notifications panel opened", "info");
+          });
+      }
+
+      // Initialize when DOM is loaded
+      document.addEventListener("DOMContentLoaded", init);
+    </script>
+    <script src="auth_guard.js"></script>
+</body>
+</html>
+

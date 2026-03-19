@@ -1,0 +1,3017 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VIT Bhopal | Community Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+
+      :root {
+        --primary: #3b82f6;
+        --secondary: #1e293b;
+        --accent: #f59e0b;
+        --success: #10b981;
+        --danger: #ef4444;
+        --warning: #f59e0b;
+        --dark: #0f172a;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #0f172a;
+        color: #e2e8f0;
+      }
+
+      .glass-card {
+        background: rgba(30, 41, 59, 0.7);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+      }
+
+      .status-badge {
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+      }
+
+      .status-pending {
+        background-color: #fef3c7;
+        color: #92400e;
+      }
+      .status-approved {
+        background-color: #d1fae5;
+        color: #065f46;
+      }
+      .status-rejected {
+        background-color: #fee2e2;
+        color: #991b1b;
+      }
+      .status-expired {
+        background-color: #e5e7eb;
+        color: #374151;
+      }
+      .status-active {
+        background-color: #dbeafe;
+        color: #1e40af;
+      }
+
+      .tab-button {
+        padding: 12px 24px;
+        background: #1e293b;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-weight: 500;
+      }
+
+      .tab-button.active {
+        background: #3b82f6;
+        color: white;
+      }
+
+      .tab-panel {
+        display: none;
+      }
+
+      .tab-panel.active {
+        display: block;
+      }
+
+      .forum-post {
+        background: #1e293b;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 16px;
+        transition: all 0.3s;
+      }
+
+      .forum-post:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      }
+
+      .event-card {
+        background: #1e293b;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 16px;
+        transition: all 0.3s;
+        border-left: 4px solid #3b82f6;
+      }
+
+      .event-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      }
+
+      .lost-item-card {
+        background: #1e293b;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 16px;
+        transition: all 0.3s;
+        border-left: 4px solid #f59e0b;
+      }
+
+      .lost-item-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      }
+
+      .achievement-card {
+        background: #1e293b;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 16px;
+        transition: all 0.3s;
+        border-left: 4px solid #10b981;
+      }
+
+      .achievement-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      }
+
+      .committee-card {
+        background: #1e293b;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 16px;
+        transition: all 0.3s;
+        border-left: 4px solid #8b5cf6;
+      }
+
+      .committee-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(0, 10, 0, 0.2);
+      }
+
+      .notice-card {
+        background: #1e293b;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 16px;
+        transition: all 0.3s;
+        border-left: 4px solid #ef4444;
+      }
+
+      .notice-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 2000;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .modal.show {
+        display: flex;
+      }
+
+      .modal-content {
+        background: #1e293b;
+        border-radius: 12px;
+        padding: 24px;
+        width: 90%;
+        max-width: 600px;
+        box-shadow: 0 20px 25px rgba(0, 0, 0, 0.3);
+        max-height: 90vh;
+        overflow-y: auto;
+      }
+
+      .notification-dot {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        width: 12px;
+        height: 12px;
+        background: #ef4444;
+        border-radius: 50%;
+      }
+
+      .stats-card {
+        background: linear-gradient(135deg, #3b82f6, #1e40af);
+        border-radius: 12px;
+        padding: 20px;
+        color: white;
+      }
+
+      .student-profile {
+        background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+        border-radius: 12px;
+        padding: 20px;
+        color: white;
+      }
+
+      .message-box {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: #10b981;
+        color: white;
+        padding: 15px 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        z-index: 1000;
+        display: none;
+      }
+
+      .message-box.show {
+        display: block;
+        animation: slideIn 0.5s forwards;
+      }
+
+      @keyframes slideIn {
+        from {
+          transform: translateX(100%);
+        }
+        to {
+          transform: translateX(0);
+        }
+      }
+
+      .reply-section {
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 1px solid #334155;
+      }
+
+      .reply {
+        background: #1e293b;
+        border-radius: 8px;
+        padding: 12px;
+        margin-bottom: 10px;
+      }
+
+      .reply-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+      }
+
+      .reply-author {
+        font-weight: 600;
+        color: #e2e8f0;
+      }
+
+      .reply-date {
+        color: #94a3b8;
+        font-size: 0.875rem;
+      }
+
+      .reply-content {
+        color: #cbd5e1;
+      }
+    </style>
+  </head>
+  <body class="min-h-screen">
+    <!-- Header -->
+    <header class="bg-slate-800 text-white p-4 shadow-lg">
+      <div class="container mx-auto flex justify-between items-center">
+        <div class="flex items-center space-x-3">
+          <i class="fas fa-users text-2xl text-amber-400"></i>
+          <div>
+            <h1 class="text-2xl font-bold">VIT Bhopal Community Portal</h1>
+            <p class="text-sm text-slate-400">
+              Student Engagement & Collaboration Hub
+            </p>
+          </div>
+        </div>
+        <div class="flex items-center space-x-6">
+          <div class="relative">
+            <i
+              class="fa-solid fa-bell text-xl hover:text-white transition duration-200 cursor-pointer"
+              id="notification-icon"
+            ></i>
+            <span class="notification-dot"></span>
+          </div>
+          <div class="flex items-center space-x-2">
+            <i class="fa-solid fa-user-circle text-xl"></i>
+            <span id="user-name">Piyush Wali (22BHI10111)</span>
+          </div>
+          <div
+            class="flex items-center space-x-2 cursor-pointer"
+            id="logout-btn"
+          >
+            <i class="fa-solid fa-right-from-bracket text-xl"></i>
+            <span>Logout</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Community Portal -->
+    <div class="container mx-auto p-6">
+      <!-- Community Profile & Quick Stats -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div class="student-profile">
+          <div class="flex items-center mb-4">
+            <div
+              class="w-16 h-16 bg-white rounded-full flex items-center justify-center mr-4"
+            >
+              <i class="fas fa-users text-purple-600 text-2xl"></i>
+            </div>
+            <div>
+              <h3 class="font-bold text-lg">VIT Bhopal Community</h3>
+              <p class="text-sm opacity-90">Student Engagement Portal</p>
+              <p class="text-sm opacity-90">Active Members: 1,250+</p>
+            </div>
+          </div>
+          <div class="flex justify-between text-center">
+            <div>
+              <div class="text-xl font-bold">24</div>
+              <div class="text-xs opacity-90">Active Events</div>
+            </div>
+            <div>
+              <div class="text-xl font-bold">156</div>
+              <div class="text-xs opacity-90">Forum Posts</div>
+            </div>
+            <div>
+              <div class="text-xl font-bold">42</div>
+              <div class="text-xs opacity-90">Lost Items</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="stats-card">
+          <div class="flex justify-between items-center">
+            <div>
+              <div class="text-2xl font-bold" id="community-events">24</div>
+              <div class="text-sm opacity-90">Upcoming Events</div>
+            </div>
+            <i
+              class="fa-solid fa-calendar-day text-white text-2xl opacity-80"
+            ></i>
+          </div>
+        </div>
+
+        <div
+          class="stats-card"
+          style="background: linear-gradient(135deg, #10b981, #047857)"
+        >
+          <div class="flex justify-between items-center">
+            <div>
+              <div class="text-2xl font-bold" id="community-forum">156</div>
+              <div class="text-sm opacity-90">Forum Posts</div>
+            </div>
+            <i class="fa-solid fa-comments text-white text-2xl opacity-80"></i>
+          </div>
+        </div>
+
+        <div
+          class="stats-card"
+          style="background: linear-gradient(135deg, #f59e0b, #d97706)"
+        >
+          <div class="flex justify-between items-center">
+            <div>
+              <div class="text-2xl font-bold" id="community-achievements">
+                38
+              </div>
+              <div class="text-sm opacity-90">Achievements</div>
+            </div>
+            <i class="fa-solid fa-trophy text-white text-2xl opacity-80"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Community Tabs -->
+      <div class="flex flex-wrap gap-4 mb-6 bg-slate-800 p-3 rounded-xl">
+        <div class="tab-button active" data-tab="community-forum">
+          Student Forums
+        </div>
+        <div class="tab-button" data-tab="community-lost-found">
+          Lost & Found
+        </div>
+        <div class="tab-button" data-tab="community-notices">Notice Boards</div>
+        <div class="tab-button" data-tab="community-achievements">
+          Achievements
+        </div>
+        <div class="tab-button" data-tab="community-committees">
+          Student Committees
+        </div>
+        <div class="tab-button" data-tab="community-events">
+          Cultural Events
+        </div>
+      </div>
+
+      <!-- Community Tab Content -->
+      <div id="community-tab-content">
+        <!-- Student Forums Tab -->
+        <div class="tab-panel active" id="community-forum-panel">
+          <div class="glass-card p-6 mb-6">
+            <div class="flex justify-between items-center mb-6">
+              <h3 class="text-xl font-bold text-white">Student Forums</h3>
+              <button
+                class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition"
+                id="create-post-btn"
+              >
+                <i class="fas fa-plus mr-2"></i>Create New Post
+              </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+              <div
+                class="bg-slate-700 rounded-xl p-4 text-white cursor-pointer hover:bg-slate-600 transition text-center"
+                data-category="academic"
+              >
+                <i
+                  class="fas fa-graduation-cap text-2xl mb-2 text-blue-400"
+                ></i>
+                <h4 class="font-bold">Academic</h4>
+                <p class="text-sm opacity-90">
+                  Course discussions, study groups
+                </p>
+              </div>
+              <div
+                class="bg-slate-700 rounded-xl p-4 text-white cursor-pointer hover:bg-slate-600 transition text-center"
+                data-category="hostel"
+              >
+                <i class="fas fa-home text-2xl mb-2 text-green-400"></i>
+                <h4 class="font-bold">Hostel Life</h4>
+                <p class="text-sm opacity-90">Roommate issues, facilities</p>
+              </div>
+              <div
+                class="bg-slate-700 rounded-xl p-4 text-white cursor-pointer hover:bg-slate-600 transition text-center"
+                data-category="events"
+              >
+                <i class="fas fa-calendar-alt text-2xl mb-2 text-amber-400"></i>
+                <h4 class="font-bold">Events & Activities</h4>
+                <p class="text-sm opacity-90">Campus events, clubs</p>
+              </div>
+            </div>
+
+            <div id="forum-posts-container">
+              <!-- Forum posts will be populated by JavaScript -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Lost & Found Tab -->
+        <div class="tab-panel" id="community-lost-found-panel">
+          <div class="glass-card p-6 mb-6">
+            <div class="flex justify-between items-center mb-6">
+              <h3 class="text-xl font-bold text-white">Lost & Found</h3>
+              <button
+                class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition"
+                id="report-item-btn"
+              >
+                <i class="fas fa-plus mr-2"></i>Report Lost Item
+              </button>
+            </div>
+
+            <div class="flex space-x-4 mb-6">
+              <button
+                class="filter-btn bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition"
+                data-filter="all"
+              >
+                All Items
+              </button>
+              <button
+                class="filter-btn bg-slate-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-slate-600 transition"
+                data-filter="lost"
+              >
+                Lost Items
+              </button>
+              <button
+                class="filter-btn bg-slate-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-slate-600 transition"
+                data-filter="found"
+              >
+                Found Items
+              </button>
+            </div>
+
+            <div id="lost-found-container">
+              <!-- Lost and found items will be populated by JavaScript -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Notice Boards Tab -->
+        <div class="tab-panel" id="community-notices-panel">
+          <div class="glass-card p-6">
+            <h3 class="text-xl font-bold text-white mb-6">Notice Boards</h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <div
+                class="bg-slate-700 rounded-xl p-4 text-white cursor-pointer hover:bg-slate-600 transition"
+                data-board="academic"
+              >
+                <div class="flex justify-between items-start mb-3">
+                  <h4 class="font-bold text-lg">Academic Notices</h4>
+                  <span
+                    class="bg-white text-purple-700 text-xs font-bold px-2 py-1 rounded-full"
+                    >12 New</span
+                  >
+                </div>
+                <p class="text-sm opacity-90">Exam schedules, course updates</p>
+              </div>
+
+              <div
+                class="bg-slate-700 rounded-xl p-4 text-white cursor-pointer hover:bg-slate-600 transition"
+                data-board="hostel"
+              >
+                <div class="flex justify-between items-start mb-3">
+                  <h4 class="font-bold text-lg">Hostel Notices</h4>
+                  <span
+                    class="bg-white text-green-700 text-xs font-bold px-2 py-1 rounded-full"
+                    >5 New</span
+                  >
+                </div>
+                <p class="text-sm opacity-90">
+                  Maintenance, rules, announcements
+                </p>
+              </div>
+
+              <div
+                class="bg-slate-700 rounded-xl p-4 text-white cursor-pointer hover:bg-slate-600 transition"
+                data-board="events"
+              >
+                <div class="flex justify-between items-start mb-3">
+                  <h4 class="font-bold text-lg">Event Notices</h4>
+                  <span
+                    class="bg-white text-amber-700 text-xs font-bold px-2 py-1 rounded-full"
+                    >8 New</span
+                  >
+                </div>
+                <p class="text-sm opacity-90">Cultural events, competitions</p>
+              </div>
+
+              <div
+                class="bg-slate-700 rounded-xl p-4 text-white cursor-pointer hover:bg-slate-600 transition"
+                data-board="general"
+              >
+                <div class="flex justify-between items-start mb-3">
+                  <h4 class="font-bold text-lg">General Notices</h4>
+                  <span
+                    class="bg-white text-blue-700 text-xs font-bold px-2 py-1 rounded-full"
+                    >3 New</span
+                  >
+                </div>
+                <p class="text-sm opacity-90">Important announcements</p>
+              </div>
+            </div>
+
+            <div id="notices-container">
+              <!-- Notices will be populated by JavaScript -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Achievements Tab -->
+        <div class="tab-panel" id="community-achievements-panel">
+          <div class="glass-card p-6">
+            <h3 class="text-xl font-bold text-white mb-6">
+              Student Achievements
+            </h3>
+
+            <div class="flex space-x-4 mb-6">
+              <button
+                class="filter-btn bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition"
+                data-filter="all"
+              >
+                All Achievements
+              </button>
+              <button
+                class="filter-btn bg-slate-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-slate-600 transition"
+                data-filter="academic"
+              >
+                Academic
+              </button>
+              <button
+                class="filter-btn bg-slate-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-slate-600 transition"
+                data-filter="sports"
+              >
+                Sports
+              </button>
+              <button
+                class="filter-btn bg-slate-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-slate-600 transition"
+                data-filter="cultural"
+              >
+                Cultural
+              </button>
+            </div>
+
+            <div id="achievements-container">
+              <!-- Achievements will be populated by JavaScript -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Student Committees Tab -->
+        <div class="tab-panel" id="community-committees-panel">
+          <div class="glass-card p-6">
+            <h3 class="text-xl font-bold text-white mb-6">
+              Student Committees
+            </h3>
+
+            <div
+              class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6"
+            >
+              <div class="committee-card">
+                <div class="flex justify-between items-start mb-3">
+                  <h4 class="font-bold text-lg">Cultural Committee</h4>
+                  <span
+                    class="bg-white text-purple-700 text-xs font-bold px-2 py-1 rounded-full"
+                    >12 Members</span
+                  >
+                </div>
+                <p class="text-sm text-slate-400 mb-4">
+                  Organizing cultural events, festivals, and performances
+                </p>
+                <div class="flex justify-between items-center">
+                  <span class="text-sm text-slate-300"
+                    >Coordinator: Rohan Singh</span
+                  >
+                  <button
+                    class="join-committee bg-blue-600 text-white text-xs font-semibold py-1 px-3 rounded hover:bg-blue-700 transition"
+                    data-committee="cultural"
+                  >
+                    Join
+                  </button>
+                </div>
+              </div>
+
+              <div class="committee-card">
+                <div class="flex justify-between items-start mb-3">
+                  <h4 class="font-bold text-lg">Sports Committee</h4>
+                  <span
+                    class="bg-white text-green-700 text-xs font-bold px-2 py-1 rounded-full"
+                    >18 Members</span
+                  >
+                </div>
+                <p class="text-sm text-slate-400 mb-4">
+                  Managing sports events, teams, and facilities
+                </p>
+                <div class="flex justify-between items-center">
+                  <span class="text-sm text-slate-300"
+                    >Coordinator: Anjali Sharma</span
+                  >
+                  <button
+                    class="join-committee bg-blue-600 text-white text-xs font-semibold py-1 px-3 rounded hover:bg-blue-700 transition"
+                    data-committee="sports"
+                  >
+                    Join
+                  </button>
+                </div>
+              </div>
+
+              <div class="committee-card">
+                <div class="flex justify-between items-start mb-3">
+                  <h4 class="font-bold text-lg">Academic Committee</h4>
+                  <span
+                    class="bg-white text-amber-700 text-xs font-bold px-2 py-1 rounded-full"
+                    >15 Members</span
+                  >
+                </div>
+                <p class="text-sm text-slate-400 mb-4">
+                  Organizing seminars, workshops, and academic events
+                </p>
+                <div class="flex justify-between items-center">
+                  <span class="text-sm text-slate-300"
+                    >Coordinator: Vikram Patel</span
+                  >
+                  <button
+                    class="join-committee bg-blue-600 text-white text-xs font-semibold py-1 px-3 rounded hover:bg-blue-700 transition"
+                    data-committee="academic"
+                  >
+                    Join
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-8">
+              <h4 class="text-lg font-semibold text-white mb-4">
+                My Committee Memberships
+              </h4>
+              <div id="my-committees-container">
+                <!-- User's committee memberships will be populated by JavaScript -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cultural Events Tab -->
+        <div class="tab-panel" id="community-events-panel">
+          <div class="glass-card p-6">
+            <div class="flex justify-between items-center mb-6">
+              <h3 class="text-xl font-bold text-white">Cultural Events</h3>
+              <button
+                class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition"
+                id="create-event-btn"
+              >
+                <i class="fas fa-plus mr-2"></i>Create New Event
+              </button>
+            </div>
+
+            <div class="flex space-x-4 mb-6">
+              <button
+                class="filter-btn bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition"
+                data-filter="all"
+              >
+                All Events
+              </button>
+              <button
+                class="filter-btn bg-slate-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-slate-600 transition"
+                data-filter="upcoming"
+              >
+                Upcoming
+              </button>
+              <button
+                class="filter-btn bg-slate-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-slate-600 transition"
+                data-filter="ongoing"
+              >
+                Ongoing
+              </button>
+              <button
+                class="filter-btn bg-slate-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-slate-600 transition"
+                data-filter="past"
+              >
+                Past Events
+              </button>
+            </div>
+
+            <div id="events-container">
+              <!-- Events will be populated by JavaScript -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Message Box -->
+    <div id="message-box" class="message-box">
+      <p id="message-text"></p>
+    </div>
+
+    <!-- Create Post Modal -->
+    <div class="modal" id="create-post-modal">
+      <div class="modal-content">
+        <div class="modal-header flex justify-between items-center mb-4">
+          <h3 class="text-xl font-bold text-white">Create New Forum Post</h3>
+          <button
+            class="modal-close text-2xl text-slate-400 hover:text-white"
+            id="close-create-post-modal"
+          >
+            &times;
+          </button>
+        </div>
+        <div class="space-y-4">
+          <div>
+            <label class="block text-slate-300 mb-2 font-medium"
+              >Category</label
+            >
+            <select
+              class="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              id="post-category"
+            >
+              <option value="academic">Academic</option>
+              <option value="hostel">Hostel Life</option>
+              <option value="events">Events & Activities</option>
+              <option value="general">General Discussion</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-slate-300 mb-2 font-medium">Title</label>
+            <input
+              type="text"
+              class="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              id="post-title"
+              placeholder="Enter post title"
+            />
+          </div>
+          <div>
+            <label class="block text-slate-300 mb-2 font-medium">Content</label>
+            <textarea
+              class="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              rows="5"
+              id="post-content"
+              placeholder="Write your post content here..."
+            ></textarea>
+          </div>
+          <div class="flex justify-end space-x-3 mt-6">
+            <button
+              class="bg-slate-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-slate-700 transition"
+              id="cancel-post"
+            >
+              Cancel
+            </button>
+            <button
+              class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition"
+              id="submit-post"
+            >
+              <i class="fas fa-paper-plane mr-2"></i>Submit Post
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Post Details Modal -->
+    <div class="modal" id="post-details-modal">
+      <div class="modal-content">
+        <div class="modal-header flex justify-between items-center mb-4">
+          <h3 class="text-xl font-bold text-white" id="post-details-title">
+            Post Details
+          </h3>
+          <button
+            class="modal-close text-2xl text-slate-400 hover:text-white"
+            id="close-post-details-modal"
+          >
+            &times;
+          </button>
+        </div>
+        <div id="post-details-content">
+          <!-- Post details will be populated by JavaScript -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Reply Modal -->
+    <div class="modal" id="reply-modal">
+      <div class="modal-content">
+        <div class="modal-header flex justify-between items-center mb-4">
+          <h3 class="text-xl font-bold text-white">Reply to Post</h3>
+          <button
+            class="modal-close text-2xl text-slate-400 hover:text-white"
+            id="close-reply-modal"
+          >
+            &times;
+          </button>
+        </div>
+        <div class="space-y-4">
+          <div id="reply-post-info">
+            <!-- Post info will be populated by JavaScript -->
+          </div>
+          <div>
+            <label class="block text-slate-300 mb-2 font-medium"
+              >Your Reply</label
+            >
+            <textarea
+              class="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              rows="4"
+              id="reply-content"
+              placeholder="Write your reply here..."
+            ></textarea>
+          </div>
+          <div class="flex justify-end space-x-3 mt-6">
+            <button
+              class="bg-slate-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-slate-700 transition"
+              id="cancel-reply"
+            >
+              Cancel
+            </button>
+            <button
+              class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition"
+              id="submit-reply"
+            >
+              <i class="fas fa-paper-plane mr-2"></i>Submit Reply
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Report Item Modal -->
+    <div class="modal" id="report-item-modal">
+      <div class="modal-content">
+        <div class="modal-header flex justify-between items-center mb-4">
+          <h3 class="text-xl font-bold text-white">Report Lost/Found Item</h3>
+          <button
+            class="modal-close text-2xl text-slate-400 hover:text-white"
+            id="close-report-item-modal"
+          >
+            &times;
+          </button>
+        </div>
+        <div class="space-y-4">
+          <div>
+            <label class="block text-slate-300 mb-2 font-medium"
+              >Item Type</label
+            >
+            <div class="flex space-x-4">
+              <label class="flex items-center">
+                <input
+                  type="radio"
+                  name="item-type"
+                  value="lost"
+                  class="mr-2"
+                  checked
+                />
+                <span class="text-slate-300">Lost Item</span>
+              </label>
+              <label class="flex items-center">
+                <input
+                  type="radio"
+                  name="item-type"
+                  value="found"
+                  class="mr-2"
+                />
+                <span class="text-slate-300">Found Item</span>
+              </label>
+            </div>
+          </div>
+          <div>
+            <label class="block text-slate-300 mb-2 font-medium"
+              >Item Name</label
+            >
+            <input
+              type="text"
+              class="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              id="item-name"
+              placeholder="Enter item name"
+            />
+          </div>
+          <div>
+            <label class="block text-slate-300 mb-2 font-medium"
+              >Description</label
+            >
+            <textarea
+              class="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              rows="3"
+              id="item-description"
+              placeholder="Describe the item..."
+            ></textarea>
+          </div>
+          <div>
+            <label class="block text-slate-300 mb-2 font-medium"
+              >Location</label
+            >
+            <input
+              type="text"
+              class="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              id="item-location"
+              placeholder="Where was it lost/found?"
+            />
+          </div>
+          <div>
+            <label class="block text-slate-300 mb-2 font-medium">Date</label>
+            <input
+              type="date"
+              class="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              id="item-date"
+            />
+          </div>
+          <div class="flex justify-end space-x-3 mt-6">
+            <button
+              class="bg-slate-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-slate-700 transition"
+              id="cancel-item"
+            >
+              Cancel
+            </button>
+            <button
+              class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition"
+              id="submit-item"
+            >
+              <i class="fas fa-paper-plane mr-2"></i>Submit Report
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Item Details Modal -->
+    <div class="modal" id="item-details-modal">
+      <div class="modal-content">
+        <div class="modal-header flex justify-between items-center mb-4">
+          <h3 class="text-xl font-bold text-white" id="item-details-title">
+            Item Details
+          </h3>
+          <button
+            class="modal-close text-2xl text-slate-400 hover:text-white"
+            id="close-item-details-modal"
+          >
+            &times;
+          </button>
+        </div>
+        <div id="item-details-content">
+          <!-- Item details will be populated by JavaScript -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Notice Details Modal -->
+    <div class="modal" id="notice-details-modal">
+      <div class="modal-content">
+        <div class="modal-header flex justify-between items-center mb-4">
+          <h3 class="text-xl font-bold text-white" id="notice-details-title">
+            Notice Details
+          </h3>
+          <button
+            class="modal-close text-2xl text-slate-400 hover:text-white"
+            id="close-notice-details-modal"
+          >
+            &times;
+          </button>
+        </div>
+        <div id="notice-details-content">
+          <!-- Notice details will be populated by JavaScript -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Achievement Details Modal -->
+    <div class="modal" id="achievement-details-modal">
+      <div class="modal-content">
+        <div class="modal-header flex justify-between items-center mb-4">
+          <h3
+            class="text-xl font-bold text-white"
+            id="achievement-details-title"
+          >
+            Achievement Details
+          </h3>
+          <button
+            class="modal-close text-2xl text-slate-400 hover:text-white"
+            id="close-achievement-details-modal"
+          >
+            &times;
+          </button>
+        </div>
+        <div id="achievement-details-content">
+          <!-- Achievement details will be populated by JavaScript -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Event Details Modal -->
+    <div class="modal" id="event-details-modal">
+      <div class="modal-content">
+        <div class="modal-header flex justify-between items-center mb-4">
+          <h3 class="text-xl font-bold text-white" id="event-details-title">
+            Event Details
+          </h3>
+          <button
+            class="modal-close text-2xl text-slate-400 hover:text-white"
+            id="close-event-details-modal"
+          >
+            &times;
+          </button>
+        </div>
+        <div id="event-details-content">
+          <!-- Event details will be populated by JavaScript -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Event Registration Modal -->
+    <div class="modal" id="event-registration-modal">
+      <div class="modal-content">
+        <div class="modal-header flex justify-between items-center mb-4">
+          <h3
+            class="text-xl font-bold text-white"
+            id="event-registration-title"
+          >
+            Event Registration
+          </h3>
+          <button
+            class="modal-close text-2xl text-slate-400 hover:text-white"
+            id="close-event-registration-modal"
+          >
+            &times;
+          </button>
+        </div>
+        <div class="space-y-4">
+          <div id="event-registration-info">
+            <!-- Event info will be populated by JavaScript -->
+          </div>
+          <div>
+            <label class="block text-slate-300 mb-2 font-medium"
+              >Full Name</label
+            >
+            <input
+              type="text"
+              class="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              id="registration-name"
+              placeholder="Enter your full name"
+            />
+          </div>
+          <div>
+            <label class="block text-slate-300 mb-2 font-medium"
+              >Student ID</label
+            >
+            <input
+              type="text"
+              class="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              id="registration-id"
+              placeholder="Enter your student ID"
+            />
+          </div>
+          <div>
+            <label class="block text-slate-300 mb-2 font-medium">Email</label>
+            <input
+              type="email"
+              class="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              id="registration-email"
+              placeholder="Enter your email"
+            />
+          </div>
+          <div>
+            <label class="block text-slate-300 mb-2 font-medium"
+              >Phone Number</label
+            >
+            <input
+              type="tel"
+              class="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              id="registration-phone"
+              placeholder="Enter your phone number"
+            />
+          </div>
+          <div>
+            <label class="block text-slate-300 mb-2 font-medium"
+              >Any Special Requirements?</label
+            >
+            <textarea
+              class="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              rows="3"
+              id="registration-requirements"
+              placeholder="Any special requirements or comments..."
+            ></textarea>
+          </div>
+          <div class="flex justify-end space-x-3 mt-6">
+            <button
+              class="bg-slate-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-slate-700 transition"
+              id="cancel-registration"
+            >
+              Cancel
+            </button>
+            <button
+              class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition"
+              id="submit-registration"
+            >
+              <i class="fas fa-user-plus mr-2"></i>Register
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Create Event Modal -->
+    <div class="modal" id="create-event-modal">
+      <div class="modal-content">
+        <div class="modal-header flex justify-between items-center mb-4">
+          <h3 class="text-xl font-bold text-white">Create New Event</h3>
+          <button
+            class="modal-close text-2xl text-slate-400 hover:text-white"
+            id="close-create-event-modal"
+          >
+            &times;
+          </button>
+        </div>
+        <div class="space-y-4">
+          <div>
+            <label class="block text-slate-300 mb-2 font-medium"
+              >Event Name</label
+            >
+            <input
+              type="text"
+              class="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              id="event-name"
+              placeholder="Enter event name"
+            />
+          </div>
+          <div>
+            <label class="block text-slate-300 mb-2 font-medium"
+              >Description</label
+            >
+            <textarea
+              class="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              rows="3"
+              id="event-description"
+              placeholder="Describe the event..."
+            ></textarea>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-slate-300 mb-2 font-medium"
+                >Start Date & Time</label
+              >
+              <input
+                type="datetime-local"
+                class="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                id="event-start"
+              />
+            </div>
+            <div>
+              <label class="block text-slate-300 mb-2 font-medium"
+                >End Date & Time</label
+              >
+              <input
+                type="datetime-local"
+                class="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                id="event-end"
+              />
+            </div>
+          </div>
+          <div>
+            <label class="block text-slate-300 mb-2 font-medium"
+              >Location</label
+            >
+            <input
+              type="text"
+              class="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              id="event-location"
+              placeholder="Event venue"
+            />
+          </div>
+          <div>
+            <label class="block text-slate-300 mb-2 font-medium"
+              >Organizing Committee</label
+            >
+            <select
+              class="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              id="event-committee"
+            >
+              <option value="cultural">Cultural Committee</option>
+              <option value="sports">Sports Committee</option>
+              <option value="academic">Academic Committee</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="flex justify-end space-x-3 mt-6">
+            <button
+              class="bg-slate-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-slate-700 transition"
+              id="cancel-event"
+            >
+              Cancel
+            </button>
+            <button
+              class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition"
+              id="submit-event"
+            >
+              <i class="fas fa-paper-plane mr-2"></i>Create Event
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Sample data for community features
+      const communityData = {
+        forumPosts: [
+          {
+            id: "FP001",
+            title: "Need study partners for Data Structures",
+            content:
+              "Looking for serious students to form a study group for the upcoming DS exam. We can meet in the library or online. I'm particularly struggling with graph algorithms and would appreciate any help!",
+            author: "Rohan Singh",
+            authorId: "22BHI10110",
+            category: "academic",
+            date: "2025-09-20T14:30:00",
+            replies: [
+              {
+                id: "R001",
+                author: "Anjali Sharma",
+                authorId: "22BHI10095",
+                content:
+                  "I'd be interested! I'm good with graphs. When are you planning to meet?",
+                date: "2025-09-20T16:45:00",
+              },
+              {
+                id: "R002",
+                author: "Vikram Patel",
+                authorId: "22BHI10105",
+                content:
+                  "Count me in too. I have some good study materials we can share.",
+                date: "2025-09-20T17:20:00",
+              },
+            ],
+            likes: 24,
+          },
+          {
+            id: "FP002",
+            title: "Hostel WiFi issues in Block 1",
+            content:
+              "Is anyone else experiencing slow WiFi in Boys Hostel Block 1? It's been terrible for the past 2 days. I can't even load simple web pages, let alone attend online classes.",
+            author: "Ankur Jha",
+            authorId: "22BHI10100",
+            category: "hostel",
+            date: "2025-09-21T10:15:00",
+            replies: [
+              {
+                id: "R003",
+                author: "Piyush Wali",
+                authorId: "22BHI10111",
+                content:
+                  "Yes, facing the same issue. I've already complained to the warden but no response yet.",
+                date: "2025-09-21T11:30:00",
+              },
+            ],
+            likes: 15,
+          },
+          {
+            id: "FP003",
+            title: "Cultural Fest volunteers needed",
+            content:
+              "We're looking for volunteers to help with the upcoming cultural fest. Roles include event coordination, decoration, and registration. This is a great opportunity to develop leadership skills and be part of our biggest campus event!",
+            author: "Anjali Sharma",
+            authorId: "22BHI10095",
+            category: "events",
+            date: "2025-09-22T16:45:00",
+            replies: [
+              {
+                id: "R004",
+                author: "Rohan Singh",
+                authorId: "22BHI10110",
+                content:
+                  "I'm interested in event coordination. Who should I contact?",
+                date: "2025-09-22T18:10:00",
+              },
+            ],
+            likes: 42,
+          },
+        ],
+        lostFoundItems: [
+          {
+            id: "LF001",
+            type: "lost",
+            name: "Black Water Bottle",
+            description:
+              "Milton 1L black water bottle with VIT Bhopal sticker on the side. Has a small scratch near the cap.",
+            location: "Central Library, 2nd Floor",
+            date: "2025-09-20",
+            reportedBy: "Piyush Wali",
+            contact: "piyushwali2022@vitbhopal.ac.in",
+            status: "open",
+          },
+          {
+            id: "LF002",
+            type: "found",
+            name: "Calculator",
+            description:
+              "Casio fx-991ES scientific calculator in a black case. Found on a desk in the study area.",
+            location: "Academic Block A, Room 203",
+            date: "2025-09-21",
+            reportedBy: "Rohan Singh",
+            contact: "rohan.singh@vitbhopal.ac.in",
+            status: "open",
+          },
+          {
+            id: "LF003",
+            type: "lost",
+            name: "Student ID Card",
+            description:
+              "ID card for 22BHI10111 - Piyush Wali. Has my photo and is essential for campus access.",
+            location: "Cafeteria, near the payment counter",
+            date: "2025-09-22",
+            reportedBy: "Piyush Wali",
+            contact: "piyushwali2022@vitbhopal.ac.in",
+            status: "resolved",
+          },
+        ],
+        notices: [
+          {
+            id: "N001",
+            title: "Mid-Term Examination Schedule",
+            content:
+              "The mid-term examination schedule for all courses has been published. Please check the academic portal for details. Examinations will be conducted from October 10-20, 2025. All students must carry their ID cards to the examination hall.",
+            category: "academic",
+            date: "2025-09-18T09:00:00",
+            priority: "high",
+            issuedBy: "Examination Cell",
+          },
+          {
+            id: "N002",
+            title: "Hostel Maintenance - Water Supply",
+            content:
+              "There will be no water supply in Boys Hostel Block 1 from 10 AM to 4 PM on September 25 due to maintenance work. Please store water in advance. We apologize for the inconvenience.",
+            category: "hostel",
+            date: "2025-09-22T14:30:00",
+            priority: "medium",
+            issuedBy: "Hostel Administration",
+          },
+          {
+            id: "N003",
+            title: "Cultural Fest 'Utsav' 2025",
+            content:
+              "VIT Bhopal's annual cultural fest 'Utsav' will be held from October 10-12. Registrations are now open! Events include dance, music, drama, fashion show, and more. Cash prizes worth ₹2 lakhs to be won!",
+            category: "events",
+            date: "2025-09-23T11:15:00",
+            priority: "high",
+            issuedBy: "Cultural Committee",
+          },
+        ],
+        achievements: [
+          {
+            id: "A001",
+            student: "Rohan Singh",
+            studentId: "22BHI10110",
+            achievement: "Won 1st prize in National Coding Competition",
+            description:
+              "Rohan secured first position in the National Coding Competition organized by CodeChef, competing against 5000+ participants from across India.",
+            category: "academic",
+            date: "2025-09-15",
+            recognizedBy: "Dean of Academics",
+            image: "coding_trophy.jpg",
+          },
+          {
+            id: "A002",
+            student: "Anjali Sharma",
+            studentId: "22BHI10095",
+            achievement: "Selected for National Basketball Team",
+            description:
+              "Anjali has been selected to represent India in the upcoming Asian Basketball Championship after outstanding performance in the trials.",
+            category: "sports",
+            date: "2025-09-18",
+            recognizedBy: "Sports Committee",
+            image: "basketball_medal.jpg",
+          },
+          {
+            id: "A003",
+            student: "Vikram Patel",
+            studentId: "22BHI10105",
+            achievement: "Best Performer in Dance Competition",
+            description:
+              "Vikram won the 'Best Performer' award at the Inter-University Dance Competition for his exceptional contemporary dance performance.",
+            category: "cultural",
+            date: "2025-09-20",
+            recognizedBy: "Cultural Committee",
+            image: "dance_trophy.jpg",
+          },
+        ],
+        events: [
+          {
+            id: "E001",
+            name: "Tech Symposium 2025",
+            description:
+              "Annual technical symposium featuring workshops, hackathons, and guest lectures from industry experts. Topics include AI, Blockchain, Cybersecurity, and more. Don't miss this opportunity to learn from the best in the industry!",
+            start: "2025-10-05T09:00:00",
+            end: "2025-10-07T18:00:00",
+            location: "Academic Block A, Auditorium",
+            committee: "academic",
+            status: "upcoming",
+            participants: 120,
+            registrationLink: "https://forms.techsymposium.vitbhopal.ac.in",
+          },
+          {
+            id: "E002",
+            name: "Inter-Hostel Sports Tournament",
+            description:
+              "Annual sports competition between hostel blocks featuring cricket, football, basketball and more. Show your hostel spirit and compete for the championship trophy!",
+            start: "2025-09-25T08:00:00",
+            end: "2025-09-28T18:00:00",
+            location: "Sports Complex",
+            committee: "sports",
+            status: "ongoing",
+            participants: 85,
+            registrationLink: "https://forms.sports.vitbhopal.ac.in",
+          },
+          {
+            id: "E003",
+            name: "Cultural Night - Music & Dance",
+            description:
+              "An evening of performances by talented students showcasing various cultural traditions. Featuring classical, folk, and contemporary performances. Food stalls will be available.",
+            start: "2025-10-10T18:00:00",
+            end: "2025-10-10T22:00:00",
+            location: "Main Auditorium",
+            committee: "cultural",
+            status: "upcoming",
+            participants: 200,
+            registrationLink: "https://forms.cultural.vitbhopal.ac.in",
+          },
+        ],
+        userCommittees: ["cultural"],
+      };
+
+      // Current state
+      let currentTab = "community-forum";
+      let currentFilter = "all";
+      let currentPostId = null;
+      let currentItemId = null;
+      let currentEventId = null;
+
+      // Function to format date with time
+      function formatDateTime(dateTimeString) {
+        const date = new Date(dateTimeString);
+        const options = {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        };
+        return date.toLocaleDateString("en-US", options);
+      }
+
+      // Function to show a custom message box
+      function showMessage(text, type = "info") {
+        const messageBox = document.getElementById("message-box");
+        const messageText = document.getElementById("message-text");
+
+        messageText.textContent = text;
+        messageBox.classList.remove(
+          "show",
+          "bg-red-500",
+          "bg-green-500",
+          "bg-blue-500"
+        );
+
+        if (type === "error") {
+          messageBox.classList.add("bg-red-500");
+        } else if (type === "success") {
+          messageBox.classList.add("bg-green-500");
+        } else if (type === "info") {
+          messageBox.classList.add("bg-blue-500");
+        } else {
+          messageBox.classList.add("bg-slate-700");
+        }
+
+        messageBox.classList.add("show");
+
+        setTimeout(() => {
+          messageBox.classList.remove("show");
+        }, 4000);
+      }
+
+      // Function to switch tabs
+      function switchTab(tabId) {
+        // Update active tab button
+        document.querySelectorAll(".tab-button").forEach((btn) => {
+          btn.classList.remove("active");
+          if (btn.dataset.tab === tabId) {
+            btn.classList.add("active");
+          }
+        });
+
+        // Show corresponding tab panel
+        document.querySelectorAll(".tab-panel").forEach((panel) => {
+          panel.classList.remove("active");
+          if (panel.id === `${tabId}-panel`) {
+            panel.classList.add("active");
+          }
+        });
+
+        currentTab = tabId;
+
+        // Render tab-specific content
+        renderTabSpecificContent();
+      }
+
+      // Function to render tab-specific content
+      function renderTabSpecificContent() {
+        switch (currentTab) {
+          case "community-forum":
+            renderForumPosts();
+            break;
+          case "community-lost-found":
+            renderLostFoundItems();
+            break;
+          case "community-notices":
+            renderNotices();
+            break;
+          case "community-achievements":
+            renderAchievements();
+            break;
+          case "community-committees":
+            renderCommittees();
+            break;
+          case "community-events":
+            renderEvents();
+            break;
+        }
+      }
+
+      // Function to render forum posts
+      function renderForumPosts() {
+        const container = document.getElementById("forum-posts-container");
+        let posts = communityData.forumPosts;
+
+        if (posts.length === 0) {
+          container.innerHTML = `
+                    <div class="text-center py-8">
+                        <i class="fas fa-comments text-4xl text-slate-500 mb-4"></i>
+                        <p class="text-slate-400">No forum posts found</p>
+                    </div>
+                `;
+          return;
+        }
+
+        let postsHTML = "";
+
+        posts.forEach((post) => {
+          const postDate = formatDateTime(post.date);
+          let categoryBadge = "";
+
+          if (post.category === "academic") {
+            categoryBadge = `<span class="status-badge" style="background-color: #dbeafe; color: #1e40af;">Academic</span>`;
+          } else if (post.category === "hostel") {
+            categoryBadge = `<span class="status-badge" style="background-color: #d1fae5; color: #065f46;">Hostel</span>`;
+          } else if (post.category === "events") {
+            categoryBadge = `<span class="status-badge" style="background-color: #fef3c7; color: #92400e;">Events</span>`;
+          }
+
+          postsHTML += `
+                    <div class="forum-post">
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
+                            <div class="mb-4 md:mb-0">
+                                <div class="flex items-center mb-2">
+                                    <h4 class="font-bold text-white text-lg">${
+                                      post.title
+                                    }</h4>
+                                </div>
+                                <div class="text-sm text-slate-400 mb-2">
+                                    <span class="mr-4">${categoryBadge}</span>
+                                    <span>By ${post.author} • ${postDate}</span>
+                                </div>
+                                <div class="text-sm text-slate-300 mb-2">
+                                    ${post.content.substring(0, 150)}...
+                                </div>
+                                <div class="flex space-x-4 text-sm text-slate-400">
+                                    <span><i class="fas fa-reply mr-1"></i> ${
+                                      post.replies.length
+                                    } replies</span>
+                                    <span><i class="fas fa-heart mr-1"></i> ${
+                                      post.likes
+                                    } likes</span>
+                                </div>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button class="view-post bg-blue-600 text-white text-sm font-semibold py-1 px-3 rounded hover:bg-blue-700 transition" data-id="${
+                                  post.id
+                                }">
+                                    <i class="fas fa-eye mr-1"></i> View
+                                </button>
+                                <button class="reply-post bg-green-600 text-white text-sm font-semibold py-1 px-3 rounded hover:bg-green-700 transition" data-id="${
+                                  post.id
+                                }">
+                                    <i class="fas fa-reply mr-1"></i> Reply
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+        });
+
+        container.innerHTML = postsHTML;
+
+        // Add event listeners
+        document.querySelectorAll(".view-post").forEach((button) => {
+          button.addEventListener("click", function () {
+            const postId = this.dataset.id;
+            viewPostDetails(postId);
+          });
+        });
+
+        document.querySelectorAll(".reply-post").forEach((button) => {
+          button.addEventListener("click", function () {
+            const postId = this.dataset.id;
+            replyToPost(postId);
+          });
+        });
+      }
+
+      // Function to view post details
+      function viewPostDetails(postId) {
+        const post = communityData.forumPosts.find((p) => p.id === postId);
+        if (!post) return;
+
+        const postDate = formatDateTime(post.date);
+        let categoryBadge = "";
+
+        if (post.category === "academic") {
+          categoryBadge = `<span class="status-badge" style="background-color: #dbeafe; color: #1e40af;">Academic</span>`;
+        } else if (post.category === "hostel") {
+          categoryBadge = `<span class="status-badge" style="background-color: #d1fae5; color: #065f46;">Hostel</span>`;
+        } else if (post.category === "events") {
+          categoryBadge = `<span class="status-badge" style="background-color: #fef3c7; color: #92400e;">Events</span>`;
+        }
+
+        let repliesHTML = "";
+        if (post.replies && post.replies.length > 0) {
+          repliesHTML = `<div class="reply-section">
+                    <h4 class="font-bold text-white mb-3">Replies (${post.replies.length})</h4>`;
+
+          post.replies.forEach((reply) => {
+            const replyDate = formatDateTime(reply.date);
+            repliesHTML += `
+                        <div class="reply">
+                            <div class="reply-header">
+                                <span class="reply-author">${reply.author}</span>
+                                <span class="reply-date">${replyDate}</span>
+                            </div>
+                            <div class="reply-content">${reply.content}</div>
+                        </div>
+                    `;
+          });
+
+          repliesHTML += `</div>`;
+        }
+
+        document.getElementById("post-details-title").textContent = post.title;
+        document.getElementById("post-details-content").innerHTML = `
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <span class="text-slate-300 mr-3">By ${post.author}</span>
+                            ${categoryBadge}
+                        </div>
+                        <span class="text-slate-400 text-sm">${postDate}</span>
+                    </div>
+                    <div class="text-slate-300">
+                        ${post.content}
+                    </div>
+                    <div class="flex space-x-4 text-sm text-slate-400">
+                        <span><i class="fas fa-reply mr-1"></i> ${post.replies.length} replies</span>
+                        <span><i class="fas fa-heart mr-1"></i> ${post.likes} likes</span>
+                    </div>
+                    ${repliesHTML}
+                    <div class="flex justify-end mt-4">
+                        <button class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition" id="reply-from-details" data-id="${post.id}">
+                            <i class="fas fa-reply mr-2"></i>Reply to this Post
+                        </button>
+                    </div>
+                </div>
+            `;
+
+        document.getElementById("post-details-modal").classList.add("show");
+
+        // Add event listener to reply button in details modal
+        document
+          .getElementById("reply-from-details")
+          .addEventListener("click", function () {
+            document
+              .getElementById("post-details-modal")
+              .classList.remove("show");
+            replyToPost(postId);
+          });
+      }
+
+      // Function to reply to a post
+      function replyToPost(postId) {
+        const post = communityData.forumPosts.find((p) => p.id === postId);
+        if (!post) return;
+
+        currentPostId = postId;
+
+        document.getElementById("reply-post-info").innerHTML = `
+                <div class="bg-slate-800 rounded-lg p-4 mb-4">
+                    <h4 class="font-bold text-white">Replying to: ${post.title}</h4>
+                    <p class="text-slate-300 text-sm mt-1">By ${post.author}</p>
+                </div>
+            `;
+
+        document.getElementById("reply-modal").classList.add("show");
+      }
+
+      // Function to submit a reply
+      function submitReply() {
+        const replyContent = document.getElementById("reply-content").value;
+
+        if (!replyContent) {
+          showMessage("Please enter your reply", "error");
+          return;
+        }
+
+        const post = communityData.forumPosts.find(
+          (p) => p.id === currentPostId
+        );
+        if (post) {
+          const newReply = {
+            id: `R${Date.now()}`,
+            author: "Piyush Wali",
+            authorId: "22BHI10111",
+            content: replyContent,
+            date: new Date().toISOString(),
+          };
+
+          post.replies.push(newReply);
+          showMessage("Your reply has been posted successfully!", "success");
+          document.getElementById("reply-modal").classList.remove("show");
+          document.getElementById("reply-content").value = "";
+
+          // Refresh the forum posts if we're on that tab
+          if (currentTab === "community-forum") {
+            renderForumPosts();
+          }
+        }
+      }
+
+      // Function to render lost and found items
+      function renderLostFoundItems() {
+        const container = document.getElementById("lost-found-container");
+        let items = communityData.lostFoundItems;
+
+        // Apply filter if needed
+        if (currentFilter !== "all") {
+          items = items.filter((item) => item.type === currentFilter);
+        }
+
+        if (items.length === 0) {
+          container.innerHTML = `
+                    <div class="text-center py-8">
+                        <i class="fas fa-search text-4xl text-slate-500 mb-4"></i>
+                        <p class="text-slate-400">No ${
+                          currentFilter === "all" ? "" : currentFilter
+                        } items found</p>
+                    </div>
+                `;
+          return;
+        }
+
+        let itemsHTML = "";
+
+        items.forEach((item) => {
+          const isLost = item.type === "lost";
+          const statusClass =
+            item.status === "resolved" ? "status-approved" : "status-pending";
+
+          itemsHTML += `
+                    <div class="lost-item-card">
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
+                            <div class="mb-4 md:mb-0">
+                                <div class="flex items-center mb-2">
+                                    <h4 class="font-bold text-white text-lg">${
+                                      item.name
+                                    }</h4>
+                                    <span class="ml-2 status-badge ${
+                                      isLost
+                                        ? "status-rejected"
+                                        : "status-approved"
+                                    }">${isLost ? "Lost" : "Found"}</span>
+                                </div>
+                                <div class="text-sm text-slate-300 mb-2">
+                                    ${item.description.substring(0, 100)}...
+                                </div>
+                                <div class="text-sm text-slate-400">
+                                    <span class="mr-4"><i class="fas fa-map-marker-alt mr-1"></i> ${
+                                      item.location
+                                    }</span>
+                                    <span class="mr-4"><i class="fas fa-calendar mr-1"></i> ${
+                                      item.date
+                                    }</span>
+                                    <span class="mr-4"><i class="fas fa-user mr-1"></i> ${
+                                      item.reportedBy
+                                    }</span>
+                                    <span class="status-badge ${statusClass}">${
+            item.status === "resolved" ? "Resolved" : "Open"
+          }</span>
+                                </div>
+                            </div>
+                            <div class="flex space-x-2">
+                                ${
+                                  item.status === "open"
+                                    ? `
+                                <button class="claim-item bg-blue-600 text-white text-sm font-semibold py-1 px-3 rounded hover:bg-blue-700 transition" data-id="${
+                                  item.id
+                                }">
+                                    <i class="fas fa-hand-holding mr-1"></i> ${
+                                      isLost ? "Found It" : "Claim"
+                                    }
+                                </button>
+                                `
+                                    : ""
+                                }
+                                <button class="view-item bg-green-600 text-white text-sm font-semibold py-1 px-3 rounded hover:bg-green-700 transition" data-id="${
+                                  item.id
+                                }">
+                                    <i class="fas fa-eye mr-1"></i> Details
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+        });
+
+        container.innerHTML = itemsHTML;
+
+        // Add event listeners
+        document.querySelectorAll(".claim-item").forEach((button) => {
+          button.addEventListener("click", function () {
+            const itemId = this.dataset.id;
+            claimItem(itemId);
+          });
+        });
+
+        document.querySelectorAll(".view-item").forEach((button) => {
+          button.addEventListener("click", function () {
+            const itemId = this.dataset.id;
+            viewItemDetails(itemId);
+          });
+        });
+      }
+
+      // Function to claim an item
+      function claimItem(itemId) {
+        const item = communityData.lostFoundItems.find((i) => i.id === itemId);
+        if (!item) return;
+
+        showMessage(
+          `You've claimed the ${item.type} item: ${item.name}. The owner will be notified.`,
+          "success"
+        );
+
+        // In a real application, this would update the item status
+        item.status = "claimed";
+
+        // Refresh the lost & found items
+        renderLostFoundItems();
+      }
+
+      // Function to view item details
+      function viewItemDetails(itemId) {
+        const item = communityData.lostFoundItems.find((i) => i.id === itemId);
+        if (!item) return;
+
+        const isLost = item.type === "lost";
+
+        document.getElementById("item-details-title").textContent = item.name;
+        document.getElementById("item-details-content").innerHTML = `
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <span class="status-badge ${
+                          isLost ? "status-rejected" : "status-approved"
+                        }">${isLost ? "Lost Item" : "Found Item"}</span>
+                        <span class="status-badge ${
+                          item.status === "resolved"
+                            ? "status-approved"
+                            : "status-pending"
+                        }">${
+          item.status === "resolved" ? "Resolved" : "Open"
+        }</span>
+                    </div>
+                    <div>
+                        <label class="block text-slate-400 text-sm font-medium mb-1">Description</label>
+                        <p class="text-white">${item.description}</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-slate-400 text-sm font-medium mb-1">Location</label>
+                            <p class="text-white">${item.location}</p>
+                        </div>
+                        <div>
+                            <label class="block text-slate-400 text-sm font-medium mb-1">Date</label>
+                            <p class="text-white">${item.date}</p>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-slate-400 text-sm font-medium mb-1">Reported By</label>
+                        <p class="text-white">${item.reportedBy}</p>
+                    </div>
+                    <div>
+                        <label class="block text-slate-400 text-sm font-medium mb-1">Contact</label>
+                        <p class="text-white">${item.contact}</p>
+                    </div>
+                    ${
+                      item.status === "open"
+                        ? `
+                    <div class="flex justify-end mt-4">
+                        <button class="claim-from-details bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition" data-id="${
+                          item.id
+                        }">
+                            <i class="fas fa-hand-holding mr-2"></i> ${
+                              isLost ? "I Found This Item" : "Claim This Item"
+                            }
+                        </button>
+                    </div>
+                    `
+                        : ""
+                    }
+                </div>
+            `;
+
+        document.getElementById("item-details-modal").classList.add("show");
+
+        // Add event listener to claim button in details modal
+        if (item.status === "open") {
+          document
+            .querySelector(".claim-from-details")
+            .addEventListener("click", function () {
+              document
+                .getElementById("item-details-modal")
+                .classList.remove("show");
+              claimItem(itemId);
+            });
+        }
+      }
+
+      // Function to render notices
+      function renderNotices() {
+        const container = document.getElementById("notices-container");
+        const notices = communityData.notices;
+
+        if (notices.length === 0) {
+          container.innerHTML = `
+                    <div class="text-center py-8">
+                        <i class="fas fa-sticky-note text-4xl text-slate-500 mb-4"></i>
+                        <p class="text-slate-400">No notices found</p>
+                    </div>
+                `;
+          return;
+        }
+
+        let noticesHTML = "";
+
+        notices.forEach((notice) => {
+          const noticeDate = formatDateTime(notice.date);
+          let priorityBadge = "";
+
+          if (notice.priority === "high") {
+            priorityBadge = `<span class="status-badge status-rejected">High Priority</span>`;
+          } else if (notice.priority === "medium") {
+            priorityBadge = `<span class="status-badge status-pending">Medium Priority</span>`;
+          }
+
+          noticesHTML += `
+                    <div class="notice-card">
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
+                            <div class="mb-4 md:mb-0">
+                                <div class="flex items-center mb-2">
+                                    <h4 class="font-bold text-white text-lg">${
+                                      notice.title
+                                    }</h4>
+                                    ${priorityBadge}
+                                </div>
+                                <div class="text-sm text-slate-300 mb-2">
+                                    ${notice.content.substring(0, 150)}...
+                                </div>
+                                <div class="text-sm text-slate-400">
+                                    <span class="mr-4"><i class="fas fa-calendar mr-1"></i> ${noticeDate}</span>
+                                    <span class="mr-4"><i class="fas fa-tag mr-1"></i> ${
+                                      notice.category.charAt(0).toUpperCase() +
+                                      notice.category.slice(1)
+                                    }</span>
+                                </div>
+                            </div>
+                            <button class="view-notice bg-blue-600 text-white text-sm font-semibold py-1 px-3 rounded hover:bg-blue-700 transition" data-id="${
+                              notice.id
+                            }">
+                                <i class="fas fa-eye mr-1"></i> View Details
+                            </button>
+                        </div>
+                    </div>
+                `;
+        });
+
+        container.innerHTML = noticesHTML;
+
+        // Add event listeners
+        document.querySelectorAll(".view-notice").forEach((button) => {
+          button.addEventListener("click", function () {
+            const noticeId = this.dataset.id;
+            viewNoticeDetails(noticeId);
+          });
+        });
+      }
+
+      // Function to view notice details
+      function viewNoticeDetails(noticeId) {
+        const notice = communityData.notices.find((n) => n.id === noticeId);
+        if (!notice) return;
+
+        const noticeDate = formatDateTime(notice.date);
+        let priorityBadge = "";
+
+        if (notice.priority === "high") {
+          priorityBadge = `<span class="status-badge status-rejected">High Priority</span>`;
+        } else if (notice.priority === "medium") {
+          priorityBadge = `<span class="status-badge status-pending">Medium Priority</span>`;
+        }
+
+        document.getElementById("notice-details-title").textContent =
+          notice.title;
+        document.getElementById("notice-details-content").innerHTML = `
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            ${priorityBadge}
+                            <span class="ml-3 text-slate-300">Issued by: ${notice.issuedBy}</span>
+                        </div>
+                        <span class="text-slate-400 text-sm">${noticeDate}</span>
+                    </div>
+                    <div class="text-slate-300">
+                        ${notice.content}
+                    </div>
+                </div>
+            `;
+
+        document.getElementById("notice-details-modal").classList.add("show");
+      }
+
+      // Function to render achievements
+      function renderAchievements() {
+        const container = document.getElementById("achievements-container");
+        let achievements = communityData.achievements;
+
+        // Apply filter if needed
+        if (currentFilter !== "all") {
+          achievements = achievements.filter(
+            (achievement) => achievement.category === currentFilter
+          );
+        }
+
+        if (achievements.length === 0) {
+          container.innerHTML = `
+                    <div class="text-center py-8">
+                        <i class="fas fa-trophy text-4xl text-slate-500 mb-4"></i>
+                        <p class="text-slate-400">No ${
+                          currentFilter === "all" ? "" : currentFilter
+                        } achievements found</p>
+                    </div>
+                `;
+          return;
+        }
+
+        let achievementsHTML = "";
+
+        achievements.forEach((achievement) => {
+          let categoryBadge = "";
+
+          if (achievement.category === "academic") {
+            categoryBadge = `<span class="status-badge" style="background-color: #dbeafe; color: #1e40af;">Academic</span>`;
+          } else if (achievement.category === "sports") {
+            categoryBadge = `<span class="status-badge" style="background-color: #d1fae5; color: #065f46;">Sports</span>`;
+          } else if (achievement.category === "cultural") {
+            categoryBadge = `<span class="status-badge" style="background-color: #fef3c7; color: #92400e;">Cultural</span>`;
+          }
+
+          achievementsHTML += `
+                    <div class="achievement-card">
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
+                            <div class="mb-4 md:mb-0">
+                                <div class="flex items-center mb-2">
+                                    <h4 class="font-bold text-white text-lg">${achievement.student}</h4>
+                                    ${categoryBadge}
+                                </div>
+                                <div class="text-sm text-slate-300 mb-2">
+                                    ${achievement.achievement}
+                                </div>
+                                <div class="text-sm text-slate-400">
+                                    <span class="mr-4"><i class="fas fa-calendar mr-1"></i> ${achievement.date}</span>
+                                    <span class="mr-4"><i class="fas fa-award mr-1"></i> Recognized by ${achievement.recognizedBy}</span>
+                                </div>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button class="view-achievement bg-blue-600 text-white text-sm font-semibold py-1 px-3 rounded hover:bg-blue-700 transition" data-id="${achievement.id}">
+                                    <i class="fas fa-eye mr-1"></i> Details
+                                </button>
+                                <button class="congratulate bg-green-600 text-white text-sm font-semibold py-1 px-3 rounded hover:bg-green-700 transition" data-id="${achievement.id}">
+                                    <i class="fas fa-hands-clapping mr-1"></i> Congratulate
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+        });
+
+        container.innerHTML = achievementsHTML;
+
+        // Add event listeners
+        document.querySelectorAll(".view-achievement").forEach((button) => {
+          button.addEventListener("click", function () {
+            const achievementId = this.dataset.id;
+            viewAchievementDetails(achievementId);
+          });
+        });
+
+        document.querySelectorAll(".congratulate").forEach((button) => {
+          button.addEventListener("click", function () {
+            const achievementId = this.dataset.id;
+            congratulateStudent(achievementId);
+          });
+        });
+      }
+
+      // Function to view achievement details
+      function viewAchievementDetails(achievementId) {
+        const achievement = communityData.achievements.find(
+          (a) => a.id === achievementId
+        );
+        if (!achievement) return;
+
+        let categoryBadge = "";
+
+        if (achievement.category === "academic") {
+          categoryBadge = `<span class="status-badge" style="background-color: #dbeafe; color: #1e40af;">Academic</span>`;
+        } else if (achievement.category === "sports") {
+          categoryBadge = `<span class="status-badge" style="background-color: #d1fae5; color: #065f46;">Sports</span>`;
+        } else if (achievement.category === "cultural") {
+          categoryBadge = `<span class="status-badge" style="background-color: #fef3c7; color: #92400e;">Cultural</span>`;
+        }
+
+        document.getElementById(
+          "achievement-details-title"
+        ).textContent = `${achievement.student}'s Achievement`;
+        document.getElementById("achievement-details-content").innerHTML = `
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <h4 class="font-bold text-white text-lg">${achievement.student}</h4>
+                            ${categoryBadge}
+                        </div>
+                        <span class="text-slate-400 text-sm">${achievement.date}</span>
+                    </div>
+                    <div>
+                        <label class="block text-slate-400 text-sm font-medium mb-1">Achievement</label>
+                        <p class="text-white text-lg font-semibold">${achievement.achievement}</p>
+                    </div>
+                    <div>
+                        <label class="block text-slate-400 text-sm font-medium mb-1">Description</label>
+                        <p class="text-white">${achievement.description}</p>
+                    </div>
+                    <div>
+                        <label class="block text-slate-400 text-sm font-medium mb-1">Recognized By</label>
+                        <p class="text-white">${achievement.recognizedBy}</p>
+                    </div>
+                    <div class="flex justify-end mt-4">
+                        <button class="congratulate-from-details bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition" data-id="${achievement.id}">
+                            <i class="fas fa-hands-clapping mr-2"></i>Congratulate ${achievement.student}
+                        </button>
+                    </div>
+                </div>
+            `;
+
+        document
+          .getElementById("achievement-details-modal")
+          .classList.add("show");
+
+        // Add event listener to congratulate button in details modal
+        document
+          .querySelector(".congratulate-from-details")
+          .addEventListener("click", function () {
+            document
+              .getElementById("achievement-details-modal")
+              .classList.remove("show");
+            congratulateStudent(achievementId);
+          });
+      }
+
+      // Function to congratulate a student
+      function congratulateStudent(achievementId) {
+        const achievement = communityData.achievements.find(
+          (a) => a.id === achievementId
+        );
+        if (!achievement) return;
+
+        showMessage(
+          `Congratulations sent to ${achievement.student} for their achievement: ${achievement.achievement}!`,
+          "success"
+        );
+      }
+
+      // Function to render committees
+      function renderCommittees() {
+        const container = document.getElementById("my-committees-container");
+        const userCommittees = communityData.userCommittees;
+
+        if (userCommittees.length === 0) {
+          container.innerHTML = `
+                    <div class="text-center py-8">
+                        <i class="fas fa-users text-4xl text-slate-500 mb-4"></i>
+                        <p class="text-slate-400">You are not a member of any committees yet</p>
+                    </div>
+                `;
+          return;
+        }
+
+        let committeesHTML = "";
+
+        userCommittees.forEach((committee) => {
+          let committeeName = "";
+          let committeeDescription = "";
+
+          if (committee === "cultural") {
+            committeeName = "Cultural Committee";
+            committeeDescription =
+              "Organizing cultural events, festivals, and performances";
+          } else if (committee === "sports") {
+            committeeName = "Sports Committee";
+            committeeDescription =
+              "Managing sports events, teams, and facilities";
+          } else if (committee === "academic") {
+            committeeName = "Academic Committee";
+            committeeDescription =
+              "Organizing seminars, workshops, and academic events";
+          }
+
+          committeesHTML += `
+                    <div class="committee-card">
+                        <div class="flex justify-between items-start mb-3">
+                            <h4 class="font-bold text-lg">${committeeName}</h4>
+                            <span class="bg-white text-purple-700 text-xs font-bold px-2 py-1 rounded-full">Member</span>
+                        </div>
+                        <p class="text-sm text-slate-400 mb-4">${committeeDescription}</p>
+                        <div class="flex space-x-2">
+                            <button class="view-committee bg-blue-600 text-white text-sm font-semibold py-1 px-3 rounded hover:bg-blue-700 transition" data-committee="${committee}">
+                                <i class="fas fa-eye mr-1"></i> View
+                            </button>
+                            <button class="leave-committee bg-red-600 text-white text-sm font-semibold py-1 px-3 rounded hover:bg-red-700 transition" data-committee="${committee}">
+                                <i class="fas fa-sign-out-alt mr-1"></i> Leave
+                            </button>
+                        </div>
+                    </div>
+                `;
+        });
+
+        container.innerHTML = committeesHTML;
+
+        // Add event listeners
+        document.querySelectorAll(".view-committee").forEach((button) => {
+          button.addEventListener("click", function () {
+            const committee = this.dataset.committee;
+            viewCommitteeDetails(committee);
+          });
+        });
+
+        document.querySelectorAll(".leave-committee").forEach((button) => {
+          button.addEventListener("click", function () {
+            const committee = this.dataset.committee;
+            leaveCommittee(committee);
+          });
+        });
+      }
+
+      // Function to view committee details
+      function viewCommitteeDetails(committee) {
+        let committeeName = "";
+        let committeeDescription = "";
+        let coordinator = "";
+
+        if (committee === "cultural") {
+          committeeName = "Cultural Committee";
+          committeeDescription =
+            "The Cultural Committee is responsible for organizing all cultural events on campus, including festivals, performances, and competitions. We work to promote cultural diversity and provide platforms for students to showcase their talents.";
+          coordinator = "Rohan Singh";
+        } else if (committee === "sports") {
+          committeeName = "Sports Committee";
+          committeeDescription =
+            "The Sports Committee manages all sports-related activities, including inter-hostel tournaments, team practices, and facility maintenance. We promote physical fitness and sportsmanship among students.";
+          coordinator = "Anjali Sharma";
+        } else if (committee === "academic") {
+          committeeName = "Academic Committee";
+          committeeDescription =
+            "The Academic Committee organizes seminars, workshops, and academic competitions to enhance the learning experience. We facilitate knowledge sharing and academic excellence among students.";
+          coordinator = "Vikram Patel";
+        }
+
+        showMessage(
+          `Viewing ${committeeName} details. Coordinator: ${coordinator}`,
+          "info"
+        );
+      }
+
+      // Function to leave a committee
+      function leaveCommittee(committee) {
+        const index = communityData.userCommittees.indexOf(committee);
+        if (index > -1) {
+          communityData.userCommittees.splice(index, 1);
+          showMessage(`You have left the ${committee} committee`, "info");
+          renderCommittees();
+        }
+      }
+
+      // Function to join a committee
+      function joinCommittee(committee) {
+        if (!communityData.userCommittees.includes(committee)) {
+          communityData.userCommittees.push(committee);
+          showMessage(
+            `Successfully joined the ${committee} committee`,
+            "success"
+          );
+          renderCommittees();
+        } else {
+          showMessage(
+            `You are already a member of the ${committee} committee`,
+            "info"
+          );
+        }
+      }
+
+      // Function to render events
+      function renderEvents() {
+        const container = document.getElementById("events-container");
+        let events = communityData.events;
+
+        // Apply filter if needed
+        if (currentFilter !== "all") {
+          events = events.filter((event) => event.status === currentFilter);
+        }
+
+        if (events.length === 0) {
+          container.innerHTML = `
+                    <div class="text-center py-8">
+                        <i class="fas fa-calendar-day text-4xl text-slate-500 mb-4"></i>
+                        <p class="text-slate-400">No ${
+                          currentFilter === "all" ? "" : currentFilter
+                        } events found</p>
+                    </div>
+                `;
+          return;
+        }
+
+        let eventsHTML = "";
+
+        events.forEach((event) => {
+          const startDate = formatDateTime(event.start);
+          const endDate = formatDateTime(event.end);
+          let statusBadge = "";
+
+          if (event.status === "upcoming") {
+            statusBadge = `<span class="status-badge status-pending">Upcoming</span>`;
+          } else if (event.status === "ongoing") {
+            statusBadge = `<span class="status-badge status-active">Ongoing</span>`;
+          } else if (event.status === "past") {
+            statusBadge = `<span class="status-badge" style="background-color: #e5e7eb; color: #374151;">Past</span>`;
+          }
+
+          eventsHTML += `
+                    <div class="event-card">
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
+                            <div class="mb-4 md:mb-0">
+                                <div class="flex items-center mb-2">
+                                    <h4 class="font-bold text-white text-lg">${
+                                      event.name
+                                    }</h4>
+                                    ${statusBadge}
+                                </div>
+                                <div class="text-sm text-slate-300 mb-2">
+                                    ${event.description.substring(0, 150)}...
+                                </div>
+                                <div class="text-sm text-slate-400">
+                                    <span class="mr-4"><i class="fas fa-calendar mr-1"></i> ${startDate} - ${endDate}</span>
+                                    <span class="mr-4"><i class="fas fa-map-marker-alt mr-1"></i> ${
+                                      event.location
+                                    }</span>
+                                    <span class="mr-4"><i class="fas fa-users mr-1"></i> ${
+                                      event.participants
+                                    } participants</span>
+                                </div>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button class="view-event bg-blue-600 text-white text-sm font-semibold py-1 px-3 rounded hover:bg-blue-700 transition" data-id="${
+                                  event.id
+                                }">
+                                    <i class="fas fa-eye mr-1"></i> Details
+                                </button>
+                                <button class="register-event bg-green-600 text-white text-sm font-semibold py-1 px-3 rounded hover:bg-green-700 transition" data-id="${
+                                  event.id
+                                }">
+                                    <i class="fas fa-user-plus mr-1"></i> Register
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+        });
+
+        container.innerHTML = eventsHTML;
+
+        // Add event listeners
+        document.querySelectorAll(".view-event").forEach((button) => {
+          button.addEventListener("click", function () {
+            const eventId = this.dataset.id;
+            viewEventDetails(eventId);
+          });
+        });
+
+        document.querySelectorAll(".register-event").forEach((button) => {
+          button.addEventListener("click", function () {
+            const eventId = this.dataset.id;
+            registerForEvent(eventId);
+          });
+        });
+      }
+
+      // Function to view event details
+      function viewEventDetails(eventId) {
+        const event = communityData.events.find((e) => e.id === eventId);
+        if (!event) return;
+
+        const startDate = formatDateTime(event.start);
+        const endDate = formatDateTime(event.end);
+        let statusBadge = "";
+
+        if (event.status === "upcoming") {
+          statusBadge = `<span class="status-badge status-pending">Upcoming</span>`;
+        } else if (event.status === "ongoing") {
+          statusBadge = `<span class="status-badge status-active">Ongoing</span>`;
+        } else if (event.status === "past") {
+          statusBadge = `<span class="status-badge" style="background-color: #e5e7eb; color: #374151;">Past</span>`;
+        }
+
+        document.getElementById("event-details-title").textContent = event.name;
+        document.getElementById("event-details-content").innerHTML = `
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        ${statusBadge}
+                        <span class="text-slate-400 text-sm">${
+                          event.participants
+                        } participants</span>
+                    </div>
+                    <div class="text-slate-300">
+                        ${event.description}
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-slate-400 text-sm font-medium mb-1">Start Date & Time</label>
+                            <p class="text-white">${startDate}</p>
+                        </div>
+                        <div>
+                            <label class="block text-slate-400 text-sm font-medium mb-1">End Date & Time</label>
+                            <p class="text-white">${endDate}</p>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-slate-400 text-sm font-medium mb-1">Location</label>
+                        <p class="text-white">${event.location}</p>
+                    </div>
+                    <div>
+                        <label class="block text-slate-400 text-sm font-medium mb-1">Organizing Committee</label>
+                        <p class="text-white">${
+                          event.committee.charAt(0).toUpperCase() +
+                          event.committee.slice(1)
+                        } Committee</p>
+                    </div>
+                    <div class="flex justify-end mt-4">
+                        <button class="register-from-details bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition" data-id="${
+                          event.id
+                        }">
+                            <i class="fas fa-user-plus mr-2"></i>Register for this Event
+                        </button>
+                    </div>
+                </div>
+            `;
+
+        document.getElementById("event-details-modal").classList.add("show");
+
+        // Add event listener to register button in details modal
+        document
+          .querySelector(".register-from-details")
+          .addEventListener("click", function () {
+            document
+              .getElementById("event-details-modal")
+              .classList.remove("show");
+            registerForEvent(eventId);
+          });
+      }
+
+      // Function to register for an event
+      function registerForEvent(eventId) {
+        const event = communityData.events.find((e) => e.id === eventId);
+        if (!event) return;
+
+        currentEventId = eventId;
+
+        document.getElementById(
+          "event-registration-title"
+        ).textContent = `Register for ${event.name}`;
+        document.getElementById("event-registration-info").innerHTML = `
+                <div class="bg-slate-800 rounded-lg p-4 mb-4">
+                    <h4 class="font-bold text-white">${event.name}</h4>
+                    <p class="text-slate-300 text-sm mt-1">${formatDateTime(
+                      event.start
+                    )} - ${formatDateTime(event.end)}</p>
+                    <p class="text-slate-300 text-sm">Location: ${
+                      event.location
+                    }</p>
+                </div>
+            `;
+
+        // Pre-fill form with user data
+        document.getElementById("registration-name").value = "Piyush Wali";
+        document.getElementById("registration-id").value = "22BHI10111";
+        document.getElementById("registration-email").value =
+          "piyushwali2022@vitbhopal.ac.in";
+        document.getElementById("registration-phone").value = "";
+
+        document
+          .getElementById("event-registration-modal")
+          .classList.add("show");
+      }
+
+      // Function to submit event registration
+      function submitRegistration() {
+        const name = document.getElementById("registration-name").value;
+        const studentId = document.getElementById("registration-id").value;
+        const email = document.getElementById("registration-email").value;
+        const phone = document.getElementById("registration-phone").value;
+        const requirements = document.getElementById(
+          "registration-requirements"
+        ).value;
+
+        if (!name || !studentId || !email || !phone) {
+          showMessage("Please fill all required fields", "error");
+          return;
+        }
+
+        const event = communityData.events.find((e) => e.id === currentEventId);
+        if (event) {
+          event.participants += 1;
+          showMessage(
+            `Successfully registered for ${event.name}! You'll receive a confirmation email shortly.`,
+            "success"
+          );
+          document
+            .getElementById("event-registration-modal")
+            .classList.remove("show");
+
+          // Reset form
+          document.getElementById("registration-phone").value = "";
+          document.getElementById("registration-requirements").value = "";
+
+          // Refresh the events if we're on that tab
+          if (currentTab === "community-events") {
+            renderEvents();
+          }
+        }
+      }
+
+      // Initialize the application
+      function init() {
+        // Render initial content
+        renderTabSpecificContent();
+
+        // Tab navigation
+        document.querySelectorAll(".tab-button").forEach((button) => {
+          button.addEventListener("click", function () {
+            const tabId = this.dataset.tab;
+            switchTab(tabId);
+          });
+        });
+
+        // Filter buttons
+        document.querySelectorAll(".filter-btn").forEach((button) => {
+          button.addEventListener("click", function () {
+            // Update active filter button
+            document.querySelectorAll(".filter-btn").forEach((btn) => {
+              btn.classList.remove("bg-blue-600");
+              btn.classList.add("bg-slate-700");
+            });
+            this.classList.remove("bg-slate-700");
+            this.classList.add("bg-blue-600");
+
+            currentFilter = this.dataset.filter;
+            renderTabSpecificContent();
+          });
+        });
+
+        // Create post button
+        document
+          .getElementById("create-post-btn")
+          .addEventListener("click", function () {
+            document.getElementById("create-post-modal").classList.add("show");
+          });
+
+        // Close create post modal
+        document
+          .getElementById("close-create-post-modal")
+          .addEventListener("click", function () {
+            document
+              .getElementById("create-post-modal")
+              .classList.remove("show");
+          });
+
+        // Cancel post button
+        document
+          .getElementById("cancel-post")
+          .addEventListener("click", function () {
+            document
+              .getElementById("create-post-modal")
+              .classList.remove("show");
+          });
+
+        // Submit post button
+        document
+          .getElementById("submit-post")
+          .addEventListener("click", function () {
+            const category = document.getElementById("post-category").value;
+            const title = document.getElementById("post-title").value;
+            const content = document.getElementById("post-content").value;
+
+            if (!title || !content) {
+              showMessage("Please fill all required fields", "error");
+              return;
+            }
+
+            // In a real application, this would make an API call
+            const newPost = {
+              id: `FP${Date.now()}`,
+              title: title,
+              content: content,
+              author: "Piyush Wali",
+              authorId: "22BHI10111",
+              category: category,
+              date: new Date().toISOString(),
+              replies: [],
+              likes: 0,
+            };
+
+            communityData.forumPosts.unshift(newPost);
+            showMessage(
+              `Forum post "${title}" created successfully`,
+              "success"
+            );
+            document
+              .getElementById("create-post-modal")
+              .classList.remove("show");
+
+            // Reset form
+            document.getElementById("post-title").value = "";
+            document.getElementById("post-content").value = "";
+
+            // Refresh the forum posts
+            renderForumPosts();
+          });
+
+        // Close post details modal
+        document
+          .getElementById("close-post-details-modal")
+          .addEventListener("click", function () {
+            document
+              .getElementById("post-details-modal")
+              .classList.remove("show");
+          });
+
+        // Close reply modal
+        document
+          .getElementById("close-reply-modal")
+          .addEventListener("click", function () {
+            document.getElementById("reply-modal").classList.remove("show");
+          });
+
+        // Cancel reply button
+        document
+          .getElementById("cancel-reply")
+          .addEventListener("click", function () {
+            document.getElementById("reply-modal").classList.remove("show");
+          });
+
+        // Submit reply button
+        document
+          .getElementById("submit-reply")
+          .addEventListener("click", submitReply);
+
+        // Report item button
+        document
+          .getElementById("report-item-btn")
+          .addEventListener("click", function () {
+            document.getElementById("report-item-modal").classList.add("show");
+          });
+
+        // Close report item modal
+        document
+          .getElementById("close-report-item-modal")
+          .addEventListener("click", function () {
+            document
+              .getElementById("report-item-modal")
+              .classList.remove("show");
+          });
+
+        // Cancel item button
+        document
+          .getElementById("cancel-item")
+          .addEventListener("click", function () {
+            document
+              .getElementById("report-item-modal")
+              .classList.remove("show");
+          });
+
+        // Submit item button
+        document
+          .getElementById("submit-item")
+          .addEventListener("click", function () {
+            const itemType = document.querySelector(
+              'input[name="item-type"]:checked'
+            ).value;
+            const name = document.getElementById("item-name").value;
+            const description =
+              document.getElementById("item-description").value;
+            const location = document.getElementById("item-location").value;
+            const date = document.getElementById("item-date").value;
+
+            if (!name || !description || !location || !date) {
+              showMessage("Please fill all required fields", "error");
+              return;
+            }
+
+            // In a real application, this would make an API call
+            const newItem = {
+              id: `LF${Date.now()}`,
+              type: itemType,
+              name: name,
+              description: description,
+              location: location,
+              date: date,
+              reportedBy: "Piyush Wali",
+              contact: "piyushwali2022@vitbhopal.ac.in",
+              status: "open",
+            };
+
+            communityData.lostFoundItems.unshift(newItem);
+            showMessage(
+              `${
+                itemType === "lost" ? "Lost" : "Found"
+              } item "${name}" reported successfully`,
+              "success"
+            );
+            document
+              .getElementById("report-item-modal")
+              .classList.remove("show");
+
+            // Reset form
+            document.getElementById("item-name").value = "";
+            document.getElementById("item-description").value = "";
+            document.getElementById("item-location").value = "";
+            document.getElementById("item-date").value = "";
+
+            // Refresh the lost & found items
+            renderLostFoundItems();
+          });
+
+        // Close item details modal
+        document
+          .getElementById("close-item-details-modal")
+          .addEventListener("click", function () {
+            document
+              .getElementById("item-details-modal")
+              .classList.remove("show");
+          });
+
+        // Close notice details modal
+        document
+          .getElementById("close-notice-details-modal")
+          .addEventListener("click", function () {
+            document
+              .getElementById("notice-details-modal")
+              .classList.remove("show");
+          });
+
+        // Close achievement details modal
+        document
+          .getElementById("close-achievement-details-modal")
+          .addEventListener("click", function () {
+            document
+              .getElementById("achievement-details-modal")
+              .classList.remove("show");
+          });
+
+        // Close event details modal
+        document
+          .getElementById("close-event-details-modal")
+          .addEventListener("click", function () {
+            document
+              .getElementById("event-details-modal")
+              .classList.remove("show");
+          });
+
+        // Close event registration modal
+        document
+          .getElementById("close-event-registration-modal")
+          .addEventListener("click", function () {
+            document
+              .getElementById("event-registration-modal")
+              .classList.remove("show");
+          });
+
+        // Cancel registration button
+        document
+          .getElementById("cancel-registration")
+          .addEventListener("click", function () {
+            document
+              .getElementById("event-registration-modal")
+              .classList.remove("show");
+          });
+
+        // Submit registration button
+        document
+          .getElementById("submit-registration")
+          .addEventListener("click", submitRegistration);
+
+        // Create event button
+        document
+          .getElementById("create-event-btn")
+          .addEventListener("click", function () {
+            document.getElementById("create-event-modal").classList.add("show");
+          });
+
+        // Close create event modal
+        document
+          .getElementById("close-create-event-modal")
+          .addEventListener("click", function () {
+            document
+              .getElementById("create-event-modal")
+              .classList.remove("show");
+          });
+
+        // Cancel event button
+        document
+          .getElementById("cancel-event")
+          .addEventListener("click", function () {
+            document
+              .getElementById("create-event-modal")
+              .classList.remove("show");
+          });
+
+        // Submit event button
+        document
+          .getElementById("submit-event")
+          .addEventListener("click", function () {
+            const name = document.getElementById("event-name").value;
+            const description =
+              document.getElementById("event-description").value;
+            const start = document.getElementById("event-start").value;
+            const end = document.getElementById("event-end").value;
+            const location = document.getElementById("event-location").value;
+            const committee = document.getElementById("event-committee").value;
+
+            if (!name || !description || !start || !end || !location) {
+              showMessage("Please fill all required fields", "error");
+              return;
+            }
+
+            // In a real application, this would make an API call
+            const newEvent = {
+              id: `E${Date.now()}`,
+              name: name,
+              description: description,
+              start: start,
+              end: end,
+              location: location,
+              committee: committee,
+              status: "upcoming",
+              participants: 0,
+              registrationLink: "https://forms.vitbhopal.ac.in",
+            };
+
+            communityData.events.unshift(newEvent);
+            showMessage(`Event "${name}" created successfully`, "success");
+            document
+              .getElementById("create-event-modal")
+              .classList.remove("show");
+
+            // Reset form
+            document.getElementById("event-name").value = "";
+            document.getElementById("event-description").value = "";
+            document.getElementById("event-start").value = "";
+            document.getElementById("event-end").value = "";
+            document.getElementById("event-location").value = "";
+
+            // Refresh the events
+            renderEvents();
+          });
+
+        // Join committee buttons
+        document.querySelectorAll(".join-committee").forEach((button) => {
+          button.addEventListener("click", function () {
+            const committee = this.dataset.committee;
+            joinCommittee(committee);
+          });
+        });
+
+        // Forum category selection
+        document.querySelectorAll("[data-category]").forEach((category) => {
+          category.addEventListener("click", function () {
+            const categoryName = this.dataset.category;
+            showMessage(
+              `Filtering forum posts by ${categoryName} category`,
+              "info"
+            );
+          });
+        });
+
+        // Notice board selection
+        document.querySelectorAll("[data-board]").forEach((board) => {
+          board.addEventListener("click", function () {
+            const boardName = this.dataset.board;
+            showMessage(`Viewing ${boardName} notices`, "info");
+          });
+        });
+
+        // Logout button
+        document
+          .getElementById("logout-btn")
+          .addEventListener("click", function () {
+            showMessage("Logged out successfully", "info");
+          });
+
+        // Notification icon
+        document
+          .getElementById("notification-icon")
+          .addEventListener("click", function () {
+            showMessage("Notifications panel opened", "info");
+          });
+      }
+
+      // Initialize when DOM is loaded
+      document.addEventListener("DOMContentLoaded", init);
+    </script>
+    <script src="auth_guard.js"></script>
+</body>
+</html>
+

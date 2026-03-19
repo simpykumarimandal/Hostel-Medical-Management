@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HMS | Food Order Service</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style> @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"); body { font-family: "Inter", sans-serif; color: #d1d5db; /* gray-300 */ } .active-nav-link { background-color: #374151; /* gray-700 */ color: white; } .bg-card { background-color: #374151; /* gray-700 */ } .message-box { animation: slideIn 0.5s forwards; } @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } } .food-card { transition: transform 0.2s ease-in-out; } .food-card:hover { transform: translateY(-2px); } .category-btn.active { background-color: #3b82f6; color: white; } </style> <style> .sidebar { transition: transform 0.25s ease-in-out; } .sidebar-collapsed .sidebar { transform: translateX(-110%); } .main-content { transition: margin-left 0.25s ease-in-out; } .sidebar-collapsed .main-content { margin-left: 0 !important; } @media (max-width: 768px) { .sidebar { transform: translateX(-110%); } .sidebar-open .sidebar { transform: translateX(0); } } </style></head>
+  <body class="bg-gray-900 flex flex-col md:flex-row min-h-screen">
+
+    <!-- Sidebar -->
+    <aside
+      class="sidebar w-full md:w-64 bg-gray-950 text-white p-6 flex flex-col items-center md:items-start space-y-8 shadow-2xl">
+      <div class="flex items-center space-x-2 mb-4">
+        <i class="fas fa-hospital text-xl text-blue-400"></i>
+        <h1 class="text-xl font-bold">HMS</h1>
+        <span class="text-sm text-gray-400 ml-2">Student Mode</span>
+      </div>
+      <nav class="w-full">
+  <ul class="space-y-2">
+    <li>
+      <a href="demo.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-chart-line mr-3"></i>
+        <span class="font-medium">Dashboard</span>
+      </a>
+    </li>
+    <li>
+      <a href="ambulance.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-truck-medical mr-3"></i>
+        <span class="font-medium">Ambulance</span>
+      </a>
+    </li>
+    <li>
+      <a href="doctors.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-user-doctor mr-3"></i>
+        <span class="font-medium">Doctors</span>
+      </a>
+    </li>
+    <li>
+      <a href="medicine_order.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-pills mr-3"></i>
+        <span class="font-medium">Pharmacy</span>
+      </a>
+    </li>
+    <li>
+      <a href="medicine_reminder.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bell mr-3"></i>
+        <span class="font-medium">Medicine Reminder</span>
+      </a>
+    </li>
+    <li>
+      <a href="symptoms_checker.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-stethoscope mr-3"></i>
+        <span class="font-medium">Symptoms Checker</span>
+      </a>
+    </li>
+    <li>
+      <a href="lab_tests.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-vial-circle-check mr-3"></i>
+        <span class="font-medium">Lab Tests</span>
+      </a>
+    </li>
+    <li>
+      <a href="emergency_requests.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-hand-holding-medical mr-3"></i>
+        <span class="font-medium">Emergency Requests</span>
+      </a>
+    </li>
+    <li>
+      <a href="sos.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-sos mr-3"></i>
+        <span class="font-medium">SOS</span>
+      </a>
+    </li>
+    <li>
+      <a href="electronic_health_records.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-file-medical mr-3"></i>
+        <span class="font-medium">Health Records</span>
+      </a>
+    </li>
+    <li>
+      <a href="health_insurance.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-shield-heart mr-3"></i>
+        <span class="font-medium">Health Insurance</span>
+      </a>
+    </li>
+    <li>
+      <a href="reports_and_analytics.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-chart-pie mr-3"></i>
+        <span class="font-medium">Reports & Analytics</span>
+      </a>
+    </li>
+    <li>
+      <a href="restocking.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-box-open mr-3"></i>
+        <span class="font-medium">Inventory</span>
+      </a>
+    </li>
+    <li>
+      <a href="studentrequest.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-cash-register mr-3"></i>
+        <span class="font-medium">Student Requests</span>
+      </a>
+    </li>
+    <li>
+      <a href="student_transport.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bus mr-3"></i>
+        <span class="font-medium">Student Transport</span>
+      </a>
+    </li>
+    <li>
+      <a href="transport_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-route mr-3"></i>
+        <span class="font-medium">Transport Management</span>
+      </a>
+    </li>
+    <li>
+      <a href="room_management.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bed mr-3"></i>
+        <span class="font-medium">Room Management</span>
+      </a>
+    </li>
+    <li>
+      <a href="room_sanitation.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-spray-can-sparkles mr-3"></i>
+        <span class="font-medium">Room Sanitation</span>
+      </a>
+    </li>
+    <li>
+      <a href="mess_menu.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-utensils mr-3"></i>
+        <span class="font-medium">Mess Menu</span>
+      </a>
+    </li>
+    <li>
+      <a href="mess_food_order_service.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-bowl-food mr-3"></i>
+        <span class="font-medium">Mess Food Order</span>
+      </a>
+    </li>
+    <li>
+      <a href="laundry_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-shirt mr-3"></i>
+        <span class="font-medium">Laundry</span>
+      </a>
+    </li>
+    <li>
+      <a href="leave_and_outing.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-door-open mr-3"></i>
+        <span class="font-medium">Leave & Outing</span>
+      </a>
+    </li>
+    <li>
+      <a href="vit_bhopal_community.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-users mr-3"></i>
+        <span class="font-medium">VIT Community</span>
+      </a>
+    </li>
+    <li>
+      <a href="parent_notification.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-comments mr-3"></i>
+        <span class="font-medium">Parent Notification</span>
+      </a>
+    </li>
+    <li>
+      <a href="payment_gateway.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-credit-card mr-3"></i>
+        <span class="font-medium">Payment Gateway</span>
+      </a>
+    </li>
+    <li>
+      <a href="complaint_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-circle-exclamation mr-3"></i>
+        <span class="font-medium">Complaints</span>
+      </a>
+    </li>
+    <li>
+      <a href="exam_management_system.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-clipboard-list mr-3"></i>
+        <span class="font-medium">Exam Management</span>
+      </a>
+    </li>
+    <li>
+      <a href="local_hospital_network.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-hospital mr-3"></i>
+        <span class="font-medium">Local Hospitals</span>
+      </a>
+    </li>
+    <li>
+      <a href="medical_camps.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-hand-holding-heart mr-3"></i>
+        <span class="font-medium">Medical Camps</span>
+      </a>
+    </li>
+    <li>
+      <a href="virtual_consultation.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-video mr-3"></i>
+        <span class="font-medium">Virtual Consultation</span>
+      </a>
+    </li>
+    <li>
+      <a href="wearables.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-watch-fitness mr-3"></i>
+        <span class="font-medium">Wearables</span>
+      </a>
+    </li>
+    <li>
+      <a href="biometric.html" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-800 transition duration-200">
+        <i class="fa-solid fa-fingerprint mr-3"></i>
+        <span class="font-medium">Biometric</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+      <div class="mt-auto w-full">
+        <a href="/index.html" data-logout="true"
+          class="flex items-center justify-center w-full px-4 py-3 rounded-lg bg-red-600 hover:bg-red-700 transition-colors duration-200"
+        >
+          <i class="fa-solid fa-right-from-bracket mr-2"></i>
+          <span class="font-semibold">Log Out</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content flex-1 p-8 overflow-y-auto bg-gray-800">
+      <!-- Top Header -->
+      <header
+        class="flex items-center justify-between text-sm text-gray-400 mb-8"
+      >
+        <div id="date-time-display"></div>
+        <div class="flex items-center space-x-6">
+          <i
+            class="fa-solid fa-bell text-xl hover:text-white transition duration-200"
+          ></i>
+          <div class="flex items-center space-x-2">
+            <i class="fa-solid fa-user-circle text-xl"></i>
+            <span>Student Mode</span>
+          </div>
+          <div class="flex items-center space-x-2 cursor-pointer">
+            <i class="fa-solid fa-globe text-xl"></i>
+            <span>English</span>
+            <i class="fa-solid fa-chevron-down text-xs"></i>
+          </div>
+        </div>
+      </header>
+
+      <!-- Page Title & Actions -->
+      <h2 class="text-3xl font-bold text-white mb-1">Food Order Service</h2>
+      <p class="text-gray-400 mb-8">
+        Order food from college mess to be delivered to your room when you're
+        unwell.
+      </p>
+
+      <!-- Food Menu and Cart Sections -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Food Menu Section -->
+        <div class="lg:col-span-2 bg-card rounded-xl shadow-lg p-6">
+          <div class="flex justify-between items-center mb-6">
+            <h3 class="text-xl font-bold text-white">Today's Menu</h3>
+            <div class="text-sm text-gray-400">
+              <i class="fa-solid fa-clock mr-1"></i>
+              Serving: 7:00 AM - 9:00 PM
+            </div>
+          </div>
+
+          <!-- Food Categories -->
+          <div class="flex flex-wrap gap-2 mb-6">
+            <button
+              class="category-btn active bg-gray-600 hover:bg-gray-500 text-white px-4 py-2 rounded-lg transition duration-200"
+              data-category="all"
+            >
+              All Items
+            </button>
+            <button
+              class="category-btn bg-gray-600 hover:bg-gray-500 text-white px-4 py-2 rounded-lg transition duration-200"
+              data-category="breakfast"
+            >
+              Breakfast
+            </button>
+            <button
+              class="category-btn bg-gray-600 hover:bg-gray-500 text-white px-4 py-2 rounded-lg transition duration-200"
+              data-category="lunch"
+            >
+              Lunch
+            </button>
+            <button
+              class="category-btn bg-gray-600 hover:bg-gray-500 text-white px-4 py-2 rounded-lg transition duration-200"
+              data-category="dinner"
+            >
+              Dinner
+            </button>
+            <button
+              class="category-btn bg-gray-600 hover:bg-gray-500 text-white px-4 py-2 rounded-lg transition duration-200"
+              data-category="beverages"
+            >
+              Beverages
+            </button>
+            <button
+              class="category-btn bg-gray-600 hover:bg-gray-500 text-white px-4 py-2 rounded-lg transition duration-200"
+              data-category="sick-diet"
+            >
+              Sick Diet
+            </button>
+          </div>
+
+          <!-- Food Items Grid -->
+          <div
+            id="food-items-grid"
+            class="grid grid-cols-1 md:grid-cols-2 gap-4"
+          >
+            <!-- Food items will be injected here by JavaScript -->
+          </div>
+        </div>
+
+        <!-- Order Cart & Delivery Section -->
+        <div class="space-y-6">
+          <!-- Order Cart -->
+          <div class="bg-card rounded-xl shadow-lg p-6">
+            <h3 class="text-xl font-bold text-white mb-4">Your Order</h3>
+            <div
+              id="cart-items"
+              class="space-y-3 mb-4 max-h-64 overflow-y-auto"
+            >
+              <!-- Cart items will be injected here by JavaScript -->
+              <p id="empty-cart-message" class="text-gray-500 text-center py-4">
+                Your cart is empty
+              </p>
+            </div>
+
+            <div class="border-t border-gray-600 pt-4 space-y-2">
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-400">Subtotal</span>
+                <span id="cart-subtotal" class="text-white">₹0.00</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-400">Delivery Charge</span>
+                <span id="delivery-charge" class="text-white">₹0.00</span>
+              </div>
+              <div
+                class="flex justify-between font-semibold text-lg border-t border-gray-600 pt-2"
+              >
+                <span class="text-white">Total</span>
+                <span id="cart-total" class="text-white">₹0.00</span>
+              </div>
+            </div>
+
+            <button
+              id="checkout-btn"
+              class="w-full bg-blue-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-blue-700 transition duration-200 shadow-md flex items-center justify-center mt-4 disabled:bg-gray-600 disabled:cursor-not-allowed"
+              disabled
+            >
+              <i class="fa-solid fa-credit-card mr-2"></i>
+              Proceed to Checkout
+            </button>
+          </div>
+
+          <!-- Delivery Information -->
+          <div class="bg-card rounded-xl shadow-lg p-6">
+            <h3 class="text-xl font-bold text-white mb-4">
+              Delivery Information
+            </h3>
+            <form id="delivery-form" class="space-y-4">
+              <div>
+                <label
+                  for="hostel-block"
+                  class="block text-sm font-medium text-gray-400"
+                  >Hostel Block</label
+                >
+                <select
+                  id="hostel-block"
+                  name="hostel-block"
+                  class="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-lg p-2 text-white focus:ring-blue-500 focus:border-blue-500"
+                  required
+                >
+                  <option value="" disabled selected>
+                    Select your hostel block
+                  </option>
+                  <option value="A">Block 1</option>
+                  <option value="B">Block 2</option>
+                  <option value="C">Block 3</option>
+                  <option value="D">Block 4</option>
+                </select>
+              </div>
+
+              <div>
+                <label
+                  for="room-number"
+                  class="block text-sm font-medium text-gray-400"
+                  >Room Number</label
+                >
+                <input
+                  type="text"
+                  id="room-number"
+                  name="room-number"
+                  class="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-lg p-2 text-white focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="e.g., 205"
+                  required
+                />
+              </div>
+
+              <div>
+                <label
+                  for="special-instructions"
+                  class="block text-sm font-medium text-gray-400"
+                  >Special Instructions</label
+                >
+                <textarea
+                  id="special-instructions"
+                  name="special-instructions"
+                  rows="3"
+                  class="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-lg p-2 text-white focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="Any special requests or dietary restrictions..."
+                ></textarea>
+              </div>
+
+              <div>
+                <label class="flex items-center">
+                  <input
+                    type="checkbox"
+                    id="sick-student"
+                    class="rounded bg-gray-700 border-gray-600 text-blue-500 focus:ring-blue-500 mr-2"
+                    checked
+                  />
+                  <span class="text-sm text-gray-300"
+                    >I am ordering because I'm unwell</span
+                  >
+                </label>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Order History Section -->
+      <div class="bg-card rounded-xl shadow-lg p-6 mt-6">
+        <h3 class="text-xl font-bold text-white mb-4">Order History</h3>
+        <div id="order-history" class="space-y-4">
+          <!-- Order history will be injected here by JavaScript -->
+          <p id="empty-order-message" class="text-gray-500 text-center py-4">
+            No previous orders found.
+          </p>
+        </div>
+      </div>
+    </main>
+
+    <!-- Message Box for notifications -->
+    <div
+      id="message-box"
+      class="fixed bottom-4 right-4 bg-gray-700 text-white p-4 rounded-lg shadow-lg hidden message-box"
+    >
+      <p id="message-text"></p>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div
+      id="checkout-modal"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50"
+    >
+      <div class="bg-gray-800 rounded-xl p-6 w-full max-w-md mx-4">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-xl font-bold text-white">Confirm Your Order</h3>
+          <button id="close-modal" class="text-gray-400 hover:text-white">
+            <i class="fa-solid fa-times text-xl"></i>
+          </button>
+        </div>
+
+        <div id="order-summary" class="space-y-3 mb-4">
+          <!-- Order summary will be injected here -->
+        </div>
+
+        <div class="border-t border-gray-600 pt-4 mb-4">
+          <div class="flex justify-between font-semibold text-lg">
+            <span class="text-white">Total Amount</span>
+            <span id="modal-total" class="text-white">₹0.00</span>
+          </div>
+        </div>
+
+        <div class="flex space-x-3">
+          <button
+            id="cancel-order"
+            class="flex-1 bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition duration-200"
+          >
+            Cancel
+          </button>
+          <button
+            id="confirm-order"
+            class="flex-1 bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition duration-200"
+          >
+            <i class="fa-solid fa-check mr-2"></i>
+            Confirm Order
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // JavaScript to display the current date and time
+      function updateDateTime() {
+        const now = new Date();
+        const options = {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        };
+        const formattedDate = now.toLocaleDateString("en-US", options);
+        document.getElementById("date-time-display").textContent =
+          formattedDate;
+      }
+      updateDateTime();
+      setInterval(updateDateTime, 60000);
+
+      // Food menu data
+      const foodMenu = {
+        breakfast: [
+          {
+            id: 1,
+            name: "Masala Dosa",
+            price: 40,
+            description: "Crispy rice crepe with potato filling",
+            category: "breakfast",
+            isVeg: true,
+            available: true,
+          },
+          {
+            id: 2,
+            name: "Poha",
+            price: 25,
+            description: "Flattened rice with vegetables",
+            category: "breakfast",
+            isVeg: true,
+            available: true,
+          },
+          {
+            id: 3,
+            name: "Sandwich",
+            price: 35,
+            description: "Vegetable sandwich with chutney",
+            category: "breakfast",
+            isVeg: true,
+            available: true,
+          },
+          {
+            id: 4,
+            name: "Idli Sambar",
+            price: 30,
+            description: "Steamed rice cakes with lentil soup",
+            category: "breakfast",
+            isVeg: true,
+            available: true,
+          },
+        ],
+        lunch: [
+          {
+            id: 5,
+            name: "Vegetable Thali",
+            price: 60,
+            description: "Complete meal with 3 vegetables, dal, rice, roti",
+            category: "lunch",
+            isVeg: true,
+            available: true,
+          },
+          {
+            id: 6,
+            name: "Chicken Curry",
+            price: 80,
+            description: "Spicy chicken curry with rice",
+            category: "lunch",
+            isVeg: false,
+            available: true,
+          },
+          {
+            id: 7,
+            name: "Paneer Butter Masala",
+            price: 70,
+            description: "Cottage cheese in rich tomato gravy",
+            category: "lunch",
+            isVeg: true,
+            available: true,
+          },
+          {
+            id: 8,
+            name: "Dal Fry & Rice",
+            price: 45,
+            description: "Tempered lentils with steamed rice",
+            category: "lunch",
+            isVeg: true,
+            available: true,
+          },
+        ],
+        dinner: [
+          {
+            id: 9,
+            name: "Vegetable Biryani",
+            price: 65,
+            description: "Fragrant rice with mixed vegetables",
+            category: "dinner",
+            isVeg: true,
+            available: true,
+          },
+          {
+            id: 10,
+            name: "Chicken Biryani",
+            price: 85,
+            description: "Aromatic rice with chicken pieces",
+            category: "dinner",
+            isVeg: false,
+            available: true,
+          },
+          {
+            id: 11,
+            name: "Roti & Sabzi",
+            price: 40,
+            description: "2 rotis with seasonal vegetable",
+            category: "dinner",
+            isVeg: true,
+            available: true,
+          },
+          {
+            id: 12,
+            name: "Fried Rice",
+            price: 50,
+            description: "Chinese style vegetable fried rice",
+            category: "dinner",
+            isVeg: true,
+            available: true,
+          },
+        ],
+        beverages: [
+          {
+            id: 13,
+            name: "Tea",
+            price: 10,
+            description: "Hot milk tea",
+            category: "beverages",
+            isVeg: true,
+            available: true,
+          },
+          {
+            id: 14,
+            name: "Coffee",
+            price: 15,
+            description: "Hot filter coffee",
+            category: "beverages",
+            isVeg: true,
+            available: true,
+          },
+          {
+            id: 15,
+            name: "Lemonade",
+            price: 20,
+            description: "Fresh lemon juice with mint",
+            category: "beverages",
+            isVeg: true,
+            available: true,
+          },
+          {
+            id: 16,
+            name: "Fruit Juice",
+            price: 30,
+            description: "Seasonal fresh fruit juice",
+            category: "beverages",
+            isVeg: true,
+            available: true,
+          },
+        ],
+        "sick-diet": [
+          {
+            id: 17,
+            name: "Khichdi",
+            price: 35,
+            description: "Light rice and lentil porridge",
+            category: "sick-diet",
+            isVeg: true,
+            available: true,
+          },
+          {
+            id: 18,
+            name: "Vegetable Soup",
+            price: 25,
+            description: "Clear vegetable broth",
+            category: "sick-diet",
+            isVeg: true,
+            available: true,
+          },
+          {
+            id: 19,
+            name: "Plain Daliya",
+            price: 30,
+            description: "Simple cracked wheat porridge",
+            category: "sick-diet",
+            isVeg: true,
+            available: true,
+          },
+          {
+            id: 20,
+            name: "Boiled Eggs",
+            price: 20,
+            description: "2 boiled eggs with salt",
+            category: "sick-diet",
+            isVeg: false,
+            available: true,
+          },
+        ],
+      };
+
+      // Cart and orders data
+      let cart = [];
+      let orders = [];
+
+      // DOM Elements
+      const foodItemsGrid = document.getElementById("food-items-grid");
+      const cartItems = document.getElementById("cart-items");
+      const emptyCartMessage = document.getElementById("empty-cart-message");
+      const cartSubtotal = document.getElementById("cart-subtotal");
+      const deliveryCharge = document.getElementById("delivery-charge");
+      const cartTotal = document.getElementById("cart-total");
+      const checkoutBtn = document.getElementById("checkout-btn");
+      const orderHistory = document.getElementById("order-history");
+      const emptyOrderMessage = document.getElementById("empty-order-message");
+      const messageBox = document.getElementById("message-box");
+      const messageText = document.getElementById("message-text");
+      const checkoutModal = document.getElementById("checkout-modal");
+      const orderSummary = document.getElementById("order-summary");
+      const modalTotal = document.getElementById("modal-total");
+
+      // Function to show a custom message box
+      function showMessage(text, type = "info") {
+        messageText.textContent = text;
+        messageBox.classList.remove("hidden", "bg-red-700", "bg-green-700");
+        if (type === "error") {
+          messageBox.classList.add("bg-red-700");
+        } else if (type === "success") {
+          messageBox.classList.add("bg-green-700");
+        } else {
+          messageBox.classList.add("bg-gray-700");
+        }
+        setTimeout(() => {
+          messageBox.classList.add("hidden");
+        }, 3000);
+      }
+
+      // Function to render food items
+      function renderFoodItems(category = "all") {
+        foodItemsGrid.innerHTML = "";
+
+        Object.values(foodMenu)
+          .flat()
+          .forEach((item) => {
+            if (category === "all" || item.category === category) {
+              const foodCard = document.createElement("div");
+              foodCard.className = `food-card bg-gray-700 border border-gray-600 rounded-lg p-4 ${
+                !item.available ? "opacity-50" : ""
+              }`;
+              foodCard.innerHTML = `
+              <div class="flex justify-between items-start mb-2">
+                <div class="flex-1">
+                  <div class="flex items-center">
+                    <span class="font-medium text-white">${item.name}</span>
+                    ${
+                      item.isVeg
+                        ? '<span class="ml-2 text-green-500 text-xs">● Veg</span>'
+                        : '<span class="ml-2 text-red-500 text-xs">● Non-Veg</span>'
+                    }
+                  </div>
+                  <div class="text-sm text-gray-400 mt-1">${
+                    item.description
+                  }</div>
+                </div>
+                <span class="font-semibold text-white ml-2">₹${
+                  item.price
+                }</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-xs text-gray-500 capitalize">${
+                  item.category
+                }</span>
+                <button 
+                  class="add-to-cart bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold py-1 px-3 rounded transition duration-200 ${
+                    !item.available ? "opacity-50 cursor-not-allowed" : ""
+                  }"
+                  data-id="${item.id}"
+                  ${!item.available ? "disabled" : ""}
+                >
+                  ${!item.available ? "Not Available" : "Add to Cart"}
+                </button>
+              </div>
+            `;
+              foodItemsGrid.appendChild(foodCard);
+            }
+          });
+      }
+
+      // Function to render cart
+      function renderCart() {
+        cartItems.innerHTML = "";
+
+        if (cart.length === 0) {
+          emptyCartMessage.classList.remove("hidden");
+          checkoutBtn.disabled = true;
+        } else {
+          emptyCartMessage.classList.add("hidden");
+          checkoutBtn.disabled = false;
+
+          cart.forEach((item) => {
+            const cartItem = document.createElement("div");
+            cartItem.className =
+              "flex justify-between items-center bg-gray-800 rounded p-3";
+            cartItem.innerHTML = `
+              <div class="flex-1">
+                <div class="font-medium text-white">${item.name}</div>
+                <div class="text-sm text-gray-400">₹${item.price} × ${
+              item.quantity
+            }</div>
+              </div>
+              <div class="flex items-center space-x-2">
+                <span class="font-semibold text-white">₹${
+                  item.price * item.quantity
+                }</span>
+                <div class="flex items-center space-x-1">
+                  <button class="decrease-qty text-gray-400 hover:text-white" data-id="${
+                    item.id
+                  }">
+                    <i class="fa-solid fa-minus text-xs"></i>
+                  </button>
+                  <span class="text-white mx-1">${item.quantity}</span>
+                  <button class="increase-qty text-gray-400 hover:text-white" data-id="${
+                    item.id
+                  }">
+                    <i class="fa-solid fa-plus text-xs"></i>
+                  </button>
+                </div>
+                <button class="remove-item text-red-400 hover:text-red-300 ml-2" data-id="${
+                  item.id
+                }">
+                  <i class="fa-solid fa-trash text-xs"></i>
+                </button>
+              </div>
+            `;
+            cartItems.appendChild(cartItem);
+          });
+        }
+
+        updateCartTotals();
+      }
+
+      // Function to update cart totals
+      function updateCartTotals() {
+        const subtotal = cart.reduce(
+          (sum, item) => sum + item.price * item.quantity,
+          0
+        );
+        const delivery = subtotal > 0 ? 10 : 0; // ₹10 delivery charge
+        const total = subtotal + delivery;
+
+        cartSubtotal.textContent = `₹${subtotal.toFixed(2)}`;
+        deliveryCharge.textContent = `₹${delivery.toFixed(2)}`;
+        cartTotal.textContent = `₹${total.toFixed(2)}`;
+      }
+
+      // Function to render order history
+      function renderOrderHistory() {
+        orderHistory.innerHTML = "";
+
+        if (orders.length === 0) {
+          emptyOrderMessage.classList.remove("hidden");
+        } else {
+          emptyOrderMessage.classList.add("hidden");
+
+          orders.forEach((order) => {
+            const orderCard = document.createElement("div");
+            orderCard.className =
+              "bg-gray-700 border border-gray-600 rounded-lg p-4";
+            orderCard.innerHTML = `
+              <div class="flex justify-between items-start mb-2">
+                <div class="flex-1">
+                  <div class="font-medium text-white">Order #${order.id}</div>
+                  <div class="text-sm text-gray-400">${
+                    order.items.length
+                  } items • ${order.location}</div>
+                  <div class="text-sm text-gray-400">${order.timestamp}</div>
+                </div>
+                <span class="px-3 py-1 text-xs font-semibold rounded-full ${getOrderStatusClass(
+                  order.status
+                )}">
+                  ${order.status}
+                </span>
+              </div>
+              <div class="text-sm text-white font-semibold">₹${order.total.toFixed(
+                2
+              )}</div>
+            `;
+            orderHistory.appendChild(orderCard);
+          });
+        }
+      }
+
+      // Helper function for order status styling
+      function getOrderStatusClass(status) {
+        switch (status) {
+          case "Preparing":
+            return "bg-yellow-600 text-white";
+          case "On the way":
+            return "bg-blue-600 text-white";
+          case "Delivered":
+            return "bg-green-600 text-white";
+          case "Cancelled":
+            return "bg-red-600 text-white";
+          default:
+            return "bg-gray-500 text-white";
+        }
+      }
+
+      // Event Listeners
+      document.addEventListener("DOMContentLoaded", function () {
+        // Initial render
+        renderFoodItems();
+        renderCart();
+        renderOrderHistory();
+
+        // Category filter
+        document.querySelectorAll(".category-btn").forEach((btn) => {
+          btn.addEventListener("click", function () {
+            document
+              .querySelectorAll(".category-btn")
+              .forEach((b) => b.classList.remove("active"));
+            this.classList.add("active");
+            renderFoodItems(this.getAttribute("data-category"));
+          });
+        });
+
+        // Add to cart
+        document.addEventListener("click", function (e) {
+          if (
+            e.target.classList.contains("add-to-cart") ||
+            e.target.closest(".add-to-cart")
+          ) {
+            const button = e.target.classList.contains("add-to-cart")
+              ? e.target
+              : e.target.closest(".add-to-cart");
+            const itemId = parseInt(button.getAttribute("data-id"));
+
+            // Find the food item
+            const allItems = Object.values(foodMenu).flat();
+            const foodItem = allItems.find((item) => item.id === itemId);
+
+            if (foodItem) {
+              // Check if item already in cart
+              const existingItem = cart.find((item) => item.id === itemId);
+
+              if (existingItem) {
+                existingItem.quantity += 1;
+              } else {
+                cart.push({
+                  id: foodItem.id,
+                  name: foodItem.name,
+                  price: foodItem.price,
+                  quantity: 1,
+                });
+              }
+
+              renderCart();
+              showMessage(`${foodItem.name} added to cart!`, "success");
+            }
+          }
+        });
+
+        // Cart quantity controls
+        document.addEventListener("click", function (e) {
+          if (
+            e.target.classList.contains("increase-qty") ||
+            e.target.closest(".increase-qty")
+          ) {
+            const button = e.target.classList.contains("increase-qty")
+              ? e.target
+              : e.target.closest(".increase-qty");
+            const itemId = parseInt(button.getAttribute("data-id"));
+            const cartItem = cart.find((item) => item.id === itemId);
+
+            if (cartItem) {
+              cartItem.quantity += 1;
+              renderCart();
+            }
+          }
+
+          if (
+            e.target.classList.contains("decrease-qty") ||
+            e.target.closest(".decrease-qty")
+          ) {
+            const button = e.target.classList.contains("decrease-qty")
+              ? e.target
+              : e.target.closest(".decrease-qty");
+            const itemId = parseInt(button.getAttribute("data-id"));
+            const cartItem = cart.find((item) => item.id === itemId);
+
+            if (cartItem) {
+              if (cartItem.quantity > 1) {
+                cartItem.quantity -= 1;
+              } else {
+                cart = cart.filter((item) => item.id !== itemId);
+              }
+              renderCart();
+            }
+          }
+
+          if (
+            e.target.classList.contains("remove-item") ||
+            e.target.closest(".remove-item")
+          ) {
+            const button = e.target.classList.contains("remove-item")
+              ? e.target
+              : e.target.closest(".remove-item");
+            const itemId = parseInt(button.getAttribute("data-id"));
+
+            cart = cart.filter((item) => item.id !== itemId);
+            renderCart();
+            showMessage("Item removed from cart", "success");
+          }
+        });
+
+        // Checkout process
+        checkoutBtn.addEventListener("click", function () {
+          const hostelBlock = document.getElementById("hostel-block").value;
+          const roomNumber = document.getElementById("room-number").value;
+
+          if (!hostelBlock || !roomNumber) {
+            showMessage("Please fill in your delivery information!", "error");
+            return;
+          }
+
+          // Show checkout modal
+          showCheckoutModal();
+        });
+
+        // Checkout modal controls
+        document
+          .getElementById("close-modal")
+          .addEventListener("click", closeCheckoutModal);
+        document
+          .getElementById("cancel-order")
+          .addEventListener("click", closeCheckoutModal);
+        document
+          .getElementById("confirm-order")
+          .addEventListener("click", confirmOrder);
+      });
+
+      // Function to show checkout modal
+      function showCheckoutModal() {
+        const hostelBlock = document.getElementById("hostel-block").value;
+        const roomNumber = document.getElementById("room-number").value;
+        const specialInstructions = document.getElementById(
+          "special-instructions"
+        ).value;
+        const isSickStudent = document.getElementById("sick-student").checked;
+
+        const subtotal = cart.reduce(
+          (sum, item) => sum + item.price * item.quantity,
+          0
+        );
+        const delivery = 10;
+        const total = subtotal + delivery;
+
+        orderSummary.innerHTML = `
+          <div class="text-white font-medium mb-2">Delivery to: Block ${hostelBlock}, Room ${roomNumber}</div>
+          ${
+            isSickStudent
+              ? '<div class="text-yellow-400 text-sm mb-3"><i class="fa-solid fa-heart-pulse mr-1"></i> Priority delivery for sick student</div>'
+              : ""
+          }
+          <div class="space-y-2 max-h-40 overflow-y-auto">
+            ${cart
+              .map(
+                (item) => `
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-300">${item.name} × ${
+                  item.quantity
+                }</span>
+                <span class="text-white">₹${(
+                  item.price * item.quantity
+                ).toFixed(2)}</span>
+              </div>
+            `
+              )
+              .join("")}
+          </div>
+          ${
+            specialInstructions
+              ? `
+            <div class="mt-3 p-2 bg-gray-700 rounded text-sm">
+              <div class="text-gray-400 text-xs">Special Instructions:</div>
+              <div class="text-gray-300">${specialInstructions}</div>
+            </div>
+          `
+              : ""
+          }
+        `;
+
+        modalTotal.textContent = `₹${total.toFixed(2)}`;
+        checkoutModal.classList.remove("hidden");
+      }
+
+      // Function to close checkout modal
+      function closeCheckoutModal() {
+        checkoutModal.classList.add("hidden");
+      }
+
+      // Function to confirm order
+      function confirmOrder() {
+        const hostelBlock = document.getElementById("hostel-block").value;
+        const roomNumber = document.getElementById("room-number").value;
+        const specialInstructions = document.getElementById(
+          "special-instructions"
+        ).value;
+        const isSickStudent = document.getElementById("sick-student").checked;
+
+        const subtotal = cart.reduce(
+          (sum, item) => sum + item.price * item.quantity,
+          0
+        );
+        const delivery = 10;
+        const total = subtotal + delivery;
+
+        const now = new Date();
+        const timestamp = `${now.toLocaleDateString()} ${now.toLocaleTimeString(
+          [],
+          { hour: "2-digit", minute: "2-digit" }
+        )}`;
+
+        const newOrder = {
+          id: Date.now(),
+          items: [...cart],
+          location: `Block ${hostelBlock}, Room ${roomNumber}`,
+          specialInstructions: specialInstructions,
+          isSickStudent: isSickStudent,
+          total: total,
+          status: "Preparing",
+          timestamp: timestamp,
+        };
+
+        orders.unshift(newOrder);
+        cart = [];
+
+        renderCart();
+        renderOrderHistory();
+        closeCheckoutModal();
+
+        // Reset form
+        document.getElementById("special-instructions").value = "";
+
+        showMessage(
+          "Order placed successfully! Your food will be delivered soon.",
+          "success"
+        );
+
+        // Simulate order status updates
+        setTimeout(() => {
+          const orderIndex = orders.findIndex((o) => o.id === newOrder.id);
+          if (orderIndex !== -1) {
+            orders[orderIndex].status = "On the way";
+            renderOrderHistory();
+            showMessage("Your order is on the way!", "success");
+          }
+        }, 10000);
+
+        setTimeout(() => {
+          const orderIndex = orders.findIndex((o) => o.id === newOrder.id);
+          if (orderIndex !== -1) {
+            orders[orderIndex].status = "Delivered";
+            renderOrderHistory();
+            showMessage("Your order has been delivered!", "success");
+          }
+        }, 20000);
+      }
+    </script>
+    <script src="auth_guard.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
