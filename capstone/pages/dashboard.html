@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -17,7 +17,8 @@
       }
       body {
         font-family: "Space Grotesk", sans-serif;
-        background: radial-gradient(
+        background:
+          radial-gradient(
             circle at 20% 20%,
             rgba(56, 189, 248, 0.15),
             transparent 35%
@@ -96,7 +97,7 @@
         "biometric.html",
         "complaint_management_system.html",
         "dashboard.html",
-        "demo.html",
+
         "doctors.html",
         "electronic_health_records.html",
         "emergency_requests.html",
@@ -137,7 +138,7 @@
       const renderPages = (filter = "") => {
         const normalized = filter.trim().toLowerCase();
         const visible = pages.filter((file) =>
-          file.toLowerCase().includes(normalized)
+          file.toLowerCase().includes(normalized),
         );
 
         grid.innerHTML = "";
@@ -150,7 +151,7 @@
             <div class="flex items-start justify-between gap-3">
               <div>
                 <h3 class="text-lg font-semibold text-white">${formatTitle(
-                  file
+                  file,
                 )}</h3>
                 <p class="text-xs text-slate-400 mt-1">/${file}</p>
               </div>
@@ -175,7 +176,5 @@
       renderPages();
     </script>
     <script src="auth_guard.js"></script>
-</body>
+  </body>
 </html>
-
-
