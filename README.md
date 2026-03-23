@@ -205,20 +205,16 @@ npm start
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 👥 Authors
 
-- **Simpy Kumari Mandal** - _Initial work_ - [simpykumarimandal](https://github.com/simpykumarimandal)
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - VIT Bhopal for the project inspiration
 - Open source community for the amazing tools and libraries
 - Font Awesome for icons
 - Tailwind CSS for styling framework
 
-## 📞 Support
 
-For support, email simpykumarimandal@gmail.com or create an issue in this repository.
-
+LINK-https://hostel-medical-management.onrender.com/
 ---
 
